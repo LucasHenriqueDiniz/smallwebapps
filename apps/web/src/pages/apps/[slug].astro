@@ -1,0 +1,113 @@
+---
+import MainLayout from "@/components/layout/MainLayout.astro";
+import AppHero from "@/components/apps/AppHero.astro";
+import FeatureList from "@/components/apps/FeatureList.astro";
+import FAQ from "@/components/apps/FAQ.astro";
+import RelatedApps from "@/components/apps/RelatedApps.astro";
+import TrustBlock from "@/components/apps/TrustBlock.astro";
+import CTASection from "@/components/apps/CTASection.astro";
+import AdSlot from "@/components/ads/AdSlot.astro";
+import ToolMount from "@/components/tools/ToolMount.astro";
+import { apps, appMap } from "@/data/apps";
+
+export function getStaticPaths() {
+  return apps.map((app) => ({
+    params: { slug: app.slug }
+  }));
+}
+
+const app = appMap[Astro.params.slug ?? ""];
+
+if (!app) {
+  throw new Error(`Unknown app slug: ${Astro.params.slug}`);
+}
+
+const relatedApps = apps.filter((item) => item.slug !== app.slug).slice(0, 3);
+const isTubeTrace = app.slug === "tubetrace";
+---
+
+<MainLayout title={app.seo.title} description={app.seo.description} canonicalPath={app.landingUrl}>
+  {
+    isTubeTrace ? (
+      <>
+        <section class="section-shell pt-10">
+          <div class="rounded-[2.5rem] border border-slate-200 bg-white px-6 py-8 shadow-soft md:px-10 md:py-10">
+            <div class="mx-auto max-w-4xl text-center">
+              <div class="inline-flex items-center rounded-full bg-orange-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-700 ring-1 ring-orange-200">
+                TubeTrace
+              </div>
+              <h1 class="mt-6 text-5xl font-semibold tracking-[-0.04em] text-slate-950 md:text-7xl">
+                Upload your YouTube export and start analyzing immediately.
+              </h1>
+              <p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
+                This route is the app. Upload the file, open the explanation if you need help with Google Takeout, and continue directly into the TubeTrace workflow.
+              </p>
+
+              <div class="mt-8 flex flex-wrap justify-center gap-3">
+                <a href="#tool" class="inline-flex rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600">
+                  Upload file
+                </a>
+                <a href="/guides/how-to-export-youtube-watch-history" class="inline-flex rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-orange-300 hover:text-orange-700">
+                  How to export
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-shell pt-8">
+          <ToolMount slug={app.slug} />
+        </section>
+
+        <TrustBlock
+          title="Privacy and local processing"
+          copy="TubeTrace is designed to keep the primary workflow in the browser. The page explains the Takeout flow, the app opens immediately, and support content stays below the tool instead of interrupting the upload path."
+        />
+
+        <FAQ items={app.faq} />
+        <RelatedApps items={relatedApps} />
+      </>
+    ) : (
+      <>
+        <AppHero app={app} />
+
+        <section class="section-shell pt-10">
+          <div class="grid gap-5 md:grid-cols-[1.2fr_0.8fr]">
+            <div class="card-surface rounded-[2rem] p-7">
+              <span class="eyebrow">Overview</span>
+              <h2 class="mt-4 text-2xl font-semibold text-slate-950">Why this app belongs inside Small Web Apps</h2>
+              <p class="mt-4 text-sm leading-7 text-slate-600 md:text-base">
+                {app.longDescription}
+              </p>
+              <p class="mt-4 text-sm leading-7 text-slate-600 md:text-base">
+                The page is intentionally content-rich so it remains indexable and trustworthy even before the user scrolls to the interactive surface.
+              </p>
+            </div>
+
+            <AdSlot label="App page ad placeholder reserved near the top content" />
+          </div>
+        </section>
+
+        <FeatureList features={app.features} />
+        {app.implemented && <ToolMount slug={app.slug} />}
+
+        <TrustBlock
+          title="Data handling and page trust"
+          copy="This app page is built to explain the workflow clearly before the user interacts with anything. When processing is browser-first, that claim should stay visible in the content so the user does not have to infer it from the UI alone."
+        />
+
+        <FAQ items={app.faq} />
+        <RelatedApps items={relatedApps} />
+
+        <CTASection
+          title="Support the hub by exploring adjacent tools and guides"
+          copy="A stronger internal content graph helps users discover more tools and gives the site a healthier long-term monetization surface."
+          primaryHref="/guides"
+          primaryLabel="See guides"
+          secondaryHref="/apps"
+          secondaryLabel="Browse apps"
+        />
+      </>
+    )
+  }
+</MainLayout>

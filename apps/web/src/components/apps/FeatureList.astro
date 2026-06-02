@@ -1,0 +1,25 @@
+---
+interface Props {
+  features: string[];
+}
+
+const { features } = Astro.props;
+---
+
+<section class="section-shell pt-10">
+  <div class="grid gap-4 md:grid-cols-2">
+    {
+      features.map((feature) => (
+        <div class="card-surface rounded-[1.75rem] p-5">
+          <div class="flex items-start gap-3">
+            <span class="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full bg-orange-100 text-sm font-bold text-orange-700">
+              +
+            </span>
+            <p class="text-sm leading-6 text-slate-700">{feature}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+

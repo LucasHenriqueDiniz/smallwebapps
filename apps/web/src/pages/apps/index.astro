@@ -1,0 +1,35 @@
+---
+import MainLayout from "@/components/layout/MainLayout.astro";
+import AppGrid from "@/components/apps/AppGrid.astro";
+import AdSlot from "@/components/ads/AdSlot.astro";
+import { apps } from "@/data/apps";
+---
+
+<MainLayout
+  title="Apps"
+  description="Browse Small Web Apps tools for YouTube history inspection, JSON formatting, AI image review, and CSV cleanup."
+  canonicalPath="/apps"
+>
+  <section class="section-shell pt-12">
+    <span class="eyebrow">Apps</span>
+    <h1 class="mt-4 section-title">A compact app directory built to be useful before the click</h1>
+    <p class="mt-4 section-copy">
+      These pages are designed to serve both users and search. Each app has a real landing page, a clear description, trust copy, and an interactive surface when ready.
+    </p>
+  </section>
+
+  <section class="section-shell pt-10">
+    <div class="mb-6 flex flex-wrap gap-2 text-sm text-slate-600">
+      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">YouTube / Data</span>
+      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">Developer Tools</span>
+      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">Image / Inspection</span>
+      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">Data Tools</span>
+    </div>
+    <AppGrid items={apps} />
+  </section>
+
+  <section class="section-shell pt-10">
+    <AdSlot label="App index ad placeholder with fixed reserved space" />
+  </section>
+</MainLayout>
+

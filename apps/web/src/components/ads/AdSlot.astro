@@ -1,0 +1,18 @@
+---
+interface Props {
+  label?: string;
+}
+
+const { label = "Ad placement placeholder" } = Astro.props;
+---
+
+<aside class="card-surface rounded-[2rem] p-5">
+  <div class="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+    <span>AdSlot</span>
+    <span>Reserved</span>
+  </div>
+  <div class="flex min-h-32 items-center justify-center rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50/90 px-4 text-center text-sm text-slate-500">
+    {label}
+  </div>
+</aside>
+

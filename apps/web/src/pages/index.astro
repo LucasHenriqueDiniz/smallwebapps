@@ -1,0 +1,121 @@
+---
+import MainLayout from "@/components/layout/MainLayout.astro";
+import AppGrid from "@/components/apps/AppGrid.astro";
+import AdSlot from "@/components/ads/AdSlot.astro";
+import { apps } from "@/data/apps";
+import { siteConfig } from "@/lib/site";
+
+const featuredApps = apps;
+const quickLinks = [
+  { label: "TubeTrace", href: "/apps/tubetrace" },
+  { label: "JSON Formatter", href: "/apps/json-formatter" },
+  { label: "AI Image Checker", href: "/apps/ai-image-checker" },
+  { label: "CSV Cleaner", href: "/apps/csv-cleaner" }
+];
+---
+
+<MainLayout title={siteConfig.title} description={siteConfig.description} canonicalPath="/">
+  <section class="section-shell pt-10">
+    <div class="rounded-[2.5rem] border border-slate-200 bg-white px-6 py-10 shadow-soft md:px-10 md:py-14">
+      <div class="mx-auto max-w-4xl text-center">
+        <div class="inline-flex items-center rounded-full bg-orange-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-700 ring-1 ring-orange-200">
+          Simple browser tools for real tasks
+        </div>
+        <h1 class="mt-6 text-5xl font-semibold tracking-[-0.04em] text-slate-950 md:text-7xl">
+          Every small tool you wish the web already had.
+        </h1>
+        <p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
+          Small Web Apps is a clean hub for lightweight tools, analyzers, viewers, and quick utilities that run in your browser. Fast pages, clear workflows, and no fake complexity.
+        </p>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <a href="/apps" class="inline-flex rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600">
+            View all tools
+          </a>
+          <a href="/apps/tubetrace" class="inline-flex rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-orange-300 hover:text-orange-700">
+            Open TubeTrace
+          </a>
+        </div>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-2 text-sm text-slate-600">
+          {
+            quickLinks.map((item) => (
+              <a href={item.href} class="rounded-full bg-slate-100 px-4 py-2 transition hover:bg-orange-50 hover:text-orange-700">
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell pt-12">
+    <div class="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+      <div class="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft">
+        <span class="eyebrow">Why this format works</span>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950">Tool hubs that work feel obvious in under five seconds.</h2>
+        <p class="mt-4 text-base leading-7 text-slate-600">
+          The best references in this space are blunt and useful: clear headline, visible tools, no mystery. That is the direction here. Fewer abstract “platform” claims, more direct entry points.
+        </p>
+        <div class="mt-6 grid gap-3">
+          <div class="rounded-[1.4rem] bg-slate-50 p-4">
+            <div class="text-sm font-semibold text-slate-900">Fast to scan</div>
+            <p class="mt-2 text-sm leading-6 text-slate-600">Large headline, clear buttons, and tool chips that expose the actual catalog immediately.</p>
+          </div>
+          <div class="rounded-[1.4rem] bg-slate-50 p-4">
+            <div class="text-sm font-semibold text-slate-900">SEO without looking like SEO</div>
+            <p class="mt-2 text-sm leading-6 text-slate-600">Each tool gets a real landing page with copy, trust, FAQ, and the interactive surface.</p>
+          </div>
+          <div class="rounded-[1.4rem] bg-slate-50 p-4">
+            <div class="text-sm font-semibold text-slate-900">Prepared for ads</div>
+            <p class="mt-2 text-sm leading-6 text-slate-600">Stable ad zones can be introduced later without collapsing the layout.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft">
+        <div class="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <span class="eyebrow">Featured workflow</span>
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950">TubeTrace leads the product direction.</h2>
+          </div>
+          <a href="/apps/tubetrace" class="text-sm font-semibold text-orange-700">Open</a>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Input</div>
+            <div class="mt-3 text-lg font-semibold text-slate-950">Takeout export</div>
+            <p class="mt-2 text-sm leading-6 text-slate-600">Upload a local file or paste raw history data.</p>
+          </div>
+          <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Signals</div>
+            <div class="mt-3 text-lg font-semibold text-slate-950">Links, dates, channels</div>
+            <p class="mt-2 text-sm leading-6 text-slate-600">Validate the structure before deeper parsing.</p>
+          </div>
+          <div class="rounded-[1.5rem] border border-orange-200 bg-orange-50 p-4">
+            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-orange-700">Trust</div>
+            <div class="mt-3 text-lg font-semibold text-slate-950">Local-first positioning</div>
+            <p class="mt-2 text-sm leading-6 text-slate-700">The page explains privacy and limitations directly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell pt-12">
+    <div class="mb-8">
+      <span class="eyebrow">Tools</span>
+      <h2 class="mt-4 section-title">Start with the utilities people can understand instantly.</h2>
+      <p class="mt-4 section-copy">
+        This catalog keeps the layout straightforward: practical names, simple categories, and landing pages that explain the job of each tool before the user clicks into the workflow.
+      </p>
+    </div>
+    <AppGrid items={featuredApps} />
+  </section>
+
+  <section class="section-shell pt-10">
+    <AdSlot label="Homepage ad placeholder reserved below the tool catalog" />
+  </section>
+</MainLayout>

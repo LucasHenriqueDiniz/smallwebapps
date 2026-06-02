@@ -1,0 +1,14 @@
+---
+import type { AppDefinition } from "@smallwebapps/data";
+import AppCard from "./AppCard.astro";
+
+interface Props {
+  items: AppDefinition[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+  {items.map((app) => <AppCard app={app} />)}
+</div>

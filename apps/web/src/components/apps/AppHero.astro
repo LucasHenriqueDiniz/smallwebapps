@@ -1,0 +1,56 @@
+---
+import type { AppDefinition } from "@smallwebapps/data";
+
+interface Props {
+  app: AppDefinition;
+}
+
+const { app } = Astro.props;
+---
+
+<section class="section-shell pt-12">
+  <div class="card-surface overflow-hidden rounded-[2.5rem] p-8 md:p-10">
+    <div class="grid gap-8 md:grid-cols-[1.35fr_0.65fr] md:items-end">
+      <div class="space-y-5">
+        <span class="eyebrow">{app.category}</span>
+        <div>
+          <h1 class="section-title">{app.name}</h1>
+          <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-600">{app.longDescription}</p>
+        </div>
+
+        {app.disclaimer && (
+          <div class="rounded-[1.5rem] border border-orange-200 bg-orange-50 px-5 py-4 text-sm leading-6 text-orange-900">
+            <strong>Important:</strong> {app.disclaimer}
+          </div>
+        )}
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#tool" class="inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-600">
+            {app.implemented ? "Jump to tool" : "View roadmap"}
+          </a>
+          <a href="/apps" class="inline-flex rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:border-orange-300 hover:text-orange-700">
+            Browse all apps
+          </a>
+        </div>
+      </div>
+
+      <div class="rounded-[2rem] bg-slate-950 p-6 text-white shadow-soft">
+        <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Quick summary</div>
+        <dl class="mt-5 space-y-4 text-sm">
+          <div>
+            <dt class="text-slate-400">Status</dt>
+            <dd class="mt-1 font-semibold text-white">{app.status === "live" ? "Live" : "Coming soon"}</dd>
+          </div>
+          <div>
+            <dt class="text-slate-400">Mode</dt>
+            <dd class="mt-1 font-semibold text-white capitalize">{app.mode}</dd>
+          </div>
+          <div>
+            <dt class="text-slate-400">Data handling</dt>
+            <dd class="mt-1 font-semibold text-white">Browser-first where possible</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>

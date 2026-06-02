@@ -1,0 +1,75 @@
+---
+import MainLayout from "@/components/layout/MainLayout.astro";
+import CTASection from "@/components/apps/CTASection.astro";
+import AdSlot from "@/components/ads/AdSlot.astro";
+import { guides } from "@/data/guides";
+
+export function getStaticPaths() {
+  return guides.map((guide) => ({
+    params: { slug: guide.slug }
+  }));
+}
+
+const guide = guides.find((item) => item.slug === Astro.params.slug);
+
+if (!guide) {
+  throw new Error(`Unknown guide slug: ${Astro.params.slug}`);
+}
+
+const contentMap = {
+  "how-to-export-youtube-watch-history": {
+    intro:
+      "If you want to inspect your YouTube watch history locally, the first step is getting the correct export from Google Takeout. The important part is not just downloading a zip, but confirming that the export actually contains the watch-history data you expect to inspect.",
+    points: [
+      "Choose the YouTube and YouTube Music data sections carefully in Google Takeout.",
+      "Keep the export local instead of immediately uploading it to third-party tools.",
+      "Open the resulting files with TubeTrace inside Small Web Apps so the content stays inside the browser session."
+    ]
+  },
+  "how-to-analyze-youtube-watch-history": {
+    intro:
+      "A lightweight local workflow is often enough to answer basic questions about your viewing history. You usually do not need a complex cloud dashboard to validate whether a file contains usable watch-history data and estimate how much history is present.",
+    points: [
+      "Start by validating the file locally in TubeTrace.",
+      "Look for timestamps, watch links, and channel-related patterns before deeper parsing.",
+      "Treat local inspection as the safest default until you genuinely need richer analytics."
+    ]
+  }
+};
+
+const content = contentMap[guide.slug as keyof typeof contentMap];
+---
+
+<MainLayout title={guide.title} description={guide.description} canonicalPath={`/guides/${guide.slug}`}>
+  <section class="section-shell pt-12">
+    <span class="eyebrow">{guide.category}</span>
+    <h1 class="mt-4 section-title">{guide.title}</h1>
+    <p class="mt-4 section-copy">{guide.description}</p>
+  </section>
+
+  <section class="section-shell pt-10">
+    <div class="grid gap-5 md:grid-cols-[1.2fr_0.8fr]">
+      <article class="card-surface rounded-[2rem] p-7">
+        <p class="text-sm leading-7 text-slate-600 md:text-base">{content.intro}</p>
+        <ul class="mt-6 space-y-4 text-sm leading-7 text-slate-600 md:text-base">
+          {content.points.map((point) => <li>{point}</li>)}
+        </ul>
+        <p class="mt-6 text-sm leading-7 text-slate-600 md:text-base">
+          The purpose of this guide is to strengthen the app page with supporting context, not to replace the app itself.
+        </p>
+      </article>
+
+      <AdSlot label="Guide article ad placeholder reserved beside content" />
+    </div>
+  </section>
+
+  <CTASection
+    title="Continue into the actual tool"
+    copy="Use the guide to understand the workflow, then move into the app page for local interaction."
+    primaryHref="/apps/tubetrace"
+    primaryLabel="Open TubeTrace page"
+    secondaryHref="/guides"
+    secondaryLabel="Back to guides"
+  />
+</MainLayout>
+

@@ -1,0 +1,24 @@
+---
+import JsonFormatterApp from "@/tools/json-formatter/JsonFormatterApp";
+import CsvCleanerApp from "@/tools/csv-cleaner/CsvCleanerApp";
+import AiImageCheckerApp from "@/tools/ai-image-checker/AiImageCheckerApp";
+import TubeTraceApp from "@/tools/tubetrace/TubeTraceApp";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<section id="tool" class="section-shell pt-10">
+  {slug === "tubetrace" && <TubeTraceApp client:load />}
+  {slug === "json-formatter" && <JsonFormatterApp client:load />}
+  {slug === "ai-image-checker" && <AiImageCheckerApp client:load />}
+  {slug === "csv-cleaner" && <CsvCleanerApp client:load />}
+  {!["tubetrace", "json-formatter", "ai-image-checker", "csv-cleaner"].includes(slug) && (
+    <div class="card-surface rounded-[2rem] p-6 md:p-8">
+      <p class="text-sm text-slate-600">This tool is not available yet.</p>
+    </div>
+  )}
+</section>

@@ -1,0 +1,39 @@
+---
+import { navItems } from "@/lib/site";
+---
+
+<footer class="border-t border-slate-200 bg-white/80">
+  <div class="section-shell grid gap-8 py-10 md:grid-cols-[1.4fr_1fr_1fr]">
+    <div class="space-y-3">
+      <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Small Web Apps</div>
+      <p class="max-w-xl text-sm leading-6 text-slate-600">
+        A single-domain hub for fast browser-based utilities, content-rich tool pages, and future AdSense-ready growth.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold text-slate-900">Explore</h2>
+      <ul class="mt-3 space-y-2 text-sm text-slate-600">
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} class="transition hover:text-orange-600">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold text-slate-900">Policy</h2>
+      <ul class="mt-3 space-y-2 text-sm text-slate-600">
+        <li>English-first content in v1</li>
+        <li>Tools are browser-first whenever possible</li>
+        <li>Ad slots are placeholders until monetization goes live</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+

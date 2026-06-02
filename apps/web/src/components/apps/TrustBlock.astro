@@ -1,0 +1,32 @@
+---
+interface Props {
+  title?: string;
+  copy?: string;
+}
+
+const {
+  title = "Privacy-first by default",
+  copy = "Small Web Apps is built around browser-based workflows whenever that is practical. Tool pages should explain clearly whether processing stays local, what the limitations are, and where users should be cautious."
+} = Astro.props;
+---
+
+<section class="section-shell pt-10">
+  <div class="grid gap-5 md:grid-cols-3">
+    <div class="card-surface rounded-[2rem] p-6 md:col-span-2">
+      <span class="eyebrow">Trust</span>
+      <h2 class="mt-4 text-2xl font-semibold text-slate-950">{title}</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600 md:text-base">{copy}</p>
+    </div>
+
+    <div class="rounded-[2rem] bg-slate-950 p-6 text-white shadow-soft">
+      <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Checklist</div>
+      <ul class="mt-4 space-y-3 text-sm leading-6 text-slate-200">
+        <li>No forced sign-up</li>
+        <li>Clear limitations</li>
+        <li>Stable app-page structure</li>
+        <li>Prepared ad zones, not intrusive ads</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
