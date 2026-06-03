@@ -1,121 +1,162 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
 import AppGrid from "@/components/apps/AppGrid.astro";
+import CategoryCard from "@/components/apps/CategoryCard.astro";
 import AdSlot from "@/components/ads/AdSlot.astro";
 import { apps } from "@/data/apps";
 import { siteConfig } from "@/lib/site";
 
 const featuredApps = apps;
-const quickLinks = [
-  { label: "TubeTrace", href: "/apps/tubetrace" },
-  { label: "JSON Formatter", href: "/apps/json-formatter" },
-  { label: "AI Image Checker", href: "/apps/ai-image-checker" },
-  { label: "CSV Cleaner", href: "/apps/csv-cleaner" }
+
+const categories = [
+  {
+    label: "PDF Tools",
+    description: "Solve Your PDF Problems",
+    count: "10+ tools",
+    colorClass: "bg-indigo-500",
+    href: "/apps",
+    featuredTool: { name: "PDF to Image", href: "/apps" },
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`,
+  },
+  {
+    label: "Image Tools",
+    description: "Solve Your Image Problems",
+    count: "8+ tools",
+    colorClass: "bg-orange-500",
+    href: "/apps",
+    featuredTool: { name: "Remove BG", href: "/apps" },
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+  },
+  {
+    label: "Developer Tools",
+    description: "Format & Validate Code",
+    count: "5+ tools",
+    colorClass: "bg-emerald-500",
+    href: "/apps",
+    featuredTool: { name: "JSON Formatter", href: "/apps/json-formatter" },
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  },
+  {
+    label: "AI Detectors",
+    description: "Check AI-Generated Content",
+    count: "3+ tools",
+    colorClass: "bg-teal-600",
+    href: "/apps",
+    featuredTool: { name: "AI Image Check", href: "/apps/ai-image-checker" },
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`,
+  },
+  {
+    label: "File Tools",
+    description: "Convert & Manage Files",
+    count: "5+ tools",
+    colorClass: "bg-sky-500",
+    href: "/apps",
+    featuredTool: { name: "CSV Cleaner", href: "/apps/csv-cleaner" },
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>`,
+  },
+];
+
+const stats = [
+  { value: "20+", label: "Online Tools" },
+  { value: "100%", label: "Browser-Based" },
+  { value: "0", label: "File Uploads" },
+  { value: "Free", label: "Forever" },
 ];
 ---
 
 <MainLayout title={siteConfig.title} description={siteConfig.description} canonicalPath="/">
+
+  <!-- Hero -->
+  <section class="section-shell pt-14 pb-2 text-center">
+    <h1 class="text-4xl font-extrabold tracking-tight text-slate-950 md:text-6xl leading-tight">
+      Free Tools to Make&nbsp;<span class="inline-block rounded-lg bg-teal-700 px-3 py-1 text-white">Everything</span>&nbsp;Simple
+    </h1>
+    <p class="mx-auto mt-5 max-w-xl text-base text-slate-500 md:text-lg">
+      PDF, image, developer, and AI tools that run entirely in your browser. No uploads. No accounts.
+    </p>
+
+    <!-- Search bar -->
+    <div class="mx-auto mt-8 flex max-w-lg items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-soft">
+      <svg class="h-5 w-5 shrink-0 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
+      </svg>
+      <input
+        type="search"
+        id="tool-search"
+        placeholder="Search tools…"
+        class="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+      />
+      <button
+        onclick="document.getElementById('tools-catalog').scrollIntoView({behavior:'smooth'})"
+        class="rounded-full bg-orange-500 px-5 py-1.5 text-sm font-semibold text-white transition hover:bg-orange-600"
+      >
+        Search
+      </button>
+    </div>
+
+    <!-- Recent tools quick links -->
+    <div class="mt-5 flex flex-wrap justify-center gap-2 text-sm text-slate-500">
+      <span class="font-medium text-slate-700">Recent Tools:</span>
+      {[
+        { label: "JSON Formatter", href: "/apps/json-formatter" },
+        { label: "AI Image Checker", href: "/apps/ai-image-checker" },
+        { label: "TubeTrace", href: "/apps/tubetrace" },
+      ].map((t) => (
+        <a href={t.href} class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-orange-300 hover:text-orange-700">
+          {t.label}
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Category cards -->
   <section class="section-shell pt-10">
-    <div class="rounded-[2.5rem] border border-slate-200 bg-white px-6 py-10 shadow-soft md:px-10 md:py-14">
-      <div class="mx-auto max-w-4xl text-center">
-        <div class="inline-flex items-center rounded-full bg-orange-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-700 ring-1 ring-orange-200">
-          Simple browser tools for real tasks
-        </div>
-        <h1 class="mt-6 text-5xl font-semibold tracking-[-0.04em] text-slate-950 md:text-7xl">
-          Every small tool you wish the web already had.
-        </h1>
-        <p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
-          Small Web Apps is a clean hub for lightweight tools, analyzers, viewers, and quick utilities that run in your browser. Fast pages, clear workflows, and no fake complexity.
-        </p>
-
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="/apps" class="inline-flex rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600">
-            View all tools
-          </a>
-          <a href="/apps/tubetrace" class="inline-flex rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-orange-300 hover:text-orange-700">
-            Open TubeTrace
-          </a>
-        </div>
-
-        <div class="mt-8 flex flex-wrap justify-center gap-2 text-sm text-slate-600">
-          {
-            quickLinks.map((item) => (
-              <a href={item.href} class="rounded-full bg-slate-100 px-4 py-2 transition hover:bg-orange-50 hover:text-orange-700">
-                {item.label}
-              </a>
-            ))
-          }
-        </div>
-      </div>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+      {categories.map((cat) => (
+        <CategoryCard {...cat} />
+      ))}
     </div>
   </section>
 
-  <section class="section-shell pt-12">
-    <div class="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-      <div class="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft">
-        <span class="eyebrow">Why this format works</span>
-        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950">Tool hubs that work feel obvious in under five seconds.</h2>
-        <p class="mt-4 text-base leading-7 text-slate-600">
-          The best references in this space are blunt and useful: clear headline, visible tools, no mystery. That is the direction here. Fewer abstract “platform” claims, more direct entry points.
-        </p>
-        <div class="mt-6 grid gap-3">
-          <div class="rounded-[1.4rem] bg-slate-50 p-4">
-            <div class="text-sm font-semibold text-slate-900">Fast to scan</div>
-            <p class="mt-2 text-sm leading-6 text-slate-600">Large headline, clear buttons, and tool chips that expose the actual catalog immediately.</p>
-          </div>
-          <div class="rounded-[1.4rem] bg-slate-50 p-4">
-            <div class="text-sm font-semibold text-slate-900">SEO without looking like SEO</div>
-            <p class="mt-2 text-sm leading-6 text-slate-600">Each tool gets a real landing page with copy, trust, FAQ, and the interactive surface.</p>
-          </div>
-          <div class="rounded-[1.4rem] bg-slate-50 p-4">
-            <div class="text-sm font-semibold text-slate-900">Prepared for ads</div>
-            <p class="mt-2 text-sm leading-6 text-slate-600">Stable ad zones can be introduced later without collapsing the layout.</p>
-          </div>
+  <!-- Stats bar -->
+  <section class="section-shell pt-10">
+    <div class="grid grid-cols-2 divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-soft sm:grid-cols-4 sm:divide-x">
+      {stats.map((s, i) => (
+        <div class={`flex flex-col items-center py-6 px-4 ${i % 2 === 0 && i < 2 ? 'border-b sm:border-b-0' : ''}`}>
+          <span class="text-3xl font-extrabold text-orange-500">{s.value}</span>
+          <span class="mt-1 text-sm text-slate-500">{s.label}</span>
         </div>
-      </div>
-
-      <div class="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft">
-        <div class="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <span class="eyebrow">Featured workflow</span>
-            <h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950">TubeTrace leads the product direction.</h2>
-          </div>
-          <a href="/apps/tubetrace" class="text-sm font-semibold text-orange-700">Open</a>
-        </div>
-
-        <div class="grid gap-4 md:grid-cols-3">
-          <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
-            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Input</div>
-            <div class="mt-3 text-lg font-semibold text-slate-950">Takeout export</div>
-            <p class="mt-2 text-sm leading-6 text-slate-600">Upload a local file or paste raw history data.</p>
-          </div>
-          <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
-            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Signals</div>
-            <div class="mt-3 text-lg font-semibold text-slate-950">Links, dates, channels</div>
-            <p class="mt-2 text-sm leading-6 text-slate-600">Validate the structure before deeper parsing.</p>
-          </div>
-          <div class="rounded-[1.5rem] border border-orange-200 bg-orange-50 p-4">
-            <div class="text-xs font-semibold uppercase tracking-[0.18em] text-orange-700">Trust</div>
-            <div class="mt-3 text-lg font-semibold text-slate-950">Local-first positioning</div>
-            <p class="mt-2 text-sm leading-6 text-slate-700">The page explains privacy and limitations directly.</p>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   </section>
 
-  <section class="section-shell pt-12">
-    <div class="mb-8">
-      <span class="eyebrow">Tools</span>
-      <h2 class="mt-4 section-title">Start with the utilities people can understand instantly.</h2>
-      <p class="mt-4 section-copy">
-        This catalog keeps the layout straightforward: practical names, simple categories, and landing pages that explain the job of each tool before the user clicks into the workflow.
-      </p>
+  <!-- All tools catalog -->
+  <section id="tools-catalog" class="section-shell pt-12">
+    <div class="mb-7 flex items-end justify-between gap-4">
+      <div>
+        <span class="eyebrow">All Tools</span>
+        <h2 class="mt-3 text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">
+          Start with what you need right now.
+        </h2>
+      </div>
+      <a href="/apps" class="shrink-0 text-sm font-semibold text-orange-600 hover:underline">View all →</a>
     </div>
     <AppGrid items={featuredApps} />
   </section>
 
-  <section class="section-shell pt-10">
-    <AdSlot label="Homepage ad placeholder reserved below the tool catalog" />
+  <section class="section-shell pt-10 pb-16">
+    <AdSlot label="Homepage ad placeholder" />
   </section>
+
 </MainLayout>
+
+<script>
+  const input = document.getElementById('tool-search') as HTMLInputElement | null;
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('tools-catalog')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+</script>
