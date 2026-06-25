@@ -82,12 +82,34 @@ For `apps/web` changes, run:
 pnpm --dir apps/web run build
 ```
 
+Use the Claude Code validation skills before committing:
+
+```bash
+# Validate build integrity
+./.claude/skills/build-validator.sh
+
+# Validate SEO essentials
+./.claude/skills/seo-checker.sh
+```
+
 Before committing:
 
 - inspect `git status`;
 - confirm only requested workspaces changed;
 - run `git diff --check`;
 - verify no generated secrets or local environment files are staged.
+
+## Claude Code Configuration
+
+The `.claude/` directory contains automated behaviors, skills, and templates:
+
+- **`.claude/settings.json`**: Project model (Opus 4.8), permissions, build/preview commands
+- **`.claude/INSTRUCTIONS.md`**: Detailed guidance for Claude agents working in this repo
+- **`.claude/skills/`**: Executable validation scripts (build-validator, seo-checker)
+- **`.claude/hooks.json`**: Pre-commit and pre-push hooks (disabled by default; enable via `/config`)
+- **`.claude/templates/`**: PR and issue templates following Small Web Apps conventions
+
+All agents should reference `.claude/INSTRUCTIONS.md` for quick context and validation workflow.
 
 ## Deployment
 
