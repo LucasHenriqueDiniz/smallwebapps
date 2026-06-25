@@ -9,7 +9,7 @@
  * Props:
  *   name       — display name of the tool
  *   category   — category label (e.g. "Developer Tools")
- *   status     — "live" | "coming-soon"
+ *   status     — "live"
  *   slug       — used for the canonical URL
  *   disclaimer — optional short warning shown in the strip
  *   fullWidth  — if true, no max-width wrapper (for tools that need full width)
@@ -27,7 +27,7 @@ import "../../styles/global.css";
 interface Props {
   name: string;
   category: string;
-  status: "live" | "coming-soon";
+  status: "live";
   slug: string;
   disclaimer?: string;
   fullWidth?: boolean;
@@ -161,7 +161,7 @@ const breadcrumbSchema = {
         </a>
         <span class="tl-sep">›</span>
         <span class="tl-name">{name}</span>
-        <span class={`tl-badge ${isLive ? 'live' : 'soon'}`}>{isLive ? '● Live' : '◌ Soon'}</span>
+        <span class="tl-badge live">● Live</span>
         <span class="tl-cat">{category}</span>
         {disclaimer && (
           <span class="tl-disclaimer">

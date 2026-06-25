@@ -1,5 +1,5 @@
 export type AppMode = "embedded" | "external";
-export type AppStatus = "live" | "coming-soon";
+export type AppStatus = "live";
 
 export interface AppFaq {
   question: string;

@@ -28,7 +28,6 @@ const byCategory = categoryOrder
   .filter((group) => group.apps.length > 0);
 
 const liveApps = apps.filter((app) => app.status === "live");
-const soonApps = apps.filter((app) => app.status !== "live");
 const categoryDisplay: Record<string, string> = {
   "YouTube / Data": "YouTube Analysis",
 };
@@ -48,7 +47,6 @@ const categoryDisplay: Record<string, string> = {
       </div>
       <div class="hero-panel" aria-label="Tool counts">
         <div><strong>{liveApps.length}</strong><span>Live</span></div>
-        <div><strong>{soonApps.length}</strong><span>Coming soon</span></div>
         <div><strong>{byCategory.length}</strong><span>Categories</span></div>
       </div>
     </section>
@@ -62,7 +60,6 @@ const categoryDisplay: Record<string, string> = {
       <div class="status-filter" role="group" aria-label="Availability">
         <button class="status-btn active" data-status="all">All</button>
         <button class="status-btn" data-status="live">Live</button>
-        <button class="status-btn" data-status="coming-soon">Soon</button>
       </div>
     </section>
 

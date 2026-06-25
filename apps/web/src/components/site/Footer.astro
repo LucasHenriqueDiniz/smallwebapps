@@ -53,7 +53,6 @@ const grouped = categoryOrder
           {groupApps.slice(0, 6).map((app) => (
             <a href={app.appUrl}>
               {app.name}
-              {app.status === "coming-soon" && <em>Soon</em>}
             </a>
           ))}
           {groupApps.length > 6 && <a href={categoryHref(category)} class="see-all">View all {groupApps.length}</a>}
