@@ -1,0 +1,22 @@
+{
+  "model": "claude-opus-4-8",
+  "projectName": "Small Web Apps",
+  "permissions": {
+    "allowed": [
+      "git",
+      "bash",
+      "pnpm",
+      "node",
+      "npm"
+    ]
+  },
+  "hooks": {
+    "onBeforeCommit": "pnpm run lint && pnpm run type-check"
+  },
+  "settings": {
+    "defaultBuildCommand": "pnpm --dir apps/web run build",
+    "defaultPreviewCommand": "pnpm --dir apps/web run dev",
+    "outputDirectory": "apps/web/dist",
+    "sourceDirectory": "apps/web/src"
+  }
+}

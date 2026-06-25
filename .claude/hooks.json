@@ -1,0 +1,28 @@
+{
+  "description": "Claude Code hooks for Small Web Apps — automated behaviors",
+  "hooks": [
+    {
+      "event": "onBeforeCommit",
+      "description": "Validate code quality before commit",
+      "enabled": false,
+      "command": "pnpm run type-check 2>/dev/null && echo '✓ Type check passed' || echo '⚠️  Type check warnings — review before committing'"
+    },
+    {
+      "event": "onAfterSave",
+      "description": "Auto-format on save (disabled by default to avoid noise)",
+      "enabled": false,
+      "command": "echo 'Save detected'"
+    },
+    {
+      "event": "onPushRemote",
+      "description": "Validate build before pushing",
+      "enabled": false,
+      "command": "./.claude/skills/build-validator.sh"
+    }
+  ],
+  "notes": [
+    "Hooks are disabled by default — enable in .claude/settings.json or via /config if desired",
+    "onBeforeCommit is most useful for catching type errors early",
+    "onPushRemote can gate unvalidated code from reaching origin"
+  ]
+}
