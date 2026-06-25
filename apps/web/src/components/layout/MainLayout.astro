@@ -13,6 +13,7 @@ interface Props {
   image?: string;
   ogType?: "website" | "article";
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
 }
 
 const {
@@ -21,7 +22,8 @@ const {
   canonicalPath = "/",
   image = "/og/site.svg",
   ogType = "website",
-  structuredData
+  structuredData,
+  noindex = false
 } = Astro.props;
 
 const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.name}`;
@@ -53,6 +55,7 @@ const schemaPayload = structuredData
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="generator" content={Astro.generator} />
     <!-- Dark theme: apply BEFORE paint to avoid flash -->
     <script is:inline>

@@ -56,7 +56,7 @@ const {
 
 const pageTitle    = seoTitle    ?? `${name} — ${siteConfig.name}`;
 const pageDesc     = seoDescription ?? `Free browser-based ${name.toLowerCase()} tool. No uploads, no accounts.`;
-const canonicalUrl = new URL(`/apps/${slug}`, siteConfig.siteUrl).toString();
+const canonicalUrl = new URL(`/apps/${slug}/`, siteConfig.siteUrl).toString();
 const ogImageUrl   = new URL(`/og/${slug}.svg`, siteConfig.siteUrl).toString();
 const isLive       = status === "live";
 const displayFaq   = faqExpanded.length ? faqExpanded : faq;
@@ -176,6 +176,7 @@ const breadcrumbSchema = {
 
     <!-- ── Tool content ── -->
     <div class={fullWidth ? 'tl-body-full' : 'tl-body'}>
+      <h1 class="tl-title">{name}</h1>
       <slot />
       <ExpandedFaq items={displayFaq} />
     </div>
@@ -245,8 +246,18 @@ body {
   padding: 32px 0 64px;
 }
 
+.tl-title {
+  margin: 0 0 16px 0;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text);
+}
+.tl-body-full .tl-title { padding: 0 24px; }
+
 @media (max-width: 640px) {
   .tl-cat, .tl-sep { display: none; }
   .tl-body, .tl-body-full { padding: 16px 16px 48px; }
+  .tl-body-full .tl-title { padding: 0 16px; }
 }
 </style>
