@@ -41,16 +41,21 @@ Usage:
 ./.claude/skills/build-validator.sh
 ```
 
-#### `seo-checker.sh`
-Validates SEO essentials:
-- robots.txt and sitemap in build output
-- App metadata in `apps.ts`
-- Guide schema correctness
+#### `seo-adsense-validator.sh`
+Comprehensive SEO + AdSense validator:
+- **AdSense**: ads.txt, AdSenseHead component, env var config
+- **Consent Mode v2**: Privacy-first defaults, persistence
+- **Security Headers**: CSP compatibility with AdSense/Fonts
+- **Dark Mode**: Theme implementation
+- **SEO**: robots.txt, sitemap, agent discovery
+- **Metadata**: OG tags, Twitter Cards, structured data (JSON-LD, Schema.org)
 
 Usage:
 ```bash
-./.claude/skills/seo-checker.sh
+./.claude/skills/seo-adsense-validator.sh
 ```
+
+Output: Detailed checklist (✓ pass, ⚠ warn, ✗ fail)
 
 ### `hooks.json`
 Pre-commit and pre-push automation (disabled by default):

@@ -116,8 +116,8 @@ CODEX.md                ← Redirects to CLAUDE.md
 # 1. Validate build
 ./.claude/skills/build-validator.sh
 
-# 2. Check SEO essentials
-./.claude/skills/seo-checker.sh
+# 2. Validate SEO + AdSense
+./.claude/skills/seo-adsense-validator.sh
 
 # 3. Inspect git status
 git status
