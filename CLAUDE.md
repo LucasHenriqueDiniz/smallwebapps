@@ -1,95 +1,99 @@
-# CLAUDE
+# Small Web Apps repository instructions
 
-Read `AGENTS.md` first — it has the full architecture, data contracts, design system, and rules.
+This is the canonical instruction file for every coding agent working in this repository. `AGENTS.md` and `CODEX.md` only redirect here.
 
-This file adds Claude-specific collaboration guidance on top.
+## Product definition
 
----
+Small Web Apps is a single-domain product hub for free browser-based utilities. Optimize the codebase for:
 
-## How I should approach tasks here
+1. indexable, useful content;
+2. AdSense-friendly information architecture;
+3. fast browser-first tools;
+4. simple Cloudflare deployment.
 
-### Adding a new tool
+Use `smallwebapps.com` as the canonical production domain.
 
-1. Add entry to `apps/web/src/data/apps.ts` — this is the single source of truth
-2. Create the React component at `apps/web/src/tools/[slug]/[SlugApp].tsx`
-3. Register in `ToolMount.astro`
-4. Optionally add to the header mega-menu in `Header.astro`
-5. The `/apps/[slug]` page generates automatically — do not create a custom page file unless the tool needs a non-standard layout
+## Architecture
 
-### Modifying the visual design
+- `apps/web` is the Small Web Apps Astro site and primary product.
+- Astro owns routing, SEO pages, metadata, and static content.
+- React islands own interactive tool surfaces only.
+- `/apps/[slug]` is the canonical URL for each tool.
+- Keep shared app metadata centralized in `apps/web/src/data/apps.ts`.
+- Keep shared product types in `packages/data/src`.
+- Keep tool implementations under `apps/web/src/tools/{slug}`.
+- Keep tool pages data-driven through `apps/web/src/pages/apps/[slug].astro` and `ToolLayout.astro`.
+- Preserve `apps/tubetrace` as the imported TubeTrace source workspace when changing the embedded TubeTrace route.
+- `apps/botschannel` is not part of this repository’s current Small Web Apps scope. Do not recreate, build, deploy, commit, or modify it unless the user explicitly changes scope.
 
-- Always use CSS vars (`--text`, `--bg`, `--border`, etc.) — never hardcode hex in `.astro` component styles
-- When writing CSS that needs to target a dark-mode ancestor, use `:global([data-theme="dark"])` in Astro scoped styles
-- When writing CSS for dynamically injected HTML (e.g. `innerHTML` in scripts), use `:global(.class-name)` to escape Astro scoping
-- The dark mode is CSS-variable based — `[data-theme="dark"]` is set on `<html>` before first paint
+## Tool page contract
 
-### Tool components (React)
+Every `/apps/[slug]` page must remain useful if JavaScript fails. Include:
 
-- React tools use Tailwind — dark mode is handled by global CSS overrides in `global.css`, not by Tailwind's dark: prefix
-- If a tool has colored elements that need dark mode, check if the class is already covered in `global.css`. If not, add an override there
-- Keep tool components stateless where possible; local `useState` is fine, avoid global stores
+- one clear H1 or equivalent visible tool title;
+- original descriptive content from metadata/content sections;
+- visible privacy and trust copy;
+- limitations or disclaimers where relevant;
+- FAQ content matching any FAQ structured data;
+- related internal links.
 
----
+Do not ship thin pages containing only a widget. Keep claims truthful, especially for probabilistic tools and browser-only processing.
 
-## Architecture constraints
+## Adding or changing tools
 
-- **Single domain**: everything on `smallwebapps.com`. No subdomains for tools unless a tool is a completely separate product
-- **Static first**: Astro generates static HTML. Only add client-side JS when the tool needs it
-- **ToolLayout for tools, MainLayout for everything else**: don't use MainLayout for tool pages — it adds hero sections and extra chrome that tool users don't need
-- **`apps.ts` is canonical**: if you want to add, rename, or deprecate a tool, always start there
+1. Add or update metadata in `apps/web/src/data/apps.ts`.
+2. Add the React implementation under `apps/web/src/tools/{slug}` when interactive.
+3. Register the tool in `apps/web/src/components/tools/ToolMount.astro`.
+4. Keep status, implementation, FAQ, features, content, and SEO metadata aligned.
+5. Use variants for long-tail SEO pages only when they reuse shared implementation instead of duplicating heavy logic.
 
----
+## Design and performance
 
-## What NOT to do
+- Use existing CSS variables and global styles before adding one-off visual systems.
+- Keep dark mode compatible with `[data-theme="dark"]`.
+- Prefer static HTML and CSS for page structure; hydrate only the interactive tool surface.
+- Avoid importing heavy libraries at page load when a user action can dynamically import them.
+- Review large tool chunks. PDF, image, QR, barcode, chart, and compression libraries should be deferred when practical.
 
-- Don't add CMS or database calls — everything is static or client-side
-- Don't add authentication — tools are anonymous by design
-- Don't create separate page files for tools that already have entries in `apps.ts`
-- Don't add `min-height` or `height` constraints to text containers where the height should be determined by the font size and padding alone
-- Don't use `display: inline-flex` for inline text highlight boxes — use `display: inline` with `em`-based padding so height matches the line height
-- Don't write Tailwind `dark:` classes in React tools — the global.css override approach handles dark mode more reliably across the site
-- Don't duplicate SEO metadata between `apps.ts` and page files — `ToolLayout` reads from `apps.ts`
+## SEO and content
 
----
+- English-first for v1, without blocking future localization.
+- Keep canonical URLs aligned with sitemap URLs.
+- Maintain `robots.txt`, sitemap output, and a real noindex 404 page.
+- Add explicit title and description metadata to indexable pages.
+- Preserve valid structured data when visible content supports it.
+- Keep internal links between home, app pages, guides, Privacy, Terms, and Contact.
+- Use precise, non-hyped language.
+- Do not invent tool counts, categories, capabilities, or availability.
+- Probabilistic tools such as image-origin inspection require clear limitations.
 
-## Current tool inventory
+## Monetization and trust
 
-| Slug | Name | Category | Status |
-|---|---|---|---|
-| `tubetrace` | TubeTrace | YouTube / Data | Live |
-| `json-formatter` | JSON Formatter | Developer Tools | Live |
-| `ai-image-checker` | AI Image Checker | Image / Inspection | Coming Soon |
-| `csv-cleaner` | CSV Cleaner | Data Tools | Coming Soon |
+- Keep Privacy, Terms, Contact, cookie consent, and AdSense integration live.
+- Do not place ads inside the core tool workflow.
+- Avoid deceptive download buttons, exaggerated claims, or unfinished featured tools.
+- If a workflow is local-only, distinguish local file selection from server upload.
 
----
+## Validation
 
-## UI component quick reference
+For `apps/web` changes, run:
 
-| Component | File | Used for |
-|---|---|---|
-| `ToolLayout` | `components/layout/ToolLayout.astro` | Wraps every tool page |
-| `MainLayout` | `components/layout/MainLayout.astro` | Wraps content pages |
-| `ToolCard` | `components/apps/ToolCard.astro` | Grid items in Popular Tools section |
-| `FeaturedCard` | `components/apps/FeaturedCard.astro` | Cards in "Free Tools You'd Usually Pay For" |
-| `ToolMount` | `components/tools/ToolMount.astro` | Mounts the correct React tool by slug |
-| `CookieBanner` | `components/site/CookieBanner.astro` | GDPR consent banner (auto-included in both layouts) |
-| `Header` | `components/site/Header.astro` | Sticky navbar with mega-menus and search |
-| `Footer` | `components/site/Footer.astro` | Dark footer |
+```bash
+pnpm --dir apps/web run build
+```
 
----
+Before committing:
 
-## Planning constraints
+- inspect `git status`;
+- confirm only requested workspaces changed;
+- run `git diff --check`;
+- verify no generated secrets or local environment files are staged.
 
-- Preserve the single-domain monorepo architecture
-- Assume tools are embedded by default (inside the main Astro site)
-- English-first; keep localization possible without structural rewrites
-- `apps/tubetrace` is imported source-of-truth code — do not delete or heavily modify it; fold it gradually into the hub route
+## Deployment
 
----
+- Cloudflare Pages project: `smallwebapps`
+- Production domain: `https://smallwebapps.com`
+- Build command: `pnpm build`
+- Output directory: `apps/web/dist`
 
-## Content rules
-
-- Use precise, non-hyped language in all copy
-- For probabilistic/uncertain tools, add disclaimers — use the `disclaimer` field in `apps.ts`
-- Privacy-first positioning: if a tool is browser-only, say so clearly and consistently
-- Guide content is part of the SEO and monetization strategy — treat it seriously
+Deploy only when explicitly requested. Do not deploy another workspace as part of a Small Web Apps task.

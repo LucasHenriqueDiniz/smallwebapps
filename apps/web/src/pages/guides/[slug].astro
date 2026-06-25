@@ -37,13 +37,62 @@ const contentMap = {
 };
 
 const content = contentMap[guide.slug as keyof typeof contentMap];
+const canonicalUrl = `https://smallwebapps.com/guides/${guide.slug}/`;
+const imageUrl = new URL(guide.image, "https://smallwebapps.com").toString();
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.description,
+    mainEntityOfPage: canonicalUrl,
+    datePublished: guide.publishedDate,
+    dateModified: guide.modifiedDate,
+    image: imageUrl,
+    author: {
+      "@type": "Organization",
+      name: "Small Web Apps",
+      url: "https://smallwebapps.com/"
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Small Web Apps",
+      url: "https://smallwebapps.com/",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://smallwebapps.com/favicon.svg"
+      }
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://smallwebapps.com/" },
+      { "@type": "ListItem", position: 2, name: "Guides", item: "https://smallwebapps.com/guides/" },
+      { "@type": "ListItem", position: 3, name: guide.title, item: canonicalUrl }
+    ]
+  }
+];
 ---
 
-<MainLayout title={guide.title} description={guide.description} canonicalPath={`/guides/${guide.slug}`}>
+<MainLayout
+  title={guide.title}
+  description={guide.description}
+  canonicalPath={`/guides/${guide.slug}`}
+  image={guide.image}
+  ogType="article"
+  structuredData={structuredData}
+>
   <section class="section-shell pt-12">
     <span class="eyebrow">{guide.category}</span>
     <h1 class="mt-4 section-title">{guide.title}</h1>
     <p class="mt-4 section-copy">{guide.description}</p>
+    <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
+      <span>Published <time datetime={guide.publishedDate}>June 2, 2026</time></span>
+      <span>Updated <time datetime={guide.modifiedDate}>June 25, 2026</time></span>
+      <span>By Small Web Apps</span>
+    </div>
   </section>
 
   <section class="section-shell pt-10">

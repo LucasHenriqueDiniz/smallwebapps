@@ -4,6 +4,9 @@ export interface GuideDefinition {
   description: string;
   category: string;
   publishedLabel: string;
+  publishedDate: string;
+  modifiedDate: string;
+  image: string;
 }
 
 export const guides: GuideDefinition[] = [
@@ -11,16 +14,22 @@ export const guides: GuideDefinition[] = [
     slug: "how-to-export-youtube-watch-history",
     title: "How to Export Your YouTube Watch History",
     description:
-      "A practical guide to locating the right Google Takeout export so you can inspect your viewing history locally.",
+      "Export YouTube watch history from Google Takeout, verify that the archive contains the right files, and prepare it for private browser-based analysis.",
     category: "YouTube Analysis",
-    publishedLabel: "Starter guide"
+    publishedLabel: "Google Takeout guide",
+    publishedDate: "2026-06-02",
+    modifiedDate: "2026-06-25",
+    image: "/og/site.svg"
   },
   {
     slug: "how-to-analyze-youtube-watch-history",
-    title: "How to Analyze Your YouTube Watch History Without Uploading It",
+    title: "Analyze YouTube Watch History Locally",
     description:
-      "A privacy-first workflow for inspecting watch-history exports, spotting patterns, and keeping the data in your browser.",
+      "Analyze a YouTube watch-history export locally, understand useful viewing patterns, and avoid unnecessary uploads of personal Google Takeout data.",
     category: "YouTube Analysis",
-    publishedLabel: "Starter guide"
+    publishedLabel: "Privacy-first analysis guide",
+    publishedDate: "2026-06-02",
+    modifiedDate: "2026-06-25",
+    image: "/og/site.svg"
   }
 ];

@@ -10,17 +10,25 @@ interface Props {
   title?: string;
   description?: string;
   canonicalPath?: string;
+  image?: string;
+  ogType?: "website" | "article";
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title = siteConfig.title,
   description = siteConfig.description,
-  canonicalPath = "/"
+  canonicalPath = "/",
+  image = "/og/site.svg",
+  ogType = "website",
+  structuredData
 } = Astro.props;
 
 const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.name}`;
 const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
-const websiteSchema = {
+const imageUrl = new URL(image, siteConfig.siteUrl).toString();
+const imageAlt = `${siteConfig.name} — free browser-based tools`;
+const websiteSchema: Record<string, unknown> = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: siteConfig.name,
@@ -32,6 +40,9 @@ const websiteSchema = {
     "query-input": "required name=search_term_string",
   },
 };
+const schemaPayload = structuredData
+  ? [websiteSchema, ...(Array.isArray(structuredData) ? structuredData : [structuredData])]
+  : websiteSchema;
 ---
 
 <!doctype html>
@@ -83,16 +94,22 @@ const websiteSchema = {
     <link rel="apple-touch-icon"           href="/apple-touch-icon.png" />
     <link rel="manifest"                   href="/site.webmanifest" />
     <meta name="theme-color" content="#1a73e8" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteConfig.name} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <AdSenseHead />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaPayload)} />
   </head>
   <body class="text-slate-900" style="font-family: 'Inter', sans-serif; background: var(--page-bg); color: var(--text); margin: 0;">
     <Header />

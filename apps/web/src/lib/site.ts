@@ -1,10 +1,10 @@
 export const siteConfig = {
   name: "Small Web Apps",
   siteUrl: "https://smallwebapps.com",
-  title: "Small Web Apps",
+  title: "Free Browser Tools for Data and Developers",
   tagline: "Small, useful web apps that run in your browser.",
   description:
-    "A growing collection of lightweight browser-based apps for analyzing, checking, formatting, cleaning, and exploring data."
+    "Use free browser-based tools for PDF, image, developer, data, and AI inspection workflows. No accounts, no server uploads."
 };
 
 export const navItems = [

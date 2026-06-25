@@ -104,8 +104,11 @@ pnpm sync:tubetrace
 - Then copies the generated output into `apps/web/public/tubetrace-app`
 - It also writes stable `embed.js` and `embed.css` files for native mounting inside the Astro route
 
+## License
+
+This repository is licensed under the [MIT License](./LICENSE).
+
 ## Agent files
 
-- `AGENTS.md` contains the shared source of truth for architecture and content rules.
-- `CODEX.md` contains Codex-oriented execution guidance.
-- `CLAUDE.md` contains Claude-oriented planning and editing guidance.
+- `CLAUDE.md` contains the canonical repository instructions.
+- `AGENTS.md` and `CODEX.md` redirect to `CLAUDE.md`.
