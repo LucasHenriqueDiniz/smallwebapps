@@ -83,17 +83,21 @@ Issue template for:
 
 1. **Read** `INSTRUCTIONS.md` (2 min overview)
 2. **Then read** `../../CLAUDE.md` (product & architecture)
-3. **Before commit**, run:
+3. **Before commit**, run quick validators:
    ```bash
    ./.claude/skills/build-validator.sh
-   ./.claude/skills/seo-checker.sh
+   ./.claude/skills/seo-adsense-validator.sh
    ```
-4. **When creating PR**, use the template: `.claude/templates/PULL_REQUEST.md`
+4. **For deep audits**, see `EXTERNAL_SKILLS.md`:
+   - `/seo audit` — Full site SEO analysis (18 agents, 5 min)
+   - `/adsense-site-auditor` — AdSense compliance check (73 requirements)
+5. **When creating PR**, use the template: `.claude/templates/PULL_REQUEST.md`
 
 ## Key Constraints (TL;DR)
 
 - ✅ Add tools to `apps.ts`, implement in `apps/web/src/tools/[slug]`
-- ✅ Run build-validator + seo-checker before committing
+- ✅ Run build-validator + seo-adsense-validator before committing
+- ✅ For deep audits: use `/seo audit` or `/adsense-site-auditor` (install via EXTERNAL_SKILLS.md)
 - ❌ Never touch `apps/botschannel`
 - ❌ Don't build/deploy outside explicit requests
 - ✅ Keep tool metadata centralized
