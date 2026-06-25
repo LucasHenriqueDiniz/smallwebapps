@@ -38,7 +38,7 @@ export async function buildShareCard(data: AnalyticsData): Promise<Blob> {
   ctx.textAlign = "center";
   ctx.fillStyle = "#ffffff";
   ctx.font = "800 46px Inter, sans-serif";
-  ctx.fillText("TubeTrace", cx, 130);
+  ctx.fillText("YouTube Watch History", cx, 130);
   ctx.fillStyle = "rgba(255,255,255,0.45)";
   ctx.font = "500 24px Inter, sans-serif";
   ctx.fillText("meu histórico do YouTube", cx, 168);
@@ -87,7 +87,7 @@ export async function buildShareCard(data: AnalyticsData): Promise<Blob> {
   ctx.textAlign = "center";
   ctx.fillStyle = "rgba(255,255,255,0.4)";
   ctx.font = "600 28px Inter, sans-serif";
-  ctx.fillText("tubetrace.pages.dev", cx, S - 70);
+  ctx.fillText("smallwebapps.com", cx, S - 70);
 
   return new Promise<Blob>((resolve) =>
     canvas.toBlob((b) => resolve(b!), "image/png", 0.95)
@@ -97,15 +97,15 @@ export async function buildShareCard(data: AnalyticsData): Promise<Blob> {
 /** Shares the card via Web Share API, falling back to a download. */
 export async function shareCard(data: AnalyticsData): Promise<"shared" | "downloaded"> {
   const blob = await buildShareCard(data);
-  const file = new File([blob], "tubetrace.png", { type: "image/png" });
+  const file = new File([blob], "youtube-watch-history.png", { type: "image/png" });
 
   const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
   if (nav.share && nav.canShare?.({ files: [file] })) {
     try {
       await nav.share({
         files: [file],
-        title: "TubeTrace",
-        text: "Meu histórico do YouTube analisado no TubeTrace",
+        title: "YouTube Watch History Analyzer",
+        text: "Meu hist?rico do YouTube analisado localmente",
       });
       return "shared";
     } catch {
@@ -116,7 +116,7 @@ export async function shareCard(data: AnalyticsData): Promise<"shared" | "downlo
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "tubetrace.png";
+  a.download = "youtube-watch-history.png";
   a.click();
   URL.revokeObjectURL(url);
   return "downloaded";

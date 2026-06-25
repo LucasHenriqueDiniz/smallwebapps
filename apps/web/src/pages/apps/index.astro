@@ -1,35 +1,565 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
-import AppGrid from "@/components/apps/AppGrid.astro";
-import AdSlot from "@/components/ads/AdSlot.astro";
 import { apps } from "@/data/apps";
+
+const categoryOrder = [
+  "PDF Tools",
+  "Image / Inspection",
+  "Developer Tools",
+  "Data Tools",
+  "YouTube / Data",
+];
+
+const palette: Record<string, { bg: string; color: string; tint: string; icon: string }> = {
+  "YouTube / Data": { bg: "#fee2e2", color: "#dc2626", tint: "rgba(220,38,38,.08)", icon: "M23 7l-7 5 7 5V7z M1 5h15a2 2 0 012 2v10a2 2 0 01-2 2H1V5z" },
+  "Developer Tools": { bg: "#dbeafe", color: "#2563eb", tint: "rgba(37,99,235,.08)", icon: "M16 18l6-6-6-6M8 6l-6 6 6 6" },
+  "Image / Inspection": { bg: "#ede9fe", color: "#7c3aed", tint: "rgba(124,58,237,.08)", icon: "M4 16l4-4 4 4 4-5 4 5M4 4h16v16H4z" },
+  "Data Tools": { bg: "#d1fae5", color: "#059669", tint: "rgba(5,150,105,.08)", icon: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" },
+  "PDF Tools": { bg: "#ede9fe", color: "#7c3aed", tint: "rgba(124,58,237,.08)", icon: "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z M14 2v6h6" },
+};
+
+const byCategory = categoryOrder
+  .map((category) => ({
+    category,
+    apps: apps
+      .filter((app) => app.category === category)
+      .sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || a.name.localeCompare(b.name)),
+  }))
+  .filter((group) => group.apps.length > 0);
+
+const liveApps = apps.filter((app) => app.status === "live");
+const soonApps = apps.filter((app) => app.status !== "live");
+const categoryDisplay: Record<string, string> = {
+  "YouTube / Data": "YouTube Analysis",
+};
 ---
 
 <MainLayout
-  title="Apps"
-  description="Browse Small Web Apps tools for YouTube history inspection, JSON formatting, AI image review, and CSV cleanup."
+  title="Browse Free Browser Tools - Small Web Apps"
+  description="Browse free browser-based tools for PDF, image, developer, data, and YouTube tasks. No uploads, no accounts, client-side only."
   canonicalPath="/apps"
 >
-  <section class="section-shell pt-12">
-    <span class="eyebrow">Apps</span>
-    <h1 class="mt-4 section-title">A compact app directory built to be useful before the click</h1>
-    <p class="mt-4 section-copy">
-      These pages are designed to serve both users and search. Each app has a real landing page, a clear description, trust copy, and an interactive surface when ready.
-    </p>
-  </section>
+  <main class="directory">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow-line">{apps.length} local browser tools</p>
+        <h1>Useful tools, organized for fast work.</h1>
+        <p>Search across every utility, filter by category, and open the exact tool you need. Files and pasted data stay in your browser.</p>
+      </div>
+      <div class="hero-panel" aria-label="Tool counts">
+        <div><strong>{liveApps.length}</strong><span>Live</span></div>
+        <div><strong>{soonApps.length}</strong><span>Coming soon</span></div>
+        <div><strong>{byCategory.length}</strong><span>Categories</span></div>
+      </div>
+    </section>
 
-  <section class="section-shell pt-10">
-    <div class="mb-6 flex flex-wrap gap-2 text-sm text-slate-600">
-      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">YouTube / Data</span>
-      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">Developer Tools</span>
-      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">Image / Inspection</span>
-      <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">Data Tools</span>
+    <section class="control-bar" aria-label="Tool filters">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+        <input id="q" type="search" placeholder="Search by name, task, format, or keyword..." autocomplete="off" spellcheck="false" />
+        <kbd>/</kbd>
+      </div>
+      <div class="status-filter" role="group" aria-label="Availability">
+        <button class="status-btn active" data-status="all">All</button>
+        <button class="status-btn" data-status="live">Live</button>
+        <button class="status-btn" data-status="coming-soon">Soon</button>
+      </div>
+    </section>
+
+    <div class="body">
+      <aside class="sidebar" aria-label="Categories">
+        <button class="cat-btn active" data-cat="all">
+          <span>All tools</span>
+          <strong>{apps.length}</strong>
+        </button>
+        {byCategory.map(({ category, apps: groupApps }) => {
+          const p = palette[category];
+          return (
+            <button class="cat-btn" data-cat={category}>
+              <span>
+                <i style={`background:${p.bg};color:${p.color}`}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={p.icon} /></svg>
+                </i>
+                {categoryDisplay[category] ?? category}
+              </span>
+              <strong>{groupApps.length}</strong>
+            </button>
+          );
+        })}
+      </aside>
+
+      <div class="sections" id="sections">
+        {byCategory.map(({ category, apps: groupApps }) => {
+          const p = palette[category];
+          return (
+            <section class="category-section" data-section={category}>
+              <div class="section-head">
+                <div>
+                  <p class="section-kicker" style={`color:${p.color}`}>{groupApps.length} tools</p>
+                  <h2>{categoryDisplay[category] ?? category}</h2>
+                </div>
+                <a href={`/apps?cat=${encodeURIComponent(category).replaceAll("%20", "+")}`} style={`color:${p.color}`}>Filter category</a>
+              </div>
+              <div class="tool-grid">
+                {groupApps.map((app) => (
+                  <a
+                    href={app.appUrl}
+                    class="tool-card"
+                    data-card
+                    data-cat={app.category}
+                    data-status={app.status}
+                    data-name={app.name.toLowerCase()}
+                    data-search={`${app.name} ${app.shortDescription} ${app.tags.join(" ")} ${app.category}`.toLowerCase()}
+                    style={`--cat-color:${p.color};--cat-bg:${p.bg};--cat-tint:${p.tint}`}
+                  >
+                    <div class="card-top">
+                      <span class="tool-icon">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={p.icon} /></svg>
+                      </span>
+                      <span class={`badge ${app.status === "live" ? "live" : "soon"}`}>{app.status === "live" ? "Live" : "Soon"}</span>
+                    </div>
+                    <h3>{app.name}</h3>
+                    <p>{app.shortDescription}</p>
+                    <div class="tag-row">
+                      {app.tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </section>
+          );
+        })}
+
+        <div class="nores" id="nores">
+          <strong>No matching tools</strong>
+          <p>Try a shorter search or reset the filters.</p>
+          <button type="button" id="clear-btn">Clear filters</button>
+        </div>
+      </div>
     </div>
-    <AppGrid items={apps} />
-  </section>
-
-  <section class="section-shell pt-10">
-    <AdSlot label="App index ad placeholder with fixed reserved space" />
-  </section>
+  </main>
 </MainLayout>
 
+<script>
+  const q = document.getElementById("q") as HTMLInputElement;
+  const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-card]"));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>(".category-section"));
+  const catBtns = Array.from(document.querySelectorAll<HTMLElement>(".cat-btn"));
+  const statusBtns = Array.from(document.querySelectorAll<HTMLElement>(".status-btn"));
+  const nores = document.getElementById("nores")!;
+  const clearBtn = document.getElementById("clear-btn")!;
+  let activeCat = "all";
+  let activeStatus = "all";
+
+  function setCat(cat: string, clearSearch = true) {
+    activeCat = cat;
+    if (clearSearch) q.value = "";
+    catBtns.forEach((button) => button.classList.toggle("active", button.dataset.cat === cat));
+    run();
+  }
+
+  function setStatus(status: string) {
+    activeStatus = status;
+    statusBtns.forEach((button) => button.classList.toggle("active", button.dataset.status === status));
+    run();
+  }
+
+  function run() {
+    const text = q.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach((card) => {
+      const matchesCat = activeCat === "all" || card.dataset.cat === activeCat;
+      const matchesStatus = activeStatus === "all" || card.dataset.status === activeStatus;
+      const matchesText = !text || card.dataset.search?.includes(text) || false;
+      const show = matchesCat && matchesStatus && matchesText;
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    sections.forEach((section) => {
+      const hasVisibleCards = Boolean(section.querySelector("[data-card]:not([hidden])"));
+      section.hidden = !hasVisibleCards;
+    });
+    nores.hidden = visible > 0;
+  }
+
+  catBtns.forEach((button) => button.addEventListener("click", () => setCat(button.dataset.cat ?? "all")));
+  statusBtns.forEach((button) => button.addEventListener("click", () => setStatus(button.dataset.status ?? "all")));
+  q.addEventListener("input", run);
+  q.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      q.value = "";
+      run();
+    }
+  });
+  clearBtn.addEventListener("click", () => {
+    q.value = "";
+    setCat("all");
+    setStatus("all");
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
+      event.preventDefault();
+      q.focus();
+    }
+  });
+
+  const params = new URLSearchParams(location.search);
+  const urlCat = params.get("cat");
+  const urlQ = params.get("q");
+  if (urlCat) setCat(urlCat, false);
+  if (urlQ) {
+    q.value = urlQ;
+    run();
+  }
+  run();
+</script>
+
+<style>
+.directory {
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+.hero {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 44px 24px 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 36px;
+  align-items: end;
+}
+.eyebrow-line {
+  color: var(--blue);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+.hero h1 {
+  font-size: clamp(2.1rem, 4vw, 4rem);
+  line-height: 1;
+  letter-spacing: -1.4px;
+  margin: 0 0 14px;
+  max-width: 760px;
+}
+.hero-copy > p:last-child {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 680px;
+  margin: 0;
+}
+.hero-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--border);
+}
+.hero-panel div {
+  background: var(--card-bg);
+  padding: 18px 16px;
+}
+.hero-panel strong {
+  display: block;
+  font-size: 1.55rem;
+  letter-spacing: -.4px;
+}
+.hero-panel span {
+  display: block;
+  color: var(--muted);
+  font-size: .76rem;
+  margin-top: 3px;
+}
+.control-bar {
+  position: sticky;
+  top: 62px;
+  z-index: 40;
+  background: color-mix(in srgb, var(--nav-bg) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-block: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+.search-box {
+  width: min(760px, 100%);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--card-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 11px 13px;
+}
+.search-box:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(26,115,232,.08);
+}
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: .92rem;
+}
+.search-box kbd {
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 6px;
+  color: var(--muted);
+  font-size: .68rem;
+  background: var(--input-bg);
+}
+.status-filter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+}
+.status-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.status-btn.active {
+  background: var(--card-bg);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+.body {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 24px 76px;
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+.sidebar {
+  position: sticky;
+  top: 142px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cat-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 9px 10px;
+  text-align: left;
+  font: inherit;
+  font-size: .84rem;
+  cursor: pointer;
+}
+.cat-btn:hover,
+.cat-btn.active {
+  background: var(--card-bg);
+  border-color: var(--border);
+  color: var(--text);
+}
+.cat-btn span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.cat-btn i {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cat-btn strong {
+  color: inherit;
+  font-size: .75rem;
+  background: var(--input-bg);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+.category-section[hidden],
+.tool-card[hidden],
+.nores[hidden] { display: none; }
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 13px;
+}
+.section-kicker {
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: -.5px;
+}
+.section-head a {
+  font-size: .8rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.tool-card {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: inherit;
+  text-decoration: none;
+  padding: 15px;
+  transition: transform .15s, border-color .15s, box-shadow .15s;
+}
+.tool-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--cat-color);
+  box-shadow: 0 12px 28px rgba(15,23,42,.1);
+}
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.tool-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cat-color);
+  background: var(--cat-bg);
+}
+[data-theme="dark"] .tool-icon { background: var(--cat-tint); }
+.badge {
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: .64rem;
+  font-weight: 900;
+}
+.badge.live { background: rgba(34,197,94,.12); color: #16a34a; }
+.badge.soon { background: rgba(245,158,11,.14); color: #b45309; }
+.tool-card h3 {
+  margin: 0 0 7px;
+  color: var(--text);
+  font-size: .98rem;
+  letter-spacing: -.2px;
+}
+.tool-card p {
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.5;
+  margin: 0;
+}
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+.tag-row span {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 999px;
+  font-size: .66rem;
+  font-weight: 700;
+  padding: 3px 7px;
+}
+.nores {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  padding: 44px 24px;
+  text-align: center;
+}
+.nores strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 7px;
+}
+.nores p {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+.nores button {
+  border: none;
+  background: var(--blue);
+  color: white;
+  border-radius: 8px;
+  padding: 9px 15px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+@media (max-width: 1100px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-panel { max-width: 520px; }
+  .body { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .hero { padding: 32px 16px 22px; }
+  .control-bar {
+    top: 62px;
+    padding: 10px 16px;
+    flex-direction: column;
+  }
+  .body { padding: 20px 16px 56px; }
+  .sidebar { grid-template-columns: 1fr; }
+  .tool-grid { grid-template-columns: 1fr; }
+  .section-head { align-items: start; flex-direction: column; }
+  .hero-panel { grid-template-columns: 1fr; }
+}
+</style>

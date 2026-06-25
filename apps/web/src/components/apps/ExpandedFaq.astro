@@ -1,0 +1,98 @@
+---
+import type { AppFaq } from "@smallwebapps/data";
+
+interface Props {
+  items: AppFaq[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-head">
+      <span>FAQ</span>
+      <h2>Frequently asked questions</h2>
+    </div>
+    <div class="faq-list">
+      {items.map((item) => (
+        <details class="faq-item">
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+)}
+
+<style>
+.faq-section {
+  margin-top: 28px;
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+}
+
+.faq-inner {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+
+.faq-head { margin-bottom: 16px; }
+.faq-head span {
+  display: block;
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.faq-head h2 {
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 6px 0 0;
+}
+
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--page-bg);
+  padding: 14px 16px;
+}
+
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--muted);
+  transition: transform .15s;
+}
+.faq-item[open] summary::after { content: "−"; }
+
+.faq-item p {
+  margin: 10px 0 0;
+  font-size: .85rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+</style>

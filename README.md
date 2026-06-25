@@ -59,7 +59,7 @@ pnpm build
    - privacy/trust copy
    - FAQ entries
    - related internal links
-   - an AdSlot placeholder in a non-blocking position
+   - no manual ad slots inside the tool or article body
 
 ## Deployment
 

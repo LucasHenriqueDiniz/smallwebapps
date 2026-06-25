@@ -1,7 +1,6 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
 import CTASection from "@/components/apps/CTASection.astro";
-import AdSlot from "@/components/ads/AdSlot.astro";
 import { guides } from "@/data/guides";
 
 export function getStaticPaths() {
@@ -23,14 +22,14 @@ const contentMap = {
     points: [
       "Choose the YouTube and YouTube Music data sections carefully in Google Takeout.",
       "Keep the export local instead of immediately uploading it to third-party tools.",
-      "Open the resulting files with TubeTrace inside Small Web Apps so the content stays inside the browser session."
+      "Open the resulting files with the YouTube Watch History Analyzer inside Small Web Apps so the content stays inside the browser session."
     ]
   },
   "how-to-analyze-youtube-watch-history": {
     intro:
       "A lightweight local workflow is often enough to answer basic questions about your viewing history. You usually do not need a complex cloud dashboard to validate whether a file contains usable watch-history data and estimate how much history is present.",
     points: [
-      "Start by validating the file locally in TubeTrace.",
+      "Start by validating the file locally in the YouTube Watch History Analyzer.",
       "Look for timestamps, watch links, and channel-related patterns before deeper parsing.",
       "Treat local inspection as the safest default until you genuinely need richer analytics."
     ]
@@ -48,7 +47,7 @@ const content = contentMap[guide.slug as keyof typeof contentMap];
   </section>
 
   <section class="section-shell pt-10">
-    <div class="grid gap-5 md:grid-cols-[1.2fr_0.8fr]">
+    <div class="max-w-3xl">
       <article class="card-surface rounded-[2rem] p-7">
         <p class="text-sm leading-7 text-slate-600 md:text-base">{content.intro}</p>
         <ul class="mt-6 space-y-4 text-sm leading-7 text-slate-600 md:text-base">
@@ -58,8 +57,6 @@ const content = contentMap[guide.slug as keyof typeof contentMap];
           The purpose of this guide is to strengthen the app page with supporting context, not to replace the app itself.
         </p>
       </article>
-
-      <AdSlot label="Guide article ad placeholder reserved beside content" />
     </div>
   </section>
 
@@ -67,7 +64,7 @@ const content = contentMap[guide.slug as keyof typeof contentMap];
     title="Continue into the actual tool"
     copy="Use the guide to understand the workflow, then move into the app page for local interaction."
     primaryHref="/apps/tubetrace"
-    primaryLabel="Open TubeTrace page"
+    primaryLabel="Open YouTube analyzer"
     secondaryHref="/guides"
     secondaryLabel="Back to guides"
   />

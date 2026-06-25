@@ -1,39 +1,237 @@
 ---
-import { navItems } from "@/lib/site";
+import { apps } from "@/data/apps";
+
+const categoryOrder = [
+  "PDF Tools",
+  "Image / Inspection",
+  "Developer Tools",
+  "Data Tools",
+  "YouTube / Data",
+];
+
+const categoryLabel: Record<string, string> = {
+  "PDF Tools": "PDF",
+  "Image / Inspection": "Image",
+  "Developer Tools": "Developer",
+  "Data Tools": "Data",
+  "YouTube / Data": "YouTube Analysis",
+};
+
+const categoryHref = (category: string) => `/apps?cat=${encodeURIComponent(category).replaceAll("%20", "+")}`;
+const grouped = categoryOrder
+  .map((category) => ({
+    category,
+    apps: apps
+      .filter((app) => app.category === category)
+      .sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || a.name.localeCompare(b.name)),
+  }))
+  .filter((group) => group.apps.length > 0);
 ---
 
-<footer class="border-t border-slate-200 bg-white/80">
-  <div class="section-shell grid gap-8 py-10 md:grid-cols-[1.4fr_1fr_1fr]">
-    <div class="space-y-3">
-      <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Small Web Apps</div>
-      <p class="max-w-xl text-sm leading-6 text-slate-600">
-        A single-domain hub for fast browser-based utilities, content-rich tool pages, and future AdSense-ready growth.
-      </p>
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">
+        <img src="/favicon-96x96.png" alt="Small Web Apps" width="36" height="36" />
+        <span><span class="fn-small">Small</span><span class="fn-web">Web</span> <span class="fn-apps">Apps</span></span>
+      </a>
+      <p>{apps.length} free browser-based utilities for PDF, image, developer, data, YouTube analysis, and social content workflows. No uploads, no accounts.</p>
+      <div class="footer-badges">
+        <span class="fbadge">Privacy first</span>
+        <span class="fbadge">Client-side tools</span>
+        <span class="fbadge">No accounts</span>
+      </div>
     </div>
 
-    <div>
-      <h2 class="text-sm font-semibold text-slate-900">Explore</h2>
-      <ul class="mt-3 space-y-2 text-sm text-slate-600">
-        {
-          navItems.map((item) => (
-            <li>
-              <a href={item.href} class="transition hover:text-orange-600">
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
+    <div class="footer-directory">
+      {grouped.map(({ category, apps: groupApps }) => (
+        <div class="footer-col">
+          <h4>
+            <a href={categoryHref(category)}>{categoryLabel[category] ?? category}</a>
+            <span>{groupApps.length}</span>
+          </h4>
+          {groupApps.slice(0, 6).map((app) => (
+            <a href={app.appUrl}>
+              {app.name}
+              {app.status === "coming-soon" && <em>Soon</em>}
+            </a>
+          ))}
+          {groupApps.length > 6 && <a href={categoryHref(category)} class="see-all">View all {groupApps.length}</a>}
+        </div>
+      ))}
 
-    <div>
-      <h2 class="text-sm font-semibold text-slate-900">Policy</h2>
-      <ul class="mt-3 space-y-2 text-sm text-slate-600">
-        <li>English-first content in v1</li>
-        <li>Tools are browser-first whenever possible</li>
-        <li>Ad slots are placeholders until monetization goes live</li>
-      </ul>
+      <div class="footer-col footer-nav">
+        <h4>Site</h4>
+        <a href="/">Home</a>
+        <a href="/apps">All tools</a>
+        <a href="/guides">Guides</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
     </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© {new Date().getFullYear()} Small Web Apps. All rights reserved.</span>
+    <span>Browser-first · No file uploads · Consent-gated ads</span>
   </div>
 </footer>
 
+<style>
+.footer {
+  background: #0f172a;
+  font-family: 'Inter', sans-serif;
+  color: rgba(255,255,255,.66);
+}
+.footer-top {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 50px 24px 38px;
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 54px;
+}
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+.footer-logo img {
+  border-radius: 8px;
+  opacity: .94;
+}
+.fn-small { color: white; }
+.fn-web { color: #60a5fa; }
+.fn-apps { font-weight: 500; opacity: .58; font-size: .9rem; }
+.footer-brand p {
+  font-size: .84rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,.55);
+  margin: 0;
+}
+.footer-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fbadge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: .7rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.68);
+}
+.footer-directory {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 30px;
+}
+.footer-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.footer-col h4 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: .7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: rgba(255,255,255,.38);
+  margin: 0 0 2px;
+}
+.footer-col h4 a {
+  color: inherit;
+  text-decoration: none;
+}
+.footer-col h4 a:hover { color: white; }
+.footer-col h4 span {
+  font-size: .66rem;
+  letter-spacing: 0;
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.55);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+.footer-col > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: rgba(255,255,255,.57);
+  text-decoration: none;
+  font-size: .82rem;
+  line-height: 1.35;
+}
+.footer-col > a:hover { color: white; }
+.footer-col em {
+  font-style: normal;
+  flex-shrink: 0;
+  color: #fde68a;
+  background: rgba(245,158,11,.14);
+  border-radius: 999px;
+  padding: 1px 6px;
+  font-size: .62rem;
+  font-weight: 800;
+}
+.see-all {
+  color: #93c5fd !important;
+  font-weight: 800;
+  margin-top: 2px;
+}
+.footer-nav {
+  border-left: 1px solid rgba(255,255,255,.08);
+  padding-left: 24px;
+}
+.footer-bottom {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: .76rem;
+  color: rgba(255,255,255,.34);
+}
+@media (max-width: 1000px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .footer-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer-nav {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+@media (max-width: 620px) {
+  .footer-top { padding: 42px 16px 32px; }
+  .footer-directory { grid-template-columns: 1fr; }
+  .footer-bottom {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>

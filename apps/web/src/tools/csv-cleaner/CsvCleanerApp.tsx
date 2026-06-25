@@ -1,65 +1,105 @@
 import { useMemo, useState } from "react";
 
-function parseRows(input: string) {
-  return input
+function parseRows(raw: string): string[][] {
+  return raw
     .split(/\r?\n/)
     .map((line) => line.split(","))
-    .filter((cells) => cells.some((cell) => cell.trim().length > 0));
+    .filter((cells) => cells.some((c) => c.trim().length > 0));
 }
 
 export default function CsvCleanerApp() {
-  const [input, setInput] = useState("name, city, score\n Alice , Sao Paulo , 42 \n Bob, Recife, 37\n,,");
+  const [input, setInput] = useState(
+    "name, city, score\n Alice , São Paulo , 42 \n Bob, Recife, 37\n,,"
+  );
+  const [copied, setCopied] = useState(false);
 
-  const rows = useMemo(() => parseRows(input), [input]);
+  const rows    = useMemo(() => parseRows(input), [input]);
   const cleaned = useMemo(
-    () =>
-      rows
-        .map((cells) => cells.map((cell) => cell.trim()).join(","))
-        .join("\n"),
+    () => rows.map((cells) => cells.map((c) => c.trim()).join(",")).join("\n"),
     [rows]
   );
+  const colCount = useMemo(() => Math.max(...rows.map((r) => r.length), 0), [rows]);
 
-  const columnCount = useMemo(() => Math.max(...rows.map((cells) => cells.length), 0), [rows]);
+  function copyOutput() {
+    if (!cleaned) return;
+    navigator.clipboard.writeText(cleaned).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  }
+
+  function downloadOutput() {
+    const blob = new Blob([cleaned], { type: "text/csv" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = "cleaned.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <div className="grid gap-5 md:grid-cols-[1fr_0.9fr]">
-      <section className="rounded-[1.75rem] border border-slate-200 bg-white p-5">
-        <h3 className="text-lg font-semibold text-slate-950">Paste CSV data</h3>
+      {/* Input */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h3 className="mb-3 text-base font-semibold text-slate-950">Paste CSV data</h3>
         <textarea
           value={input}
-          onChange={(event) => setInput(event.target.value)}
-          className="mt-4 min-h-72 w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none ring-orange-200 transition focus:ring-2"
+          onChange={(e) => setInput(e.target.value)}
+          className="min-h-64 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
           spellCheck={false}
+          placeholder="Paste your CSV here…"
+          aria-label="CSV input"
         />
       </section>
 
-      <section className="space-y-5">
-        <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5">
-          <h3 className="text-lg font-semibold text-slate-950">Quick stats</h3>
-          <dl className="mt-3 grid gap-3 text-sm text-slate-600">
+      {/* Output */}
+      <section className="flex flex-col gap-4">
+        {/* Stats */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <h3 className="text-base font-semibold text-slate-950">Quick stats</h3>
+          <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
             <div>
               <dt className="font-semibold text-slate-900">Rows kept</dt>
-              <dd>{rows.length}</dd>
+              <dd className="text-slate-600">{rows.length}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-900">Estimated columns</dt>
-              <dd>{columnCount}</dd>
+              <dt className="font-semibold text-slate-900">Columns detected</dt>
+              <dd className="text-slate-600">{colCount}</dd>
             </div>
-            <div>
+            <div className="col-span-2">
               <dt className="font-semibold text-slate-900">Cleanup applied</dt>
-              <dd>Trimmed whitespace and removed fully empty rows</dd>
+              <dd className="text-slate-600">Trimmed whitespace · Removed blank rows</dd>
             </div>
           </dl>
         </div>
 
-        <div className="rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white">
-          <h3 className="text-lg font-semibold">Cleaned output</h3>
-          <pre className="mt-3 overflow-x-auto whitespace-pre-wrap break-words text-sm text-slate-200">
-            {cleaned || "Add CSV rows to generate cleaned output."}
+        {/* Cleaned output */}
+        <div className="flex-1 rounded-2xl border border-slate-200 bg-slate-950 p-5 text-white">
+          <div className="mb-3 flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="text-base font-semibold">Cleaned output</h3>
+            {cleaned && (
+              <div className="flex gap-2">
+                <button
+                  onClick={copyOutput}
+                  className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-medium text-slate-300 transition hover:bg-slate-700"
+                >
+                  {copied ? "✓ Copied" : "Copy"}
+                </button>
+                <button
+                  onClick={downloadOutput}
+                  className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-medium text-slate-300 transition hover:bg-slate-700"
+                >
+                  ↓ Download
+                </button>
+              </div>
+            )}
+          </div>
+          <pre className="overflow-x-auto whitespace-pre-wrap break-words text-sm text-slate-200 leading-relaxed">
+            {cleaned || "Add CSV rows above to generate cleaned output here."}
           </pre>
         </div>
       </section>
     </div>
   );
 }
-

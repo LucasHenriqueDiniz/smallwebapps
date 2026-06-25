@@ -1,0 +1,28 @@
+{
+  "name": "Small Web Apps",
+  "short_name": "SmallWebApps",
+  "description": "Free browser-based tools — PDF, image, developer, AI, and more.",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#1a73e8",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+}

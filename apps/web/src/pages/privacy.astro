@@ -3,24 +3,60 @@ import MainLayout from "@/components/layout/MainLayout.astro";
 ---
 
 <MainLayout
-  title="Privacy"
-  description="Read the Small Web Apps privacy overview and how browser-first tools are positioned in v1."
+  title="Privacy Policy — Small Web Apps"
+  description="Read the Small Web Apps privacy overview and how browser-first tools handle your data."
   canonicalPath="/privacy"
 >
-  <section class="section-shell pt-12">
-    <span class="eyebrow">Privacy</span>
-    <h1 class="mt-4 section-title">A browser-first privacy posture, explained plainly</h1>
-    <div class="mt-8 card-surface rounded-[2rem] p-7 text-sm leading-7 text-slate-600 md:text-base">
-      <p>
-        Small Web Apps focuses on lightweight browser-based utilities. When a tool processes data locally in the browser, the app page should say so clearly.
-      </p>
-      <p class="mt-4">
-        This privacy page is a site-level overview, not a blanket claim that every future tool behaves identically. Each app page remains responsible for accurately describing its own data handling.
-      </p>
-      <p class="mt-4">
-        Users should avoid assuming that privacy behavior is identical across all future utilities. The page-level copy is the source of truth for each tool.
-      </p>
+  <section class="static-page">
+    <div class="static-inner">
+      <span class="static-eyebrow">Privacy</span>
+      <h1>A browser-first privacy posture,<br/>explained plainly</h1>
+      <div class="static-card">
+        <p>Small Web Apps focuses on lightweight browser-based utilities. Tool inputs are processed in the browser unless a tool page clearly says otherwise.</p>
+        <p>We do not run accounts, paywalls, or server-side file uploads for the tools. Some site-level services may still receive standard web request data, such as IP address, browser information, referrer, and page URL.</p>
+        <p>If advertising or analytics is enabled, Google and related vendors may use cookies or similar technologies according to the consent choice shown in the cookie banner.</p>
+        <p>This privacy page is a site-level overview. Each app page remains responsible for accurately describing its own data handling and limitations.</p>
+        <div class="static-highlight">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <p>Private tool content, such as pasted text or selected files, is handled locally by browser-based tools unless the specific tool page states a network dependency.</p>
+        </div>
+      </div>
     </div>
   </section>
 </MainLayout>
 
+<style>
+.static-page {
+  max-width: 760px; margin: 0 auto; padding: 64px 24px 80px;
+  font-family: 'Inter', sans-serif;
+}
+.static-inner { display: flex; flex-direction: column; gap: 20px; }
+.static-eyebrow {
+  display: inline-flex; align-items: center;
+  background: rgba(26,115,232,.1); color: var(--blue);
+  padding: 4px 14px; border-radius: 20px;
+  font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  width: fit-content;
+}
+h1 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900;
+  color: var(--text); letter-spacing: -.5px; line-height: 1.15; margin: 0;
+}
+.static-card {
+  background: var(--surface-strong); border: 1px solid var(--border);
+  border-radius: 20px; padding: 32px;
+  display: flex; flex-direction: column; gap: 16px;
+  box-shadow: var(--shadow);
+}
+.static-card p {
+  font-size: .95rem; line-height: 1.8; color: var(--muted); margin: 0;
+}
+.static-highlight {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: rgba(26,115,232,.07); border: 1px solid rgba(26,115,232,.15);
+  border-radius: 12px; padding: 16px 18px; margin-top: 8px;
+  color: var(--blue);
+}
+.static-highlight svg { flex-shrink: 0; margin-top: 2px; }
+.static-highlight p  { color: var(--blue) !important; font-weight: 500; font-size: .88rem !important; line-height: 1.6 !important; }
+</style>

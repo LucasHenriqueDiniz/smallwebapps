@@ -1,0 +1,4 @@
+name = "smallwebapps"
+account_id = "4b0cda1955c5f4a6a71df6dc67c69533"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-06-06"

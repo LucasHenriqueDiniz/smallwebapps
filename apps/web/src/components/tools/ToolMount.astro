@@ -1,24 +1,324 @@
 ---
-import JsonFormatterApp from "@/tools/json-formatter/JsonFormatterApp";
-import CsvCleanerApp from "@/tools/csv-cleaner/CsvCleanerApp";
-import AiImageCheckerApp from "@/tools/ai-image-checker/AiImageCheckerApp";
-import TubeTraceApp from "@/tools/tubetrace/TubeTraceApp";
+/**
+ * ToolMount — renders the correct React tool island by slug.
+ * Layout/padding is handled by ToolLayout (.tl-body).
+ * Do NOT add extra wrappers here.
+ */
+import JsonFormatterApp        from "@/tools/json-formatter/JsonFormatterApp";
+import CsvCleanerApp           from "@/tools/csv-cleaner/CsvCleanerApp";
+import AiImageCheckerApp       from "@/tools/ai-image-checker/AiImageCheckerApp";
+import YouTubeWatchHistoryAnalyzerApp from "@/tools/tubetrace/YouTubeWatchHistoryAnalyzerApp";
+import PdfExtractTextApp       from "@/tools/pdf-extract-text/PdfExtractTextApp";
+import PdfToImageApp           from "@/tools/pdf-to-image/PdfToImageApp";
+import PdfSplitApp             from "@/tools/pdf-split/PdfSplitApp";
+import ImageToPdfApp           from "@/tools/image-to-pdf/ImageToPdfApp";
+import ImageResizeApp          from "@/tools/image-resize/ImageResizeApp";
+import ImageCropApp            from "@/tools/image-crop/ImageCropApp";
+import ImageOptimizeApp        from "@/tools/image-optimize/ImageOptimizeApp";
+import ImageCompressVariantApp from "@/tools/image-optimize/ImageCompressVariantApp";
+import CssFormatterApp         from "@/tools/css-formatter/CssFormatterApp";
+
+// Text Tools
+import WordCounterApp          from "@/tools/word-counter/WordCounterApp";
+import CaseConverterApp        from "@/tools/case-converter/CaseConverterApp";
+import LineSorterApp           from "@/tools/line-sorter/LineSorterApp";
+import DuplicateRemoverApp     from "@/tools/duplicate-remover/DuplicateRemoverApp";
+import FindReplaceApp          from "@/tools/find-replace/FindReplaceApp";
+import LoremIpsumApp           from "@/tools/lorem-ipsum/LoremIpsumApp";
+import SlugGeneratorApp        from "@/tools/slug-generator/SlugGeneratorApp";
+import ReadingTimeApp          from "@/tools/reading-time/ReadingTimeApp";
+import TextReverseApp          from "@/tools/text-reverse/TextReverseApp";
+import PasswordGeneratorApp    from "@/tools/password-generator/PasswordGeneratorApp";
+import PasswordStrengthApp     from "@/tools/password-strength/PasswordStrengthApp";
+
+// Math & Numbers
+import UnitConverterApp        from "@/tools/unit-converter/UnitConverterApp";
+import NumberBaseConverterApp  from "@/tools/number-base-converter/NumberBaseConverterApp";
+import TimestampConverterApp   from "@/tools/timestamp-converter/TimestampConverterApp";
+import AgeCalculatorApp        from "@/tools/age-calculator/AgeCalculatorApp";
+import DateDiffApp             from "@/tools/date-diff/DateDiffApp";
+import PercentageCalculatorApp from "@/tools/percentage-calculator/PercentageCalculatorApp";
+import LoanCalculatorApp       from "@/tools/loan-calculator/LoanCalculatorApp";
+import BmiCalculatorApp        from "@/tools/bmi-calculator/BmiCalculatorApp";
+import StatisticsCalculatorApp from "@/tools/statistics-calculator/StatisticsCalculatorApp";
+
+// Developer Tools (new)
+import Base64EncoderApp        from "@/tools/base64-encoder/Base64EncoderApp";
+import UrlEncoderApp           from "@/tools/url-encoder/UrlEncoderApp";
+import UuidGeneratorApp        from "@/tools/uuid-generator/UuidGeneratorApp";
+import HashGeneratorApp        from "@/tools/hash-generator/HashGeneratorApp";
+import RegexTesterApp          from "@/tools/regex-tester/RegexTesterApp";
+import HtmlEntitiesApp         from "@/tools/html-entities/HtmlEntitiesApp";
+import JwtDecoderApp           from "@/tools/jwt-decoder/JwtDecoderApp";
+import AspectRatioCalculatorApp from "@/tools/aspect-ratio-calculator/AspectRatioCalculatorApp";
+import RandomStringApp         from "@/tools/random-string/RandomStringApp";
+
+// Color & CSS
+import ColorConverterApp       from "@/tools/color-converter/ColorConverterApp";
+import ContrastCheckerApp      from "@/tools/contrast-checker/ContrastCheckerApp";
+import CssGradientGeneratorApp from "@/tools/css-gradient-generator/CssGradientGeneratorApp";
+import CssShadowGeneratorApp   from "@/tools/css-shadow-generator/CssShadowGeneratorApp";
+import CssBorderRadiusApp      from "@/tools/css-border-radius/CssBorderRadiusApp";
+
+// Image / Canvas (new)
+import ImageFormatConverterApp from "@/tools/image-format-converter/ImageFormatConverterApp";
+import ImageFlipRotateApp      from "@/tools/image-flip-rotate/ImageFlipRotateApp";
+import ImageGrayscaleApp       from "@/tools/image-grayscale/ImageGrayscaleApp";
+import ImageColorPickerApp     from "@/tools/image-color-picker/ImageColorPickerApp";
+import FaviconGeneratorApp     from "@/tools/favicon-generator/FaviconGeneratorApp";
+
+// PDF Tools (new)
+import PdfMergeApp             from "@/tools/pdf-merge/PdfMergeApp";
+import PdfRotateApp            from "@/tools/pdf-rotate/PdfRotateApp";
+import PdfWatermarkApp         from "@/tools/pdf-watermark/PdfWatermarkApp";
+import PdfMetadataApp          from "@/tools/pdf-metadata/PdfMetadataApp";
+import PdfCompressApp          from "@/tools/pdf-compress/PdfCompressApp";
+import PdfCompressVariantApp   from "@/tools/pdf-compress/PdfCompressVariantApp";
+
+// Data Tools (new)
+import JsonToCsvApp            from "@/tools/json-to-csv/JsonToCsvApp";
+import CsvToJsonApp            from "@/tools/csv-to-json/CsvToJsonApp";
+import FileHashApp             from "@/tools/file-hash/FileHashApp";
+
+// Existing tools now published
+import BarcodeGeneratorApp     from "@/tools/barcode-generator/BarcodeGeneratorApp";
+import BinaryTextConverterApp  from "@/tools/binary-text-converter/BinaryTextConverterApp";
+import ColorPaletteExtractorApp from "@/tools/color-palette-extractor/ColorPaletteExtractorApp";
+import ColorShadesApp          from "@/tools/color-shades/ColorShadesApp";
+import CronParserApp           from "@/tools/cron-parser/CronParserApp";
+import CssUnitConverterApp     from "@/tools/css-unit-converter/CssUnitConverterApp";
+import DataSizeConverterApp    from "@/tools/data-size-converter/DataSizeConverterApp";
+import DiffViewerApp           from "@/tools/diff-viewer/DiffViewerApp";
+import DummyDataGeneratorApp   from "@/tools/dummy-data-generator/DummyDataGeneratorApp";
+import ExifViewerApp           from "@/tools/exif-viewer/ExifViewerApp";
+import HexDumpApp              from "@/tools/hex-dump/HexDumpApp";
+import HtmlFormatterApp        from "@/tools/html-formatter/HtmlFormatterApp";
+import HttpStatusCodesApp      from "@/tools/http-status-codes/HttpStatusCodesApp";
+import ImageMetadataApp        from "@/tools/image-metadata/ImageMetadataApp";
+import JsonFlattenApp          from "@/tools/json-flatten/JsonFlattenApp";
+import JsonToXmlApp            from "@/tools/json-to-xml/JsonToXmlApp";
+import MarkdownPreviewApp      from "@/tools/markdown-preview/MarkdownPreviewApp";
+import MetaTagGeneratorApp     from "@/tools/meta-tag-generator/MetaTagGeneratorApp";
+import MorseEncoderApp         from "@/tools/morse-encoder/MorseEncoderApp";
+import NumberFormatterApp      from "@/tools/number-formatter/NumberFormatterApp";
+import OgTagGeneratorApp       from "@/tools/og-tag-generator/OgTagGeneratorApp";
+import QrCodeGeneratorApp      from "@/tools/qr-code-generator/QrCodeGeneratorApp";
+import QrCodeReaderApp         from "@/tools/qr-code-reader/QrCodeReaderApp";
+import ScreenColorPickerApp    from "@/tools/screen-color-picker/ScreenColorPickerApp";
+import SvgToPngApp             from "@/tools/svg-to-png/SvgToPngApp";
+import TimezoneConverterApp    from "@/tools/timezone-converter/TimezoneConverterApp";
+import UrlParserApp            from "@/tools/url-parser/UrlParserApp";
+import XmlFormatterApp         from "@/tools/xml-formatter/XmlFormatterApp";
+import XmlToJsonApp            from "@/tools/xml-to-json/XmlToJsonApp";
+import YamlToJsonApp           from "@/tools/yaml-to-json/YamlToJsonApp";
+import SimpleUtilityApp        from "@/tools/simple-utilities/SimpleUtilityApp";
+import KeywordDensityCheckerApp from "@/tools/keyword-density-checker/KeywordDensityCheckerApp";
+import MetaTagsAnalyzerApp     from "@/tools/meta-tags-analyzer/MetaTagsAnalyzerApp";
+import OpenGraphCheckerApp     from "@/tools/open-graph-checker/OpenGraphCheckerApp";
 
 interface Props {
   slug: string;
 }
 
 const { slug } = Astro.props;
+
+const ALL_SLUGS = [
+  "tubetrace", "json-formatter", "ai-image-checker", "csv-cleaner",
+  "pdf-extract-text", "pdf-to-image", "pdf-split", "image-to-pdf",
+  "image-resize", "image-crop", "image-optimize", "css-formatter",
+  "compress-image-to-50kb", "compress-image-to-100kb", "compress-image-to-200kb",
+  "compress-jpg-to-100kb", "compress-png-to-100kb", "compress-webp-to-100kb",
+  "word-counter", "case-converter", "line-sorter", "duplicate-remover",
+  "find-replace", "lorem-ipsum", "slug-generator", "reading-time",
+  "text-reverse", "password-generator", "password-strength",
+  "unit-converter", "number-base-converter", "timestamp-converter",
+  "age-calculator", "date-diff", "percentage-calculator", "loan-calculator",
+  "bmi-calculator", "statistics-calculator",
+  "base64-encoder", "url-encoder", "uuid-generator", "hash-generator",
+  "regex-tester", "html-entities", "jwt-decoder", "aspect-ratio-calculator",
+  "random-string",
+  "color-converter", "contrast-checker", "css-gradient-generator",
+  "css-shadow-generator", "css-border-radius",
+  "image-format-converter", "image-flip-rotate", "image-grayscale",
+  "image-color-picker", "favicon-generator",
+  "pdf-merge", "pdf-rotate", "pdf-watermark", "pdf-metadata", "pdf-compress",
+  "compress-pdf-to-100kb", "compress-pdf-to-200kb", "compress-pdf-to-500kb", "compress-pdf-to-1mb",
+  "json-to-csv", "csv-to-json", "file-hash",
+  "barcode-generator", "binary-text-converter", "color-palette-extractor",
+  "color-shades", "cron-parser", "css-unit-converter", "data-size-converter",
+  "diff-viewer", "dummy-data-generator", "exif-viewer", "hex-dump",
+  "html-formatter", "http-status-codes", "image-metadata", "json-flatten",
+  "json-to-xml", "markdown-preview", "meta-tag-generator", "morse-encoder",
+  "number-formatter", "og-tag-generator", "qr-code-generator", "qr-code-reader",
+  "screen-color-picker", "svg-to-png", "timezone-converter", "url-parser",
+  "xml-formatter", "xml-to-json", "yaml-to-json",
+  "robots-txt-generator", "sitemap-generator", "htaccess-redirect-generator",
+  "keyword-density-checker", "meta-tags-analyzer", "open-graph-checker",
+  "csp-generator", "gitignore-generator", "dockerignore-generator",
+  "sql-formatter", "utm-builder", "url-query-builder",
+  "word-frequency-counter", "csv-column-extractor", "json-schema-generator",
+  "json-path-extractor", "csv-to-sql", "csv-to-markdown",
+  "csv-delimiter-converter", "css-clamp-generator", "css-minifier",
+  "html-minifier", "markdown-table-generator", "uuid-validator",
+  "ulid-generator", "luhn-validator", "mime-type-lookup",
+  "user-agent-parser", "chmod-calculator", "email-validator",
+  "youtube-url-parser", "youtube-chapter-generator", "youtube-tag-extractor",
+  "youtube-title-counter", "youtube-description-cleaner",
+  "instagram-hashtag-extractor", "instagram-caption-formatter",
+];
 ---
 
-<section id="tool" class="section-shell pt-10">
-  {slug === "tubetrace" && <TubeTraceApp client:load />}
-  {slug === "json-formatter" && <JsonFormatterApp client:load />}
-  {slug === "ai-image-checker" && <AiImageCheckerApp client:load />}
-  {slug === "csv-cleaner" && <CsvCleanerApp client:load />}
-  {!["tubetrace", "json-formatter", "ai-image-checker", "csv-cleaner"].includes(slug) && (
-    <div class="card-surface rounded-[2rem] p-6 md:p-8">
-      <p class="text-sm text-slate-600">This tool is not available yet.</p>
-    </div>
-  )}
-</section>
+{slug === "tubetrace"              && <YouTubeWatchHistoryAnalyzerApp client:load />}
+{slug === "json-formatter"         && <JsonFormatterApp           client:load />}
+{slug === "ai-image-checker"       && <AiImageCheckerApp          client:load />}
+{slug === "csv-cleaner"            && <CsvCleanerApp              client:load />}
+{slug === "pdf-extract-text"       && <PdfExtractTextApp          client:visible />}
+{slug === "pdf-to-image"           && <PdfToImageApp              client:visible />}
+{slug === "pdf-split"              && <PdfSplitApp                client:visible />}
+{slug === "image-to-pdf"           && <ImageToPdfApp              client:visible />}
+{slug === "image-resize"           && <ImageResizeApp             client:visible />}
+{slug === "image-crop"             && <ImageCropApp               client:visible />}
+{slug === "image-optimize"         && <ImageOptimizeApp           client:visible />}
+{slug === "compress-image-to-50kb" && <ImageCompressVariantApp targetKB={50} formatLabel="image" client:visible />}
+{slug === "compress-image-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="image" client:visible />}
+{slug === "compress-image-to-200kb" && <ImageCompressVariantApp targetKB={200} formatLabel="image" client:visible />}
+{slug === "compress-jpg-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="JPG" client:visible />}
+{slug === "compress-png-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="PNG" client:visible />}
+{slug === "compress-webp-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="WebP" client:visible />}
+{slug === "css-formatter"          && <CssFormatterApp            client:load />}
+
+{slug === "word-counter"           && <WordCounterApp             client:load />}
+{slug === "case-converter"         && <CaseConverterApp           client:load />}
+{slug === "line-sorter"            && <LineSorterApp              client:load />}
+{slug === "duplicate-remover"      && <DuplicateRemoverApp        client:load />}
+{slug === "find-replace"           && <FindReplaceApp             client:load />}
+{slug === "lorem-ipsum"            && <LoremIpsumApp              client:load />}
+{slug === "slug-generator"         && <SlugGeneratorApp           client:load />}
+{slug === "reading-time"           && <ReadingTimeApp             client:load />}
+{slug === "text-reverse"           && <TextReverseApp             client:load />}
+{slug === "password-generator"     && <PasswordGeneratorApp       client:load />}
+{slug === "password-strength"      && <PasswordStrengthApp        client:load />}
+
+{slug === "unit-converter"         && <UnitConverterApp           client:load />}
+{slug === "number-base-converter"  && <NumberBaseConverterApp     client:load />}
+{slug === "timestamp-converter"    && <TimestampConverterApp      client:load />}
+{slug === "age-calculator"         && <AgeCalculatorApp           client:load />}
+{slug === "date-diff"              && <DateDiffApp                client:load />}
+{slug === "percentage-calculator"  && <PercentageCalculatorApp    client:load />}
+{slug === "loan-calculator"        && <LoanCalculatorApp          client:load />}
+{slug === "bmi-calculator"         && <BmiCalculatorApp           client:load />}
+{slug === "statistics-calculator"  && <StatisticsCalculatorApp    client:load />}
+
+{slug === "base64-encoder"         && <Base64EncoderApp           client:load />}
+{slug === "url-encoder"            && <UrlEncoderApp              client:load />}
+{slug === "uuid-generator"         && <UuidGeneratorApp           client:load />}
+{slug === "hash-generator"         && <HashGeneratorApp           client:load />}
+{slug === "regex-tester"           && <RegexTesterApp             client:load />}
+{slug === "html-entities"          && <HtmlEntitiesApp            client:load />}
+{slug === "jwt-decoder"            && <JwtDecoderApp              client:load />}
+{slug === "aspect-ratio-calculator" && <AspectRatioCalculatorApp  client:load />}
+{slug === "random-string"          && <RandomStringApp            client:load />}
+
+{slug === "color-converter"        && <ColorConverterApp          client:load />}
+{slug === "contrast-checker"       && <ContrastCheckerApp         client:load />}
+{slug === "css-gradient-generator" && <CssGradientGeneratorApp    client:load />}
+{slug === "css-shadow-generator"   && <CssShadowGeneratorApp      client:load />}
+{slug === "css-border-radius"      && <CssBorderRadiusApp         client:load />}
+
+{slug === "image-format-converter" && <ImageFormatConverterApp    client:visible />}
+{slug === "image-flip-rotate"      && <ImageFlipRotateApp         client:load />}
+{slug === "image-grayscale"        && <ImageGrayscaleApp          client:load />}
+{slug === "image-color-picker"     && <ImageColorPickerApp        client:visible />}
+{slug === "favicon-generator"      && <FaviconGeneratorApp        client:visible />}
+
+{slug === "pdf-merge"              && <PdfMergeApp                client:visible />}
+{slug === "pdf-rotate"             && <PdfRotateApp               client:visible />}
+{slug === "pdf-watermark"          && <PdfWatermarkApp            client:visible />}
+{slug === "pdf-metadata"           && <PdfMetadataApp             client:visible />}
+{slug === "pdf-compress"           && <PdfCompressApp             client:visible />}
+{slug === "compress-pdf-to-100kb"  && <PdfCompressVariantApp targetKB={100} label="100KB" client:visible />}
+{slug === "compress-pdf-to-200kb"  && <PdfCompressVariantApp targetKB={200} label="200KB" client:visible />}
+{slug === "compress-pdf-to-500kb"  && <PdfCompressVariantApp targetKB={500} label="500KB" client:visible />}
+{slug === "compress-pdf-to-1mb"    && <PdfCompressVariantApp targetKB={1024} label="1MB" client:visible />}
+
+{slug === "json-to-csv"            && <JsonToCsvApp               client:load />}
+{slug === "csv-to-json"            && <CsvToJsonApp               client:load />}
+{slug === "file-hash"              && <FileHashApp                client:load />}
+
+{slug === "barcode-generator"      && <BarcodeGeneratorApp        client:load />}
+{slug === "binary-text-converter"  && <BinaryTextConverterApp     client:load />}
+{slug === "color-palette-extractor" && <ColorPaletteExtractorApp  client:visible />}
+{slug === "color-shades"           && <ColorShadesApp             client:load />}
+{slug === "cron-parser"            && <CronParserApp              client:load />}
+{slug === "css-unit-converter"     && <CssUnitConverterApp        client:load />}
+{slug === "data-size-converter"    && <DataSizeConverterApp       client:load />}
+{slug === "diff-viewer"            && <DiffViewerApp              client:load />}
+{slug === "dummy-data-generator"   && <DummyDataGeneratorApp      client:load />}
+{slug === "exif-viewer"            && <ExifViewerApp              client:visible />}
+{slug === "hex-dump"               && <HexDumpApp                 client:load />}
+{slug === "html-formatter"         && <HtmlFormatterApp           client:load />}
+{slug === "http-status-codes"      && <HttpStatusCodesApp         client:load />}
+{slug === "image-metadata"         && <ImageMetadataApp           client:visible />}
+{slug === "json-flatten"           && <JsonFlattenApp             client:load />}
+{slug === "json-to-xml"            && <JsonToXmlApp               client:load />}
+{slug === "markdown-preview"       && <MarkdownPreviewApp         client:load />}
+{slug === "meta-tag-generator"     && <MetaTagGeneratorApp        client:load />}
+{slug === "morse-encoder"          && <MorseEncoderApp            client:load />}
+{slug === "number-formatter"       && <NumberFormatterApp         client:load />}
+{slug === "og-tag-generator"       && <OgTagGeneratorApp          client:load />}
+{slug === "qr-code-generator"      && <QrCodeGeneratorApp         client:load />}
+{slug === "qr-code-reader"         && <QrCodeReaderApp            client:visible />}
+{slug === "screen-color-picker"    && <ScreenColorPickerApp       client:load />}
+{slug === "svg-to-png"             && <SvgToPngApp                client:visible />}
+{slug === "timezone-converter"     && <TimezoneConverterApp       client:load />}
+{slug === "url-parser"             && <UrlParserApp               client:load />}
+{slug === "xml-formatter"          && <XmlFormatterApp            client:load />}
+{slug === "xml-to-json"            && <XmlToJsonApp               client:load />}
+{slug === "yaml-to-json"           && <YamlToJsonApp              client:load />}
+
+{slug === "robots-txt-generator"   && <SimpleUtilityApp tool="robots-txt-generator" client:load />}
+{slug === "sitemap-generator"      && <SimpleUtilityApp tool="sitemap-generator" client:load />}
+{slug === "htaccess-redirect-generator" && <SimpleUtilityApp tool="htaccess-redirect-generator" client:load />}
+{slug === "keyword-density-checker" && <KeywordDensityCheckerApp client:load />}
+{slug === "meta-tags-analyzer"     && <MetaTagsAnalyzerApp        client:load />}
+{slug === "open-graph-checker"     && <OpenGraphCheckerApp        client:load />}
+{slug === "csp-generator"          && <SimpleUtilityApp tool="csp-generator" client:load />}
+{slug === "gitignore-generator"    && <SimpleUtilityApp tool="gitignore-generator" client:load />}
+{slug === "dockerignore-generator" && <SimpleUtilityApp tool="dockerignore-generator" client:load />}
+{slug === "sql-formatter"          && <SimpleUtilityApp tool="sql-formatter" client:load />}
+{slug === "utm-builder"            && <SimpleUtilityApp tool="utm-builder" client:load />}
+{slug === "url-query-builder"      && <SimpleUtilityApp tool="url-query-builder" client:load />}
+{slug === "word-frequency-counter" && <SimpleUtilityApp tool="word-frequency-counter" client:load />}
+{slug === "csv-column-extractor"   && <SimpleUtilityApp tool="csv-column-extractor" client:load />}
+{slug === "json-schema-generator"  && <SimpleUtilityApp tool="json-schema-generator" client:load />}
+{slug === "json-path-extractor"    && <SimpleUtilityApp tool="json-path-extractor" client:load />}
+{slug === "csv-to-sql"             && <SimpleUtilityApp tool="csv-to-sql" client:load />}
+{slug === "csv-to-markdown"        && <SimpleUtilityApp tool="csv-to-markdown" client:load />}
+{slug === "csv-delimiter-converter" && <SimpleUtilityApp tool="csv-delimiter-converter" client:load />}
+{slug === "css-clamp-generator"    && <SimpleUtilityApp tool="css-clamp-generator" client:load />}
+{slug === "css-minifier"           && <SimpleUtilityApp tool="css-minifier" client:load />}
+{slug === "html-minifier"          && <SimpleUtilityApp tool="html-minifier" client:load />}
+{slug === "markdown-table-generator" && <SimpleUtilityApp tool="markdown-table-generator" client:load />}
+{slug === "uuid-validator"         && <SimpleUtilityApp tool="uuid-validator" client:load />}
+{slug === "ulid-generator"         && <SimpleUtilityApp tool="ulid-generator" client:load />}
+{slug === "luhn-validator"         && <SimpleUtilityApp tool="luhn-validator" client:load />}
+{slug === "mime-type-lookup"       && <SimpleUtilityApp tool="mime-type-lookup" client:load />}
+{slug === "user-agent-parser"      && <SimpleUtilityApp tool="user-agent-parser" client:load />}
+{slug === "chmod-calculator"       && <SimpleUtilityApp tool="chmod-calculator" client:load />}
+{slug === "email-validator"        && <SimpleUtilityApp tool="email-validator" client:load />}
+{slug === "youtube-url-parser"     && <SimpleUtilityApp tool="youtube-url-parser" client:load />}
+{slug === "youtube-chapter-generator" && <SimpleUtilityApp tool="youtube-chapter-generator" client:load />}
+{slug === "youtube-tag-extractor"  && <SimpleUtilityApp tool="youtube-tag-extractor" client:load />}
+{slug === "youtube-title-counter"  && <SimpleUtilityApp tool="youtube-title-counter" client:load />}
+{slug === "youtube-description-cleaner" && <SimpleUtilityApp tool="youtube-description-cleaner" client:load />}
+{slug === "instagram-hashtag-extractor" && <SimpleUtilityApp tool="instagram-hashtag-extractor" client:load />}
+{slug === "instagram-caption-formatter" && <SimpleUtilityApp tool="instagram-caption-formatter" client:load />}
+
+{!ALL_SLUGS.includes(slug) && (
+  <div style="text-align:center;padding:48px 24px;color:var(--muted);font-family:'Inter',sans-serif">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 16px;display:block;opacity:.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <p style="font-size:.95rem;font-weight:600;color:var(--text)">Tool coming soon</p>
+    <p style="font-size:.82rem;margin-top:8px">This tool is being built. Check back soon.</p>
+    <a href="/apps" style="display:inline-block;margin-top:20px;font-size:.82rem;font-weight:600;color:var(--blue);text-decoration:none">← Browse available tools</a>
+  </div>
+)}

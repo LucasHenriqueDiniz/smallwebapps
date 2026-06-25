@@ -1,0 +1,186 @@
+---
+/**
+ * ContentInfoModal — "Learn more" trigger + tabbed modal with
+ * How to use / Use cases / Limitations & Privacy content.
+ * Renders nothing if `content` has no usable fields.
+ */
+import type { AppContent } from "@smallwebapps/data";
+
+interface Props {
+  name: string;
+  content?: AppContent;
+}
+
+const { name, content } = Astro.props;
+
+const howToUse = content?.howToUse ?? [];
+const useCases = content?.useCases ?? [];
+const limitations = content?.limitations ?? [];
+const privacy = content?.privacy;
+
+const hasHowTo = howToUse.length > 0;
+const hasUseCases = useCases.length > 0;
+const hasLimitations = limitations.length > 0 || !!privacy;
+const hasContent = hasHowTo || hasUseCases || hasLimitations;
+---
+
+{hasContent && (
+  <>
+    <button type="button" class="info-trigger" data-info-open aria-haspopup="dialog">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      How this tool works
+    </button>
+
+    <dialog class="info-modal" data-info-modal aria-label={`How ${name} works`}>
+      <div class="info-modal-inner">
+        <header class="info-header">
+          <h2>How {name} works</h2>
+          <button type="button" class="info-close" data-info-close aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <div class="info-tabs" role="tablist">
+          {hasHowTo && <button type="button" role="tab" class="info-tab" data-tab="howto">How to use</button>}
+          {hasUseCases && <button type="button" role="tab" class="info-tab" data-tab="usecases">Use cases</button>}
+          {hasLimitations && <button type="button" role="tab" class="info-tab" data-tab="limitations">Limitations &amp; privacy</button>}
+        </div>
+
+        <div class="info-panels">
+          {hasHowTo && (
+            <div class="info-panel" data-panel="howto">
+              <ol class="info-steps">
+                {howToUse.map((step) => <li>{step}</li>)}
+              </ol>
+            </div>
+          )}
+          {hasUseCases && (
+            <div class="info-panel" data-panel="usecases">
+              <ul class="info-list">
+                {useCases.map((useCase) => <li>{useCase}</li>)}
+              </ul>
+            </div>
+          )}
+          {hasLimitations && (
+            <div class="info-panel" data-panel="limitations">
+              {privacy && (
+                <p class="info-privacy">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  {privacy}
+                </p>
+              )}
+              {limitations.length > 0 && (
+                <ul class="info-list">
+                  {limitations.map((item) => <li>{item}</li>)}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </dialog>
+  </>
+)}
+
+<style>
+.info-trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .76rem; font-weight: 600; color: var(--blue);
+  background: none; border: 1px solid var(--border); border-radius: 999px;
+  padding: 5px 12px; cursor: pointer; flex-shrink: 0;
+  transition: border-color .15s, background .15s;
+  white-space: nowrap;
+}
+.info-trigger:hover { border-color: var(--blue); background: var(--input-bg); }
+
+.info-modal {
+  border: none; border-radius: 16px; padding: 0;
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(80vh, 720px);
+  background: var(--card-bg); color: var(--text);
+  box-shadow: var(--shadow);
+}
+.info-modal::backdrop { background: rgba(15, 23, 42, .55); }
+
+.info-modal-inner { display: flex; flex-direction: column; max-height: min(80vh, 720px); }
+
+.info-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.info-header h2 { font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text); }
+.info-close {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  background: none; border: 1px solid var(--border); color: var(--muted); cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.info-close:hover { border-color: var(--blue); color: var(--blue); }
+
+.info-tabs {
+  display: flex; gap: 4px; padding: 12px 20px 0; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  overflow-x: auto;
+}
+.info-tab {
+  font-size: .8rem; font-weight: 700; color: var(--muted);
+  background: none; border: none; padding: 8px 12px; cursor: pointer;
+  border-bottom: 2px solid transparent; white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.info-tab:hover { color: var(--text); }
+.info-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+.info-panels { padding: 18px 20px 22px; overflow-y: auto; }
+.info-panel { display: none; }
+.info-panel.active { display: block; }
+
+.info-steps, .info-list {
+  margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px;
+}
+.info-steps li, .info-list li {
+  font-size: .88rem; line-height: 1.55; color: var(--text);
+}
+
+.info-privacy {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: .85rem; line-height: 1.55; color: var(--muted);
+  background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; margin: 0 0 14px;
+}
+.info-privacy svg { flex-shrink: 0; margin-top: 2px; color: var(--blue); }
+
+@media (max-width: 640px) {
+  .info-trigger span { display: none; }
+}
+</style>
+
+<script>
+function initInfoModal() {
+  const openBtn = document.querySelector<HTMLButtonElement>("[data-info-open]");
+  const modal = document.querySelector<HTMLDialogElement>("[data-info-modal]");
+  const closeBtn = document.querySelector<HTMLButtonElement>("[data-info-close]");
+  if (!openBtn || !modal || !closeBtn) return;
+
+  const tabs = Array.from(modal.querySelectorAll<HTMLButtonElement>(".info-tab"));
+  const panels = Array.from(modal.querySelectorAll<HTMLDivElement>(".info-panel"));
+
+  function activateTab(name: string | undefined) {
+    if (!name) return;
+    tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === name));
+    panels.forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === name));
+  }
+
+  if (tabs.length) activateTab(tabs[0].dataset.tab);
+
+  tabs.forEach((tab) => tab.addEventListener("click", () => activateTab(tab.dataset.tab)));
+
+  openBtn.addEventListener("click", () => modal.showModal());
+  closeBtn.addEventListener("click", () => modal.close());
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) modal.close();
+  });
+}
+
+initInfoModal();
+document.addEventListener("astro:page-load", initInfoModal);
+</script>

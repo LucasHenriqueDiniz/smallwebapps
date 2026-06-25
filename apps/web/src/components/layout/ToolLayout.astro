@@ -1,0 +1,252 @@
+---
+/**
+ * ToolLayout — minimal layout for each tool page.
+ * Usage:
+ *   <ToolLayout name="JSON Formatter" category="Developer Tools" status="live" slug="json-formatter">
+ *     <!-- your tool UI here -->
+ *   </ToolLayout>
+ *
+ * Props:
+ *   name       — display name of the tool
+ *   category   — category label (e.g. "Developer Tools")
+ *   status     — "live" | "coming-soon"
+ *   slug       — used for the canonical URL
+ *   disclaimer — optional short warning shown in the strip
+ *   fullWidth  — if true, no max-width wrapper (for tools that need full width)
+ */
+import Header from "../site/Header.astro";
+import Footer from "../site/Footer.astro";
+import CookieBanner from "../site/CookieBanner.astro";
+import AdSenseHead from "../site/AdSenseHead.astro";
+import ContentInfoModal from "../tools/ContentInfoModal.astro";
+import ExpandedFaq from "../apps/ExpandedFaq.astro";
+import { siteConfig } from "@/lib/site";
+import type { AppContent, AppFaq } from "@smallwebapps/data";
+import "../../styles/global.css";
+
+interface Props {
+  name: string;
+  category: string;
+  status: "live" | "coming-soon";
+  slug: string;
+  disclaimer?: string;
+  fullWidth?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  features?: string[];
+  faq?: AppFaq[];
+  faqExpanded?: AppFaq[];
+  content?: AppContent;
+}
+
+const {
+  name,
+  category,
+  status,
+  slug,
+  disclaimer,
+  fullWidth = false,
+  seoTitle,
+  seoDescription,
+  features = [],
+  faq = [],
+  faqExpanded = [],
+  content,
+} = Astro.props;
+
+const pageTitle    = seoTitle    ?? `${name} — ${siteConfig.name}`;
+const pageDesc     = seoDescription ?? `Free browser-based ${name.toLowerCase()} tool. No uploads, no accounts.`;
+const canonicalUrl = new URL(`/apps/${slug}`, siteConfig.siteUrl).toString();
+const ogImageUrl   = new URL(`/og/${slug}.svg`, siteConfig.siteUrl).toString();
+const isLive       = status === "live";
+const displayFaq   = faqExpanded.length ? faqExpanded : faq;
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name,
+  applicationCategory: category,
+  operatingSystem: "Web browser",
+  url: canonicalUrl,
+  description: pageDesc,
+  isAccessibleForFree: true,
+  featureList: features,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  publisher: { "@type": "Organization", name: siteConfig.name, url: siteConfig.siteUrl },
+};
+const faqSchema = displayFaq.length ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: displayFaq.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+} : null;
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.siteUrl },
+    { "@type": "ListItem", position: 2, name: "Tools", item: new URL("/apps", siteConfig.siteUrl).toString() },
+    { "@type": "ListItem", position: 3, name, item: canonicalUrl },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <link rel="canonical" href={canonicalUrl} />
+  <link rel="icon" type="image/svg+xml"  href="/favicon.svg" />
+  <link rel="icon" type="image/png"      href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/x-icon"   href="/favicon.ico" />
+  <link rel="apple-touch-icon"           href="/apple-touch-icon.png" />
+  <link rel="manifest"                   href="/site.webmanifest" />
+  <meta name="theme-color" content="#1a73e8" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content={pageTitle} />
+  <meta property="og:description" content={pageDesc} />
+  <meta property="og:url"         content={canonicalUrl} />
+  <meta property="og:image"       content={ogImageUrl} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={pageDesc} />
+  <meta name="twitter:image" content={ogImageUrl} />
+  <AdSenseHead />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  {faqSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <!-- Anti-FOUC dark theme -->
+  <script is:inline>
+    (function(){
+      var t = localStorage.getItem('swa-theme') ||
+              (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <!-- Google Consent Mode v2 -->
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage:'denied', analytics_storage:'denied',
+      ad_user_data:'denied', ad_personalization:'denied', wait_for_update:500
+    });
+    var saved = localStorage.getItem('swa_consent');
+    if (saved) {
+      var v = saved === 'granted' ? 'granted' : 'denied';
+      gtag('consent','update',{ad_storage:v,analytics_storage:v,ad_user_data:v,ad_personalization:v});
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <Header />
+
+  <div class="tool-page">
+    <!-- ── Breadcrumb strip ── -->
+    <div class="tl-strip">
+      <div class="tl-strip-inner">
+        <a href="/apps" class="tl-back">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          All tools
+        </a>
+        <span class="tl-sep">›</span>
+        <span class="tl-name">{name}</span>
+        <span class={`tl-badge ${isLive ? 'live' : 'soon'}`}>{isLive ? '● Live' : '◌ Soon'}</span>
+        <span class="tl-cat">{category}</span>
+        {disclaimer && (
+          <span class="tl-disclaimer">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            {disclaimer}
+          </span>
+        )}
+        <span class="tl-spacer"></span>
+        <ContentInfoModal name={name} content={content} />
+      </div>
+    </div>
+
+    <!-- ── Tool content ── -->
+    <div class={fullWidth ? 'tl-body-full' : 'tl-body'}>
+      <slot />
+      <ExpandedFaq items={displayFaq} />
+    </div>
+  </div>
+
+  <Footer />
+  <CookieBanner />
+</body>
+</html>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0; min-height: 100vh;
+  background: var(--page-bg); color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+.tool-page { display: flex; flex-direction: column; min-height: calc(100vh - 62px); }
+
+/* Strip */
+.tl-strip {
+  background: var(--nav-bg); border-bottom: 1px solid var(--border);
+  padding: 0 24px; flex-shrink: 0;
+}
+.tl-strip-inner {
+  max-width: 1280px; margin: 0 auto;
+  height: 44px; display: flex; align-items: center; gap: 8px;
+  overflow: hidden;
+}
+.tl-back {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .78rem; font-weight: 500; color: var(--muted);
+  text-decoration: none; white-space: nowrap; flex-shrink: 0;
+  transition: color .15s;
+}
+.tl-back:hover { color: var(--blue); }
+.tl-sep { color: var(--muted); opacity: .4; font-size: .8rem; flex-shrink: 0; }
+.tl-name { font-size: .86rem; font-weight: 700; color: var(--text); white-space: nowrap; flex-shrink: 0; }
+.tl-badge {
+  font-size: .65rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; flex-shrink: 0;
+}
+.tl-badge.live { background: #dcfce7; color: #15803d; }
+.tl-badge.soon { background: #fef3c7; color: #92400e; }
+[data-theme="dark"] .tl-badge.live { background: rgba(34,197,94,.15); color: #86efac; }
+[data-theme="dark"] .tl-badge.soon { background: rgba(245,158,11,.15); color: #fde68a; }
+.tl-cat {
+  font-size: .74rem; color: var(--muted); opacity: .7;
+  white-space: nowrap; flex-shrink: 0;
+}
+.tl-disclaimer {
+  display: flex; align-items: center; gap: 4px;
+  font-size: .72rem; color: #f59e0b; font-style: italic;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tl-spacer { flex: 1; }
+
+/* Body */
+.tl-body {
+  flex: 1;
+  max-width: 1280px; width: 100%; margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+.tl-body-full {
+  flex: 1; width: 100%;
+  padding: 32px 0 64px;
+}
+
+@media (max-width: 640px) {
+  .tl-cat, .tl-sep { display: none; }
+  .tl-body, .tl-body-full { padding: 16px 16px 48px; }
+}
+</style>

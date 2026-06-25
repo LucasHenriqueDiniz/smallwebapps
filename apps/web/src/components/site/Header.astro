@@ -1,28 +1,671 @@
 ---
-import { navItems, siteConfig } from "@/lib/site";
+import { apps } from "@/data/apps";
+
+const categoryOrder = [
+  "PDF Tools",
+  "Image / Inspection",
+  "Developer Tools",
+  "Data Tools",
+  "YouTube / Data",
+];
+
+const categoryMeta: Record<string, { label: string; color: string; bg: string; href: string }> = {
+  "PDF Tools": { label: "PDF", color: "#7c3aed", bg: "#ede9fe", href: "/apps?cat=PDF+Tools" },
+  "Image / Inspection": { label: "Image", color: "#7c3aed", bg: "#ede9fe", href: "/apps?cat=Image+%2F+Inspection" },
+  "Developer Tools": { label: "Developer", color: "#2563eb", bg: "#dbeafe", href: "/apps?cat=Developer+Tools" },
+  "Data Tools": { label: "Data", color: "#059669", bg: "#d1fae5", href: "/apps?cat=Data+Tools" },
+  "YouTube / Data": { label: "YouTube Analysis", color: "#dc2626", bg: "#fee2e2", href: "/apps?cat=YouTube+%2F+Data" },
+};
+
+const appsByCategory = Object.fromEntries(
+  categoryOrder.map((category) => [
+    category,
+    apps
+      .filter((app) => app.category === category)
+      .sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || a.name.localeCompare(b.name)),
+  ]),
+);
+
+const searchApps = apps.map((app) => ({
+  name: app.name,
+  shortDescription: app.shortDescription,
+  category: app.category,
+  tags: app.tags,
+  status: app.status,
+  appUrl: app.appUrl,
+}));
+
+const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
 ---
 
-<header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
-  <div class="section-shell flex items-center justify-between py-4">
-    <a href="/" class="flex items-center gap-3">
-      <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-orange-500 font-bold text-white shadow-soft">
-        SW
-      </span>
-      <div>
-        <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Small Web Apps</div>
-        <div class="text-sm text-slate-700">{siteConfig.tagline}</div>
-      </div>
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="logo">
+      <img src="/favicon-96x96.png" alt="Small Web Apps" width="32" height="32" class="logo-img" />
+      <span class="logo-text"><span class="logo-small">Small</span><span class="logo-web">Web</span><span class="logo-apps"> Apps</span></span>
     </a>
 
-    <nav class="hidden items-center gap-5 text-sm font-medium text-slate-700 md:flex">
-      {
-        navItems.map((item) => (
-          <a href={item.href} class="transition hover:text-orange-600">
-            {item.label}
-          </a>
-        ))
-      }
+    <nav class="nav-links" aria-label="Primary navigation">
+      {categoryOrder.map((category) => {
+        const meta = categoryMeta[category];
+        const categoryApps = appsByCategory[category] ?? [];
+        const featured = categoryApps.filter((app) => app.status === "live").slice(0, 4);
+        const visibleList = categoryApps.slice(0, 14);
+        return (
+          <div class="nav-item dropdown">
+            <a href={meta.href} class="nav-btn">
+              {meta.label}
+              <span class="nav-count">{categoryApps.length}</span>
+              <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" />
+              </svg>
+            </a>
+            <div class="mega">
+              <div class="mega-shell">
+                <div class="mega-summary">
+                  <div class="mega-icon" style={`background:${meta.bg};color:${meta.color}`}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M4 4h16v16H4z" />
+                      <path d="M8 9h8M8 15h5" />
+                    </svg>
+                  </div>
+                  <p class="mega-label">{category}</p>
+                  <strong>{categoryApps.length} tools</strong>
+                  <span>{categoryApps.filter((app) => app.status === "live").length} live, all browser-based.</span>
+                  <a href={meta.href} class="mega-all">Browse all {meta.label} tools</a>
+                </div>
+
+                <div class="mega-content">
+                  <div class="mega-section">
+                    <p class="mega-label">Featured</p>
+                    <div class="feature-grid">
+                      {featured.map((app) => (
+                        <a href={app.appUrl} class="feature-link">
+                          <strong>{app.name}</strong>
+                          <span>{app.shortDescription}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div class="mega-section">
+                    <p class="mega-label">Tool directory</p>
+                    <div class="tool-list">
+                      {visibleList.map((app) => (
+                        <a href={app.appUrl} class="tool-link">
+                          <span>{app.name}</span>
+                          <em class={app.status === "live" ? "live" : "soon"}>{app.status === "live" ? "Live" : "Soon"}</em>
+                        </a>
+                      ))}
+                      {categoryApps.length > visibleList.length && (
+                        <a href={meta.href} class="tool-link more-link">
+                          <span>View {categoryApps.length - visibleList.length} more</span>
+                          <em>&rarr;</em>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      <a href="/guides" class="nav-btn nav-plain">Guides</a>
     </nav>
+
+    <div class="navbar-right">
+      <button class="search-trigger" id="search-trigger" aria-label="Search tools">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+        <span>Search tools</span>
+        <kbd>/</kbd>
+      </button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>
+      </button>
+      <a href="/apps" class="cta-btn">All tools</a>
+    </div>
   </div>
 </header>
 
+<div class="search-overlay" id="search-overlay" aria-hidden="true">
+  <div class="search-modal">
+    <div class="search-modal-input">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+      <input type="text" id="overlay-search" placeholder={`Search ${apps.length} tools...`} autocomplete="off" spellcheck="false" />
+      <button class="search-close" id="search-close" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+      </button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+    <div class="search-footer">
+      <span><kbd>Enter</kbd> open</span><span><kbd>Arrows</kbd> navigate</span><span><kbd>Esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="search-data" set:html={searchAppsJson} />
+
+<script>
+  const themeToggle = document.getElementById("theme-toggle");
+  function getTheme() { return document.documentElement.getAttribute("data-theme") || "light"; }
+  function setTheme(t: string) {
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem("swa-theme", t);
+  }
+  themeToggle?.addEventListener("click", () => setTheme(getTheme() === "dark" ? "light" : "dark"));
+
+  const navItems = document.querySelectorAll<HTMLElement>(".nav-item.dropdown");
+  const timers = new Map<HTMLElement, ReturnType<typeof setTimeout>>();
+  navItems.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      timers.forEach((timer, current) => {
+        if (current !== item) {
+          clearTimeout(timer);
+          current.classList.remove("open");
+        }
+      });
+      const timer = timers.get(item);
+      if (timer) clearTimeout(timer);
+      item.classList.add("open");
+    });
+    item.addEventListener("mouseleave", () => {
+      const timer = setTimeout(() => {
+        item.classList.remove("open");
+        timers.delete(item);
+      }, 130);
+      timers.set(item, timer);
+    });
+  });
+  document.addEventListener("click", (event) => {
+    if (!(event.target as HTMLElement).closest(".nav-item.dropdown")) {
+      navItems.forEach((item) => item.classList.remove("open"));
+    }
+  });
+
+  const trigger = document.getElementById("search-trigger");
+  const overlay = document.getElementById("search-overlay");
+  const input = document.getElementById("overlay-search") as HTMLInputElement | null;
+  const closeBtn = document.getElementById("search-close");
+  const results = document.getElementById("search-results");
+  const searchData = document.getElementById("search-data")?.textContent ?? "[]";
+  const apps = JSON.parse(searchData) as Array<{
+    name: string;
+    shortDescription: string;
+    category: string;
+    tags: string[];
+    status: string;
+    appUrl: string;
+  }>;
+  let selectedIdx = -1;
+
+  const catColors: Record<string, { bg: string; color: string; darkBg: string }> = {
+    "YouTube / Data": { bg: "#fee2e2", color: "#dc2626", darkBg: "rgba(220,38,38,.18)" },
+    "Developer Tools": { bg: "#dbeafe", color: "#2563eb", darkBg: "rgba(37,99,235,.18)" },
+    "Image / Inspection": { bg: "#ede9fe", color: "#7c3aed", darkBg: "rgba(124,58,237,.18)" },
+    "Data Tools": { bg: "#d1fae5", color: "#059669", darkBg: "rgba(5,150,105,.18)" },
+    "PDF Tools": { bg: "#ede9fe", color: "#7c3aed", darkBg: "rgba(124,58,237,.18)" },
+  };
+
+  function openOverlay() {
+    overlay?.classList.add("open");
+    overlay?.setAttribute("aria-hidden", "false");
+    input?.focus();
+    render("");
+  }
+  function closeOverlay() {
+    overlay?.classList.remove("open");
+    overlay?.setAttribute("aria-hidden", "true");
+    if (input) input.value = "";
+    if (results) results.innerHTML = "";
+    selectedIdx = -1;
+  }
+
+  function render(q: string) {
+    if (!results) return;
+    const query = q.toLowerCase();
+    const filtered = query
+      ? apps.filter((app) =>
+          app.name.toLowerCase().includes(query) ||
+          app.shortDescription.toLowerCase().includes(query) ||
+          app.category.toLowerCase().includes(query) ||
+          app.tags.join(" ").toLowerCase().includes(query)
+        )
+      : apps;
+    if (filtered.length === 0) {
+      results.innerHTML = `<div class="sr-empty">No results for "<strong>${q}</strong>"</div>`;
+      return;
+    }
+    const dark = document.documentElement.getAttribute("data-theme") === "dark";
+    results.innerHTML = filtered
+      .map((app, i) => {
+        const color = catColors[app.category] ?? { bg: "#f1f5f9", color: "#475569", darkBg: "rgba(71,85,105,.18)" };
+        const isLive = app.status === "live";
+        return `<a href="${app.appUrl}" class="sr-item" data-idx="${i}">
+          <div class="sr-icon" style="background:${dark ? color.darkBg : color.bg};color:${color.color}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 15h5"/></svg>
+          </div>
+          <div class="sr-body"><div class="sr-name">${app.name}</div><div class="sr-cat" style="color:${color.color}">${app.category}</div></div>
+          <div class="sr-right"><span class="sr-status ${isLive ? "live" : "soon"}">${isLive ? "Live" : "Soon"}</span><span class="sr-arrow">&rarr;</span></div>
+        </a>`;
+      })
+      .join("");
+    selectedIdx = -1;
+  }
+
+  input?.addEventListener("input", () => render(input.value.trim()));
+  input?.addEventListener("keydown", (event) => {
+    const items = results?.querySelectorAll<HTMLElement>(".sr-item") ?? [];
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      selectedIdx = Math.min(selectedIdx + 1, items.length - 1);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      selectedIdx = Math.max(selectedIdx - 1, 0);
+    } else if (event.key === "Enter" && selectedIdx >= 0) {
+      event.preventDefault();
+      (items[selectedIdx] as HTMLAnchorElement).click();
+      return;
+    } else if (event.key === "Escape") {
+      closeOverlay();
+      return;
+    }
+    items.forEach((item, i) => item.classList.toggle("selected", i === selectedIdx));
+    items[selectedIdx]?.scrollIntoView({ block: "nearest" });
+  });
+  trigger?.addEventListener("click", openOverlay);
+  closeBtn?.addEventListener("click", closeOverlay);
+  overlay?.addEventListener("click", (event) => {
+    if (event.target === overlay) closeOverlay();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
+      event.preventDefault();
+      openOverlay();
+    }
+    if (event.key === "Escape" && overlay?.classList.contains("open")) closeOverlay();
+  });
+</script>
+
+<style>
+.navbar {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 1px 12px rgba(0,0,0,.06);
+  font-family: 'Inter', sans-serif;
+}
+.navbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.logo-img { border-radius: 8px; display: block; }
+.logo-text { font-size: 1.05rem; font-weight: 800; line-height: 1; white-space: nowrap; }
+.logo-small { color: var(--text); }
+.logo-web { color: var(--blue); }
+.logo-apps { color: var(--muted); font-weight: 500; font-size: .85rem; opacity: .65; }
+.nav-links {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+}
+.nav-item { position: static; }
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--nav-text);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.nav-btn:hover,
+.nav-item.open > .nav-btn { background: var(--bg); color: var(--blue); }
+.nav-count {
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: .67rem;
+  font-weight: 800;
+}
+.chevron { transition: transform .18s; }
+.nav-item.open .chevron { transform: rotate(180deg); }
+.mega {
+  display: none;
+  position: fixed;
+  top: 62px;
+  left: 0;
+  right: 0;
+  background: var(--drop-bg);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 18px 50px rgba(15,23,42,.16);
+  z-index: 300;
+}
+.nav-item.open .mega { display: block; }
+.mega-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 22px 24px 24px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 26px;
+}
+.mega-summary {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 18px;
+  min-height: 100%;
+}
+.mega-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.mega-label {
+  font-size: .68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+.mega-summary strong {
+  display: block;
+  color: var(--text);
+  font-size: 1.25rem;
+  letter-spacing: -.4px;
+  margin-bottom: 6px;
+}
+.mega-summary span {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.mega-all {
+  display: inline-flex;
+  margin-top: 18px;
+  color: var(--blue);
+  font-size: .82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+.mega-content {
+  display: grid;
+  grid-template-columns: minmax(280px, .75fr) 1fr;
+  gap: 24px;
+  min-width: 0;
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.feature-link {
+  min-height: 94px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: inherit;
+  padding: 13px 14px;
+  text-decoration: none;
+  transition: border-color .15s, transform .15s, box-shadow .15s;
+}
+.feature-link:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(26,115,232,.1);
+}
+.feature-link strong {
+  display: block;
+  color: var(--text);
+  font-size: .87rem;
+  margin-bottom: 5px;
+}
+.feature-link span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: .76rem;
+  line-height: 1.45;
+}
+.tool-list {
+  columns: 2;
+  column-gap: 18px;
+}
+.tool-link {
+  break-inside: avoid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 7px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .82rem;
+  line-height: 1.25;
+}
+.tool-link:hover { background: var(--bg); color: var(--text); }
+.tool-link em {
+  font-style: normal;
+  font-size: .62rem;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 2px 6px;
+  flex-shrink: 0;
+}
+.tool-link em.live { background: rgba(34,197,94,.12); color: #16a34a; }
+.tool-link em.soon { background: rgba(245,158,11,.14); color: #b45309; }
+.more-link { color: var(--blue); font-weight: 800; }
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 20px;
+  padding: 7px 13px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: .82rem;
+  color: var(--muted);
+}
+.search-trigger:hover { border-color: var(--blue); color: var(--text); }
+.search-trigger kbd {
+  background: var(--nav-bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: .68rem;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+}
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+}
+.theme-toggle:hover { background: var(--bg); color: var(--blue); border-color: var(--blue); }
+.icon-sun { display: none; }
+.icon-moon { display: block; }
+[data-theme="dark"] .icon-sun { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
+.cta-btn {
+  background: var(--blue);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: .84rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.cta-btn:hover { background: var(--blue-dark); }
+.search-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(15,23,42,.55);
+  backdrop-filter: blur(4px);
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80px 16px 0;
+}
+.search-overlay.open { display: flex; }
+.search-modal {
+  background: var(--drop-bg);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 620px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.35);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.search-modal-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.search-modal-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background: transparent;
+}
+.search-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: var(--input-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+:global(.search-results) { max-height: 360px; overflow-y: auto; }
+:global(.sr-empty) { padding: 24px; text-align: center; color: var(--muted); font-size: .88rem; }
+:global(.sr-item) {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: background .1s;
+  border-bottom: 1px solid var(--border);
+}
+:global(.sr-item:hover),
+:global(.sr-item.selected) { background: var(--bg); }
+:global(.sr-icon) {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+:global(.sr-body) { flex: 1; min-width: 0; }
+:global(.sr-name) { font-size: .88rem; font-weight: 800; color: var(--text); line-height: 1.3; }
+:global(.sr-cat) { font-size: .72rem; font-weight: 700; margin-top: 1px; }
+:global(.sr-right) { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+:global(.sr-status) { font-size: .65rem; font-weight: 800; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+:global(.sr-status.live) { background: #dcfce7; color: #15803d; }
+:global(.sr-status.soon) { background: #fef3c7; color: #92400e; }
+:global([data-theme="dark"] .sr-status.live) { background: rgba(34,197,94,.15); color: #86efac; }
+:global([data-theme="dark"] .sr-status.soon) { background: rgba(245,158,11,.15); color: #fde68a; }
+:global(.sr-arrow) { font-size: .9rem; color: var(--muted); }
+.search-footer {
+  display: flex;
+  gap: 16px;
+  padding: 10px 18px;
+  background: var(--drop-header-bg);
+  border-top: 1px solid var(--border);
+  font-size: .72rem;
+  color: var(--muted);
+}
+.search-footer kbd {
+  background: var(--nav-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: .68rem;
+  color: var(--muted);
+  margin-right: 4px;
+}
+@media (max-width: 1080px) {
+  .nav-links { display: none; }
+  .navbar-inner { gap: 12px; }
+  .navbar-right { margin-left: auto; }
+}
+@media (max-width: 640px) {
+  .navbar-inner { padding: 0 16px; }
+  .search-trigger span,
+  .search-trigger kbd,
+  .cta-btn { display: none; }
+  .search-trigger { width: 36px; height: 36px; padding: 0; justify-content: center; }
+  .logo-text { font-size: .95rem; }
+}
+</style>

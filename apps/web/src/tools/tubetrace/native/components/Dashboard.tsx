@@ -39,7 +39,7 @@ export function Dashboard() {
       <header className="sticky top-0 z-50 border-b border-border/40 bg-background/75 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <span className="text-base font-extrabold tracking-tight shrink-0">
-            Tube<span className="text-primary">Trace</span>
+            YouTube <span className="text-primary">Analysis</span>
           </span>
 
           {/* data range pill */}

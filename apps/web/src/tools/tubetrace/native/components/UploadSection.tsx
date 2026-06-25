@@ -47,7 +47,7 @@ const copy = {
       NO_ENTRIES:
         "Encontrei o arquivo, mas ele não parece ter vídeos assistidos. Confira se o histórico do YouTube estava ativado nessa conta.",
     },
-    title: "TubeTrace.",
+    title: "YouTube Watch History Analyzer",
     intro:
       "Envie o ZIP do Google Takeout para descobrir sua personalidade de consumo, maiores maratonas e canais mais vistos.",
     privacy: "100% privado no upload manual. Tudo é processado no seu navegador.",
@@ -92,7 +92,7 @@ const copy = {
       NO_ENTRIES:
         "I found the file, but it does not look like it contains watched videos. Check whether YouTube watch history was enabled for this account.",
     },
-    title: "TubeTrace.",
+    title: "YouTube Watch History Analyzer",
     intro:
       "Upload your Google Takeout ZIP to see your viewing personality, top binges, and most watched channels.",
     privacy: "100% private for manual uploads. Processed entirely in your browser.",
@@ -217,7 +217,7 @@ export function UploadSection() {
         className="text-center mb-8 md:mb-12 flex flex-col items-center"
       >
         {/* logo mark */}
-        <img src="/tubetrace-favicon.svg" alt="TubeTrace" className="mb-6 h-16 w-16 rounded-2xl shadow-xl" />
+        <img src="/tubetrace-favicon.svg" alt="YouTube Watch History Analyzer" className="mb-6 h-16 w-16 rounded-2xl shadow-xl" />
 
         {/* badge */}
         <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary mb-6">

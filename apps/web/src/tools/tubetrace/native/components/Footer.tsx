@@ -6,7 +6,7 @@ export function Footer() {
       <div className="max-w-3xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
           <span className="font-bold text-foreground/80">
-            Tube<span className="text-primary">Trace</span>
+            YouTube <span className="text-primary">Analysis</span>
           </span>
           <span className="text-muted-foreground/50">© {new Date().getFullYear()}</span>
         </div>

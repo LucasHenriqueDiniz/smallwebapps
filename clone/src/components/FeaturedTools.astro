@@ -1,0 +1,139 @@
+---
+const featured = [
+  {
+    title: "PDF Creator",
+    desc: "Create a PDF quickly and easily with our free PDF creator",
+    bg: "#dbeafe",
+  },
+  {
+    title: "Background Remover",
+    desc: "Remove or change the background on a photo",
+    bg: "#ede9fe",
+  },
+  {
+    title: "Photo Cleanup",
+    desc: "Use AI to remove unwanted objects, items, people from an image",
+    bg: "#dcfce7",
+  },
+  {
+    title: "Image Generator",
+    desc: "Generate images from your imagination",
+    bg: "#fce7f3",
+  },
+];
+---
+
+<section class="featured">
+  <div class="featured-inner">
+    <div class="featured-header">
+      <div>
+        <h2 class="section-title">Free Tools You'd Usually Pay For</h2>
+        <p class="section-sub-sm">No Limits, No Sign-Up</p>
+        <p class="section-sub-sm">Here's our featured tools</p>
+      </div>
+      <div class="nav-arrows">
+        <button class="arrow-btn" id="prev-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="arrow-btn active" id="next-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="featured-cards">
+      {featured.map(item => (
+        <div class="feat-card" style={`background: ${item.bg}`}>
+          <div class="feat-preview">
+            <div class="feat-mockup">
+              <div class="mockup-bar">
+                <div class="mockup-dot"></div>
+                <div class="mockup-dot"></div>
+                <div class="mockup-dot"></div>
+              </div>
+              <div class="mockup-body"></div>
+            </div>
+          </div>
+          <h3>{item.title}</h3>
+          <p>{item.desc}</p>
+          <a href="#" class="learn-more">Learn more →</a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+.featured { background: white; padding: 64px 24px; }
+.featured-inner { max-width: 1280px; margin: 0 auto; }
+.featured-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 36px;
+}
+.section-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
+.section-sub-sm { color: #888; font-size: 0.88rem; line-height: 1.8; }
+.nav-arrows { display: flex; gap: 10px; }
+.arrow-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: #999;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.arrow-btn.active, .arrow-btn:hover {
+  background: var(--blue); color: white; border-color: var(--blue);
+}
+
+.featured-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.feat-card {
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s;
+}
+.feat-card:hover { transform: translateY(-4px); }
+.feat-preview {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  height: 160px;
+  background: rgba(255,255,255,0.5);
+  display: flex; align-items: center; justify-content: center;
+}
+.feat-mockup { width: 90%; }
+.mockup-bar {
+  background: #e0e7ef;
+  height: 24px;
+  border-radius: 8px 8px 0 0;
+  display: flex; align-items: center; gap: 5px; padding: 0 10px;
+}
+.mockup-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #bbb;
+}
+.mockup-body {
+  height: 90px;
+  background: white;
+  border-radius: 0 0 8px 8px;
+}
+.feat-card h3 { font-size: 1rem; font-weight: 700; color: #1a1a2e; }
+.feat-card p { font-size: 0.8rem; color: #666; line-height: 1.5; flex: 1; }
+.learn-more { color: var(--blue); font-size: 0.82rem; font-weight: 600; }
+.learn-more:hover { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .featured-cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .featured-cards { grid-template-columns: 1fr; }
+}
+</style>

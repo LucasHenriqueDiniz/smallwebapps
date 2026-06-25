@@ -1,0 +1,125 @@
+---
+interface Props {
+  title: string;
+  desc: string;
+  href: string;
+  bg: string;
+  accent: string;
+  icon: string;
+  badge?: string;
+}
+const { title, desc, href, bg, accent, icon, badge } = Astro.props;
+---
+
+<a href={href} class="feat-card" style={`--card-bg: ${bg}; --card-accent: ${accent}`}>
+  {badge && <div class="feat-badge">{badge}</div>}
+  <div class="feat-preview">
+    <div class="feat-icon-wrap">
+      <Fragment set:html={icon} />
+    </div>
+    <div class="feat-lines">
+      <div class="feat-line w-full"></div>
+      <div class="feat-line w-3x4"></div>
+      <div class="feat-line w-1x2"></div>
+    </div>
+  </div>
+  <div class="feat-body">
+    <h3>{title}</h3>
+    <p>{desc}</p>
+    <span class="feat-cta">Open tool <span class="feat-arr">→</span></span>
+  </div>
+</a>
+
+<style>
+.feat-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  border: 1.5px solid var(--card-border);
+  transition: transform 0.22s cubic-bezier(.4,0,.2,1), box-shadow 0.22s, border-color 0.18s;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.feat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+  border-color: var(--card-accent);
+}
+.feat-card:active {
+  transform: translateY(-2px) scale(0.98);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.feat-badge {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: var(--card-accent);
+  color: white;
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 3px 9px; border-radius: 20px;
+  z-index: 2;
+}
+
+.feat-preview {
+  padding: 24px 24px 16px;
+  display: flex; flex-direction: column;
+  align-items: flex-start; gap: 14px;
+  min-height: 140px;
+}
+.feat-icon-wrap {
+  width: 52px; height: 52px;
+  background: var(--card-accent);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--card-accent) 40%, transparent);
+}
+.feat-lines { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.feat-line  { height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; }
+.w-full { width: 100%; }
+.w-3x4  { width: 75%; }
+.w-1x2  { width: 50%; }
+
+.feat-body {
+  background: var(--card-bg);
+  padding: 18px 24px 22px;
+  border-top: 1px solid var(--border);
+  flex: 1;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.feat-body h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 0; }
+.feat-body p  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin: 0; flex: 1; }
+.feat-cta {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--card-accent); margin-top: 6px;
+}
+.feat-arr { transition: transform 0.15s; }
+.feat-card:hover .feat-arr { transform: translateX(4px); }
+
+/* ── Dark mode — :global() escapes Astro scoping for ancestor selector ── */
+:global([data-theme="dark"]) .feat-card {
+  background: var(--surface-strong);
+  border-color: var(--border);
+}
+:global([data-theme="dark"]) .feat-card:hover {
+  border-color: var(--card-accent);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+}
+:global([data-theme="dark"]) .feat-preview {
+  background: rgba(255,255,255,0.03);
+}
+:global([data-theme="dark"]) .feat-line {
+  background: rgba(255,255,255,0.07);
+}
+:global([data-theme="dark"]) .feat-body {
+  background: var(--surface-strong);
+  border-top-color: var(--border);
+}
+</style>

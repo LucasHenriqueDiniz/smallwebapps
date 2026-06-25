@@ -12,7 +12,7 @@ export const guides: GuideDefinition[] = [
     title: "How to Export Your YouTube Watch History",
     description:
       "A practical guide to locating the right Google Takeout export so you can inspect your viewing history locally.",
-    category: "TubeTrace",
+    category: "YouTube Analysis",
     publishedLabel: "Starter guide"
   },
   {
@@ -20,7 +20,7 @@ export const guides: GuideDefinition[] = [
     title: "How to Analyze Your YouTube Watch History Without Uploading It",
     description:
       "A privacy-first workflow for inspecting watch-history exports, spotting patterns, and keeping the data in your browser.",
-    category: "TubeTrace",
+    category: "YouTube Analysis",
     publishedLabel: "Starter guide"
   }
 ];

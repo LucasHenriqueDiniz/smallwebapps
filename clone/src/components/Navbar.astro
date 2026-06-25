@@ -1,0 +1,189 @@
+---
+---
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="14" fill="#1a73e8"/>
+          <rect x="7" y="10" width="6" height="8" rx="1.5" fill="white"/>
+          <rect x="15" y="7" width="6" height="14" rx="1.5" fill="white" opacity="0.7"/>
+        </svg>
+      </div>
+      <span class="logo-text"><span class="logo-tiny">Tiny</span><span class="logo-wow">Wow</span></span>
+      <span class="logo-by">by Jenni</span>
+    </a>
+
+    <nav class="nav-links">
+      <div class="nav-item dropdown">
+        <button class="nav-btn">PDF <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></button>
+        <div class="dropdown-menu">
+          <a href="#">PDF Creator</a>
+          <a href="#">Merge PDF</a>
+          <a href="#">Split PDF</a>
+          <a href="#">Compress PDF</a>
+          <a href="#">PDF to JPG</a>
+          <a href="#">Edit PDF</a>
+        </div>
+      </div>
+      <div class="nav-item dropdown">
+        <button class="nav-btn">Image <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></button>
+        <div class="dropdown-menu">
+          <a href="#">Background Remover</a>
+          <a href="#">Resize Image</a>
+          <a href="#">Compress Image</a>
+          <a href="#">Upscale Image</a>
+          <a href="#">AI Image Generator</a>
+        </div>
+      </div>
+      <div class="nav-item dropdown">
+        <button class="nav-btn">Write <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></button>
+        <div class="dropdown-menu">
+          <a href="#">Essay Writer</a>
+          <a href="#">Paragraph Writer</a>
+          <a href="#">Content Improver</a>
+        </div>
+      </div>
+      <div class="nav-item dropdown">
+        <button class="nav-btn">Video <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></button>
+        <div class="dropdown-menu">
+          <a href="#">Mute Video</a>
+          <a href="#">Compress Video</a>
+          <a href="#">Trim Video</a>
+        </div>
+      </div>
+      <div class="nav-item dropdown">
+        <button class="nav-btn">File <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></button>
+        <div class="dropdown-menu">
+          <a href="#">Split Excel</a>
+          <a href="#">CSV to Excel</a>
+          <a href="#">JSON to CSV</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="navbar-right">
+      <button class="theme-btn" aria-label="Toggle theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+      </button>
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search" class="search-input" />
+      </div>
+      <a href="#" class="signin-btn">Sign In</a>
+    </div>
+  </div>
+</header>
+
+<style>
+.navbar {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+.navbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.logo-text { font-size: 1.1rem; font-weight: 700; }
+.logo-tiny { color: #222; }
+.logo-wow { color: var(--blue); }
+.logo-by { font-size: 0.65rem; color: #aaa; margin-left: -4px; align-self: flex-end; margin-bottom: 2px; }
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.nav-item { position: relative; }
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #444;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-btn:hover { background: var(--bg); color: var(--blue); }
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 180px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 200;
+}
+.dropdown-menu a {
+  display: block;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: #555;
+  border-radius: 8px;
+  transition: background 0.12s, color 0.12s;
+}
+.dropdown-menu a:hover { background: var(--bg); color: var(--blue); }
+.nav-item:hover .dropdown-menu { display: block; }
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #666;
+  transition: background 0.15s;
+}
+.theme-btn:hover { background: var(--bg); }
+.search-wrap {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+}
+.search-input {
+  border: none; background: none;
+  font-size: 0.85rem; color: #444;
+  outline: none; width: 120px;
+  font-family: inherit;
+}
+.search-input::placeholder { color: #aaa; }
+.signin-btn {
+  background: var(--blue);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.1s;
+}
+.signin-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+</style>

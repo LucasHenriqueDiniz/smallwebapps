@@ -1,0 +1,137 @@
+---
+const tools = [
+  { name: "Content Improver", category: "AI Write", desc: "Improve your content", color: "#2563eb" },
+  { name: "Essay Writer", category: "AI Write", desc: "Easily create an essay with AI", color: "#2563eb" },
+  { name: "Paragraph Writer", category: "AI Write", desc: "Paragraph Writer", color: "#2563eb" },
+  { name: "AI Image Generator", category: "Image Tools", desc: "AI Image Generator", color: "#9333ea" },
+  { name: "Remove Background", category: "Image Tools", desc: "Easily Remove the Background from an image", color: "#9333ea" },
+  { name: "Merge PDF", category: "Pdf Tools", desc: "Merge 2 or more PDF files into a single PDF file", color: "#f97316" },
+  { name: "Edit PDF", category: "Pdf Tools", desc: "Free PDF Editor", color: "#f97316" },
+  { name: "PDF to JPG", category: "Pdf Tools", desc: "Convert PDF to JPG and download each page as an image", color: "#f97316" },
+  { name: "Compress PDF", category: "Pdf Tools", desc: "Lessen the file size of a PDF file", color: "#f97316" },
+  { name: "JPG to PDF", category: "Pdf Tools", desc: "Upload images and receive as a PDF", color: "#f97316" },
+  { name: "Upscale Image", category: "Image Tools", desc: "Increase the resolution of your image", color: "#9333ea" },
+  { name: "Remove Watermark", category: "Image Tools", desc: "Remove watermark from photo", color: "#9333ea" },
+];
+
+const tabs = ["All Tools", "Pdf Tools", "Video Tools", "Image Tools", "Converter Tools", "Other Tools", "AI Write"];
+---
+
+<section class="popular">
+  <div class="popular-inner">
+    <h2 class="section-title">Our Most Popular Tools</h2>
+    <p class="section-sub">We present the best of the best. All free, no catch</p>
+
+    <div class="tabs">
+      {tabs.map((tab, i) => (
+        <button class={`tab-btn ${i === 0 ? 'active' : ''}`} data-tab={tab}>
+          {i === 0 && <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>}
+          {tab}
+        </button>
+      ))}
+    </div>
+
+    <div class="tools-grid">
+      {tools.map(tool => (
+        <a href="#" class="tool-card">
+          <div class="tool-icon" style={`background: ${tool.color}22;`}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={tool.color} stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+            </svg>
+          </div>
+          <div class="tool-info">
+            <h4>{tool.name}</h4>
+            <span class="tool-cat" style={`color: ${tool.color}`}>{tool.category}</span>
+            <p>{tool.desc}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="all-tools-wrap">
+      <a href="#" class="all-tools-btn">All Tools</a>
+    </div>
+  </div>
+</section>
+
+<style>
+.popular { background: var(--bg); padding: 64px 24px; }
+.popular-inner { max-width: 1280px; margin: 0 auto; }
+.section-title { font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
+.section-sub { text-align: center; color: #888; margin-bottom: 36px; }
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: white;
+  border-radius: 40px;
+  padding: 6px;
+  margin-bottom: 36px;
+  box-shadow: var(--shadow);
+}
+.tab-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #666;
+  transition: background 0.15s, color 0.15s;
+}
+.tab-btn:hover { background: var(--bg); color: #333; }
+.tab-btn.active { background: var(--blue); color: white; }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.tool-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid transparent;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.tool-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(26,115,232,0.12);
+}
+.tool-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.tool-info h4 { font-size: 0.9rem; font-weight: 700; color: #1a1a2e; margin-bottom: 2px; }
+.tool-cat { font-size: 0.75rem; font-weight: 600; }
+.tool-info p { font-size: 0.78rem; color: #888; margin-top: 4px; line-height: 1.4; }
+
+.all-tools-wrap { text-align: center; }
+.all-tools-btn {
+  display: inline-block;
+  padding: 12px 40px;
+  border: 2px solid var(--blue);
+  border-radius: 30px;
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s, color 0.15s;
+}
+.all-tools-btn:hover { background: var(--blue); color: white; }
+
+@media (max-width: 900px) {
+  .tools-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .tools-grid { grid-template-columns: 1fr; }
+}
+</style>

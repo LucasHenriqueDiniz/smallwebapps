@@ -1,0 +1,195 @@
+---
+const footerTools = [
+  "Content Improver", "Essay Writer", "Paragraph Writer", "AI Image Generator",
+  "Remove Background From Image", "Merge PDF", "Edit PDF", "PDF to JPG",
+  "Compress PDF", "JPG to PDF", "Upscale Image", "Remove watermark",
+  "Paragraph Completer", "Image To Text", "Split PDF", "Others"
+];
+---
+
+<section class="premium">
+  <div class="premium-inner">
+    <div class="premium-text">
+      <h2>Get more with Premium</h2>
+      <p>Take your projects further with premium tools that stay out of your way and work smarter. Create without limits, ads, or roadblocks. Get started for just €6.99 a month.</p>
+      <div class="premium-perks">
+        <span class="perk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Ad-free</span>
+        <span class="perk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.364 5.636a9 9 0 010 12.728M5.636 5.636a9 9 0 000 12.728M12 8v4l3 3"/></svg> Unlimited usage</span>
+        <span class="perk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> Faster processing</span>
+      </div>
+      <a href="#" class="premium-btn">Get started</a>
+    </div>
+    <div class="premium-visual">
+      <div class="laptop">
+        <div class="laptop-screen">
+          <div class="laptop-inner">
+            <div class="icon-grid">
+              {Array(8).fill(0).map((_, i) => (
+                <div class={`tool-bubble bubble-${i}`}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  </svg>
+                </div>
+              ))}
+            </div>
+            <div class="laptop-logo">
+              <svg width="40" height="40" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="14" fill="#1a73e8"/>
+                <rect x="7" y="10" width="6" height="8" rx="1.5" fill="white"/>
+                <rect x="15" y="7" width="6" height="14" rx="1.5" fill="white" opacity="0.7"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <span class="logo-tiny">Tiny</span><span class="logo-wow">Wow</span>
+      </div>
+      <p>TinyWow provides free online conversion, pdf, and other handy tools to help you solve problems of all types. All files both processed and unprocessed are deleted after 1 hour</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="#">Home</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">TOS</a>
+      <a href="#">Contact</a>
+      <a href="#">Blog</a>
+      <a href="#">About</a>
+    </div>
+    <div class="footer-tools">
+      <h4>Tools</h4>
+      <div class="footer-tools-grid">
+        {footerTools.map(t => (
+          <a href="#" class={t === "Others" ? "others-link" : ""}>{t}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+.premium {
+  background: linear-gradient(135deg, #1a73e8, #1557b0);
+  padding: 64px 24px;
+  color: white;
+}
+.premium-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+.premium-text { flex: 1; }
+.premium-text h2 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+.premium-text p { opacity: 0.85; line-height: 1.7; margin-bottom: 24px; max-width: 480px; }
+.premium-perks {
+  display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 28px;
+}
+.perk {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15);
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 0.85rem; font-weight: 500;
+}
+.premium-btn {
+  display: inline-block;
+  background: white;
+  color: var(--blue);
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.premium-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+.premium-visual { flex-shrink: 0; }
+.laptop {
+  position: relative;
+  width: 340px;
+}
+.laptop-screen {
+  background: linear-gradient(160deg, #1e3a8a, #1e40af);
+  border-radius: 16px 16px 0 0;
+  padding: 24px;
+  height: 220px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.laptop-inner { position: relative; width: 100%; height: 100%; }
+.icon-grid {
+  position: absolute; inset: 0;
+}
+.tool-bubble {
+  position: absolute;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  animation: float 3s ease-in-out infinite;
+}
+.bubble-0 { background: #dc2626; top: 5%; left: 5%; animation-delay: 0s; }
+.bubble-1 { background: #7c3aed; top: 5%; right: 20%; animation-delay: 0.4s; }
+.bubble-2 { background: #0284c7; top: 40%; left: 0%; animation-delay: 0.8s; }
+.bubble-3 { background: #059669; top: 40%; right: 0%; animation-delay: 1.2s; }
+.bubble-4 { background: #d97706; bottom: 10%; left: 10%; animation-delay: 1.6s; }
+.bubble-5 { background: #be185d; bottom: 5%; right: 15%; animation-delay: 2s; }
+.bubble-6 { background: #0891b2; top: 20%; left: 35%; animation-delay: 0.6s; }
+.bubble-7 { background: #65a30d; bottom: 25%; right: 35%; animation-delay: 1.8s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.laptop-logo {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.laptop-base {
+  background: #1557b0;
+  height: 12px;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Footer */
+.footer { background: white; border-top: 1px solid var(--border); padding: 48px 24px; }
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 120px 1fr;
+  gap: 48px;
+}
+.footer-brand p { font-size: 0.8rem; color: #888; line-height: 1.7; margin-top: 12px; }
+.footer-logo { font-size: 1.2rem; font-weight: 800; }
+.logo-tiny { color: #222; }
+.logo-wow { color: var(--blue); }
+.footer-col h4, .footer-tools h4 {
+  font-size: 0.85rem; font-weight: 700; color: #333;
+  margin-bottom: 14px;
+}
+.footer-col { display: flex; flex-direction: column; gap: 8px; }
+.footer-col a { font-size: 0.82rem; color: #888; transition: color 0.12s; }
+.footer-col a:hover { color: var(--blue); }
+.footer-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 16px;
+}
+.footer-tools-grid a { font-size: 0.8rem; color: #888; transition: color 0.12s; }
+.footer-tools-grid a:hover { color: var(--blue); }
+.others-link { color: var(--blue) !important; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .premium-inner { flex-direction: column; }
+  .laptop { width: 100%; max-width: 340px; margin: 0 auto; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+}
+</style>

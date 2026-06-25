@@ -2,6 +2,8 @@
 import "../../styles/global.css";
 import Header from "../site/Header.astro";
 import Footer from "../site/Footer.astro";
+import CookieBanner from "../site/CookieBanner.astro";
+import AdSenseHead from "../site/AdSenseHead.astro";
 import { siteConfig } from "@/lib/site";
 
 interface Props {
@@ -18,6 +20,18 @@ const {
 
 const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.name}`;
 const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteConfig.siteUrl,
+  description: siteConfig.description,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${new URL("/apps", siteConfig.siteUrl).toString()}?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
 ---
 
 <!doctype html>
@@ -29,7 +43,46 @@ const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#fff7ed" />
+    <!-- Dark theme: apply BEFORE paint to avoid flash -->
+    <script is:inline>
+      (function(){
+        var t = localStorage.getItem('swa-theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
+    <!-- Google Consent Mode v2 — default DENIED until user accepts -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        ad_storage:         'denied',
+        analytics_storage:  'denied',
+        ad_user_data:       'denied',
+        ad_personalization: 'denied',
+        wait_for_update:    500,
+      });
+      // Restore previous consent choice if any
+      var saved = localStorage.getItem('swa_consent');
+      if (saved) {
+        gtag('consent', 'update', {
+          ad_storage:         saved === 'granted' ? 'granted' : 'denied',
+          analytics_storage:  saved === 'granted' ? 'granted' : 'denied',
+          ad_user_data:       saved === 'granted' ? 'granted' : 'denied',
+          ad_personalization: saved === 'granted' ? 'granted' : 'denied',
+        });
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml"  href="/favicon.svg" />
+    <link rel="icon" type="image/png"      href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/x-icon"   href="/favicon.ico" />
+    <link rel="apple-touch-icon"           href="/apple-touch-icon.png" />
+    <link rel="manifest"                   href="/site.webmanifest" />
+    <meta name="theme-color" content="#1a73e8" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteConfig.name} />
     <meta property="og:title" content={pageTitle} />
@@ -38,12 +91,15 @@ const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
+    <AdSenseHead />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
   </head>
-  <body class="text-slate-900">
+  <body class="text-slate-900" style="font-family: 'Inter', sans-serif; background: var(--page-bg); color: var(--text); margin: 0;">
     <Header />
-    <main class="pb-16">
+    <main style="min-height: calc(100vh - 62px);">
       <slot />
     </main>
     <Footer />
+    <CookieBanner />
   </body>
 </html>

@@ -2,6 +2,17 @@
 
 Read `AGENTS.md` first. This file adds Codex-specific execution guidance.
 
+## Context order
+
+1. `AGENTS.md` is the shared source of truth for architecture, design rules,
+   privacy, SEO, monetization, and tool conventions.
+2. `CLAUDE.md` contains extra repository-specific planning notes. Use it as
+   secondary context when it does not conflict with `AGENTS.md`.
+3. `.claude/launch.json` documents the existing local app launch target. The
+   Codex action config in `.codex/environments/environment.toml` mirrors that
+   same web dev loop.
+4. Prefer package scripts from the root `package.json` over ad hoc commands.
+
 ## Working style
 
 - Default to implementing within the current monorepo instead of suggesting external repos.
@@ -29,3 +40,6 @@ Read `AGENTS.md` first. This file adds Codex-specific execution guidance.
 - Prefer reusable page sections and data-driven rendering.
 - Keep Tailwind usage consistent with the existing design tokens in global styles.
 - If a page needs metadata, define it explicitly.
+- Use the Codex `Run` action for the local Astro dev server when working in the
+  desktop app. Use `Build`, `Check`, and `Preview` actions for quick validation
+  before handing work back.

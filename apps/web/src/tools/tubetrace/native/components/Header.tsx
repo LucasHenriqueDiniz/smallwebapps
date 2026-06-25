@@ -14,9 +14,9 @@ export function Header({ locale, onLocaleChange }: HeaderProps) {
 
         {/* logo */}
         <a href="/" className="flex items-center gap-2">
-          <img src="/tubetrace-favicon.svg" alt="TubeTrace" className="h-9 w-9 rounded-xl" />
+          <img src="/tubetrace-favicon.svg" alt="YouTube Watch History Analyzer" className="h-9 w-9 rounded-xl" />
           <span className="text-lg font-extrabold tracking-tight">
-            Tube<span className="text-primary">Trace</span>
+            YouTube <span className="text-primary">Analysis</span>
           </span>
         </a>
 

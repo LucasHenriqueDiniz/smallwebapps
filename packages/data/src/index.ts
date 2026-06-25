@@ -11,6 +11,17 @@ export interface AppSeo {
   description: string;
 }
 
+export interface AppContent {
+  /** Step-by-step "how to use" instructions, shown in the info modal. */
+  howToUse?: string[];
+  /** Real-world use cases / scenarios for this tool. */
+  useCases?: string[];
+  /** Known technical limitations or caveats. */
+  limitations?: string[];
+  /** Privacy/processing note (e.g. "Your file never leaves your device"). */
+  privacy?: string;
+}
+
 export interface AppDefinition {
   slug: string;
   name: string;
@@ -25,6 +36,10 @@ export interface AppDefinition {
   tags: string[];
   features: string[];
   faq: AppFaq[];
+  /** Expanded FAQ (5-7 Q&A) shown below the fold and used for FAQPage schema when present. */
+  faqExpanded?: AppFaq[];
+  /** Extended content for the "Learn more" modal (how to use, use cases, limitations, privacy). */
+  content?: AppContent;
   disclaimer?: string;
   seo: AppSeo;
 }

@@ -2,43 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Light (default) ── */
 :root {
   color-scheme: light;
-  --page-bg: #fffdf8;
-  --surface: rgba(255, 255, 255, 0.78);
+  --page-bg: #ffffff;
+  --surface: rgba(255,255,255,0.78);
   --surface-strong: #ffffff;
-  --border: rgba(15, 23, 42, 0.1);
+  --border: #e0e7ef;
   --text: #0f172a;
   --muted: #475569;
   --accent: #f97316;
   --accent-soft: #fff2e2;
   --teal-soft: #ddfbf6;
+
+  /* site palette */
+  --blue: #1a73e8;
+  --blue-dark: #1557b0;
+  --orange: #ff6b35;
+  --bg: #eef3fb;
+  --shadow: 0 2px 16px rgba(0,0,0,0.08);
+
+  /* semantic */
+  --nav-bg: #ffffff;
+  --nav-border: #e0e7ef;
+  --nav-text: #444444;
+  --card-bg: #ffffff;
+  --card-border: #e4edf8;
+  --hero-bg-start: #ffffff;
+  --hero-bg-end: #eaeffd;
+  --footer-bg: #0f172a;
+  --input-bg: #f4f7fb;
+  --input-border: #e0e7ef;
+  --drop-bg: #ffffff;
+  --drop-header-bg: #f8faff;
 }
 
-html {
-  scroll-behavior: smooth;
+/* ── Dark ── */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --page-bg: #0f1117;
+  --surface: rgba(30,36,50,0.85);
+  --surface-strong: #1a1f2e;
+  --border: #2a3148;
+  --text: #e8eaf0;
+  --muted: #8b95aa;
+  --accent: #f97316;
+  --accent-soft: #2a1a0a;
+  --teal-soft: #0a2222;
+
+  --nav-bg: #13161f;
+  --nav-border: #252c3e;
+  --nav-text: #c8cfdd;
+  --card-bg: #1a1f2e;
+  --card-border: #252c3e;
+  --hero-bg-start: #13161f;
+  --hero-bg-end: #0f1117;
+  --input-bg: #1a1f2e;
+  --input-border: #2a3148;
+  --drop-bg: #1a1f2e;
+  --drop-header-bg: #13161f;
+
+  --bg: #181d2a;
+  --shadow: 0 2px 16px rgba(0,0,0,0.35);
 }
+
+html { scroll-behavior: smooth; }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(249, 115, 22, 0.14), transparent 28%),
-    radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 24%),
-    linear-gradient(180deg, #fffaf3 0%, var(--page-bg) 52%, #fff 100%);
+  margin: 0; min-height: 100vh;
+  background: var(--page-bg);
   color: var(--text);
-  font-family: "Aptos", "Trebuchet MS", "Segoe UI", sans-serif;
+  font-family: 'Inter', "Segoe UI", sans-serif;
+  transition: background 0.2s, color 0.2s;
 }
 
-a {
-  color: inherit;
-}
+a { color: inherit; }
 
 .card-surface {
   background: var(--surface);
   backdrop-filter: blur(18px);
   border: 1px solid var(--border);
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 45px rgba(15,23,42,0.08);
 }
 
 .section-shell {
@@ -46,18 +90,66 @@ a {
 }
 
 .eyebrow {
-  @apply inline-flex items-center rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600;
+  @apply inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em];
+  border-color: var(--border);
+  color: var(--muted);
+  background: var(--surface);
 }
 
 .section-title {
-  @apply text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl;
+  @apply text-3xl font-semibold tracking-tight md:text-4xl;
+  color: var(--text);
 }
 
 .section-copy {
-  @apply max-w-3xl text-base leading-7 text-slate-600 md:text-lg;
+  @apply max-w-3xl text-base leading-7 md:text-lg;
+  color: var(--muted);
 }
 
 .prose-link {
   @apply text-orange-600 underline decoration-orange-300 underline-offset-4 transition hover:text-orange-700;
 }
 
+/* ── Dark mode overrides for Tailwind utility classes used in tool components ── */
+/* Applied globally so every React tool gets dark mode for free */
+[data-theme="dark"] .bg-white            { background-color: var(--card-bg) !important; }
+[data-theme="dark"] .bg-slate-50         { background-color: var(--input-bg) !important; }
+[data-theme="dark"] .bg-slate-950        { background-color: #0a0d14 !important; }
+[data-theme="dark"] .border-slate-200    { border-color: var(--border) !important; }
+[data-theme="dark"] .border-slate-300    { border-color: var(--border) !important; }
+[data-theme="dark"] .text-slate-950      { color: var(--text) !important; }
+[data-theme="dark"] .text-slate-900      { color: var(--text) !important; }
+[data-theme="dark"] .text-slate-800      { color: var(--text) !important; }
+[data-theme="dark"] .text-slate-700      { color: var(--muted) !important; }
+[data-theme="dark"] .text-slate-600      { color: var(--muted) !important; }
+[data-theme="dark"] .text-slate-500      { color: var(--muted) !important; opacity: .7; }
+[data-theme="dark"] .text-slate-400      { color: var(--muted) !important; opacity: .55; }
+[data-theme="dark"] .divide-slate-200    > * + * { border-color: var(--border) !important; }
+[data-theme="dark"] .ring-orange-200:focus { --tw-ring-color: rgba(249,115,22,.3) !important; }
+/* card-surface used in old pages */
+[data-theme="dark"] .card-surface {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+/* select / input dark */
+[data-theme="dark"] select,
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="search"],
+[data-theme="dark"] textarea {
+  background: var(--input-bg) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+/* Search bar inputs should stay transparent — they live inside a styled container */
+[data-theme="dark"] .hero-search input,
+[data-theme="dark"] .page-search input,
+[data-theme="dark"] .search-box input,
+[data-theme="dark"] .search-modal-input input,
+[data-theme="dark"] #overlay-search {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+[data-theme="dark"] select option {
+  background: var(--card-bg);
+  color: var(--text);
+}
