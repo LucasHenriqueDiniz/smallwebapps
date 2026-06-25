@@ -134,10 +134,10 @@ git push origin main
 
 ## Models & Capabilities
 
-- **Model**: Claude Opus 4.8 (configured in `.claude/settings.json`)
-- **Reasoning**: Use for architecture decisions, SEO strategy, tool design
-- **Code gen**: Fast, reliable for React components and Astro pages
-- **Use Claude Opus for**: Complex tasks, multi-step planning, design decisions
+- **No default model configured** — use what fits your task
+- For **architecture & design decisions**: use a capable model (Opus for complex reasoning)
+- For **simple code gen**: any model works fine
+- **Settings don't lock you in** — choose per-task in Claude Code UI or via CLI
 
 ## Debugging & Validation
 

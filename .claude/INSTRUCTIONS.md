@@ -8,7 +8,7 @@ This file defines the automated behaviors and standards for Claude when working 
 2. **Validate with skills** before committing:
    - `.claude/skills/build-validator.sh` — ensures build completes and critical files exist
    - `.claude/skills/seo-checker.sh` — validates robots.txt, sitemap, metadata
-3. **Use this model**: Claude Opus 4.8 (configured in settings.json)
+3. **Use any Claude model** (no default configured; choose what fits your task)
 
 ## Project Structure
 

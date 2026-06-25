@@ -6,7 +6,7 @@ Claude Code project-specific configuration and automation for **Small Web Apps**
 
 ### `settings.json`
 Project-level settings for Claude Code:
-- **Model**: Claude Opus 4.8 (latest, fastest reasoning)
+- **Model**: No default — choose per-task (flexible)
 - **Permissions**: Git, bash, pnpm, node, npm
 - **Build command**: `pnpm --dir apps/web run build`
 - **Output**: `apps/web/dist`
