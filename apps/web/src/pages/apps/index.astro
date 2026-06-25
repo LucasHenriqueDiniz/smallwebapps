@@ -1,6 +1,7 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
 import { apps } from "@/data/apps";
+import { siteConfig } from "@/lib/site";
 
 const categoryOrder = [
   "PDF Tools",
@@ -31,12 +32,31 @@ const liveApps = apps.filter((app) => app.status === "live");
 const categoryDisplay: Record<string, string> = {
   "YouTube / Data": "YouTube Analysis",
 };
+const appsUrl = new URL("/apps/", siteConfig.siteUrl).toString();
+const collectionSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Browse Free Browser Tools",
+  url: appsUrl,
+  description: "Browse free browser-based tools for PDF, image, developer, data, and YouTube tasks.",
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: apps.length,
+    itemListElement: apps.map((app, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: app.name,
+      url: new URL(`${app.appUrl}/`, siteConfig.siteUrl).toString(),
+    })),
+  },
+};
 ---
 
 <MainLayout
   title="Browse Free Browser Tools"
   description="Browse free browser-based tools for PDF, image, developer, data, and YouTube tasks. No uploads, no accounts, client-side only."
   canonicalPath="/apps"
+  structuredData={collectionSchema}
 >
   <main class="directory">
     <section class="hero">

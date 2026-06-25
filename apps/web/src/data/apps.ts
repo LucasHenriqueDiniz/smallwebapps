@@ -244,8 +244,28 @@ export const apps: AppDefinition[] = [
           "The current version is an early preview. The heuristics are intentionally limited and the full workflow is still being refined. We marked it coming soon to avoid over-claiming its capabilities.",
       },
     ],
-    disclaimer:
-      "This tool cannot prove whether an image is AI-generated. It highlights signals that may deserve closer inspection — nothing more.",
+    content: {
+      howToUse: [
+        "Select an image file from your device.",
+        "Review the file format, dimensions, file size, and available metadata clues.",
+        "Read the signal summary as a checklist of things to inspect, not as a verdict.",
+        "Use the results alongside source context, reverse image search, and manual review.",
+      ],
+      useCases: [
+        "Screen a social image before sharing it when the source is unclear.",
+        "Check whether an image has metadata or dimension patterns that deserve a closer look.",
+        "Teach a review team what lightweight provenance signals can and cannot show.",
+        "Compare several versions of an image without uploading private files to a detector service.",
+      ],
+      limitations: [
+        "Cannot prove whether an image is AI-generated or human-made.",
+        "Metadata can be stripped, edited, or missing on both real and generated images.",
+        "Dimension and file-size patterns are weak signals and can produce false positives or false negatives.",
+      ],
+      privacy:
+        "The selected image is inspected locally in your browser. It is not uploaded to Small Web Apps servers.",
+    },
+    disclaimer: "This tool provides heuristic inspection only. It cannot prove whether an image is AI-generated or human-made.",
     seo: {
       title: "AI Image Checker — Inspect Image Signals Locally",
       description:
@@ -701,6 +721,7 @@ export const apps: AppDefinition[] = [
       privacy:
         "Compression runs entirely in your browser using a WASM-based library. Your images are never uploaded to a server.",
     },
+    disclaimer: "Compression results vary by image content, format, dimensions, and quality settings. Exact target sizes are not guaranteed.",
     seo: {
       title: "Image Optimizer — Compress JPG & PNG Online Free, No Upload",
       description: "Compress and optimize JPG and PNG images in your browser with a quality slider and before/after file size comparison. No upload, free.",
@@ -1307,6 +1328,28 @@ export const apps: AppDefinition[] = [
       { question: "Is my password sent anywhere?", answer: "No. All analysis is done locally in JavaScript. Your password never leaves your device." },
       { question: "Why is entropy measured in bits?", answer: "Entropy in bits represents the number of binary choices an attacker must make to guess the password by brute force. Each added bit doubles the number of possible passwords." },
     ],
+    content: {
+      howToUse: [
+        "Type or paste a password into the input box.",
+        "Review the length, character mix, and estimated strength feedback.",
+        "Use the suggestions to create a longer, less predictable password or passphrase.",
+        "Clear the field when finished, especially on a shared device.",
+      ],
+      useCases: [
+        "Check whether a new account password is obviously weak before saving it.",
+        "Compare a short complex password with a longer passphrase.",
+        "Teach users why length and uniqueness matter more than simple symbol substitutions.",
+        "Pair the checker with the password generator when you need a stronger random password.",
+      ],
+      limitations: [
+        "Strength estimates are heuristic and cannot model every real-world attack.",
+        "Do not reuse passwords even if the strength estimate looks good.",
+        "For work accounts, follow your organization's password manager and security policy.",
+      ],
+      privacy:
+        "The password text is evaluated locally in your browser and is not sent to Small Web Apps servers.",
+    },
+    disclaimer: "Password strength is a local heuristic estimate and is not a security guarantee. Follow your organization's password policy when applicable.",
     seo: {
       title: "Password Strength Checker — Entropy, Crack Time & Analysis",
       description: "Check password strength with entropy calculation, crack time estimation, and character diversity analysis. 100% local, no data sent.",
@@ -1685,6 +1728,7 @@ export const apps: AppDefinition[] = [
       privacy:
         "All calculations happen locally in your browser. Your financial figures are never sent to a server.",
     },
+    disclaimer: "This calculator is for informational estimates only and is not financial advice. Confirm loan terms with a qualified lender.",
     seo: {
       title: "Loan Calculator — Monthly Payment & Amortization, Free",
       description: "Calculate monthly loan payments, total interest, and an amortization schedule using the standard PMT formula. Free, runs in your browser.",
@@ -1743,6 +1787,7 @@ export const apps: AppDefinition[] = [
       privacy:
         "All calculations happen locally in your browser. Your height and weight are never sent to a server.",
     },
+    disclaimer: "BMI is a screening estimate only and is not medical advice. Consult a healthcare professional for personal health decisions.",
     seo: {
       title: "BMI Calculator — Metric & Imperial, Free Online",
       description: "Calculate BMI in metric or imperial units with category, healthy weight range, and visual scale. Free, runs in your browser.",
@@ -3056,7 +3101,7 @@ export const apps: AppDefinition[] = [
       privacy:
         "Compression runs locally in your browser using pdf-lib. Your PDF is never uploaded to a server.",
     },
-    disclaimer: "This tool applies structural optimization only. It does not re-encode or discard image data. File size reduction varies by PDF and may be minimal for image-heavy documents.",
+    disclaimer: "This tool applies browser-side structural optimization. File size reduction varies by PDF, and exact target sizes are not guaranteed.",
     seo: {
       title: "PDF Compressor — Reduce PDF File Size Online Free",
       description: "Compress PDF files by removing structural overhead, with before/after size comparison. Browser-based with pdf-lib, no upload. Free.",
@@ -5591,6 +5636,7 @@ const seoClusterApps: AppDefinition[] = [
       privacy:
         "Compression happens entirely in your browser using the Canvas API. Your image is never uploaded to a server.",
     },
+    disclaimer: "This tool targets roughly 100KB, but exact output is not guaranteed and some images may need resizing or stronger quality reduction.",
     seo: {
       title: "Compress Image to 100KB — Free Online, No Upload",
       description: "Reduce JPG, PNG, or WebP images to around 100KB right in your browser. Free, fast, and your image never leaves your device.",
@@ -5726,6 +5772,28 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Can this always make a PDF 100KB?", answer: "No. Browser-side PDF optimization cannot safely re-encode all embedded images, so exact size is not guaranteed." },
       { question: "Is my PDF uploaded?", answer: "No. The PDF stays in the browser and is not sent to a server." },
     ],
+    content: {
+      howToUse: [
+        "Select or drag in the PDF you want to reduce.",
+        "Let the browser run structural PDF optimization locally.",
+        "Compare the original and optimized file sizes shown by the tool.",
+        "Download the optimized copy only if it fits your upload limit and still opens correctly.",
+      ],
+      useCases: [
+        "Try to prepare a small PDF for online forms with strict attachment limits.",
+        "Reduce a resume or certificate PDF before submitting it through a portal.",
+        "Check whether a document is already optimized before looking for heavier desktop software.",
+        "Keep sensitive documents on your own device instead of uploading them to a server compressor.",
+      ],
+      limitations: [
+        "A 100KB result is not guaranteed because browser-safe compression does not re-encode every embedded image.",
+        "Scanned or image-heavy PDFs may remain much larger than the target size.",
+        "Always open the downloaded file before submitting it to confirm it still displays correctly.",
+      ],
+      privacy:
+        "PDF processing happens in your browser. The document is not uploaded, stored, or sent to a remote compression service.",
+    },
+    disclaimer: "This tool tries to reduce PDF size toward 100KB, but exact output is not guaranteed and image-heavy PDFs may remain larger.",
     seo: {
       title: "Compress PDF to 100KB - Free Browser PDF Compressor",
       description: "Try to compress a PDF toward 100KB locally in your browser. Free PDF size reducer with no upload and no account.",
@@ -5837,8 +5905,7 @@ const seoClusterApps: AppDefinition[] = [
       privacy:
         "PDF processing happens entirely in your browser. Your document is never uploaded to a server.",
     },
-    disclaimer:
-      "This tool applies structural optimization only. It does not re-encode or discard image data. File size reduction varies by PDF and may be minimal for image-heavy documents, so reaching 1MB is not guaranteed.",
+    disclaimer: "This tool tries to reduce PDF size toward 1MB, but exact output is not guaranteed and results vary by PDF structure.",
     seo: {
       title: "Compress PDF to 1MB — Free Online, No Upload",
       description: "Try to reduce a PDF toward 1MB using browser-based structural optimization. Free, private, no account required.",
@@ -5866,6 +5933,28 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Is keyword density a ranking guarantee?", answer: "No. It is only a content audit signal. Useful content and search intent matter more than a fixed percentage." },
       { question: "Does this analyze a live URL?", answer: "No. Paste the text you want to inspect. The tool does not crawl pages or fetch external sites." },
     ],
+    content: {
+      howToUse: [
+        "Paste the page copy or draft text you want to review.",
+        "Review repeated single words, two-word phrases, and three-word phrases.",
+        "Look for accidental repetition, unnatural wording, or missing topic coverage.",
+        "Rewrite the content for clarity first; use density numbers only as a supporting signal.",
+      ],
+      useCases: [
+        "Audit a landing page draft before publishing it.",
+        "Find repeated phrases that make copy sound stuffed or robotic.",
+        "Compare two versions of product or tool copy for topical focus.",
+        "Check whether important terms appear naturally in a page section.",
+      ],
+      limitations: [
+        "There is no universal keyword density percentage that guarantees ranking.",
+        "The tool does not fetch live URLs or evaluate search intent by itself.",
+        "Good rankings depend on usefulness, intent match, authority, internal links, and technical quality.",
+      ],
+      privacy:
+        "Pasted text is analyzed locally in your browser and is not uploaded or stored by Small Web Apps.",
+    },
+    disclaimer: "Keyword density is a content review signal only. It does not guarantee rankings or replace search intent analysis.",
     seo: {
       title: "Keyword Density Checker - Free SEO Text Tool",
       description: "Check keyword density, repeated words, and phrase frequency in pasted text. Free local SEO content checker with no upload.",
@@ -5893,6 +5982,28 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Can it check a live website URL?", answer: "No. Paste the page HTML or head section. This avoids server-side fetching and keeps the tool browser-only." },
       { question: "Are the length limits strict rules?", answer: "No. They are practical ranges that help catch obvious SEO issues, not ranking guarantees." },
     ],
+    content: {
+      howToUse: [
+        "Paste the HTML source or the head section from the page you want to inspect.",
+        "Review title, meta description, canonical, robots, viewport, H1, and social tag signals.",
+        "Fix missing or weak tags in your source project.",
+        "Rebuild the page and paste the updated HTML again to confirm the basics are present.",
+      ],
+      useCases: [
+        "Check a static build before deploying a new page.",
+        "Review whether a page has a canonical URL and robots directives.",
+        "Spot missing descriptions or weak title lengths during an SEO QA pass.",
+        "Teach technical SEO basics using visible HTML examples.",
+      ],
+      limitations: [
+        "The tool analyzes pasted HTML only; it does not crawl a live URL.",
+        "Length checks are practical ranges, not ranking rules.",
+        "It cannot confirm whether Google has indexed the page or chosen a different snippet.",
+      ],
+      privacy:
+        "Your pasted HTML is parsed locally in the browser and is not sent to a server.",
+    },
+    disclaimer: "This tool checks pasted HTML for common SEO tags only. It does not guarantee indexing, rankings, or Google snippet behavior.",
     seo: {
       title: "Meta Tags Analyzer - Free Technical SEO Checker",
       description: "Analyze pasted HTML for title, meta description, canonical, robots, viewport, H1, and social tags. Free browser SEO tool.",
@@ -5920,6 +6031,28 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Does it fetch my URL like a crawler?", answer: "No. Paste HTML from your page source or build output. The tool does not request external URLs." },
       { question: "Why does the preview differ from social networks?", answer: "Each platform caches and crops previews differently. This tool checks the tags and gives a local approximation." },
     ],
+    content: {
+      howToUse: [
+        "Paste the HTML source or head section for the page you want to preview.",
+        "Review detected Open Graph and Twitter card fields.",
+        "Use the local preview to catch missing title, description, image, or URL values.",
+        "Update the source page and recheck before sharing it publicly.",
+      ],
+      useCases: [
+        "Preview a blog post or tool page before sharing it on social platforms.",
+        "Check whether generated OG tags survived a static build.",
+        "Debug why a social card is missing an image or title.",
+        "Compare Open Graph tags with meta title and description values during QA.",
+      ],
+      limitations: [
+        "The preview is an approximation; each platform crops, caches, and refreshes cards differently.",
+        "The tool does not fetch live URLs or clear social platform caches.",
+        "Image availability and final rendering must still be checked with platform-specific debuggers when needed.",
+      ],
+      privacy:
+        "Pasted HTML is inspected locally in your browser and is not uploaded to Small Web Apps.",
+    },
+    disclaimer: "This tool approximates social preview metadata from pasted HTML. Final cards can differ by platform cache and cropping rules.",
     seo: {
       title: "Open Graph Checker - Free OG Tags Preview Tool",
       description: "Check Open Graph and Twitter card tags from pasted HTML. Preview social sharing metadata locally in your browser.",

@@ -60,11 +60,19 @@ const canonicalUrl = new URL(`/apps/${slug}/`, siteConfig.siteUrl).toString();
 const ogImageUrl   = new URL(`/og/${slug}.svg`, siteConfig.siteUrl).toString();
 const isLive       = status === "live";
 const displayFaq   = faqExpanded.length ? faqExpanded : faq;
+const schemaCategoryByLabel: Record<string, string> = {
+  "Developer Tools": "DeveloperApplication",
+  "Data Tools": "UtilitiesApplication",
+  "Image / Inspection": "MultimediaApplication",
+  "PDF Tools": "UtilitiesApplication",
+  "YouTube / Data": "UtilitiesApplication",
+};
+const schemaApplicationCategory = schemaCategoryByLabel[category] ?? "UtilitiesApplication";
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name,
-  applicationCategory: category,
+  applicationCategory: schemaApplicationCategory,
   operatingSystem: "Web browser",
   url: canonicalUrl,
   description: pageDesc,

@@ -1,0 +1,33 @@
+# Small Web Apps
+
+> Free browser-based tools for PDF, image, developer, data, and YouTube workflows. Tools are designed to run locally in the browser with no account and no server upload for user files or pasted data.
+
+## Important URLs
+
+- Home: https://smallwebapps.com/
+- Tools directory: https://smallwebapps.com/apps/
+- Guides: https://smallwebapps.com/guides/
+- Privacy: https://smallwebapps.com/privacy/
+- Terms: https://smallwebapps.com/terms/
+- Contact: https://smallwebapps.com/contact/
+- Sitemap: https://smallwebapps.com/sitemap-index.xml
+- Agent index: https://smallwebapps.com/.well-known/agent-index.json
+
+## Tool Categories
+
+- PDF tools
+- Image and inspection tools
+- Developer tools
+- Data tools
+- YouTube data tools
+
+## Usage Notes
+
+- Prefer canonical tool URLs under `/apps/{slug}/`.
+- Treat privacy claims as tool-specific. Browser-local workflows do not upload selected files or pasted content after the page loads.
+- Do not describe heuristic tools, including AI image inspection, as definitive detectors.
+- Calculator and compression outputs are informational and may vary by browser, input file, and device.
+
+## Crawling
+
+AI crawlers may read public pages, guides, and tool metadata for search, citation, and answer generation. Do not submit forms or attempt to upload files.

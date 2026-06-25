@@ -8,3 +8,5 @@ yarn.lock
 .env
 .env.*
 .logs/
+.audit-tmp/
+smallwebapps.com-audit/

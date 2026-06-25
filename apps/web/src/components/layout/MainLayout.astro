@@ -42,9 +42,17 @@ const websiteSchema: Record<string, unknown> = {
     "query-input": "required name=search_term_string",
   },
 };
+const organizationSchema: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: siteConfig.siteUrl,
+  logo: new URL("/favicon.svg", siteConfig.siteUrl).toString(),
+  description: siteConfig.description,
+};
 const schemaPayload = structuredData
-  ? [websiteSchema, ...(Array.isArray(structuredData) ? structuredData : [structuredData])]
-  : websiteSchema;
+  ? [websiteSchema, organizationSchema, ...(Array.isArray(structuredData) ? structuredData : [structuredData])]
+  : [websiteSchema, organizationSchema];
 ---
 
 <!doctype html>

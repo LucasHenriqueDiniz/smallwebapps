@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Upload, Download, ImageIcon } from "lucide-react";
+import { Upload, Download } from "lucide-react";
 
 export default function PdfToImageApp() {
   const [images, setImages] = useState<{ url: string; page: number }[]>([]);

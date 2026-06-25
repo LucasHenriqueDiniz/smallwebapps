@@ -1,13 +1,31 @@
 # Small Web Apps
 
-Small Web Apps is a single-domain product hub for lightweight browser-based tools. The site is designed to be fast, indexable, AdSense-ready, and easy to extend with both content pages and embedded interactive apps.
+Free browser-based utilities for PDF, image, developer, data, and YouTube workflows.
+
+Website: https://smallwebapps.com
+Tools directory: https://smallwebapps.com/apps/
+
+Small Web Apps is built as a fast, static-first product hub. Tool pages are designed to be indexable, useful without JavaScript where possible, and clear about privacy and limitations.
+
+## Popular tools
+
+- JSON Formatter: https://smallwebapps.com/apps/json-formatter/
+- PDF Compressor: https://smallwebapps.com/apps/pdf-compress/
+- Compress PDF to 100KB: https://smallwebapps.com/apps/compress-pdf-to-100kb/
+- Image Optimizer: https://smallwebapps.com/apps/image-optimize/
+- AI Image Checker: https://smallwebapps.com/apps/ai-image-checker/
+- Password Generator: https://smallwebapps.com/apps/password-generator/
+- QR Code Generator: https://smallwebapps.com/apps/qr-code-generator/
+- JWT Decoder: https://smallwebapps.com/apps/jwt-decoder/
+- Base64 Encoder: https://smallwebapps.com/apps/base64-encoder/
+- Keyword Density Checker: https://smallwebapps.com/apps/keyword-density-checker/
 
 ## Product model
 
-- `smallwebapps.com` is the canonical site and deploy target for v1.
-- `/apps/[slug]` is the canonical page for every app.
-- Apps are embedded by default and run inside the hub when they are ready.
-- External repos or subdomains are deferred until an app becomes too large or unrelated for the main codebase.
+- `smallwebapps.com` is the canonical production domain.
+- `/apps/[slug]/` is the canonical URL pattern for tool pages.
+- Interactive tools run inside the main hub when they are ready.
+- Most workflows are browser-first, with privacy and limitations documented on tool pages.
 
 ## Repository layout
 
@@ -26,83 +44,74 @@ packages/
 - TypeScript
 - Tailwind CSS
 - React islands for embedded tools
-- Static-first build for Cloudflare deployment
+- Static-first build for Cloudflare Pages
 
 ## Getting started
 
-1. Install `pnpm`.
-2. Install dependencies:
+Install dependencies:
 
 ```bash
 pnpm install
 ```
 
-3. Start the local dev server:
+Start the local dev server:
 
 ```bash
 pnpm dev
 ```
 
-4. Build the site:
+Build the site:
 
 ```bash
 pnpm build
 ```
 
+Build only the web app:
+
+```bash
+pnpm --dir apps/web run build
+```
+
 ## Adding a new app
 
-1. Add app metadata in [apps.ts](./apps/web/src/data/apps.ts).
+1. Add app metadata in [`apps/web/src/data/apps.ts`](./apps/web/src/data/apps.ts).
 2. If the app is interactive, add its implementation under `apps/web/src/tools/{slug}`.
-3. If the app is content-only for now, keep `implemented: false` and provide strong landing-page copy anyway.
-4. Confirm the app page includes:
-   - original descriptive content
-   - privacy/trust copy
-   - FAQ entries
-   - related internal links
-   - no manual ad slots inside the tool or article body
+3. Register interactive tools in `apps/web/src/components/tools/ToolMount.astro`.
+4. Keep metadata, FAQ, visible content, limitations, privacy copy, and schema aligned.
+5. Avoid manual ad slots inside the core tool workflow.
+
+## SEO and discovery
+
+The site includes static SEO assets for search engines and AI crawlers:
+
+- `robots.txt`
+- `sitemap-index.xml`
+- `llms.txt`
+- structured data on home, app directory, and tool pages
+
+After deployment, submit `https://smallwebapps.com/sitemap-index.xml` in Google Search Console and inspect a few important URLs such as the home page, `/apps/`, JSON Formatter, PDF Compressor, Image Optimizer, and AI Image Checker.
+
+## Security and environment files
+
+Do not commit local secrets or deployment credentials. The repository ignores `.env` and `.env.*` files by default.
+
+Before making the repository public or committing deployment changes, check for secrets:
+
+```bash
+rg --files -uuu -g '.env' -g '.env.*' -g '!node_modules' -g '!apps/web/dist' -g '!.git'
+rg -n -i "(api[_-]?key|secret|token|password|private[_-]?key|client[_-]?secret)"
+```
 
 ## Deployment
 
-The initial deployment target is a single Cloudflare Pages project for the Astro site.
+The production target is a single Cloudflare Pages project.
 
-- Production domain: `https://smallwebapps.com`
-- Preview domains: standard Cloudflare Pages preview URLs
-- Output mode: static
-- Repository: `https://github.com/LucasHenriqueDiniz/smallwebapps`
-
-Cloudflare Pages build settings:
-
-- Install command: `pnpm install`
+- Production domain: https://smallwebapps.com
+- Repository: https://github.com/LucasHenriqueDiniz/smallwebapps
 - Build command: `pnpm build`
 - Output directory: `apps/web/dist`
 
-## App routing model
-
-- `/apps/tubetrace` includes both the SEO landing content and the embedded TubeTrace UI.
-- `/apps/json-formatter`, `/apps/ai-image-checker`, and `/apps/csv-cleaner` follow the same model.
-- Guide content should reinforce app pages and the internal link graph.
-
-## TubeTrace import status
-
-The original TubeTrace codebase has been copied into `apps/tubetrace` so it now lives inside this monorepo.
-
-- Current hub route: `/apps/tubetrace` in `apps/web`
-- Imported source app: `apps/tubetrace`
-- Current state: source preserved in-monorepo and embedded into the hub through a generated static bundle at `/tubetrace-app/`
-
-## Embedding TubeTrace in the hub
-
-The route `/apps/tubetrace` uses the original Vite app layout via an embedded static build.
-
-- Sync command:
-
-```bash
-pnpm sync:tubetrace
-```
-
-- This builds `apps/tubetrace` with `BASE_PATH=/tubetrace-app/`
-- Then copies the generated output into `apps/web/public/tubetrace-app`
-- It also writes stable `embed.js` and `embed.css` files for native mounting inside the Astro route
+Deploy only after validating the build and SEO essentials.
 
 ## License
 

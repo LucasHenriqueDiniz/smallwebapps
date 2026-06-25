@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { FileText, Copy, Check, Upload } from "lucide-react";
+import { Copy, Check, Upload } from "lucide-react";
 
 export default function PdfExtractTextApp() {
   const [text, setText] = useState("");

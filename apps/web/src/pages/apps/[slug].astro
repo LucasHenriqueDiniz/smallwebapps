@@ -12,15 +12,30 @@ const app = appMap[Astro.params.slug ?? ""];
 if (!app) throw new Error(`Unknown app slug: ${Astro.params.slug}`);
 
 const appTags = new Set(app.tags.map((tag) => tag.toLowerCase()));
+const curatedRelatedSlugs: Record<string, string[]> = {
+  "pdf-compress": ["compress-pdf-to-100kb", "compress-pdf-to-200kb", "compress-pdf-to-500kb", "compress-pdf-to-1mb"],
+  "compress-pdf-to-100kb": ["pdf-compress", "compress-pdf-to-200kb", "compress-pdf-to-500kb", "compress-pdf-to-1mb"],
+  "compress-pdf-to-1mb": ["pdf-compress", "compress-pdf-to-100kb", "compress-pdf-to-200kb", "compress-pdf-to-500kb"],
+  "image-optimize": ["compress-image-to-50kb", "compress-image-to-100kb", "compress-image-to-200kb", "compress-jpg-to-100kb", "compress-png-to-100kb", "compress-webp-to-100kb"],
+  "compress-image-to-100kb": ["image-optimize", "compress-image-to-50kb", "compress-image-to-200kb", "compress-jpg-to-100kb", "compress-png-to-100kb", "compress-webp-to-100kb"],
+  "keyword-density-checker": ["meta-tags-analyzer", "open-graph-checker", "word-counter", "meta-tag-generator", "og-tag-generator"],
+  "meta-tags-analyzer": ["open-graph-checker", "keyword-density-checker", "meta-tag-generator", "og-tag-generator"],
+  "open-graph-checker": ["meta-tags-analyzer", "keyword-density-checker", "og-tag-generator", "meta-tag-generator"],
+  "json-formatter": ["jwt-decoder", "base64-encoder", "regex-tester", "json-to-csv", "json-flatten", "json-to-xml"],
+  "jwt-decoder": ["json-formatter", "base64-encoder", "password-generator", "hash-generator"],
+  "base64-encoder": ["json-formatter", "jwt-decoder", "url-encoder", "hash-generator"],
+};
+const curatedRelated = new Set(curatedRelatedSlugs[app.slug] ?? []);
 const relatedApps = apps
   .filter((item) => item.slug !== app.slug && item.implemented)
   .map((item) => {
     const sharedTags = item.tags.filter((tag) => appTags.has(tag.toLowerCase())).length;
     const sameCategory = item.category === app.category ? 1 : 0;
     const liveBoost = item.status === "live" ? 1 : 0;
+    const curatedBoost = curatedRelated.has(item.slug) ? 25 : 0;
     return {
       item,
-      score: sameCategory * 10 + sharedTags * 3 + liveBoost,
+      score: curatedBoost + sameCategory * 10 + sharedTags * 3 + liveBoost,
     };
   })
   .filter(({ score }) => score > 0)
