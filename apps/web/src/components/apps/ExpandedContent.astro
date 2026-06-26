@@ -1,0 +1,139 @@
+---
+/**
+ * ExpandedContent — renders visible how-to, use cases, limitations, and privacy sections.
+ * These sections are indexable by search engines and visible to users without JS.
+ */
+import type { AppContent } from "@smallwebapps/data";
+
+interface Props {
+  howToUse?: string[];
+  useCases?: string[];
+  limitations?: string[];
+  privacy?: string;
+}
+
+const { howToUse = [], useCases = [], limitations = [], privacy } = Astro.props;
+
+const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.length > 0 || !!privacy;
+---
+
+{hasContent && (
+  <div class="expanded-content">
+    {howToUse.length > 0 && (
+      <section class="content-section">
+        <h2>How to use</h2>
+        <ol class="content-list">
+          {howToUse.map((step) => <li>{step}</li>)}
+        </ol>
+      </section>
+    )}
+
+    {useCases.length > 0 && (
+      <section class="content-section">
+        <h2>Use cases</h2>
+        <ul class="content-list">
+          {useCases.map((useCase) => <li>{useCase}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {(limitations.length > 0 || privacy) && (
+      <section class="content-section">
+        <h2>Limitations &amp; Privacy</h2>
+        {privacy && (
+          <div class="privacy-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>{privacy}</p>
+          </div>
+        )}
+        {limitations.length > 0 && (
+          <ul class="content-list">
+            {limitations.map((item) => <li>{item}</li>)}
+          </ul>
+        )}
+      </section>
+    )}
+  </div>
+)}
+
+<style>
+.expanded-content {
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border);
+}
+
+.content-section {
+  margin-bottom: 36px;
+}
+
+.content-section h2 {
+  margin: 0 0 16px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.content-section:last-child {
+  margin-bottom: 0;
+}
+
+.content-list {
+  margin: 0;
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.content-list li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.privacy-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.privacy-box svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--blue);
+}
+
+.privacy-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .expanded-content {
+    margin-top: 32px;
+    padding-top: 32px;
+  }
+
+  .content-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .content-list {
+    padding-left: 20px;
+    gap: 10px;
+  }
+
+  .content-list li {
+    font-size: 0.9rem;
+  }
+}
+</style>

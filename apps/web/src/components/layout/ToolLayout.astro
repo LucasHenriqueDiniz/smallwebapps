@@ -20,6 +20,7 @@ import CookieBanner from "../site/CookieBanner.astro";
 import AdSenseHead from "../site/AdSenseHead.astro";
 import ContentInfoModal from "../tools/ContentInfoModal.astro";
 import ExpandedFaq from "../apps/ExpandedFaq.astro";
+import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
 import type { AppContent, AppFaq } from "@smallwebapps/data";
 import "../../styles/global.css";
@@ -186,6 +187,12 @@ const breadcrumbSchema = {
     <div class={fullWidth ? 'tl-body-full' : 'tl-body'}>
       <h1 class="tl-title">{name}</h1>
       <slot />
+      <ExpandedContent
+        howToUse={content?.howToUse}
+        useCases={content?.useCases}
+        limitations={content?.limitations}
+        privacy={content?.privacy}
+      />
       <ExpandedFaq items={displayFaq} />
     </div>
   </div>
