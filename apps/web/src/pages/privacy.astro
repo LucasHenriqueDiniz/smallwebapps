@@ -12,9 +12,38 @@ import MainLayout from "@/components/layout/MainLayout.astro";
       <span class="static-eyebrow">Privacy</span>
       <h1>A browser-first privacy posture,<br/>explained plainly</h1>
       <div class="static-card">
+        <p><strong>Browser-Based Processing</strong></p>
         <p>Small Web Apps focuses on lightweight browser-based utilities. Tool inputs are processed in the browser unless a tool page clearly says otherwise.</p>
         <p>We do not run accounts, paywalls, or server-side file uploads for the tools. Some site-level services may still receive standard web request data, such as IP address, browser information, referrer, and page URL.</p>
-        <p>If advertising or analytics is enabled, Google and related vendors may use cookies or similar technologies according to the consent choice shown in the cookie banner.</p>
+
+        <p style="margin-top: 16px;"><strong>Advertising & Analytics</strong></p>
+        <p>If advertising or analytics is enabled, Google AdSense and related vendors may serve personalized or non-personalized ads based on your browsing history and interests. Third-party vendors (including Google) use cookies and similar technologies to deliver these ads.</p>
+
+        <p style="margin-top: 16px;"><strong>Third-Party Cookies & Tracking</strong></p>
+        <p>Google AdSense and other advertising partners may place cookies on your browser to:</p>
+        <ul style="margin: 8px 0 0 20px; padding: 0;">
+          <li style="margin: 6px 0;">Deliver targeted ads based on your visit history</li>
+          <li style="margin: 6px 0;">Track ad performance and conversions</li>
+          <li style="margin: 6px 0;">Prevent click fraud and other abuse</li>
+          <li style="margin: 6px 0;">Show personalized ads when you visit other sites</li>
+        </ul>
+
+        <p style="margin-top: 16px;"><strong>Cookie Types Used When Ads Are Enabled</strong></p>
+        <ul style="margin: 8px 0 0 20px; padding: 0;">
+          <li style="margin: 6px 0;"><strong>Advertising cookies:</strong> Placed by Google AdSense and ad networks to serve personalized ads</li>
+          <li style="margin: 6px 0;"><strong>Analytics cookies:</strong> Track site usage and user behavior (if Google Analytics is enabled)</li>
+          <li style="margin: 6px 0;"><strong>Consent cookies:</strong> Remember your choice from the cookie banner (accept or decline)</li>
+        </ul>
+
+        <p style="margin-top: 16px;"><strong>Control Personalized Ads</strong></p>
+        <p>You can control how Google and other advertisers use your data:</p>
+        <ul style="margin: 8px 0 0 20px; padding: 0;">
+          <li style="margin: 6px 0;"><a class="prose-link" href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ad Preferences</a> — View and manage your interests; opt out of personalized ads</li>
+          <li style="margin: 6px 0;"><a class="prose-link" href="https://optout.networkadvertising.org" target="_blank" rel="noopener noreferrer">Network Advertising Initiative (NAI)</a> — Opt out of interest-based ads from NAI members</li>
+          <li style="margin: 6px 0;"><a class="prose-link" href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer">Digital Advertising Alliance (DAA)</a> — Use the WebChoice tool to control personalized ads</li>
+        </ul>
+
+        <p style="margin-top: 16px;"><strong>Site-Level Privacy</strong></p>
         <p>This privacy page is a site-level overview. Each app page remains responsible for accurately describing its own data handling and limitations.</p>
         <div class="static-highlight">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>

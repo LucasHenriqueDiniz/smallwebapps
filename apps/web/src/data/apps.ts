@@ -236,12 +236,7 @@ export const apps: AppDefinition[] = [
       {
         question: "Which signals does it check for?",
         answer:
-          "Currently: file format, dimensions (including common AI output sizes like 1:1 squares), file size relative to dimensions, and a few heuristic patterns. More signals will be added over time.",
-      },
-      {
-        question: "Why is this marked 'Coming Soon' if the tool is already visible?",
-        answer:
-          "The current version is an early preview. The heuristics are intentionally limited and the full workflow is still being refined. We marked it coming soon to avoid over-claiming its capabilities.",
+          "File format, dimensions (including common AI output sizes like 1:1 squares), file size relative to dimensions, EXIF metadata, and heuristic patterns. More signals will be added over time.",
       },
     ],
     content: {
@@ -301,12 +296,12 @@ export const apps: AppDefinition[] = [
       {
         question: "Does it handle quoted fields or complex CSV edge cases?",
         answer:
-          "The initial version handles simple to moderately messy CSV. Complex cases like multi-line quoted fields or custom delimiters are not yet supported — those features are on the roadmap.",
+          "It handles simple to moderately messy CSV well. Very complex cases like multi-line quoted fields may need manual review after cleaning.",
       },
       {
         question: "Can I download the cleaned output?",
         answer:
-          "Not yet in this version — copy-paste from the output panel. A download button is planned for a future update.",
+          "Copy-paste the cleaned output directly from the output panel. The download feature is on the roadmap.",
       },
     ],
     seo: {
