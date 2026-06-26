@@ -39,7 +39,22 @@ const contentMap = {
 const content = contentMap[guide.slug as keyof typeof contentMap];
 const canonicalUrl = `https://smallwebapps.com/guides/${guide.slug}/`;
 const imageUrl = new URL(guide.image, "https://smallwebapps.com").toString();
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: guide.title,
+  description: guide.description,
+  image: imageUrl,
+  estimatedCost: { "@type": "PriceSpecification", priceCurrency: "USD", price: "0" },
+  step: content?.points.map((point, idx) => ({
+    "@type": "HowToStep",
+    position: idx + 1,
+    name: point.split(".")[0],
+    text: point
+  })) || []
+};
 const structuredData = [
+  howToSchema,
   {
     "@context": "https://schema.org",
     "@type": "Article",
