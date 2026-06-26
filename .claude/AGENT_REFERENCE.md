@@ -107,7 +107,6 @@ apps/web/
 
 CLAUDE.md               ← Product definition & architecture (CANONICAL)
 AGENTS.md               ← Redirects to CLAUDE.md
-CODEX.md                ← Redirects to CLAUDE.md
 ```
 
 ## Before Every Commit

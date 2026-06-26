@@ -49,7 +49,7 @@ const categoryHref = `/apps?cat=${encodeURIComponent(app.category).replaceAll("%
 <ToolLayout
   name={app.name}
   category={app.category}
-  status={app.status === "live" ? "live" : "coming-soon"}
+  status="live"
   slug={app.slug}
   disclaimer={app.disclaimer}
   seoTitle={app.seo.title}

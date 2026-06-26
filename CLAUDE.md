@@ -1,6 +1,6 @@
 # Small Web Apps repository instructions
 
-This is the canonical instruction file for every coding agent working in this repository. `AGENTS.md` and `CODEX.md` only redirect here.
+This is the canonical instruction file for every coding agent working in this repository. `AGENTS.md` redirects here; do not create a separate `CODEX.md` instruction file.
 
 ## Product definition
 
