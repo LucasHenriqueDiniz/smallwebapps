@@ -33,6 +33,61 @@ const contentMap = {
       "Look for timestamps, watch links, and channel-related patterns before deeper parsing.",
       "Treat local inspection as the safest default until you genuinely need richer analytics."
     ]
+  },
+  "json-formatting-and-validation": {
+    intro:
+      "JSON is the lingua franca of modern APIs and data interchange. Whether you're debugging an API response, preparing configuration files, or integrating third-party data sources, knowing how to format and validate JSON quickly can save hours of troubleshooting. The good news: you can do all of this in your browser without any tools, files, or server uploads. This guide covers the basics of JSON formatting, common syntax errors, when to minify vs. pretty-print, and how to inspect JSON structure efficiently.",
+    points: [
+      "Understand JSON syntax and why strict formatting matters—trailing commas, unquoted keys, and single quotes are all syntax errors that break parsing. Learn to spot these quickly by formatting your JSON first; a parser error will pinpoint the exact line and character.",
+      "Know when to format for readability (development, debugging, documentation) vs. minify for size (API payloads, embedded data). Minified JSON is valid JSON, but unreadable without tooling. Format during development; minify for production.",
+      "Use the JSON formatter to inspect structure at a glance—count array elements, see the data types, and understand nesting without writing code. This is especially useful when working with unfamiliar API responses or deeply nested objects.",
+      "Avoid common mistakes: copying JSON from HTML, browser consoles, or logs that include extra characters. Paste the raw JSON, not the container. If the formatter rejects it, check for escaped quotes, extra newlines, or comments (not valid in strict JSON).",
+      "Link to related tools like JWT Decoder, Base64 Encoder, and Regex Tester for workflows where JSON is just one step. Many real-world tasks involve transforming JSON between formats, encoding payloads, or validating patterns within data."
+    ]
+  },
+  "csv-cleaning-before-import": {
+    intro:
+      "CSV (Comma-Separated Values) files are everywhere—spreadsheet exports, database dumps, data downloads—but they're rarely clean. Extra whitespace, blank rows, inconsistent delimiters, and encoding issues cause import failures and data corruption. This guide provides a practical checklist for cleaning CSV files before import, whether you're loading data into a database, spreadsheet application, or data analysis tool. By following these steps, you'll catch and fix issues early without losing data.",
+    points: [
+      "Start with a visual inspection: open the CSV in a text editor (not Excel) to see actual structure, line endings, and special characters. Look for extra spaces, trailing commas, quoted fields, and rows with missing columns. This step is faster than trial-and-error importing.",
+      "Remove blank rows and trim whitespace from every cell. Blank rows cause import failures; leading/trailing spaces cause join and filter mismatches. Use the CSV Cleaner to automate this—paste your data, copy the cleaned output, and verify the row count before importing.",
+      "Check column consistency: ensure every row has the same number of columns. If headers are misaligned, import tools will fail or shift data. Count the header columns, then spot-check a few data rows to confirm alignment.",
+      "Handle quoted and special fields carefully: if your CSV contains commas within field values, those fields must be quoted (e.g., 'Smith, John' not Smith, John). If your data uses non-standard delimiters (tabs, semicolons), standardize to commas or specify the delimiter to your import tool.",
+      "Verify encoding before import: if your CSV contains non-ASCII characters (accents, symbols, non-Latin scripts), ensure the file is UTF-8 encoded. Many tools expect UTF-8; ISO-8859-1 or other encodings cause character corruption. Most text editors allow you to set or convert encoding on save."
+    ]
+  },
+  "browser-based-pdf-tools-safe-and-fast": {
+    intro:
+      "Processing PDFs on your computer usually means choosing between slow desktop software or uploading to a cloud service that stores your files. Browser-based PDF tools offer a third way: fast, secure, and ephemeral processing. This guide explains why local PDF tools are safer than cloud alternatives, how compression actually works, and when to use each approach. By the end, you'll understand the trade-offs and know how to optimize your PDF workflow.",
+    points: [
+      "Understand the security difference: cloud PDF services store your file on their servers (even temporarily), where it's accessible to staff, auditable, and potentially subject to data retention policies. Browser-based tools process the PDF entirely on your device—nothing leaves your computer. For sensitive documents (contracts, medical records, financial statements), this is a game-changer.",
+      "Know how PDF compression works: PDF compression reduces file size by downsampling images, removing unused fonts, and compressing streams. The trade-off is quality—heavily compressed PDFs may look blurry. Use the PDF Compressor to test compression levels locally and see the size reduction before commit.",
+      "Set realistic expectations for file sizes: a scanned document (300 DPI) is typically 2-5 MB per page before compression. A 100-page document is 200-500 MB and may not compress much further without losing readability. For email attachments (usually 25 MB limit), compress to 10-20 MB per 100 pages.",
+      "Choose the right tool for your task: use local tools for quick single-PDFs (compression, extraction, merging). Use cloud tools if you need advanced features (OCR, form filling, splitting by content) or batch processing of non-sensitive documents. Most browser-based tools handle basic operations well.",
+      "Verify your output before sending: after compression or processing, open the PDF in your browser or PDF reader to confirm text is readable, images are clear, and pages are in the right order. A 2 MB file that's unreadable is worse than a 10 MB original."
+    ]
+  },
+  "resize-compress-images-locally": {
+    intro:
+      "Image files are heavy. A smartphone photo is 3-5 MB; a screenshot is 1-2 MB. Before sharing via email, uploading to a cloud service, or embedding in a website, you need to optimize: resize to the right dimensions, choose the best format (JPG, PNG, WebP), and compress without losing visible quality. You can do all of this in your browser—no upload, no account, no external service. This guide walks you through format selection, quality trade-offs, and how to preserve or strip metadata safely.",
+    points: [
+      "Choose your format wisely: JPG is best for photographs and complex images with many colors—it compresses well and supports all devices. PNG is best for graphics, logos, and images with transparency—it's lossless but larger. WebP is the modern standard, offering the best compression for both photos and graphics, but older browsers may not support it. Start with JPG for photos; use PNG if you need transparency.",
+      "Understand quality and compression: JPG quality ranges from 1-100. Quality 75-85 is visually excellent and compresses heavily; quality 90+ looks perfect but files stay large. Test different quality levels locally with the Image Optimizer to find your sweet spot—usually 80 is the best balance.",
+      "Resize to the intended dimensions: if you're embedding a 6000x4000 original photo in a web article that displays at 800 pixels wide, resize to 1200-1600 pixels wide (1.5-2x the display size for crisp high-DPI displays). Resizing reduces file size by 50-80% compared to just compressing the original.",
+      "Handle metadata and EXIF safely: photos from phones and cameras contain metadata (location, camera settings, timestamps, thumbnail). If privacy matters, strip metadata before sharing. If you need attribution or color profile information, preserve it. The Image Metadata tool lets you inspect and understand what's embedded before deciding.",
+      "Test on devices before finalizing: a heavily compressed JPG might look fine on your desktop but pixelated on a phone, or vice versa. Save your optimized image and test on the devices where it will be viewed. Quality expectations differ between email, web, and print."
+    ]
+  },
+  "privacy-first-file-tools-local-processing": {
+    intro:
+      "Every time you upload a file to process it—compress a PDF, clean CSV data, resize an image—you're trusting that service with your file. Cloud services say they delete files after processing, but you can't verify that, and terms of service often reserve the right to scan and analyze your data. Browser-based (client-side) file tools work differently: they process everything on your device and never send the file to a server. This guide explains the technical difference, what 'local processing' actually means, and how to verify that a tool respects your privacy.",
+    points: [
+      "Understand the technical difference: client-side tools run JavaScript in your browser that processes files using APIs like FileReader, Canvas, and Web Workers. The file is read into your browser's memory, processed locally, and the result is either displayed or downloaded—nothing is sent to a server. Server-side tools receive the file via HTTP, process it on a remote server, and send back the result. Client-side is faster, more private; server-side is more capable but requires trust.",
+      "Know what stays on your device with browser-based tools: the file itself, all intermediate data, and the final output are all processed in your browser's memory. Memory is cleared when you close the tab or refresh the page. This means no log files, no temporary storage, no record of what you processed—even if someone breached the server (which doesn't have your file).",
+      "Verify privacy claims: read the privacy policy to see if the site makes any server calls (many do, even if they claim to be local). Check the browser's Network tab while processing a file—if you see POST requests with the file data, the site is uploading despite claiming to be local. Small Web Apps tools show no network activity except for loading the page itself.",
+      "Recognize the limitations of client-side processing: browser tools can't persist files permanently, can't integrate with external databases, and are limited by browser memory (usually 512 MB to 2 GB). Large files (videos, multi-gigabyte datasets) may be too big to process locally. For batch processing or advanced features, cloud tools are necessary.",
+      "Use local tools as the default, cloud tools as the exception: if a browser-based tool exists for your task, use it first. Save cloud tools for when you need features that local tools don't have, or when processing is too heavy for the browser. This simple rule keeps your sensitive data private for 95% of common tasks."
+    ]
   }
 };
 
