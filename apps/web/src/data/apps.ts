@@ -239,6 +239,43 @@ export const apps: AppDefinition[] = [
           "File format, dimensions (including common AI output sizes like 1:1 squares), file size relative to dimensions, EXIF metadata, and heuristic patterns. More signals will be added over time.",
       },
     ],
+    faqExpanded: [
+      {
+        question: "Can this prove an image is AI-generated?",
+        answer:
+          "No. This tool highlights signals and inconsistencies that deserve closer inspection. It cannot prove provenance. Human review, reverse image search, and context are still necessary.",
+      },
+      {
+        question: "Which signals does it check for?",
+        answer:
+          "File format, dimensions (including common AI output sizes like 1:1 squares), file size relative to dimensions, EXIF metadata, and heuristic patterns. More signals will be added over time.",
+      },
+      {
+        question: "Why can't any tool reliably detect AI-generated images?",
+        answer:
+          "Modern generators increasingly mimic camera metadata, natural dimension ratios, and realistic compression artifacts. Reliable detection would require access to the generator's training signature or a watermarking standard neither side fully controls yet, so any browser-side heuristic is inherently limited.",
+      },
+      {
+        question: "Should I use this for content moderation decisions?",
+        answer:
+          "No. Treat it as a first-pass screening aid, not a moderation gate. False positives (real photos flagged) and false negatives (AI images that pass) are both expected — pair it with human judgment for anything consequential.",
+      },
+      {
+        question: "Does stripped metadata mean an image is fake?",
+        answer:
+          "No. Many platforms (Instagram, WhatsApp, Twitter) strip EXIF metadata from every photo on upload, real or not. Missing metadata is common and not itself a reliable signal of AI generation.",
+      },
+      {
+        question: "Can I check multiple images in a row?",
+        answer:
+          "Yes — select a new image at any time and the previous result is replaced. Each check is independent and none of the images are stored or compared against each other on a server.",
+      },
+      {
+        question: "Why does the tool avoid giving a confidence score or percentage?",
+        answer:
+          "A numeric score implies more certainty than heuristic signals can support. Instead, the tool lists the individual signals it found so you can judge their relevance yourself rather than anchoring on a potentially misleading number.",
+      },
+    ],
     content: {
       howToUse: [
         "Select an image file from your device.",
@@ -1445,6 +1482,15 @@ export const apps: AppDefinition[] = [
     faq: [
       { question: "Is my password sent anywhere?", answer: "No. All analysis is done locally in JavaScript. Your password never leaves your device." },
       { question: "Why is entropy measured in bits?", answer: "Entropy in bits represents the number of binary choices an attacker must make to guess the password by brute force. Each added bit doubles the number of possible passwords." },
+    ],
+    faqExpanded: [
+      { question: "Is my password sent anywhere?", answer: "No. All analysis is done locally in JavaScript. Your password never leaves your device." },
+      { question: "Why is entropy measured in bits?", answer: "Entropy in bits represents the number of binary choices an attacker must make to guess the password by brute force. Each added bit doubles the number of possible passwords." },
+      { question: "Why does the crack-time estimate assume 1 billion guesses per second?", answer: "That figure represents a realistic offline attack using modern GPU hardware against a fast, unsalted hash. Slower hashing algorithms (bcrypt, Argon2) used by well-built services would make real crack times far longer than the estimate shown here — the number is a worst-case reference point, not a universal guarantee." },
+      { question: "Is a long password always stronger than a complex short one?", answer: "Usually yes. Length contributes more entropy bits than adding symbol variety to a short password. A 20-character lowercase passphrase can be stronger than an 8-character password with mixed case, numbers, and symbols." },
+      { question: "Does this check my password against known breach databases?", answer: "No. This tool only analyzes character composition and length to estimate theoretical entropy — it does not check whether the exact password has appeared in a known data breach. Use a dedicated breach-checking service for that, ideally one that never transmits your actual password." },
+      { question: "Why does the strength bar sometimes disagree with a website's own password rules?", answer: "Many websites still enforce outdated rules (e.g. requiring a symbol but capping length at 12 characters) that don't align with modern entropy-based guidance. This tool measures theoretical entropy, not compliance with any particular site's arbitrary policy." },
+      { question: "Should I use a password manager instead of memorizing strong passwords?", answer: "For most people, yes — a password manager lets you use long, unique, random passwords per site without memorization. This tool is useful for evaluating a specific password's strength, not as a replacement for a password manager's generation and storage." },
     ],
     content: {
       howToUse: [
@@ -7936,6 +7982,15 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Can this always make a PDF 100KB?", answer: "No. Browser-side PDF optimization cannot safely re-encode all embedded images, so exact size is not guaranteed." },
       { question: "Is my PDF uploaded?", answer: "No. The PDF stays in the browser and is not sent to a server." },
     ],
+    faqExpanded: [
+      { question: "Can this always make a PDF 100KB?", answer: "No. Browser-side PDF optimization cannot safely re-encode all embedded images, so exact size is not guaranteed — text-heavy documents get much closer than scanned or image-heavy ones." },
+      { question: "Is my PDF uploaded?", answer: "No. The PDF stays in the browser and is not sent to a server or stored anywhere." },
+      { question: "Why is 100KB such a strict target?", answer: "100KB is a common cap on lightweight web forms, ticketing systems, and older portals that were designed for small text-only attachments rather than modern scanned documents." },
+      { question: "What kind of PDF reaches 100KB most easily?", answer: "A short, text-based document with no embedded images — a simple letter, a plain contract, a form with no logo or photo — typically starts well under 100KB or gets there easily with structural optimization alone." },
+      { question: "My PDF has a scanned signature or logo — will it still reach 100KB?", answer: "Probably not through structural optimization alone. Even a single embedded image (a logo, a signature scan) can push a document well past 100KB, since image data dominates PDF file size far more than text does." },
+      { question: "Does the tool alter the text or layout of my document?", answer: "No. Structural optimization removes redundant internal data and deduplicates resources — it does not delete text, change layout, or re-encode images, so the visual result matches the original." },
+      { question: "What should I try if 100KB isn't reachable?", answer: "Check whether the source document can be exported without embedded images or at a lower scan resolution before converting to PDF — that addresses the root cause more effectively than compressing an already-generated PDF." },
+    ],
     content: {
       howToUse: [
         "Select or drag in the PDF you want to reduce.",
@@ -8157,6 +8212,15 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Is keyword density a ranking guarantee?", answer: "No. It is only a content audit signal. Useful content and search intent matter more than a fixed percentage." },
       { question: "Does this analyze a live URL?", answer: "No. Paste the text you want to inspect. The tool does not crawl pages or fetch external sites." },
     ],
+    faqExpanded: [
+      { question: "Is keyword density a ranking guarantee?", answer: "No. It is only a content audit signal. Useful content and search intent matter more than a fixed percentage — modern search engines evaluate topical relevance and user satisfaction far more than exact keyword ratios." },
+      { question: "Does this analyze a live URL?", answer: "No. Paste the text you want to inspect. The tool does not crawl pages or fetch external sites, so it works entirely offline once loaded." },
+      { question: "What counts as \"too high\" keyword density?", answer: "There's no fixed universal threshold, but repetition that reads unnaturally to a human — the same phrase every other sentence — is a reliable red flag regardless of the exact percentage shown." },
+      { question: "Why does the tool show two-word and three-word phrases, not just single words?", answer: "Multi-word phrase repetition often reveals unnatural or keyword-stuffed writing patterns that single-word counts miss, since a phrase like \"best budget laptop\" repeating verbatim is a stronger stuffing signal than the word \"laptop\" alone appearing often." },
+      { question: "Should I remove all repeated words the tool flags?", answer: "No — some repetition is natural and even necessary for topical clarity. Use the results to spot excessive or awkward repetition, not to mechanically minimize every repeated word." },
+      { question: "Does ignoring stopwords change the results meaningfully?", answer: "Yes. Stopwords (the, and, of, a) naturally dominate raw word counts in any language. Filtering them out surfaces the substantive, topic-relevant terms that actually matter for a content review." },
+      { question: "Can I use this on non-English text?", answer: "The word- and phrase-counting logic works on any space-separated text, but the built-in stopword list is tuned for English, so non-English text may show common function words as high-frequency terms." },
+    ],
     content: {
       howToUse: [
         "Paste the page copy or draft text you want to review.",
@@ -8206,6 +8270,15 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Can it check a live website URL?", answer: "No. Paste the page HTML or head section. This avoids server-side fetching and keeps the tool browser-only." },
       { question: "Are the length limits strict rules?", answer: "No. They are practical ranges that help catch obvious SEO issues, not ranking guarantees." },
     ],
+    faqExpanded: [
+      { question: "Can it check a live website URL?", answer: "No. Paste the page HTML or head section. This avoids server-side fetching and keeps the tool fully browser-only, so it works on staging builds not yet publicly reachable too." },
+      { question: "Are the length limits strict rules?", answer: "No. They are practical ranges (roughly 50-60 characters for titles, 120-160 for descriptions) that help catch obvious SEO issues, not hard ranking rules enforced by search engines." },
+      { question: "Why does it flag a missing canonical tag as an issue?", answer: "A missing canonical tag can lead to duplicate-content ambiguity when the same content is reachable at multiple URLs (with/without trailing slash, with tracking parameters, etc.), which can dilute ranking signals across near-identical pages." },
+      { question: "Can I check a page before it's deployed?", answer: "Yes — paste the HTML output from your local build or a preview environment. Since the tool doesn't fetch anything externally, it works identically whether the page is live, staged, or only on your machine." },
+      { question: "Does a 'good' result guarantee good SEO?", answer: "No. This checks technical tag presence and length only — it says nothing about content quality, backlinks, page speed, or search intent match, all of which matter more for actual rankings." },
+      { question: "Why check Open Graph tags in an SEO tool?", answer: "Open Graph tags affect how a page appears when shared on social platforms, which indirectly impacts click-through traffic even though they aren't a direct search-ranking factor — worth checking alongside core meta tags." },
+      { question: "What's the difference between this and the Open Graph Checker tool?", answer: "This tool covers the full technical SEO tag set (title, description, canonical, robots, viewport, H1, and OG basics); the Open Graph Checker focuses specifically on rendering a social preview card from OG/Twitter tags." },
+    ],
     content: {
       howToUse: [
         "Paste the HTML source or the head section from the page you want to inspect.",
@@ -8254,6 +8327,14 @@ const seoClusterApps: AppDefinition[] = [
     faq: [
       { question: "Does it fetch my URL like a crawler?", answer: "No. Paste HTML from your page source or build output. The tool does not request external URLs." },
       { question: "Why does the preview differ from social networks?", answer: "Each platform caches and crops previews differently. This tool checks the tags and gives a local approximation." },
+    ],
+    faqExpanded: [
+      { question: "Does it fetch my URL like a crawler?", answer: "No. Paste HTML from your page source or build output. The tool does not request external URLs, so it can preview pages that aren't publicly live yet." },
+      { question: "Why does the preview differ from social networks?", answer: "Each platform (Facebook, LinkedIn, X, Discord) caches, crops, and renders preview cards slightly differently and on its own schedule. This tool checks the underlying tags and gives a local, best-effort approximation, not a pixel-perfect match to any one platform." },
+      { question: "Why is my og:image not showing in the preview?", answer: "Common causes: a relative image path instead of an absolute URL (Open Graph requires absolute URLs), a missing og:image tag entirely, or an image the platform's crawler can't reach — this tool flags the tag's presence and value but can't verify the image loads on every platform." },
+      { question: "My social card looks stale after I updated the tags — why?", answer: "Social platforms cache Open Graph data aggressively and don't always re-fetch on every share. This tool shows what your current HTML declares, not what a platform has cached from a previous crawl — you may need each platform's own cache-refresh/debug tool to force an update there.", },
+      { question: "What's the minimum set of Open Graph tags I need?", answer: "At minimum: og:title, og:description, og:image, and og:url. Missing any of these typically causes a platform to fall back to generic page metadata or an unpredictable default preview." },
+      { question: "Does this also check Twitter/X card tags?", answer: "Yes — it extracts twitter:card, twitter:title, twitter:description, and twitter:image alongside the Open Graph fields, since platforms like X primarily use the twitter: namespace when present." },
     ],
     content: {
       howToUse: [
