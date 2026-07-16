@@ -301,9 +301,69 @@ export const apps: AppDefinition[] = [
       {
         question: "Can I download the cleaned output?",
         answer:
-          "Copy-paste the cleaned output directly from the output panel. The download feature is on the roadmap.",
+          "Yes — click the Download button to save the cleaned data as a .csv file, or use Copy to place it on your clipboard.",
       },
     ],
+    faqExpanded: [
+      {
+        question: "Will CSV Cleaner modify my original file?",
+        answer:
+          "No. The tool works on the text you paste into the input and produces a separate cleaned output. Your original file on disk is untouched.",
+      },
+      {
+        question: "Does it handle quoted fields or complex CSV edge cases?",
+        answer:
+          "It handles simple to moderately messy CSV well. The parser splits on commas and newlines directly, so quoted fields containing commas or embedded line breaks may split incorrectly and need manual review after cleaning.",
+      },
+      {
+        question: "Can I download the cleaned output?",
+        answer:
+          "Yes — click the Download button to save the cleaned data as a .csv file, or use Copy to place it on your clipboard.",
+      },
+      {
+        question: "What exactly does 'cleaning' do?",
+        answer:
+          "It trims leading and trailing whitespace from every cell and removes rows where every cell is empty. It does not deduplicate rows, fix data types, or reorder columns.",
+      },
+      {
+        question: "How does the tool detect columns?",
+        answer:
+          "Each line is split on commas, and the column count shown is the highest number of cells found in any row — useful for spotting rows with missing or extra commas.",
+      },
+      {
+        question: "Can I clean a CSV exported from Excel or Google Sheets?",
+        answer:
+          "Yes, for typical exports without embedded commas or line breaks inside quoted values. Files with quoted multi-line cells (common in Excel exports with wrapped text) may need a spreadsheet app for full support.",
+      },
+      {
+        question: "Is there a size limit on the CSV I can paste?",
+        answer:
+          "There's no hard-coded limit, but very large CSV files (many thousands of rows) may slow down the browser tab since everything is processed in memory.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste your CSV data — including the header row — into the input box on the left.",
+        "Review the Quick Stats panel to see how many rows and columns were detected.",
+        "Check the Cleaned Output panel, which shows whitespace trimmed and blank rows removed.",
+        "Click Copy to copy the cleaned CSV to your clipboard, or Download to save it as a .csv file.",
+        "Paste new data at any time — the output updates immediately.",
+      ],
+      useCases: [
+        "Clean up a CSV exported from a spreadsheet app that has inconsistent spacing around values.",
+        "Strip out fully blank rows left over from a database or form export before importing elsewhere.",
+        "Quickly check how many columns a messy CSV actually has before writing an import script.",
+        "Prepare a small CSV snippet for a bug report or documentation example.",
+        "Normalize spacing in a CSV before pasting it into another tool that's strict about formatting.",
+      ],
+      limitations: [
+        "Splits rows on commas directly, so quoted fields containing commas or multi-line values are not handled correctly.",
+        "Only trims whitespace and removes blank rows — it does not deduplicate, retype, or reorder data.",
+        "Very large files (many thousands of rows) are processed entirely in browser memory and may slow the tab down.",
+      ],
+      privacy:
+        "Your CSV data is parsed and cleaned entirely in your browser's memory. Nothing is uploaded to a server.",
+    },
     seo: {
       title: "CSV Cleaner — Clean and Normalize CSV Files Locally",
       description:
@@ -1210,6 +1270,37 @@ export const apps: AppDefinition[] = [
       { question: "What reading speeds are used?", answer: "200 wpm is a careful/slow read, 250 wpm is the commonly cited adult average, and 400 wpm represents a fast reader or someone scanning familiar content." },
       { question: "Is this accurate for all content types?", answer: "It is a useful approximation. Dense technical content or content with many images and headers takes longer than these estimates suggest. Use it as a guideline." },
     ],
+    faqExpanded: [
+      { question: "What reading speeds are used?", answer: "200 wpm is a careful/slow read, 250 wpm is the commonly cited adult average, and 400 wpm represents a fast reader or someone scanning familiar content." },
+      { question: "Is this accurate for all content types?", answer: "It is a useful approximation based purely on word count. Dense technical content, code samples, or content with many images and headers takes longer than these estimates suggest. Use it as a guideline, not a guarantee." },
+      { question: "How is word count calculated?", answer: "The text is trimmed and split on whitespace, so each run of non-space characters counts as one word. Hyphenated words and numbers count as a single word each." },
+      { question: "How is sentence count calculated?", answer: "Sentences are detected by matching runs of text ending in a period, exclamation mark, or question mark. Abbreviations (like 'e.g.' or 'Dr.') can cause the sentence count to be slightly inflated." },
+      { question: "Why does it show three different times instead of one?", answer: "Reading speed varies a lot between readers and content types. Showing slow, average, and fast estimates gives you a realistic range instead of a single number that might not match your audience." },
+      { question: "Can I use this for video script timing?", answer: "It's built for reading, not speaking. Spoken narration is typically slower than silent reading (closer to 130-160 wpm), so treat these estimates as an upper bound for script length, not a direct match." },
+      { question: "Does formatting like headers or bullet points affect the estimate?", answer: "No — the tool counts words in the raw text only. It doesn't account for the extra time readers spend scanning headers, bullet lists, or images, which can meaningfully increase real reading time." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your article, blog post, or any text into the input box.",
+        "Read the reading time estimates for slow (200 wpm), average (250 wpm), and fast (400 wpm) readers.",
+        "Check the word, character, and sentence counts below the time estimates.",
+        "Edit the text and watch all numbers update live as you type or paste.",
+      ],
+      useCases: [
+        "Add an accurate 'X min read' label to a blog post before publishing.",
+        "Check whether a draft article is too long or too short for its intended format.",
+        "Estimate how long a presentation script will take to read aloud (as an upper bound).",
+        "Compare the length of two drafts side by side using word and sentence counts.",
+        "Gauge how content length affects reading time when trimming for a newsletter.",
+      ],
+      limitations: [
+        "Estimates are based on word count only — it doesn't account for images, headers, code blocks, or complex vocabulary that slow real readers down.",
+        "Sentence detection is a simple punctuation match and can be thrown off by abbreviations or unusual punctuation.",
+        "Reading speed varies significantly by individual and language; the three speeds are general benchmarks, not personalized.",
+      ],
+      privacy:
+        "Text is analyzed entirely in your browser using JavaScript string operations. Nothing is sent to a server.",
+    },
     seo: {
       title: "Reading Time Estimator — How Long to Read Your Article",
       description: "Estimate reading time for any text at slow, average, and fast speeds. See word, character, and sentence counts live. Free browser tool.",
@@ -1237,6 +1328,38 @@ export const apps: AppDefinition[] = [
       { question: "What is 'reverse characters' useful for?", answer: "Reversed character text is sometimes used for visual effects, puzzles, or simple obfuscation. It is not a security measure." },
       { question: "Does it handle emoji and Unicode correctly?", answer: "Character reversal works on JavaScript string characters. Multi-codepoint emoji may split incorrectly since JavaScript strings are UTF-16 sequences. Word and line reversal are unaffected." },
     ],
+    faqExpanded: [
+      { question: "What is 'reverse characters' useful for?", answer: "Reversed character text is sometimes used for visual effects, puzzles, or simple obfuscation. It is not a security measure — anyone can reverse it back instantly." },
+      { question: "Does it handle emoji and Unicode correctly?", answer: "Character reversal works on JavaScript string characters (UTF-16 code units). Multi-codepoint emoji, combining accents, and some non-Latin scripts may split or render incorrectly when reversed character-by-character. Word and line reversal are unaffected since they only reorder whole chunks of text." },
+      { question: "What's the difference between the three reversal modes?", answer: "Reverse Characters flips every character in the whole input (mirror text). Reverse Words keeps each line intact but reverses the order of words within that line. Reverse Lines keeps every line's content unchanged but reverses the order the lines appear in." },
+      { question: "Does 'Reverse Words' reverse the letters within each word too?", answer: "No — it only reverses the order of words in each line, keeping every word spelled normally. For example, 'Hello World' becomes 'World Hello', not 'olleH dlroW'." },
+      { question: "Can I reverse multi-line text?", answer: "Yes. Reverse Characters treats the whole input (including line breaks) as one string. Reverse Words operates line by line. Reverse Lines reverses the order of the lines themselves." },
+      { question: "Can I copy the output directly?", answer: "Yes — each of the three output panels has its own Copy button that copies just that panel's result to your clipboard." },
+      { question: "Is reversed text useful for anything beyond novelty?", answer: "Beyond puzzles and social media effects, reversed lines are occasionally useful for reviewing log files in reverse chronological order, or reversed words can help proofread text by breaking normal reading patterns." },
+    ],
+    content: {
+      howToUse: [
+        "Type or paste your text into the input box.",
+        "View the Reverse Characters panel for a full mirror-text version of your input.",
+        "View the Reverse Words panel, which reverses word order within each line.",
+        "View the Reverse Lines panel, which reverses the order of lines in multi-line text.",
+        "Click Copy on any panel to copy just that result to your clipboard.",
+      ],
+      useCases: [
+        "Create mirror text for a social media post or visual puzzle.",
+        "Reverse the word order of a sentence for a word game or teaching exercise.",
+        "Flip the order of lines in a pasted log or list to read it in reverse sequence.",
+        "Quickly check how a string looks reversed for a coding challenge or algorithm test.",
+        "Generate simple obfuscated text for a low-stakes puzzle (not for security).",
+      ],
+      limitations: [
+        "Character reversal operates on UTF-16 code units, so multi-codepoint emoji and some Unicode combining characters can split incorrectly.",
+        "Reversal is not a security or encryption method — reversed text is trivial to read by reversing it back.",
+        "Very large text blocks may take a moment to process on lower-powered devices, though there's no hard size limit.",
+      ],
+      privacy:
+        "All three reversal modes run locally in your browser using JavaScript string operations. Nothing is sent to a server.",
+    },
     seo: {
       title: "Text Reverser — Reverse Characters, Words, or Lines",
       description: "Reverse characters, word order, or line order in any text. Three independent live output panels. Free browser tool.",
@@ -1432,6 +1555,38 @@ export const apps: AppDefinition[] = [
       { question: "What is the maximum number supported?", answer: "The tool uses JavaScript's standard number type, which safely represents integers up to 2^53 - 1. For 32-bit binary display, values are treated as unsigned 32-bit integers." },
       { question: "Can I enter negative numbers?", answer: "Currently the tool supports non-negative integers. Negative number representation (two's complement) is not yet supported." },
     ],
+    faqExpanded: [
+      { question: "What is the maximum number supported?", answer: "The tool uses JavaScript's standard number type, which safely represents integers up to 2^53 - 1 (about 9 quadrillion). For the 32-bit binary display specifically, values are treated as unsigned 32-bit integers, so numbers above 4,294,967,295 won't display correctly in that panel even though the main fields still convert them." },
+      { question: "Can I enter negative numbers?", answer: "Currently the tool supports non-negative integers only. Negative number representation (two's complement) is not yet supported — entering a minus sign will not produce a valid conversion." },
+      { question: "Why does the field show a red border sometimes?", answer: "Each base validates its own character set as you type: binary only accepts 0 and 1, octal only accepts 0-7, and hex only accepts 0-9 and A-F. An invalid character for that base triggers a validation error message instead of updating the other fields." },
+      { question: "What is the 32-bit binary representation for?", answer: "It shows the decimal value as a full 32-bit binary string, grouped into 4-bit nibbles for readability. This is useful for understanding how a number is represented at the bit level, such as when working with bitwise operations or low-level protocols." },
+      { question: "Can I edit any of the four fields, or just decimal?", answer: "You can edit any of the four fields — decimal, binary, octal, or hexadecimal — and the other three update automatically to match." },
+      { question: "Does hex input need a '0x' prefix?", answer: "No — enter hex digits directly (e.g. 2A, not 0x2A). The tool treats the entire field as hex digits without requiring or accepting a prefix." },
+      { question: "What are common uses for octal in programming today?", answer: "Octal is less common in modern code but still appears in Unix/Linux file permission notation (e.g. chmod 755) and some legacy systems, which is why it's included alongside the more commonly used binary and hex." },
+    ],
+    content: {
+      howToUse: [
+        "Enter a number into any one of the four fields: Decimal, Binary, Octal, or Hexadecimal.",
+        "Watch the other three fields update automatically to show the equivalent value.",
+        "Check for a red error message if you type a character invalid for that base (e.g. '9' in a binary field).",
+        "Review the 32-bit binary representation panel for a nibble-grouped bit-level view of the decimal value.",
+        "Edit any field again at any time — all conversions recalculate immediately.",
+      ],
+      useCases: [
+        "Convert a decimal byte value to hexadecimal for a color code, memory address, or debug log.",
+        "Translate a binary string from a networking or embedded systems assignment into decimal.",
+        "Check the octal value of a Unix file permission setting like 755 or 644.",
+        "Verify a hex literal in source code by seeing its exact decimal and binary equivalents.",
+        "Teach students how the same value looks across different number bases side by side.",
+      ],
+      limitations: [
+        "Supports non-negative integers only — no negative numbers or two's complement representation.",
+        "Safely handles integers up to 2^53 - 1; the 32-bit binary panel specifically only represents values up to 4,294,967,295 correctly.",
+        "No support for fractional (non-integer) values in any base.",
+      ],
+      privacy:
+        "All conversions happen locally in your browser using JavaScript's built-in number parsing. No data is sent to a server.",
+    },
     seo: {
       title: "Number Base Converter — Decimal, Binary, Octal, Hexadecimal",
       description: "Convert numbers between decimal, binary, octal, and hexadecimal instantly. Edit any field and all others update. Free browser tool.",
@@ -1810,6 +1965,38 @@ export const apps: AppDefinition[] = [
       { question: "How is mode calculated?", answer: "The mode is the value(s) that appear most frequently. If all values appear the same number of times, 'No mode' is shown. If multiple values tie for most frequent, up to three are displayed." },
       { question: "What is IQR?", answer: "IQR (Interquartile Range) is Q3 minus Q1 — the range of the middle 50% of values. It is a robust measure of spread that is not affected by extreme outliers." },
     ],
+    faqExpanded: [
+      { question: "How is mode calculated?", answer: "The mode is the value(s) that appear most frequently. If all values appear the same number of times (no value repeats more than any other), 'No mode' is shown. If multiple values tie for most frequent, up to three are displayed." },
+      { question: "What is IQR?", answer: "IQR (Interquartile Range) is Q3 minus Q1 — the range of the middle 50% of values. It is a robust measure of spread that is not affected by extreme outliers, unlike range or standard deviation." },
+      { question: "Does this calculate population or sample standard deviation?", answer: "It calculates population standard deviation (dividing by n, not n-1). If you need sample standard deviation for inferential statistics, that distinction matters and you'll need to adjust manually." },
+      { question: "How are quartiles (Q1, Q3) calculated?", answer: "Q1 and Q3 use a simple index-based method on the sorted list: Q1 is the value at position n/4 and Q3 is at position 3n/4 (rounded down). This is one of several valid quartile methods and may differ slightly from spreadsheet software using a different convention." },
+      { question: "What separators can I use between numbers?", answer: "Commas, semicolons, and newlines are all accepted as separators, and you can mix them freely — for example pasting a column of numbers copied from a spreadsheet works directly." },
+      { question: "What happens if I include non-numeric text?", answer: "Any entry that doesn't parse as a valid number is silently filtered out before calculating statistics. The 'numbers detected' count below the input shows how many valid numbers were actually found." },
+      { question: "Can I copy all the results at once?", answer: "Yes — the Copy button copies all 13 statistics as labeled text lines, ready to paste into a report, spreadsheet, or chat message." },
+    ],
+    content: {
+      howToUse: [
+        "Enter numbers into the input box, separated by commas, semicolons, or new lines.",
+        "Check the 'numbers detected' count to confirm how many valid values were parsed.",
+        "Review all 13 statistics — count, sum, mean, median, mode, min, max, range, variance, standard deviation, Q1, Q3, and IQR — in the results panel.",
+        "Click Copy to copy every statistic as labeled text to your clipboard.",
+        "Edit the number list at any time; results recalculate instantly.",
+      ],
+      useCases: [
+        "Quickly summarize a small dataset (survey scores, test results, measurements) without opening a spreadsheet.",
+        "Check the spread of exam scores using standard deviation and IQR before deciding on a grading curve.",
+        "Paste a column of numbers copied from a spreadsheet to get instant descriptive statistics.",
+        "Compare the mean and median of a dataset to spot skew caused by outliers.",
+        "Verify a manual statistics calculation for a homework or reporting task.",
+      ],
+      limitations: [
+        "Calculates population standard deviation and variance (divides by n), not sample statistics (n-1) — a distinction that matters for inferential analysis.",
+        "Quartiles use a simple index-based method that can differ slightly from Excel, R, or other software using different quartile conventions.",
+        "Non-numeric entries are silently dropped rather than flagged, so double-check the detected count matches your expected input size.",
+      ],
+      privacy:
+        "All numbers and calculations are processed locally in your browser using JavaScript. Nothing is sent to a server.",
+    },
     seo: {
       title: "Statistics Calculator — Mean, Median, Mode, Std Dev & More",
       description: "Calculate mean, median, mode, standard deviation, quartiles, and 13 descriptive statistics from a list of numbers. Free browser tool.",
@@ -2132,6 +2319,38 @@ export const apps: AppDefinition[] = [
       { question: "Why encode HTML entities?", answer: "HTML entities prevent user-supplied text from being interpreted as HTML markup. This is essential for preventing cross-site scripting (XSS) vulnerabilities when displaying user content." },
       { question: "Does it handle named entities like &copy; and &euro;?", answer: "Decoding handles all named HTML entities recognized by the browser's HTML parser. Encoding uses numeric references for non-ASCII characters rather than named entities for maximum compatibility." },
     ],
+    faqExpanded: [
+      { question: "Why encode HTML entities?", answer: "HTML entities prevent user-supplied text from being interpreted as HTML markup. This is essential for preventing cross-site scripting (XSS) vulnerabilities when displaying user content on a web page." },
+      { question: "Does it handle named entities like &copy; and &euro;?", answer: "Decoding handles all named HTML entities recognized by the browser's HTML parser (via the browser's own textarea-based decoding), so it covers a very wide range including &copy;, &euro;, &hellip;, and more. Encoding uses numeric references (&#NNN;) for non-ASCII characters rather than named entities, for maximum compatibility." },
+      { question: "Which characters get encoded automatically?", answer: "The five reserved HTML/XML characters — & < > \" ' — are always encoded to their named entities. Any other non-ASCII character (accented letters, emoji, symbols) is encoded as a numeric character reference like &#233;." },
+      { question: "Is this the same as URL encoding?", answer: "No. HTML entity encoding escapes characters for safe placement inside HTML markup or text content. URL encoding (percent-encoding) escapes characters for safe placement inside a URL. They use different character sets and encoding schemes." },
+      { question: "How does decoding actually work under the hood?", answer: "Decoding sets the entity string as the innerHTML of a hidden textarea element and reads back its value — this lets the browser's own battle-tested HTML parser handle every named and numeric entity correctly, rather than reimplementing entity tables manually." },
+      { question: "Can I use this to sanitize untrusted HTML for my website?", answer: "Encoding here escapes special characters for safe display as plain text, but it does not sanitize or validate HTML structure. For rendering untrusted HTML safely, use a dedicated sanitization library server-side or client-side, not just entity encoding." },
+      { question: "Does decoding execute any scripts in the input?", answer: "No. Decoding only reads the resulting text value of the hidden textarea — it never renders the content as live HTML in the page, so scripts or tags in the decoded output are not executed." },
+    ],
+    content: {
+      howToUse: [
+        "Choose the Encode or Decode tab depending on which direction you need.",
+        "Paste your HTML, text, or entity string into the input box.",
+        "Read the converted result in the output box on the right.",
+        "Click Copy to copy the result to your clipboard.",
+        "Expand the 'Common HTML entities reference' table to look up specific entity codes.",
+      ],
+      useCases: [
+        "Escape user-submitted text before displaying it in an HTML page to prevent it from being rendered as markup.",
+        "Decode an entity-encoded string copied from an API response or CMS export back into readable text.",
+        "Prepare a code snippet containing < and > characters for safe display inside a blog post or documentation.",
+        "Look up the entity code for a special character like © or — using the reference table.",
+        "Debug why a page is displaying literal &amp; or &lt; instead of the intended character.",
+      ],
+      limitations: [
+        "Encodes for HTML entity safety only — this is not a full HTML sanitizer and doesn't validate or strip potentially unsafe tags.",
+        "Encoding always uses numeric references for non-ASCII characters rather than named entities, even when a named entity exists.",
+        "Decoding relies on the browser's HTML parser, so behavior for malformed or unusual entity sequences follows browser parsing rules, not a strict specification.",
+      ],
+      privacy:
+        "Encoding and decoding both happen locally in your browser — decoding uses a hidden textarea element and never executes the content as live HTML. Nothing is sent to a server.",
+    },
     seo: {
       title: "HTML Entities Encoder / Decoder — Escape and Unescape HTML",
       description: "Encode special characters to HTML entities or decode HTML entities back to text. Includes a common entities reference table. Free browser tool.",
@@ -2217,6 +2436,38 @@ export const apps: AppDefinition[] = [
       { question: "How is the ratio simplified?", answer: "The tool uses the GCD (greatest common divisor) algorithm to reduce both dimensions to their smallest integer ratio. For example, 1920×1080 reduces to 16×9 because GCD(1920,1080) = 120." },
       { question: "Can I use this for video or print work?", answer: "Yes. The scaling tool is useful for both screen (video, web) and print dimensions. Enter your known dimension and get the proportionally correct counterpart." },
     ],
+    faqExpanded: [
+      { question: "How is the ratio simplified?", answer: "The tool uses the GCD (greatest common divisor) algorithm to reduce both dimensions to their smallest integer ratio. For example, 1920×1080 reduces to 16:9 because GCD(1920,1080) = 120." },
+      { question: "Can I use this for video or print work?", answer: "Yes. The scaling tool is useful for both screen (video, web) and print dimensions. Enter your known dimension and get the proportionally correct counterpart, though print work should also account for DPI/resolution separately." },
+      { question: "How does the 'Scale to' tool work?", answer: "Enter a width and it calculates the height that preserves your current aspect ratio, or enter a height and it calculates the matching width. Entering one field clears the other so you always get a fresh calculated value." },
+      { question: "Why do the presets use large pixel values like 1920×1080 instead of just '16:9'?", answer: "The presets fill in real, commonly used resolutions so you get both the simplified ratio and a sense of a practical dimension pair — you can then use the Scale tool to resize proportionally from there." },
+      { question: "Does the decimal ratio matter if I already have the simplified ratio?", answer: "The decimal ratio (e.g. 1.7778 for 16:9) is what's actually used internally for scaling calculations, and it's useful when comparing two ratios that don't reduce to clean whole numbers, like 1.91:1 for some social media formats." },
+      { question: "Can I enter non-integer dimensions?", answer: "Yes, the width and height fields accept decimal values, and the ratio simplification rounds them to the nearest whole number first before computing the GCD." },
+      { question: "What's a common use for aspect ratio outside of video?", answer: "Aspect ratios matter for responsive image containers (using CSS aspect-ratio), print layouts, social media image specs, and UI component sizing where a consistent visual proportion needs to be preserved across different sizes." },
+    ],
+    content: {
+      howToUse: [
+        "Enter a width and height in the Dimensions section, or click a preset like 16:9 or 4:3.",
+        "View the simplified ratio (e.g. 16:9) and its decimal equivalent (e.g. 1.7778).",
+        "Use the Scale To section: enter a target width to calculate the matching height, or vice versa.",
+        "Check the live preview box, which visually reflects the current ratio.",
+        "Adjust dimensions at any time — all outputs recalculate instantly.",
+      ],
+      useCases: [
+        "Find the simplified aspect ratio of a photo or video before choosing an export preset.",
+        "Calculate the correct height for a responsive image container given a fixed width and target ratio.",
+        "Resize a video export to a specific width while keeping its original aspect ratio intact.",
+        "Check whether two images share the same aspect ratio before using them interchangeably in a layout.",
+        "Plan print dimensions that match a specific ratio like 3:2 for photo prints.",
+      ],
+      limitations: [
+        "Ratio simplification rounds width and height to whole numbers before computing GCD, so very precise fractional dimensions may not simplify exactly.",
+        "The preview box is a visual approximation capped at a fixed size — it's not meant for pixel-perfect layout testing.",
+        "Print-specific concerns like DPI and physical size aren't calculated — only relative proportions.",
+      ],
+      privacy:
+        "All ratio and scaling calculations run locally in your browser using JavaScript. No dimensions are sent to a server.",
+    },
     seo: {
       title: "Aspect Ratio Calculator — Simplify Ratios and Scale Dimensions",
       description: "Calculate and simplify aspect ratios, scale dimensions proportionally, and preview visually. Common presets included. Free browser tool.",
@@ -2244,6 +2495,38 @@ export const apps: AppDefinition[] = [
       { question: "Can I use this to generate API keys?", answer: "Yes. For API keys, use a length of 32–64 characters with uppercase, lowercase, and digits enabled. The cryptographic randomness source makes these suitable for security tokens." },
       { question: "What does 'Symbols' include?", answer: "The symbols set includes: ! @ # $ % ^ & * ( ) - _ = + [ ] { } | ; : , . < > ?" },
     ],
+    faqExpanded: [
+      { question: "Can I use this to generate API keys?", answer: "Yes. For API keys, use a length of 32–64 characters with uppercase, lowercase, and digits enabled. The cryptographic randomness source (crypto.getRandomValues) makes these suitable for security tokens, not just Math.random()-based generation." },
+      { question: "What does 'Symbols' include?", answer: "The symbols set includes: ! @ # $ % ^ & * ( ) - _ = + [ ] { } | ; : , . < > ?" },
+      { question: "How is this different from the Password Generator tool?", answer: "This tool is built for general-purpose random strings — tokens, keys, test IDs, custom alphabets — and supports bulk generation of up to 100 strings at once with a custom character set field. The Password Generator is focused specifically on human-usable passwords with a strength indicator." },
+      { question: "Can I define my own character set?", answer: "Yes — enable 'Custom chars' and type any characters you want included. This is combined with any other enabled sets (lowercase, uppercase, digits, symbols), so you can build a specific alphabet, like hex characters or a project-specific token format." },
+      { question: "How many strings can I generate at once?", answer: "Between 1 and 100 strings per click, each independently random. Use Copy All to copy every generated string as a newline-separated list." },
+      { question: "What's the maximum string length?", answer: "Up to 1000 characters per string. For most use cases like tokens or keys, 16-64 characters is typical; very long strings are more useful for stress-testing or generating filler data." },
+      { question: "Is there any bias in which characters get picked?", answer: "The generator uses modulo on a 32-bit random integer to map onto your character set. For very large character sets (close to 2^32), this can introduce a very slight statistical bias, but for typical alphabets (under a few hundred characters) the bias is negligible." },
+    ],
+    content: {
+      howToUse: [
+        "Set the string length (1-1000 characters) and how many strings to generate (1-100).",
+        "Toggle which character sets to include: lowercase, uppercase, digits, and symbols.",
+        "Optionally enable 'Custom chars' and type additional characters to include in the pool.",
+        "Click Generate to produce your random strings.",
+        "Copy an individual string or click Copy All to copy every generated string at once.",
+      ],
+      useCases: [
+        "Generate a batch of API keys or client secrets for a development environment.",
+        "Create random test data identifiers for QA or database seeding scripts.",
+        "Build a custom-alphabet token (e.g. hex-only or alphanumeric-only) for a specific system requirement.",
+        "Generate multiple unique short codes at once, like invite codes or coupon strings.",
+        "Produce a random salt or nonce value for a cryptographic or hashing exercise.",
+      ],
+      limitations: [
+        "Does not guarantee uniqueness across generated strings — with short lengths or small character sets, duplicates are statistically possible.",
+        "Modulo-based character mapping can introduce a very slight bias for extremely large custom character sets, though this is negligible for typical alphabets.",
+        "Maximum of 100 strings per generation and 1000 characters per string.",
+      ],
+      privacy:
+        "All strings are generated locally using the Web Crypto API's crypto.getRandomValues(). Nothing is sent to a server or logged.",
+    },
     seo: {
       title: "Random String Generator — Cryptographically Secure Tokens and Keys",
       description: "Generate random strings of any length from custom character sets using crypto.getRandomValues(). Bulk generation with copy-all. Free.",
@@ -2505,6 +2788,38 @@ export const apps: AppDefinition[] = [
       { question: "How do I create a circle?", answer: "Set all corners to 50% and the element will appear as a circle if its width and height are equal, or as an ellipse otherwise." },
       { question: "When should I use % vs px?", answer: "Use % for shapes that should remain round relative to the element's size (like circle avatars). Use px for fixed-radius corners that should not change when the element is resized." },
     ],
+    faqExpanded: [
+      { question: "How do I create a circle?", answer: "Set all corners to 50% and enable 'Link all corners' — the element will appear as a perfect circle if its width and height are equal, or as an ellipse if they aren't." },
+      { question: "When should I use % vs px?", answer: "Use % for shapes that should remain proportionally round relative to the element's size (like circle avatars that scale). Use px for fixed-radius corners, like the standard 8px or 16px rounded corners common in card and button designs, that should stay the same regardless of element size." },
+      { question: "How do I round only some corners, like just the top of a card?", answer: "Uncheck 'Link all corners' to unlock independent sliders for each of the four corners, then set only the top-left and top-right sliders while leaving the bottom two at 0." },
+      { question: "What's the maximum radius value?", answer: "Up to 200px, or up to 50% when using percentage units. 50% on a square element always produces a perfect circle." },
+      { question: "How is the CSS generated when all corners are equal?", answer: "When all four corner values match, the tool outputs a single shorthand value like border-radius: 16px;. When corners differ, it outputs all four values in top-left, top-right, bottom-right, bottom-left order, matching the standard CSS border-radius shorthand." },
+      { question: "Can I create irregular 'blob' shapes with this?", answer: "This tool controls the four standard rectangular corner radii, which can create rounded rectangles, capsules, and circles/ellipses. True organic blob shapes typically need the more complex 8-value border-radius syntax or an SVG path, which isn't generated here." },
+      { question: "Will the generated CSS work in all browsers?", answer: "Yes. border-radius is supported in all modern browsers without vendor prefixes, for both single-value and per-corner syntax." },
+    ],
+    content: {
+      howToUse: [
+        "Choose px or % as your unit.",
+        "Leave 'Link all corners' checked to adjust all four corners uniformly, or uncheck it to control each corner independently.",
+        "Drag each corner's slider to set its radius.",
+        "Watch the live preview box update its shape in real time.",
+        "Click Copy to copy the generated border-radius CSS property.",
+      ],
+      useCases: [
+        "Design a rounded card or button and get the exact border-radius CSS to paste into your stylesheet.",
+        "Create a circular avatar frame by setting all corners to 50%.",
+        "Round only the top corners of a header or dropdown panel for a specific UI pattern.",
+        "Match a border-radius value from a design mockup by adjusting the sliders visually.",
+        "Experiment with asymmetric corner combinations for a distinctive shape.",
+      ],
+      limitations: [
+        "Supports the standard four-corner radius model only — not the extended 8-value elliptical corner syntax for organic blob shapes.",
+        "Maximum radius is capped at 200px or 50%, covering typical UI use cases.",
+        "The preview box is a fixed-size example — it doesn't preview the radius on your actual page content.",
+      ],
+      privacy:
+        "All calculations and the live preview run locally in your browser. Nothing is sent to a server.",
+    },
     seo: {
       title: "CSS Border Radius Generator — Per-Corner Control with Live Preview",
       description: "Generate CSS border-radius for all four corners independently. Toggle px or %, live preview, and copy CSS. Free browser tool.",
@@ -3242,8 +3557,40 @@ export const apps: AppDefinition[] = [
     ],
     faq: [
       { question: "What is a file hash used for?", answer: "File hashes (checksums) verify file integrity. By comparing a computed hash against a published reference hash, you can confirm a downloaded file has not been corrupted or tampered with." },
-      { question: "Is my file uploaded anywhere?", answer: "No. The file is read entirely in your browser using the FileReader API and hashed locally using SubtleCrypto. Nothing is transmitted over the network." },
+      { question: "Is my file uploaded anywhere?", answer: "No. The file is read entirely in your browser using the File API and hashed locally using SubtleCrypto. Nothing is transmitted over the network." },
     ],
+    faqExpanded: [
+      { question: "What is a file hash used for?", answer: "File hashes (checksums) verify file integrity. By comparing a computed hash against a published reference hash, you can confirm a downloaded file has not been corrupted or tampered with in transit." },
+      { question: "Is my file uploaded anywhere?", answer: "No. The file is read entirely in your browser using the File API's arrayBuffer() method and hashed locally using the Web Crypto API's SubtleCrypto.digest(). Nothing is transmitted over the network." },
+      { question: "Which hash algorithms does this support?", answer: "SHA-1, SHA-256, and SHA-512, computed simultaneously for whatever file you select. SHA-256 is the most commonly published checksum for software downloads today." },
+      { question: "Why compute SHA-1 if it's considered broken?", answer: "SHA-1 is no longer considered cryptographically secure against deliberate collision attacks, but it's still widely published for basic file integrity checks (like Git's internal object hashing) where an adversarial collision isn't the threat model." },
+      { question: "How large a file can I hash?", answer: "There's no artificial limit — the whole file is read into an ArrayBuffer in memory, so practical limits depend on your device's available RAM. Very large files (multiple GB) may cause the browser tab to slow down or run out of memory." },
+      { question: "Why does hashing take a moment for large files?", answer: "The file must be fully read into memory and then processed by three separate hash algorithms in sequence. The progress bar reflects reading the file (first half) and computing each algorithm's digest (second half)." },
+      { question: "Can I hash multiple files at once?", answer: "No, the tool processes one file at a time. Select a new file to clear the previous results and hash the new one." },
+    ],
+    content: {
+      howToUse: [
+        "Click the file selection area and choose any file from your device.",
+        "Watch the progress bar as the file is read and hashed.",
+        "View the SHA-1, SHA-256, and SHA-512 hash values once complete.",
+        "Click Copy next to any hash to copy it to your clipboard.",
+        "Compare the copied hash against a publisher's reference checksum to verify file integrity.",
+      ],
+      useCases: [
+        "Verify a downloaded software installer matches the checksum published on the vendor's website.",
+        "Confirm two files are byte-for-byte identical by comparing their SHA-256 hashes.",
+        "Generate a checksum to include alongside a file you're distributing so others can verify it.",
+        "Check that a large file transfer completed without corruption.",
+        "Produce a reference hash for a file used in a security or compliance audit.",
+      ],
+      limitations: [
+        "The entire file is loaded into browser memory at once, so very large files (multiple GB) may slow down or crash the tab depending on available RAM.",
+        "SHA-1 is included for compatibility but is not collision-resistant against a determined attacker — prefer SHA-256 or SHA-512 for security-sensitive verification.",
+        "Only one file can be hashed at a time; there's no batch or folder hashing.",
+      ],
+      privacy:
+        "The file is read and hashed entirely in your browser using the File API and Web Crypto API's SubtleCrypto. It is never uploaded or transmitted to a server.",
+    },
     seo: {
       title: "File Hash Calculator — SHA-256, SHA-512 Checksum for Any File",
       description: "Calculate SHA-1, SHA-256, and SHA-512 checksums for any file in your browser. Uses Web Crypto API. No upload, free.",
@@ -3329,8 +3676,40 @@ export const apps: AppDefinition[] = [
     faq: [
       { question: "Is Binary Text Converter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
-      { question: "What is this tool best for?", answer: "It is best for binary text converter tasks where you need a fast, practical browser utility." },
+      { question: "What is this tool best for?", answer: "It is best for converting short text into binary, hex, octal, or decimal byte representations for teaching, debugging, or protocol notes." },
     ],
+    faqExpanded: [
+      { question: "Is Binary Text Converter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Text encoding and decoding happen locally in the browser tab using the TextEncoder/TextDecoder APIs. Your input is never sent to a server." },
+      { question: "What character encoding is used?", answer: "UTF-8. Text is converted to bytes using TextEncoder, so each byte shown corresponds to one UTF-8 byte — multi-byte characters (like emoji or accented letters) produce multiple binary/hex groups per character." },
+      { question: "What format should the binary input be in?", answer: "Space-separated 8-bit byte groups, like 01001000 01100101. Each group must be exactly a valid binary byte; the tool splits on whitespace and parses each chunk independently." },
+      { question: "Can I convert to hex and octal too?", answer: "Yes — alongside the main binary field, the 'Other Representations' panel shows the same text as octal byte groups, decimal byte values, and per-character char codes." },
+      { question: "What happens if I paste invalid binary or hex?", answer: "The tool shows an 'Invalid binary input' or 'Invalid hex input' error message and leaves the text field unchanged until you correct the input." },
+      { question: "Why does one character sometimes produce more than 8 bits?", answer: "Because encoding uses UTF-8, characters outside the basic ASCII range (like é, emoji, or non-Latin scripts) are represented by 2-4 bytes each, so they appear as multiple 8-bit groups rather than one." },
+    ],
+    content: {
+      howToUse: [
+        "Type or paste text into the Text field to see it converted to binary and hex automatically.",
+        "Or paste space-separated binary bytes (e.g. 01001000 01100101) into the Binary field to decode it to text.",
+        "Or paste space-separated hex bytes into the Hexadecimal field to decode it to text.",
+        "Check the 'Other Representations' panel for octal, decimal byte values, and character codes.",
+        "Click Copy next to any field to copy that representation to your clipboard.",
+      ],
+      useCases: [
+        "Decode a binary or hex byte string found in a networking assignment, CTF challenge, or protocol log.",
+        "Convert a short message to binary for a teaching demonstration of how computers represent text.",
+        "Check the exact UTF-8 byte length and byte values of a string containing special characters.",
+        "Debug why a string looks different than expected by inspecting its raw byte representation.",
+        "Convert between binary, hex, octal, and decimal representations of the same text for a low-level programming exercise.",
+      ],
+      limitations: [
+        "Binary and hex input must be space-separated byte groups — it does not parse continuous bit streams without separators.",
+        "Uses UTF-8 encoding only; other encodings (UTF-16, Latin-1, etc.) are not selectable.",
+        "Very long text inputs are supported but produce correspondingly long binary/hex output that may be unwieldy to read.",
+      ],
+      privacy:
+        "All encoding and decoding happens locally in your browser using the TextEncoder and TextDecoder Web APIs. No text is sent to a server.",
+    },
     seo: {
       title: "Binary Text Converter - Free Browser Tool",
       description: "Convert plain text to binary and binary back to readable text. Free, local, no upload, no account required.",
@@ -3357,8 +3736,40 @@ export const apps: AppDefinition[] = [
     faq: [
       { question: "Is Color Palette Extractor free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
-      { question: "What is this tool best for?", answer: "It is best for color palette extractor tasks where you need a fast, practical browser utility." },
+      { question: "What is this tool best for?", answer: "It is best for pulling a usable color palette out of a photo, screenshot, or design mockup for reuse as CSS variables or a design reference." },
     ],
+    faqExpanded: [
+      { question: "Is Color Palette Extractor free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my image?", answer: "No. The image is loaded and analyzed locally using the HTML canvas API. It is never uploaded to a server." },
+      { question: "How does the tool decide which colors are 'dominant'?", answer: "It downsamples the image, samples pixel colors, and groups similar colors together using a median cut algorithm — a standard color quantization technique. The 8 resulting colors are then sorted by how many pixels each one represents." },
+      { question: "Why does the extracted palette look slightly different from the exact colors in my image?", answer: "The tool resizes the image down to a maximum of 200px on its longest side before sampling, for performance. Median cut also averages similar pixels into representative colors rather than preserving every exact original pixel value." },
+      { question: "How many colors does it extract?", answer: "8 colors by default, ranked from most to least dominant based on how many sampled pixels were closest to each color." },
+      { question: "Can I export the palette as CSS?", answer: "Yes — click 'Export as CSS vars' to copy all colors as CSS custom properties (e.g. --color-100: #3B82F6;) ready to paste into a :root stylesheet block." },
+      { question: "Does it handle transparent images?", answer: "Yes — pixels with low opacity (alpha below roughly 50%) are excluded from color sampling so transparent areas don't skew the palette toward a default background color." },
+    ],
+    content: {
+      howToUse: [
+        "Drag and drop an image onto the upload area, or click to browse and select one.",
+        "Wait a moment while the tool analyzes the image and extracts 8 dominant colors.",
+        "View each color's hex code and RGB value below its swatch.",
+        "Click any color swatch to copy its hex code to your clipboard.",
+        "Click 'Export as CSS vars' to copy all colors as CSS custom properties at once.",
+      ],
+      useCases: [
+        "Extract a brand or product photo's color palette to build a matching website color scheme.",
+        "Generate CSS custom properties directly from a design mockup screenshot.",
+        "Pull the dominant colors from a photo for a mood board or presentation.",
+        "Check which colors visually dominate a thumbnail or hero image before publishing.",
+        "Find a complementary accent color by inspecting an image's less-dominant palette entries.",
+      ],
+      limitations: [
+        "Images are downsampled to a maximum of 200px on the longest side before analysis, which trades a little accuracy for speed on large images.",
+        "Extracts a fixed 8 colors using median cut quantization — this won't always match colors picked by a human eye for design purposes.",
+        "Supports standard raster formats (JPEG, PNG, WebP) that browsers can decode into a canvas; vector formats like SVG aren't analyzed pixel-by-pixel in the same way.",
+      ],
+      privacy:
+        "The image is loaded into an in-browser canvas and analyzed locally using JavaScript. It is never uploaded to Small Web Apps servers.",
+    },
     seo: {
       title: "Color Palette Extractor - Free Browser Tool",
       description: "Extract dominant colors from an image in your browser. Free, local, no upload, no account required.",
@@ -3387,6 +3798,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for color shades generator tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Color Shades Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your base color is never sent to a server." },
+      { question: "How many shades does it generate?", answer: "11 steps — 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, and 950 — following the same lightness-step convention used by Tailwind CSS color scales." },
+      { question: "How are the shades calculated?", answer: "Your base HEX color is converted to HSL, then each step reuses the same hue and saturation while setting lightness to a fixed value (from 97% for the 50 step down to 12% for the 950 step)." },
+      { question: "Can I copy the whole palette as CSS variables?", answer: "Yes — click 'Copy as CSS variables' to get a ready-to-paste :root block with --color-50 through --color-950 custom properties." },
+      { question: "Why does step 500 not always match my exact input color?", answer: "Step 500 is generated at a fixed 50% lightness in HSL, so it will differ slightly from your original HEX value unless that value already sits at exactly 50% lightness." },
+      { question: "Can I see the RGB value for each shade?", answer: "Yes, each shade row shows its HEX and RGB equivalent, and clicking any swatch or value copies the HEX code to your clipboard." },
+    ],
+    content: {
+      howToUse: [
+        "Enter a base color using the color picker or by typing a HEX value (e.g. #3B82F6).",
+        "The palette of 11 shades (50 through 950) generates instantly below.",
+        "Click any swatch or HEX value to copy that shade to your clipboard.",
+        "Click 'Copy as CSS variables' to copy the entire palette as a :root CSS block.",
+        "Use the generated shades for backgrounds, borders, hover states, or text colors in your design.",
+      ],
+      useCases: [
+        "Build a Tailwind-style color scale (50-950) from a single brand color for a design system.",
+        "Generate hover, active, and disabled states for a button by picking adjacent shades.",
+        "Create a consistent border or divider color a few steps darker than a light background.",
+        "Produce a full palette for a CSS custom-properties theme without opening a design tool.",
+        "Check how a brand color looks across a range of lightness values before committing to a UI palette.",
+      ],
+      limitations: [
+        "Shades are generated using fixed lightness steps in HSL — this is a practical approximation, not a perceptually uniform color space like OKLCH.",
+        "Only 6-digit HEX input is recognized; shorthand 3-digit HEX or named CSS colors are not parsed.",
+        "Does not check contrast ratios between shades — verify accessibility separately if shades will hold text.",
+      ],
+      privacy:
+        "All color math runs locally in your browser using JavaScript. Your base color is never sent to a server.",
+    },
     seo: {
       title: "Color Shades Generator - Free Browser Tool",
       description: "Generate lighter and darker shades from a base color. Free, local, no upload, no account required.",
@@ -3474,6 +3917,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for css unit converter tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is CSS Unit Converter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. All conversion happens locally in the browser tab. Nothing is sent to a server." },
+      { question: "Which units does it support?", answer: "px, rem, em, %, vh, vw, pt, cm, mm, and in. Enter a value in any one unit and see the equivalent value in all the others simultaneously." },
+      { question: "How does it handle rem vs em?", answer: "rem is calculated against the 'Base font size' field (the root element's font size), while em and percent are calculated against the separate 'Parent element' field, matching how they actually cascade in CSS." },
+      { question: "How are vh and vw calculated?", answer: "Using the 'Viewport width' and 'Viewport height' fields you set, so you can check how a viewport-relative value would render at a specific screen size (e.g. 1440x900 for desktop or 375x812 for mobile)." },
+      { question: "Why would I convert px to rem?", answer: "Using rem units for font sizes and spacing lets values scale when a user changes their browser's default font size, which is a common accessibility and responsive design practice." },
+      { question: "Are physical units like cm, mm, and in accurate for screen display?", answer: "They're converted using the CSS specification's fixed reference (96px = 1 inch), which is standard for print stylesheets but won't exactly match physical size on every screen due to differing pixel densities." },
+    ],
+    content: {
+      howToUse: [
+        "Enter a value and choose its starting unit (px, rem, em, %, vh, vw, pt, cm, mm, or in).",
+        "Adjust the context fields if needed: base font size, parent element size, and viewport width/height.",
+        "View the converted value across all ten units instantly in the 'All Equivalents' list.",
+        "Copy whichever converted value you need for your CSS.",
+      ],
+      useCases: [
+        "Convert a design mockup's pixel measurements into rem units for accessible, scalable typography.",
+        "Check what a percentage-based width equals in pixels for a specific parent container size.",
+        "Translate a fixed px value into vw/vh to make an element scale with the viewport.",
+        "Verify how a cm or mm measurement from a print spec would translate to px for a web layout.",
+        "Sanity-check em-based spacing when nested elements have different font sizes.",
+      ],
+      limitations: [
+        "vh/vw conversions depend on the viewport size you enter manually — they don't read your actual browser window.",
+        "em conversions use a single 'parent element' font size field, not a full simulation of nested cascading font sizes.",
+        "Physical units (cm, mm, in) use the CSS spec's fixed 96px-per-inch reference, not your display's actual pixel density.",
+      ],
+      privacy:
+        "All unit math runs locally in your browser using JavaScript. No values are transmitted anywhere.",
+    },
     seo: {
       title: "CSS Unit Converter - Free Browser Tool",
       description: "Convert px, rem, em, percent, vw, and vh values quickly. Free, local, no upload, no account required.",
@@ -3502,6 +3976,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for data size converter tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Data Size Converter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. All conversion runs locally using JavaScript in the browser tab." },
+      { question: "What's the difference between decimal and binary mode?", answer: "Decimal mode treats 1 KB as 1000 bytes (the convention used by storage manufacturers and marketing). Binary mode treats 1 KiB as 1024 bytes (how operating systems and file systems typically calculate size)." },
+      { question: "Why does my file show a different size in Windows than what I expect?", answer: "This is the classic decimal vs. binary mismatch — a drive advertised as '1 TB' (decimal, 1,000,000,000,000 bytes) shows as roughly 931 GiB in Windows, which reports binary values while calling them 'GB'." },
+      { question: "Which units are supported?", answer: "Bit, Byte, KB/MB/GB/TB/PB in decimal mode, plus Kibibyte/Mebibyte/Gibibyte/Tebibyte for binary values — all shown simultaneously so you can compare them at a glance." },
+      { question: "How precise are the conversions?", answer: "Conversions use JavaScript's BigInt for exact integer arithmetic, avoiding the floating-point rounding errors that simple division can introduce on very large numbers." },
+      { question: "Can I convert a value in bits, not just bytes?", answer: "Yes — Bit is included as a unit, useful for converting network bandwidth figures (often quoted in bits per second) alongside file sizes (quoted in bytes)." },
+    ],
+    content: {
+      howToUse: [
+        "Enter a numeric value in the input field.",
+        "Select the starting unit from the dropdown (Bit, Byte, KB, MB, GB, TB, PB, or the Kibi/Mebi/Gibi/Tebi binary units).",
+        "Choose Decimal (1 KB = 1000 B) or Binary (1 KiB = 1024 B) mode depending on which convention you need.",
+        "Read the converted value across all supported units in the list below.",
+      ],
+      useCases: [
+        "Check whether a file will fit under a hosting or upload size limit specified in MB or GB.",
+        "Convert a cloud storage quota listed in GiB into the GB figure shown in a billing dashboard.",
+        "Estimate download time by converting a file size in MB to bits for comparison with a connection speed in Mbps.",
+        "Reconcile the size difference between what an OS reports (binary/GiB) and what a product page advertises (decimal/GB).",
+        "Convert log file or database sizes between units when writing capacity planning documentation.",
+      ],
+      limitations: [
+        "Purely a unit converter — it does not read or measure the size of an actual file you upload.",
+        "Extremely large inputs are still bounded by what fits in a double-precision number before conversion to BigInt, though typical use cases are well within range.",
+        "Does not account for filesystem overhead (block size, metadata) that can make a file's on-disk size differ from its raw byte count.",
+      ],
+      privacy:
+        "All calculations happen locally in your browser. No values are sent to a server.",
+    },
     seo: {
       title: "Data Size Converter - Free Browser Tool",
       description: "Convert bytes, KB, MB, GB, and TB values instantly. Free, local, no upload, no account required.",
@@ -3589,6 +4094,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for dummy data generator tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Dummy Data Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Rows are generated entirely in your browser using JavaScript's random number generator — nothing is sent to a server." },
+      { question: "What fields can I generate?", answer: "Full name, email, phone number, address, company, date of birth, UUID, IP address, and lorem ipsum text — pick any combination via the field checkboxes." },
+      { question: "How many rows can I generate at once?", answer: "Between 1 and 100 rows per generation. For larger datasets, generate multiple batches and combine the output." },
+      { question: "Is this data safe to use in a public demo or repository?", answer: "Yes — names, emails, and addresses are assembled from fixed sample word lists (not real people's data), so the output is fictional and safe to commit to a public repo or use in a screen recording." },
+      { question: "What format is the output in?", answer: "JSON (an array of objects) or CSV (with a header row), selectable before generating. Both formats can be copied to the clipboard or downloaded as a file." },
+      { question: "Are the generated emails and UUIDs guaranteed unique?", answer: "UUIDs use the standard v4 random format and are effectively unique. Emails are built from name + random number + domain, which makes duplicates unlikely but not impossible across a large batch." },
+    ],
+    content: {
+      howToUse: [
+        "Set the number of rows you want (1-100).",
+        "Choose an output format: JSON or CSV.",
+        "Check the fields you want in each row (name, email, phone, address, company, DOB, UUID, IP, lorem text).",
+        "Click Generate to produce the sample rows.",
+        "Copy the output to your clipboard or click Download to save it as a file.",
+      ],
+      useCases: [
+        "Populate a UI mockup or component demo with realistic-looking names and emails instead of 'John Doe' repeated.",
+        "Seed a local development database with test rows without exposing any real user data.",
+        "Generate sample CSV rows to test a spreadsheet import or data pipeline.",
+        "Create placeholder UUIDs and IP addresses for testing logging or ID-handling code.",
+        "Produce lorem ipsum text blocks alongside structured fields for content-layout testing.",
+      ],
+      limitations: [
+        "Capped at 100 rows per generation — larger datasets require running the tool multiple times.",
+        "Names, companies, and addresses are drawn from small fixed word lists, so patterns repeat in large batches.",
+        "Not cryptographically random — data is unsuitable for security testing or anything requiring true randomness.",
+      ],
+      privacy:
+        "All rows are generated locally in your browser. No data is transmitted to or stored on a server.",
+    },
     seo: {
       title: "Dummy Data Generator - Free Browser Tool",
       description: "Generate sample names, emails, IDs, and rows for testing. Free, local, no upload, no account required.",
@@ -3676,6 +4213,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for hex dump viewer tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Hex Dump Viewer free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Your file is read with the browser's local FileReader API — it is never uploaded to a server." },
+      { question: "How much of the file does it show?", answer: "The first 64 KB (65,536 bytes) of any file. Files larger than that are truncated, with a notice shown above the output." },
+      { question: "What format is the output in?", answer: "The classic hex editor layout: an 8-digit hex offset, 16 space-separated hex byte values per row, and an ASCII preview column where non-printable bytes are shown as dots." },
+      { question: "Does it work with any file type?", answer: "Yes — any file can be dropped in, since it's read as raw bytes rather than parsed as a specific format. This makes it useful for binary files, executables, and unknown file types alike." },
+      { question: "Why would I inspect a file's hex dump?", answer: "To identify a file's true format via its magic-number signature (the first few bytes), spot embedded strings or control characters, or debug a file that isn't opening correctly in its expected application." },
+      { question: "Can I search within the hex dump?", answer: "The tool doesn't include a dedicated search feature — use your browser's built-in page search (Ctrl/Cmd+F) to look for specific hex values or ASCII text within the output." },
+    ],
+    content: {
+      howToUse: [
+        "Drag and drop any file onto the drop zone, or click it to browse and select a file.",
+        "The first 64 KB of the file is read and converted to a hex dump automatically.",
+        "Review the offset (left), hex byte values (middle), and ASCII preview (right) for each 16-byte row.",
+        "If the file exceeds 64 KB, a notice confirms only the first portion is shown.",
+      ],
+      useCases: [
+        "Identify a file's real format by checking its magic-number signature in the first few bytes (e.g. PNG files start with 89 50 4E 47).",
+        "Debug a corrupted or unexpectedly-behaving file by inspecting its raw byte structure.",
+        "Check for embedded readable strings inside a binary file using the ASCII preview column.",
+        "Verify that a file was saved with the expected encoding or byte order marker at the start.",
+        "Teach or learn how binary file formats are structured at the byte level.",
+      ],
+      limitations: [
+        "Only the first 64 KB of any file is read and displayed — larger files are truncated, not fully dumped.",
+        "Read-only viewer — it does not let you edit bytes or save a modified file.",
+        "No built-in search or byte-value filtering within the hex output.",
+      ],
+      privacy:
+        "The file is read locally using the browser's FileReader API and never leaves your device or gets uploaded anywhere.",
+    },
     seo: {
       title: "Hex Dump Viewer - Free Browser Tool",
       description: "Inspect text or file bytes as hexadecimal output. Free, local, no upload, no account required.",
@@ -3764,6 +4332,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for http status codes tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is HTTP Status Codes free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. This is a static reference — your search terms are matched locally against a built-in list and never sent anywhere." },
+      { question: "Which status codes are covered?", answer: "A curated set of the most commonly encountered codes across all five classes: 1xx Informational, 2xx Success, 3xx Redirection, 4xx Client Error, and 5xx Server Error — not the full IANA registry of every registered extension code." },
+      { question: "Can I search by code number or by name?", answer: "Both — the search box matches against the numeric code, the status name (e.g. 'Not Found'), and the short description, so you can search '404' or 'not found' and get the same result." },
+      { question: "What's the difference between 401 and 403?", answer: "401 Unauthorized means authentication is missing or failed — the server doesn't know who you are. 403 Forbidden means the server knows who you are but you don't have permission for that resource." },
+      { question: "What's the difference between 301 and 302 redirects?", answer: "301 Moved Permanently tells clients and search engines to update their links to the new URL permanently. 302 Found signals a temporary redirect where the original URL should still be used for future requests." },
+      { question: "Why do I see a 502 or 504 error?", answer: "Both indicate a problem with an upstream server while your server was acting as a proxy or gateway: 502 Bad Gateway means it got an invalid response, while 504 Gateway Timeout means it didn't get a response in time." },
+    ],
+    content: {
+      howToUse: [
+        "Browse the codes grouped by class (1xx-5xx), or type in the search box to filter by code, name, or description.",
+        "Click any row to expand it and read the fuller explanation of what that status code means.",
+        "Use the color-coded badges to quickly distinguish success (green), redirection (amber), client errors (red), and server errors (purple).",
+        "Reference the code while debugging an API response, browser network tab, or server log.",
+      ],
+      useCases: [
+        "Quickly recall what a status code means while reading an API response or browser DevTools network tab.",
+        "Decide which status code to return from a REST API endpoint you're building (e.g. 201 vs 200, 422 vs 400).",
+        "Explain to a teammate or in documentation why a request returned a specific error code.",
+        "Distinguish between similar codes like 401 vs 403, or 301 vs 302 vs 307, when debugging redirects or auth.",
+        "Look up an unfamiliar code encountered in a server log or monitoring alert.",
+      ],
+      limitations: [
+        "Covers commonly used codes, not the complete IANA HTTP status code registry including rare vendor-specific extensions.",
+        "Explanations are general references — actual server behavior for a given code can vary by API or framework.",
+        "Does not make live requests or inspect your actual network traffic — it's a static reference only.",
+      ],
+      privacy:
+        "The full reference list is bundled with the page and searched locally in your browser — no network requests are made.",
+    },
     seo: {
       title: "HTTP Status Codes - Free Browser Tool",
       description: "Look up HTTP status codes and what they mean. Free, local, no upload, no account required.",
@@ -3792,6 +4391,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for image metadata viewer tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Image Metadata Viewer free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The image is read and inspected locally using the browser's Image and FileReader APIs — it is never uploaded to a server." },
+      { question: "What metadata does it show?", answer: "File name, file size, MIME type, pixel dimensions, aspect ratio, megapixels, and last-modified date for any image. For JPEG files, it also attempts to extract the capture date and camera info from embedded EXIF data." },
+      { question: "How is this different from the EXIF Viewer tool?", answer: "This tool focuses on general file and dimension properties (size, MIME type, aspect ratio, megapixels) with a best-effort JPEG date/camera lookup, while the dedicated EXIF Viewer parses the full EXIF tag set (exposure, GPS, orientation) in more detail." },
+      { question: "Why don't I see a capture date for my PNG or WebP file?", answer: "EXIF-style capture date extraction only runs on JPEG files here, since PNG and WebP don't typically embed EXIF metadata using the same structure." },
+      { question: "Can I copy the metadata results?", answer: "Yes — click 'Copy as JSON' to copy all extracted fields as a JSON object, useful for pasting into documentation, bug reports, or a spreadsheet." },
+      { question: "Does it read GPS location data?", answer: "This tool's EXIF extraction is a lightweight scan for date and camera fields specifically — it does not extract GPS coordinates. Use the EXIF Viewer tool if you need to check for embedded location data." },
+    ],
+    content: {
+      howToUse: [
+        "Drag and drop an image onto the drop zone, or click it to browse and select a file.",
+        "The tool reads the image and displays file name, size, MIME type, dimensions, aspect ratio, and megapixels.",
+        "For JPEG files, it also attempts to extract a capture date and camera info from embedded EXIF data.",
+        "Click 'Copy as JSON' to copy all the extracted fields to your clipboard.",
+      ],
+      useCases: [
+        "Quickly check an image's exact pixel dimensions and megapixel count before using it in a design or upload.",
+        "Verify a file's true MIME type when the file extension might be misleading.",
+        "Check the aspect ratio of an image against a required ratio (e.g. 16:9 or 1:1) before cropping.",
+        "Look up a JPEG's approximate capture date and camera info without a dedicated photo app.",
+        "Compare file size against dimensions to gauge compression quality before publishing an image.",
+      ],
+      limitations: [
+        "EXIF-based date and camera extraction only works on JPEG files, and uses a lightweight scan rather than a full EXIF parser.",
+        "Does not extract GPS coordinates or the broader EXIF tag set (exposure, ISO, orientation) — see the EXIF Viewer tool for that.",
+        "Read-only — it inspects metadata but does not edit, strip, or re-save the image file.",
+      ],
+      privacy:
+        "The image file is read and inspected entirely in your browser. It is never uploaded to a server.",
+    },
     seo: {
       title: "Image Metadata Viewer - Free Browser Tool",
       description: "Inspect image dimensions, format, size, and metadata locally. Free, local, no upload, no account required.",
@@ -3820,6 +4450,39 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for json flattener tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is JSON Flattener free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your JSON is never sent to a server." },
+      { question: "How are nested arrays flattened?", answer: "Array items become keys with their numeric index appended, e.g. user.tags.0 and user.tags.1 for the first and second items in a tags array." },
+      { question: "Can I change the separator between key segments?", answer: "Yes — the default separator is a dot (.), but you can set it to any short string (e.g. an underscore or a colon) using the Separator field." },
+      { question: "Can I reverse the process and rebuild the nested JSON?", answer: "Yes — switch to Unflatten mode and paste dot-notation flat JSON to reconstruct the original nested object structure." },
+      { question: "Why would I flatten JSON before exporting to a spreadsheet?", answer: "Spreadsheets work best with flat columns. Flattening nested JSON into dot-path keys turns each unique path into a column header, making the data easy to import into a CSV or spreadsheet tool." },
+      { question: "What happens to null or boolean values when flattening?", answer: "They're preserved as-is at their flattened key — flattening only restructures the key paths, it doesn't change the underlying values' types." },
+      { question: "Is there a limit to how deeply nested JSON I can flatten?", answer: "There's no hard-coded depth limit, but extremely deep or large JSON documents may take longer to process depending on your browser and device." },
+    ],
+    content: {
+      howToUse: [
+        "Choose Flatten (nested → flat) or Unflatten (flat → nested) mode.",
+        "Paste your JSON into the input box, or use the sample data already loaded.",
+        "Optionally change the key separator (default is a dot).",
+        "Click Flatten or Unflatten to process the JSON.",
+        "Copy the output for use in your spreadsheet, script, or documentation.",
+      ],
+      useCases: [
+        "Flatten a nested API response into dot-path keys for easy import into a spreadsheet or CSV.",
+        "Compare two nested JSON objects more easily by flattening both into simple key-value pairs.",
+        "Prepare nested config or log data for tools that expect flat key-value structures.",
+        "Reconstruct a nested JSON object from a flat key-value export using Unflatten mode.",
+        "Debug deeply nested API payloads by seeing every value's full path at a glance.",
+      ],
+      limitations: [
+        "Flattening arrays uses numeric index keys, which can make round-tripping large arrays verbose.",
+        "Very large or deeply nested JSON documents may take longer to process depending on your device.",
+        "Custom separators that appear naturally within your original key names can create ambiguous paths when unflattening.",
+      ],
+      privacy:
+        "Your JSON is parsed and transformed entirely in your browser. Nothing is uploaded or stored.",
+    },
     seo: {
       title: "JSON Flattener - Free Browser Tool",
       description: "Flatten nested JSON into dot-path keys for analysis. Free, local, no upload, no account required.",
@@ -4026,6 +4689,39 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for morse code encoder tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Morse Code Encoder free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Text-to-Morse conversion and audio playback both happen locally in the browser tab." },
+      { question: "Can it convert Morse code back to text as well?", answer: "Yes — switch to 'Morse → Text' mode and type or paste dots and dashes, using spaces between letters and a forward slash (/) between words." },
+      { question: "Can I hear the Morse code, not just read it?", answer: "Yes — click 'Play Audio' to hear the current Morse code played as audible tones using the Web Audio API, with an adjustable speed control." },
+      { question: "How does the speed control work?", answer: "Speed is set in WPM (words per minute) from 5 to 40, which controls the duration of each dot, dash, and pause during audio playback." },
+      { question: "Which characters are supported?", answer: "The full A-Z alphabet, digits 0-9, and common punctuation (period, comma, question mark, exclamation mark, hyphen, slash, @, ampersand, colon). Unsupported characters are simply skipped during encoding." },
+      { question: "What does a forward slash (/) mean in Morse output?", answer: "It represents a space between words — the standard Morse convention, since a plain space is used to separate individual letters within a word." },
+      { question: "Can I use this to learn Morse code?", answer: "Yes — typing text and watching it convert live, or listening to the audio at a slower WPM speed, is a practical way to start recognizing basic Morse patterns." },
+    ],
+    content: {
+      howToUse: [
+        "Choose 'Text → Morse' or 'Morse → Text' mode.",
+        "Type or paste your text (or Morse code) into the corresponding box.",
+        "Watch the converted output update automatically on the other side.",
+        "Adjust the speed slider (5-40 WPM) if you plan to play the audio.",
+        "Click 'Play Audio' to hear the current Morse code as tones.",
+      ],
+      useCases: [
+        "Encode a short message into Morse code for a puzzle, escape room, or classroom activity.",
+        "Decode a Morse code message received from a puzzle, radio transcript, or historical document.",
+        "Listen to Morse code audio at a slow speed to practice recognizing letters by ear.",
+        "Demonstrate how Morse code works in a classroom or presentation with live text-to-tone conversion.",
+        "Convert a callsign or short phrase to Morse for a ham radio or signaling reference.",
+      ],
+      limitations: [
+        "Only supports the Latin alphabet, digits, and common punctuation — accented characters and non-Latin scripts are not encoded.",
+        "Unsupported characters are silently dropped rather than flagged, so double-check longer conversions.",
+        "Audio playback requires a browser that supports the Web Audio API, which is standard in modern browsers but may not work in very old ones.",
+      ],
+      privacy:
+        "Text-to-Morse conversion and audio generation both run locally in your browser. Nothing is transmitted to a server.",
+    },
     seo: {
       title: "Morse Code Encoder - Free Browser Tool",
       description: "Convert text to Morse code and Morse back to text. Free, local, no upload, no account required.",
@@ -4054,6 +4750,39 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for number formatter tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Number Formatter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Formatting uses the browser's built-in Intl.NumberFormat API and runs entirely locally." },
+      { question: "Which locales are supported?", answer: "en-US, en-GB, de-DE, fr-FR, pt-BR, ja-JP, zh-CN, and ar-SA — covering common differences in thousands separators, decimal marks, and digit grouping conventions." },
+      { question: "What's the difference between the three styles?", answer: "Decimal formats a plain number with locale-appropriate separators. Currency adds a currency symbol and follows that currency's typical decimal convention. Percent multiplies the value by 100 and appends a % sign." },
+      { question: "Why does 1234567.89 look different in en-US vs de-DE?", answer: "en-US uses a comma for thousands and a period for decimals (1,234,567.89), while de-DE swaps them (1.234.567,89) — the tool applies each locale's actual formatting convention." },
+      { question: "What are scientific and engineering notation used for?", answer: "Scientific notation (e.g. 1.235e+6) is compact for very large or small numbers in technical contexts. Engineering notation restricts the exponent to multiples of 3 (e.g. 1.235 × 10^6), aligning with SI unit prefixes like kilo, mega, and giga." },
+      { question: "Can I control the number of decimal places shown?", answer: "Yes — set the minimum and maximum decimal digits independently (0-20), which controls both padding with trailing zeros and rounding of longer decimals." },
+      { question: "Which currencies are available?", answer: "USD, EUR, GBP, BRL, JPY, CNY, INR, CHF, CAD, and AUD — selectable when Currency style is chosen." },
+    ],
+    content: {
+      howToUse: [
+        "Enter a number in the input field.",
+        "Choose a locale to control separator and grouping conventions.",
+        "Select a style: Decimal, Currency, or Percent.",
+        "If using Currency style, choose the currency code.",
+        "Adjust minimum and maximum decimal places, then copy the formatted, scientific, or engineering notation result.",
+      ],
+      useCases: [
+        "Format a raw number for display in a dashboard using proper thousands separators for the target locale.",
+        "Convert a number into a specific currency format (e.g. €1.234,56) for a European audience.",
+        "Turn a decimal ratio into a percentage string for a report or UI label.",
+        "Get the scientific or engineering notation of a very large or very small number for technical documentation.",
+        "Check how the same number displays differently across locales before localizing a product.",
+      ],
+      limitations: [
+        "Currency formatting applies standard locale conventions but doesn't perform real currency conversion between currencies.",
+        "Limited to a curated set of 8 locales and 10 currencies, not the full list supported by Intl.NumberFormat.",
+        "Engineering notation exponent grouping is calculated manually and may differ slightly from specialized scientific software for edge-case values.",
+      ],
+      privacy:
+        "All formatting happens locally using your browser's built-in Intl.NumberFormat API. Nothing is sent to a server.",
+    },
     seo: {
       title: "Number Formatter - Free Browser Tool",
       description: "Format numbers with separators, decimals, and compact notation. Free, local, no upload, no account required.",
@@ -4202,6 +4931,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for qr code reader tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is QR Code Reader free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The image is decoded locally in your browser using the jsQR library, loaded on demand — the image file never leaves your device." },
+      { question: "How do I get an image into the tool?", answer: "Three ways: drag and drop an image file onto the drop zone, click it to browse and select a file, or paste an image directly from your clipboard (Ctrl/Cmd+V)." },
+      { question: "What if it can't find a QR code in my image?", answer: "You'll see a 'No QR code found in this image' message. Try a clearer photo with better lighting, less blur, or a tighter crop around just the QR code itself." },
+      { question: "Does it automatically open decoded URLs?", answer: "No — if the decoded content is a URL, it's shown as a clickable link that you choose whether to open, rather than being auto-navigated to for safety." },
+      { question: "What image formats are supported?", answer: "PNG, JPG, WebP, and GIF — any format your browser can natively decode as an <img> element." },
+      { question: "Is it safe to scan a QR code from an unknown source this way?", answer: "Scanning locally is safer than a random online scanner because your image isn't uploaded anywhere, but always inspect the decoded URL or text carefully before visiting a link or acting on the content." },
+      { question: "Can I copy the decoded text?", answer: "Yes — click 'Copy text' after a successful scan to copy the exact decoded content to your clipboard." },
+    ],
+    content: {
+      howToUse: [
+        "Drag and drop an image containing a QR code onto the drop zone.",
+        "Alternatively, click the drop zone to browse for a file, or paste an image from your clipboard.",
+        "The QR code is decoded automatically and the extracted text or URL appears below.",
+        "If the result is a URL, click it to open in a new tab, or use 'Copy text' to copy the raw content.",
+      ],
+      useCases: [
+        "Check where a QR code on a poster, flyer, or product package actually links to before scanning it with your phone.",
+        "Extract the text or URL from a QR code in a screenshot without needing a phone camera.",
+        "Verify a QR code you generated actually encodes the correct content before printing it.",
+        "Decode a QR code from a photo taken at an angle or in low light where a phone scanner struggles.",
+        "Inspect a suspicious QR code's destination safely before visiting the link.",
+      ],
+      limitations: [
+        "Decoding accuracy depends on image quality — blurry, low-resolution, or heavily angled photos may fail to decode.",
+        "Only detects a single QR code per image; if multiple codes are present, only one result is returned.",
+        "Does not scan QR codes from a live camera feed — it only decodes from an already-captured image file.",
+      ],
+      privacy:
+        "The image is decoded entirely in your browser using a locally loaded decoding library. It is never uploaded to a server.",
+    },
     seo: {
       title: "QR Code Reader - Free Browser Tool",
       description: "Read QR codes from an image directly in your browser. Free, local, no upload, no account required.",
@@ -4230,6 +4991,39 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for screen color picker tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Screen Color Picker free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Color sampling uses the browser's native EyeDropper API — pixel data never leaves your device." },
+      { question: "Which browsers support this tool?", answer: "Chromium-based browsers only: Chrome 95+, Edge 95+, and Opera 81+. It is not available in Firefox or Safari, since they haven't implemented the EyeDropper API." },
+      { question: "Can I pick a color from anywhere on my screen, not just the browser tab?", answer: "Yes — the native EyeDropper API lets you sample a pixel from any visible window or application on your screen, not just content within the browser tab." },
+      { question: "What color formats does it show?", answer: "HEX, RGB, and HSL for each picked color, each with its own copy button." },
+      { question: "Does it keep a history of picked colors?", answer: "Yes — the last 10 unique colors you've picked are kept in a history row during your session, letting you click back to review or reuse an earlier pick." },
+      { question: "Why did nothing happen when I clicked 'Pick Color from Screen'?", answer: "If you press Escape or click outside the capture area, the picker is cancelled silently. If your browser doesn't support the EyeDropper API, the tool shows an unsupported-browser message instead of the picker button." },
+      { question: "Is the picked color saved after I close the tab?", answer: "No — the color history exists only in the browser tab's memory for that session and is cleared when you navigate away or refresh." },
+    ],
+    content: {
+      howToUse: [
+        "Click 'Pick Color from Screen' (requires a Chromium-based browser).",
+        "Your cursor becomes a magnifier — click anywhere on your screen, including outside the browser, to sample that pixel's color.",
+        "View the picked color's HEX, RGB, and HSL values.",
+        "Click any value to copy it to your clipboard.",
+        "Check the history row below to revisit up to 10 previously picked colors from your session.",
+      ],
+      useCases: [
+        "Sample an exact color from a competitor's website, a design mockup, or a screenshot to match it in your own project.",
+        "Grab a brand color directly from a logo image displayed on screen without opening an image editor.",
+        "Pick a color from a native desktop app (outside the browser) to reuse in a CSS or design file.",
+        "Build a quick palette by picking several colors from a reference image and reviewing them in the history row.",
+        "Check the exact HEX value of a UI element while reviewing a design for consistency.",
+      ],
+      limitations: [
+        "Only works in Chromium-based browsers (Chrome, Edge, Opera) — Firefox and Safari don't support the EyeDropper API.",
+        "Color history is session-only and is cleared when the tab is closed or refreshed — nothing is saved permanently.",
+        "Picks a single pixel's color, so it can be affected by anti-aliasing or compression artifacts at the exact point clicked.",
+      ],
+      privacy:
+        "Color sampling uses the browser's built-in EyeDropper API, which runs entirely on your device. No screen data is captured, sent, or stored anywhere.",
+    },
     seo: {
       title: "Screen Color Picker - Free Browser Tool",
       description: "Pick colors from the screen using the browser EyeDropper API. Free, local, no upload, no account required.",
@@ -4258,6 +5052,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for svg to png converter tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is SVG to PNG Converter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The SVG is rendered to a canvas element in your browser tab and never sent to a server." },
+      { question: "What is this tool best for?", answer: "Exporting an icon, logo, or piece of vector artwork as a raster PNG for use in places that don't accept SVG, like social previews or older design tools." },
+      { question: "Can I upload an SVG file instead of pasting code?", answer: "Yes — drag and drop an .svg file onto the upload area, or click it to browse for a file. The SVG markup loads into the code editor automatically." },
+      { question: "What does the scale option do?", answer: "It multiplies the SVG's rendered width and height by 1x, 2x, or 3x before drawing to canvas, producing a higher-resolution PNG for retina displays or larger prints." },
+      { question: "Can I export with a transparent background?", answer: "Yes — set Background to Transparent instead of White. The preview shows a checkerboard pattern to indicate transparent areas, but the exported PNG itself has a true alpha channel." },
+      { question: "Why does my exported PNG look blurry or clipped?", answer: "If your SVG doesn't have an explicit width, height, or viewBox, the browser may fall back to a default canvas size, which can distort the output. Add a viewBox attribute to your SVG for predictable results." },
+      { question: "Is there a size limit on the SVG I can convert?", answer: "There's no hard-coded limit, but very large or complex SVGs (thousands of paths, huge dimensions at 3x scale) can be slow or memory-intensive since rendering happens on your device." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your SVG markup into the code editor, or drag and drop an .svg file onto the upload area.",
+        "Choose an export scale — 1x, 2x, or 3x — to control the output resolution.",
+        "Pick a background: White for a solid fill, or Transparent to preserve alpha.",
+        "Click Convert to render the SVG to the preview panel.",
+        "Click Download PNG to save the result, or right-click the preview to copy the image.",
+      ],
+      useCases: [
+        "Export a logo or icon designed as SVG into a PNG for a platform that doesn't accept vector formats.",
+        "Generate a higher-resolution 2x or 3x PNG of an icon for retina displays.",
+        "Produce a transparent PNG asset from an SVG graphic for use in a design mockup.",
+        "Quickly preview what an inline SVG snippet looks like as a rendered raster image before shipping it.",
+      ],
+      limitations: [
+        "SVGs without an explicit width, height, or viewBox may render at an unpredictable default size.",
+        "External references inside the SVG (like linked fonts or images) may not render if the browser can't resolve them in this context.",
+        "Very large or path-heavy SVGs at 3x scale can be slow to render, since conversion runs on your device's canvas engine.",
+      ],
+      privacy:
+        "The SVG is rendered using the browser's built-in Canvas API. Nothing is uploaded — the file or code you provide stays in your browser tab.",
+    },
     seo: {
       title: "SVG to PNG Converter - Free Browser Tool",
       description: "Convert SVG markup or files into PNG images locally. Free, local, no upload, no account required.",
@@ -4644,6 +5470,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for sitemap generator tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Sitemap XML Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The URL list is converted to XML locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Turning a plain list of page URLs — copied from a spreadsheet or crawl export — into valid sitemap.xml markup you can upload to your site." },
+      { question: "How do I enter my URLs?", answer: "Paste one full, absolute URL per line (including https://) into the input box. Each line becomes a separate <url><loc> entry in the output." },
+      { question: "Does it add lastmod, changefreq, or priority tags?", answer: "No — this generator produces minimal, valid sitemaps with just the <loc> element per URL. If you need those optional tags, add them manually to the output before publishing." },
+      { question: "Where do I put the generated sitemap.xml file?", answer: "Save the output as sitemap.xml and upload it to your site's root (or wherever you reference it), then list its URL in your robots.txt and submit it in Search Console." },
+      { question: "Is there a limit to how many URLs I can include?", answer: "The tool has no hard-coded limit, but the official sitemap protocol caps a single file at 50,000 URLs or 50MB uncompressed — split larger sites into multiple sitemap files with a sitemap index." },
+      { question: "Does it validate that my URLs actually exist?", answer: "No — it only formats the URLs you provide into XML. It doesn't check that each page returns a 200 status or is reachable." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your page URLs into the input box, one full URL (with https://) per line.",
+        "Review the generated XML — each line becomes a <url><loc> entry.",
+        "Copy the output using the Copy button.",
+        "Save it as sitemap.xml and upload it to your site's root directory.",
+        "Reference the sitemap URL in your robots.txt and submit it in Google Search Console.",
+      ],
+      useCases: [
+        "Build a first sitemap.xml for a small site that doesn't have server-side sitemap generation.",
+        "Quickly turn a list of URLs exported from a crawler or spreadsheet into valid sitemap markup.",
+        "Rebuild a sitemap after a site migration when the URL structure has changed.",
+        "Generate a sitemap for a static site or landing page collection with a handful of URLs.",
+      ],
+      limitations: [
+        "Only produces the <loc> element per URL — it does not add lastmod, changefreq, or priority tags.",
+        "Does not verify that the URLs you enter are live, reachable, or correctly formatted.",
+        "Not built for sites with tens of thousands of URLs; very large sitemaps should be split into a sitemap index per the sitemap protocol's 50,000 URL limit.",
+      ],
+      privacy:
+        "The URL list is converted to sitemap XML entirely in your browser — nothing is uploaded or stored on a server.",
+    },
     seo: {
       title: "Sitemap XML Generator - Free Browser Tool",
       description: "Convert a list of URLs into sitemap.xml markup. Free, local, no upload, no account required.",
@@ -4672,6 +5530,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for htaccess redirect generator tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is .htaccess Redirect Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The redirect rule is generated locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Quickly writing a single, correctly formatted 301 redirect rule for an Apache .htaccess file after moving or renaming a page." },
+      { question: "What does this tool generate?", answer: "A single Redirect 301 line in the form 'Redirect 301 /old-page https://example.com/new-page', which permanently redirects the old path to the new URL." },
+      { question: "Why does it always use a 301 redirect instead of 302?", answer: "301 (permanent) is the standard choice for SEO-motivated redirects, since it tells search engines to transfer ranking signals to the new URL. If you need a temporary 302 redirect, change the '301' to '302' in the copied output." },
+      { question: "Where do I put the generated rule?", answer: "Paste it into the .htaccess file in your site's root directory (or the directory the source path is relative to). Apache reads .htaccess rules on each request, so no server restart is needed." },
+      { question: "Can I generate multiple redirects at once?", answer: "This tool generates one rule per use. For several redirects, repeat the process and stack the resulting Redirect 301 lines in your .htaccess file." },
+      { question: "Does this work for non-Apache servers like Nginx?", answer: "No — the Redirect directive is specific to Apache's mod_alias. Nginx, IIS, and other servers use different redirect syntax." },
+    ],
+    content: {
+      howToUse: [
+        "Enter the source path you want to redirect from, e.g. /old-page.",
+        "Enter the full destination URL, e.g. https://example.com/new-page.",
+        "Review the generated Redirect 301 rule in the output box.",
+        "Copy the rule and paste it into your site's .htaccess file.",
+        "Repeat for each additional redirect you need.",
+      ],
+      useCases: [
+        "Redirect an old blog post URL to its new location after a content restructure.",
+        "Set up a canonical redirect from a non-www or trailing-slash variant to your preferred URL.",
+        "Preserve SEO value when retiring a page by pointing it to its closest replacement.",
+        "Redirect a moved page after a site migration to a new URL structure.",
+      ],
+      limitations: [
+        "Generates one redirect rule at a time — bulk redirect lists must be assembled manually by repeating the process.",
+        "Only produces the Apache mod_alias 'Redirect' syntax; it doesn't cover RewriteRule/RewriteCond patterns for wildcard or regex redirects.",
+        "Specific to Apache — the output won't work on Nginx, IIS, or other web servers without translation.",
+      ],
+      privacy:
+        "The redirect rule is generated entirely in your browser from the paths you type. Nothing is uploaded or logged.",
+    },
     seo: {
       title: ".htaccess Redirect Generator - Free Browser Tool",
       description: "Generate Apache 301 redirect rules for URL migrations. Free, local, no upload, no account required.",
@@ -4700,6 +5590,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for content security policy generator tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Content Security Policy Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The header string is assembled locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Producing a readable starting-point CSP header for a static site or simple web app, rather than writing every directive from scratch." },
+      { question: "Which directives can I customize?", answer: "You set default-src, img-src, and script-src directly. The tool fills in reasonable fixed values for style-src, object-src, base-uri, and frame-ancestors so the policy is complete." },
+      { question: "Why is style-src fixed to 'self' 'unsafe-inline'?", answer: "Allowing inline styles keeps the starter policy from breaking common inline style attributes. For a stricter policy, remove 'unsafe-inline' once you've moved styles to external stylesheets or added nonces." },
+      { question: "Do I need to test the policy before deploying it?", answer: "Yes. Any CSP can block scripts, images, or fonts your site actually needs. Deploy it first as a Content-Security-Policy-Report-Only header, or test in a staging environment, before enforcing it in production." },
+      { question: "Where do I add the generated header?", answer: "Add it as an HTTP response header from your web server or CDN config (Apache, Nginx, Cloudflare, etc.) — this tool only generates the header value, it does not apply it to a live site." },
+      { question: "Does it cover every CSP directive?", answer: "No — it's a practical baseline covering the most commonly needed directives. Advanced use cases (nonces, hashes, report-uri, worker-src, etc.) need to be added manually to the generated string." },
+    ],
+    content: {
+      howToUse: [
+        "Enter your default-src value, e.g. 'self' to restrict to your own origin by default.",
+        "Enter your img-src value if images load from external domains or data URIs.",
+        "Enter your script-src value to control which scripts are allowed to run.",
+        "Copy the generated Content-Security-Policy header string.",
+        "Add it as a response header on your server or CDN, then test the site to confirm nothing is blocked unexpectedly.",
+      ],
+      useCases: [
+        "Draft a starter CSP header for a static site that has never had one before.",
+        "Quickly generate a baseline policy to paste into a Cloudflare, Nginx, or Apache header config.",
+        "Understand how default-src, img-src, and script-src interact by seeing the assembled header.",
+        "Get a readable starting point to harden before a security review or audit.",
+      ],
+      limitations: [
+        "Only default-src, img-src, and script-src are customizable; other directives use fixed baseline values.",
+        "Does not generate nonces, hashes, or a report-uri/report-to directive for CSP violation reporting.",
+        "The policy isn't validated against your live site — deploy it in report-only mode first to catch anything it would block.",
+      ],
+      privacy:
+        "The header string is built entirely in your browser from the values you enter. Nothing is sent to a server or stored.",
+    },
     seo: {
       title: "Content Security Policy Generator - Free Browser Tool",
       description: "Build a starter Content Security Policy header. Free, local, no upload, no account required.",
@@ -4728,6 +5650,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for gitignore generator tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is .gitignore Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The output is assembled locally in the browser tab from the templates you select — nothing is sent to a server." },
+      { question: "What is this tool best for?", answer: "Quickly combining common ignore rules for Node, Python, OS files, and editor config into one .gitignore without hunting through separate template files." },
+      { question: "Which templates are available?", answer: "Four checkboxes: Node (node_modules, dist, build, .env files, debug logs), Python (__pycache__, virtual environments, egg-info), OS (.DS_Store, Thumbs.db, Desktop.ini), and Editors (.vscode, .idea, swap files)." },
+      { question: "Can I select more than one template?", answer: "Yes — check any combination of Node, Python, OS, and Editors, and the tool concatenates all their rules into a single output." },
+      { question: "Will it ignore files I've already committed to Git?", answer: "No — .gitignore only affects untracked files. If a file matching a new rule is already tracked, run 'git rm --cached <file>' to stop tracking it after adding the rule." },
+      { question: "Does it cover every framework, like Java or Rust?", answer: "No — this generator covers common Node.js, Python, OS, and editor patterns. For other languages or frameworks, add their specific ignore rules manually to the output." },
+      { question: "Can I add my own custom ignore rules?", answer: "The generator produces a starting set from the selected templates; paste the output into your .gitignore file and add project-specific lines below it as needed." },
+    ],
+    content: {
+      howToUse: [
+        "Check the boxes for the templates that match your project: Node, Python, OS, and/or Editors.",
+        "Review the combined ignore rules in the output box as you toggle selections.",
+        "Copy the generated rules.",
+        "Paste them into a .gitignore file at the root of your repository.",
+        "Add any project-specific paths manually below the generated rules.",
+      ],
+      useCases: [
+        "Set up a .gitignore for a new Node.js project, covering node_modules, build output, and .env files in one step.",
+        "Combine Python and OS templates for a cross-platform Python project shared between Mac and Windows contributors.",
+        "Add editor-specific ignore rules (.vscode, .idea) to an existing repo without typing them by hand.",
+        "Quickly rebuild a .gitignore after realizing dependency folders were never excluded.",
+      ],
+      limitations: [
+        "Only covers Node, Python, OS, and editor patterns — other languages and frameworks need manual rules added.",
+        "Doesn't retroactively untrack files already committed before the rule existed; use 'git rm --cached' for those.",
+        "Templates are fixed, general-purpose rule sets, not tailored to unusual project layouts or monorepo structures.",
+      ],
+      privacy:
+        "The .gitignore content is assembled entirely in your browser from built-in templates. Nothing is uploaded.",
+    },
     seo: {
       title: ".gitignore Generator - Free Browser Tool",
       description: "Generate .gitignore files from common project templates. Free, local, no upload, no account required.",
@@ -4756,6 +5710,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for dockerignore generator tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is .dockerignore Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The output is assembled locally in the browser tab from the templates you select — nothing is sent to a server." },
+      { question: "What is this tool best for?", answer: "Quickly assembling .dockerignore rules that keep dependencies, Git metadata, caches, and secret files out of your Docker build context." },
+      { question: "Which templates are available?", answer: "Four checkboxes: JavaScript (node_modules, debug logs, .next, dist, coverage), Python (__pycache__, .venv, pytest/mypy caches), Git (.git, .gitignore, .github), and Secrets (.env files, .pem, .key)." },
+      { question: "Why does excluding files from the build context matter?", answer: "Docker sends the entire build context to the daemon before building, even files you never COPY. Excluding large or irrelevant directories like node_modules speeds up builds and reduces image bloat." },
+      { question: "Should I always include the Secrets template?", answer: "It's a good default for most projects — accidentally COPYing a .env file or private key into an image is a common way secrets end up baked into a shared image layer." },
+      { question: "Does .dockerignore behave like .gitignore?", answer: "The pattern syntax is similar, but .dockerignore only affects what's sent to the Docker build context and what COPY/ADD can access — it has no effect on Git tracking." },
+      { question: "Can I combine multiple templates?", answer: "Yes — check any combination of JavaScript, Python, Git, and Secrets, and the tool concatenates their rules into one output." },
+    ],
+    content: {
+      howToUse: [
+        "Check the boxes for the templates that match your stack: JavaScript, Python, Git, and/or Secrets.",
+        "Review the combined ignore rules in the output box as you toggle selections.",
+        "Copy the generated rules.",
+        "Save them as a .dockerignore file next to your Dockerfile.",
+        "Rebuild your image and confirm the excluded paths no longer appear in the build context.",
+      ],
+      useCases: [
+        "Keep node_modules and build caches out of a Node.js Docker image's build context to speed up builds.",
+        "Prevent .env files and private keys from accidentally being copied into a shared image layer.",
+        "Exclude .git history and GitHub workflow files from the build context of a containerized app.",
+        "Set up a Python service's .dockerignore to skip virtual environments and pytest caches.",
+      ],
+      limitations: [
+        "Only covers JavaScript, Python, Git, and Secrets patterns — other stacks (Go, Java, Ruby, etc.) need manual rules added.",
+        "Doesn't inspect your actual Dockerfile or project, so it can't detect project-specific files that should be excluded.",
+        "A .dockerignore only affects the build context; it can't remove files already baked into an existing image layer.",
+      ],
+      privacy:
+        "The .dockerignore content is assembled entirely in your browser from built-in templates. Nothing is uploaded.",
+    },
     seo: {
       title: ".dockerignore Generator - Free Browser Tool",
       description: "Generate .dockerignore rules for leaner Docker builds. Free, local, no upload, no account required.",
@@ -4784,6 +5770,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for sql formatter tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is SQL Formatter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The query text is reformatted locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Turning a single-line or copy-pasted SQL query into a readable version with clauses, joins, and conditions each on their own line." },
+      { question: "Which SQL keywords does it break onto new lines?", answer: "SELECT, FROM, WHERE, GROUP BY, ORDER BY, HAVING, LIMIT, OFFSET, the JOIN variants (INNER/LEFT/RIGHT/FULL/plain JOIN), VALUES, and SET each start a new line, with AND/OR conditions and comma-separated lists indented beneath them." },
+      { question: "Does it validate that my SQL is syntactically correct?", answer: "No — this is a text formatter based on keyword patterns, not a SQL parser. It reformats whitespace around recognized keywords but doesn't check whether the query would actually run." },
+      { question: "Which SQL dialect does it support?", answer: "It works on standard ANSI SQL keyword patterns common to MySQL, PostgreSQL, SQLite, and SQL Server. Dialect-specific syntax (like T-SQL's TOP or PostgreSQL's DISTINCT ON) isn't specifically recognized but generally passes through unaffected." },
+      { question: "Will formatting change what my query does?", answer: "No — it only adjusts whitespace and line breaks. Table names, column names, and query logic are left exactly as written." },
+      { question: "Can I format a multi-statement SQL script?", answer: "The formatter processes the text you paste as a whole; multiple semicolon-separated statements will have their combined keywords broken onto new lines, but it's most reliable on one query at a time." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your SQL query into the input box — single-line or already partially formatted.",
+        "The tool automatically reformats it as you type, breaking clauses and joins onto new lines.",
+        "Review the formatted output for readability.",
+        "Copy the result for use in code, documentation, or a code review comment.",
+      ],
+      useCases: [
+        "Clean up a long single-line query copied from an ORM's generated SQL or database log.",
+        "Make a complex JOIN-heavy query easier to review during a pull request.",
+        "Prepare a readable SQL example for internal documentation or a runbook.",
+        "Reformat a query pasted from Slack or a support ticket before debugging it.",
+      ],
+      limitations: [
+        "Formats based on keyword pattern matching, not a true SQL parser — it doesn't validate syntax or catch errors.",
+        "Doesn't understand SQL dialect-specific syntax beyond common keywords, so unusual constructs may not break as expected.",
+        "Very long queries with deeply nested subqueries may produce output that still needs manual indentation cleanup.",
+      ],
+      privacy:
+        "Formatting happens entirely in your browser using text pattern matching. Your SQL is never uploaded.",
+    },
     seo: {
       title: "SQL Formatter - Free Browser Tool",
       description: "Format SQL queries with readable line breaks. Free, local, no upload, no account required.",
@@ -4812,6 +5829,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for utm builder tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is UTM Builder free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The tagged URL is assembled locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Quickly appending utm_source and utm_medium parameters to a base URL so analytics tools can attribute traffic to a specific campaign." },
+      { question: "Which UTM parameters does the form let me set?", answer: "The base URL, utm_source, and utm_medium fields are editable. The tool appends a placeholder utm_campaign value that you should replace with your actual campaign name before publishing the link." },
+      { question: "Does it support utm_term and utm_content?", answer: "Not through the form directly — those two optional parameters aren't included in the generated URL. Add them manually to the copied output if you need per-keyword or per-creative tracking." },
+      { question: "Will it URL-encode special characters in my parameters?", answer: "Yes — the query string is built with the browser's URLSearchParams API, so spaces and special characters in source/medium values are properly percent-encoded." },
+      { question: "What's the difference between utm_source and utm_medium?", answer: "utm_source identifies where the traffic comes from (e.g. 'newsletter', 'twitter'), while utm_medium identifies the marketing channel type (e.g. 'email', 'social', 'cpc')." },
+      { question: "Does it work if my base URL already has query parameters?", answer: "Yes — the tool detects an existing '?' in the base URL and appends the UTM parameters with '&' instead of starting a new query string." },
+    ],
+    content: {
+      howToUse: [
+        "Enter the destination URL you want to tag, e.g. https://example.com/landing-page.",
+        "Enter a utm_source value describing where the traffic originates, e.g. 'newsletter'.",
+        "Enter a utm_medium value describing the channel type, e.g. 'email'.",
+        "Copy the generated URL and replace the placeholder campaign value with your real campaign name before using it.",
+        "Add utm_term or utm_content manually to the copied URL if your analytics setup tracks those.",
+      ],
+      useCases: [
+        "Tag a link shared in an email newsletter so it's attributed correctly in Google Analytics.",
+        "Build a source/medium-tagged URL for a social media post to compare traffic against other channels.",
+        "Create a consistently tagged link for a paid ad campaign landing page.",
+        "Quickly generate a base tagged URL to hand off to a teammate who will fill in campaign specifics.",
+      ],
+      limitations: [
+        "Only utm_source and utm_medium are set through the form; the campaign parameter uses a placeholder value you must edit manually, and utm_term/utm_content aren't generated at all.",
+        "Doesn't validate that the base URL is reachable or correctly formatted beyond basic query string handling.",
+        "Doesn't store or track UTM naming conventions across multiple links, so consistency between campaigns is up to you.",
+      ],
+      privacy:
+        "The tagged URL is built entirely in your browser from the values you enter. Nothing is sent to a server or logged.",
+    },
     seo: {
       title: "UTM Builder - Free Browser Tool",
       description: "Build campaign URLs with UTM tracking parameters. Free, local, no upload, no account required.",
@@ -4840,6 +5889,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for url query builder tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is URL Query Builder free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The URL is assembled locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Building or rewriting a URL's query string from a plain list of key=value pairs, without manually percent-encoding each value." },
+      { question: "How do I enter the parameters?", answer: "Enter the base URL in the main field, then list each parameter as key=value on its own line in the second field, e.g. 'q=browser tools' and 'page=1'." },
+      { question: "Does it URL-encode the values automatically?", answer: "Yes — parameters are built with the browser's URLSearchParams API, so spaces, ampersands, and other special characters in values are properly percent-encoded in the output." },
+      { question: "What happens if I use the same key twice?", answer: "The current implementation keeps the last value for a repeated key, since each key=value line is set on the same params object — it doesn't produce duplicate parameters." },
+      { question: "Can I use this to test an API request URL?", answer: "Yes — it's useful for assembling a query string for a GET request or search URL to paste into a browser tab, Postman, or curl command." },
+      { question: "Does it work if my base URL already has query parameters?", answer: "Yes — the tool detects an existing '?' in the base URL and appends the new parameters with '&' instead of starting a new query string." },
+    ],
+    content: {
+      howToUse: [
+        "Enter the base URL you're building, e.g. https://example.com/search.",
+        "List each query parameter as key=value, one per line, in the parameters field.",
+        "Review the assembled, properly encoded URL in the output box.",
+        "Copy the URL for use in a request, link, or test.",
+      ],
+      useCases: [
+        "Build a search URL with query filters like q, page, and sort without hand-encoding spaces.",
+        "Assemble an API request URL for testing in a browser or a tool like curl.",
+        "Construct a link with several tracking or filter parameters at once from a plain list.",
+        "Quickly rewrite an existing URL's query string by editing the key=value list instead of the raw string.",
+      ],
+      limitations: [
+        "Repeated parameter keys keep only the last value rather than producing multiple entries with the same name.",
+        "Doesn't validate that the base URL itself is well-formed beyond basic query string appending.",
+        "Doesn't preserve or edit an existing query string already present in the base URL beyond appending to it.",
+      ],
+      privacy:
+        "The URL is assembled entirely in your browser using standard URL and URLSearchParams APIs. Nothing is uploaded.",
+    },
     seo: {
       title: "URL Query Builder - Free Browser Tool",
       description: "Build URLs from key-value query parameters. Free, local, no upload, no account required.",
@@ -4868,6 +5948,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for word frequency counter tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is Word Frequency Counter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Text analysis happens locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Spotting which words repeat most often in a draft — useful for catching keyword stuffing, overused phrases, or checking keyword density in SEO content." },
+      { question: "How is 'word' defined for counting purposes?", answer: "The tool lowercases the text and matches sequences of letters, numbers, and apostrophes (so 'don't' counts as one word). Punctuation and whitespace are treated as separators." },
+      { question: "Does it remove common stop words like 'the' and 'and'?", answer: "No — this counter includes every word, including common stop words. You'll need to scan past high-frequency function words to find the meaningful repeats." },
+      { question: "How is the output sorted?", answer: "Results are sorted by frequency descending, and alphabetically for words that tie in count, output as 'word,count' lines." },
+      { question: "Can I export the results as CSV?", answer: "The output format (word,count per line) is already CSV-compatible — copy it and paste into a spreadsheet, or save it with a .csv extension." },
+      { question: "Does it handle non-English text?", answer: "The word-matching pattern is limited to a-z, 0-9, and apostrophes, so accented characters or non-Latin scripts (é, ñ, characters from other alphabets) won't be captured correctly." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your text — an article draft, transcript, or content page — into the input box.",
+        "The tool automatically lowercases the text and counts each distinct word.",
+        "Review the output, sorted by frequency with the most repeated words first.",
+        "Copy the results as word,count pairs for use in a spreadsheet or content review.",
+      ],
+      useCases: [
+        "Check keyword density in an SEO draft before publishing to catch accidental overuse.",
+        "Spot repetitive language in a long-form article or email during self-editing.",
+        "Analyze a transcript to see which terms come up most often in a conversation or interview.",
+        "Compare word frequency between draft revisions to confirm overused phrases were trimmed.",
+      ],
+      limitations: [
+        "Doesn't filter out stop words (the, and, of, etc.), so common function words will dominate the top of the list.",
+        "Word matching is limited to ASCII letters, digits, and apostrophes — accented characters and non-Latin scripts aren't handled correctly.",
+        "Counts individual words only; it doesn't detect repeated multi-word phrases or n-grams.",
+      ],
+      privacy:
+        "Text is analyzed entirely in your browser's memory using JavaScript. Nothing is uploaded or stored.",
+    },
     seo: {
       title: "Word Frequency Counter - Free Browser Tool",
       description: "Count repeated words and export word frequency data. Free, local, no upload, no account required.",
@@ -4896,6 +6007,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for csv column extractor tasks where you need a fast, practical browser utility." },
     ],
+    faqExpanded: [
+      { question: "Is CSV Column Extractor free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The CSV is parsed locally in the browser tab and is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Pulling a single column of values — like just the email addresses or just the IDs — out of a larger pasted CSV without opening a spreadsheet app." },
+      { question: "How do I select which column to extract?", answer: "Type either the exact header name from the first row (e.g. 'email') or a zero-based column index (e.g. '1' for the second column) into the selector field." },
+      { question: "What does the output look like?", answer: "One value per line, taken from every row after the header, in the order they appear in the CSV." },
+      { question: "Does it handle quoted fields with commas inside them?", answer: "It handles simple CSV well, but the parser splits on commas and strips surrounding quotes — a comma inside a quoted field may be misread as a column separator." },
+      { question: "What happens if the column name doesn't exist?", answer: "If the header name isn't found (and it isn't a valid numeric index), no matching column index is found, and the extracted values will be empty." },
+      { question: "Can I extract multiple columns at once?", answer: "No — the tool extracts one column per run. For multiple columns, run the extraction again with a different header name or index and combine the outputs manually." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your CSV data into the input box, including the header row.",
+        "Enter the column to extract — either the header name (e.g. 'email') or its zero-based index (e.g. '1').",
+        "Review the extracted values, one per line, in the output box.",
+        "Copy the result for use in a spreadsheet, script, or another tool.",
+      ],
+      useCases: [
+        "Pull just the email column out of an exported contact list to paste into a mailing tool.",
+        "Extract a single ID column from a large CSV export for a lookup or comparison task.",
+        "Get a plain list of values from one column to deduplicate or sort elsewhere.",
+        "Quickly check what values exist in a specific column without opening the file in Excel or Sheets.",
+      ],
+      limitations: [
+        "The CSV parser splits on commas and doesn't fully handle quoted fields that contain commas or embedded newlines.",
+        "Extracts one column per run — extracting several columns requires repeating the process.",
+        "If the header name isn't found and isn't a valid index, the output will be empty rather than showing an error.",
+      ],
+      privacy:
+        "CSV parsing and extraction happen entirely in your browser. Your data is never uploaded to a server.",
+    },
     seo: {
       title: "CSV Column Extractor - Free Browser Tool",
       description: "Extract a single CSV column by header name or index. Free, local, no upload, no account required.",
@@ -4924,6 +6066,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for json schema generator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is JSON Schema Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. The schema is inferred locally in the browser tab and your JSON is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Quickly generating a starter JSON Schema from a real example object — useful as a first draft for API documentation or a validation library." },
+      { question: "How does it decide each field's type?", answer: "It inspects the sample value's JavaScript type at each key: objects become 'object' with nested properties, arrays become 'array' with an 'items' schema inferred from the first element, and primitives map to 'string', 'number', 'boolean', or 'null'." },
+      { question: "Are all fields marked as required?", answer: "Yes — every property present in your sample JSON is listed in the schema's 'required' array, since the generator has no way to know which fields are optional from a single example." },
+      { question: "How does it infer an array's item schema?", answer: "It looks only at the first element of the array and infers the schema from that. If your array contains mixed types across elements, only the first element's shape is reflected." },
+      { question: "Does it add format validators like email or date-time?", answer: "No — it infers basic JSON Schema types only (string, number, boolean, object, array, null). Format keywords, patterns, and value constraints (minLength, minimum, etc.) need to be added manually." },
+      { question: "What happens if my JSON is invalid?", answer: "The tool reports a parsing error message instead of a schema, so you can fix the JSON syntax before retrying." },
+    ],
+    content: {
+      howToUse: [
+        "Paste a sample JSON object or array into the input box — real example data works best.",
+        "The tool parses it and infers a JSON Schema automatically as you type.",
+        "Review the generated schema, checking property types and the required list.",
+        "Copy the schema and refine it manually — adjusting required fields, adding formats, or loosening types as needed.",
+      ],
+      useCases: [
+        "Draft a starter JSON Schema for an API response to use with a validation library like Ajv or Zod.",
+        "Document the shape of a JSON payload for a teammate or API consumer without writing the schema by hand.",
+        "Quickly check what type each field in a JSON object would be inferred as.",
+        "Bootstrap a schema for a config file format before hardening it with stricter constraints.",
+      ],
+      limitations: [
+        "Every field in the sample is marked as required, since a single example can't indicate which fields are actually optional.",
+        "Array item types are inferred only from the first element, so mixed-type arrays won't be fully represented.",
+        "Doesn't add value-level constraints like minLength, minimum/maximum, patterns, or format keywords (email, date-time, etc.) — only basic types.",
+      ],
+      privacy:
+        "Your JSON is parsed and the schema inferred entirely in your browser. Nothing is uploaded or stored.",
+    },
     seo: {
       title: "JSON Schema Generator - Free Browser Tool",
       description: "Infer a starter JSON Schema from sample JSON. Free, local, no upload, no account required.",
@@ -4952,6 +6125,39 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for json path extractor tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is JSON Path Extractor free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Pulling one nested value out of a JSON blob — an API response, a config file, a log entry — without writing a script or opening a code editor." },
+      { question: "What path syntax does it support?", answer: "Simple dot-separated paths like user.profile.email, with bracket array indexing like items[0].id or roles[2]. A leading $. is stripped automatically if present, but this is not a full JSONPath implementation — it does not support wildcards (*), filters (?()), slices, or recursive descent (..)." },
+      { question: "What happens if the path doesn't exist?", answer: "The tool returns undefined for a missing key rather than throwing an error, so you can tell a genuinely missing field apart from a JSON syntax problem." },
+      { question: "Why am I getting 'Unable to extract path'?", answer: "This means the input in the top box isn't valid JSON — check for missing quotes, trailing commas, or unbalanced brackets. The parser requires strict JSON syntax." },
+      { question: "Can I extract multiple values at once?", answer: "No, one path at a time. For extracting many fields from many records, a tool built for JSON-to-CSV flattening is a better fit." },
+      { question: "Does it handle arrays of objects?", answer: "Yes, as long as you know the index — for example items[3].name pulls the name field from the fourth array element." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your JSON object into the Input box, or use the placeholder example to see the format expected.",
+        "Type a dot path into Option A — for example user.roles[0] to get the first role, or user.profile.email for a nested string.",
+        "The extracted value appears instantly in the Output panel, pretty-printed as JSON.",
+        "If the path resolves to undefined, double-check the key names and array indices match your actual JSON structure.",
+        "Click Copy to grab the extracted value for use elsewhere.",
+      ],
+      useCases: [
+        "Pull a single field like an error message or user ID out of a large API response while debugging.",
+        "Check what a specific nested config value resolves to in a large JSON config file without scrolling through it manually.",
+        "Verify that a webhook payload contains the field your integration expects at the path you assume it's at.",
+        "Extract one item from an array field, like the first tag or the third address, by index.",
+        "Teach dot-path and array-index syntax to someone learning to work with JSON APIs.",
+      ],
+      limitations: [
+        "This is a simple dot-path extractor, not full JSONPath — no wildcards, filters, slices, or recursive descent (..) are supported.",
+        "Input must be strict, valid JSON; JSON5, comments, and trailing commas will fail to parse.",
+        "Only one path can be evaluated at a time — there's no way to extract several fields in a single pass.",
+      ],
+      privacy:
+        "Both the JSON input and the path expression are processed in your browser's memory using built-in JavaScript — nothing is uploaded or sent to a server.",
+    },
     seo: {
       title: "JSON Path Extractor - Free Browser Tool",
       description: "Extract nested JSON values with simple dot paths. Free, local, no upload, no account required.",
@@ -4980,6 +6186,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for csv to sql insert converter tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is CSV to SQL INSERT Converter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Turning a small CSV export into ready-to-run SQL seed data for a test database, demo environment, or quick local import." },
+      { question: "How does it pick column names?", answer: "It uses the first row of your CSV as the column list verbatim, so the header row must already match your table's actual column names." },
+      { question: "How are empty cells handled?", answer: "An empty CSV cell becomes SQL NULL rather than an empty string, so downstream NOT NULL constraints and type checks behave the way you'd expect." },
+      { question: "Does it escape single quotes and special characters?", answer: "Yes, single quotes inside values are doubled (SQL-escaped) so strings like O'Brien don't break the generated statement. Table names are stripped down to word characters only." },
+      { question: "Can it handle commas inside quoted CSV fields?", answer: "No — the parser splits on every comma and only strips a leading/trailing quote character, so a field like \"Smith, John\" will be split into two columns incorrectly. Pre-clean fields with embedded commas before pasting." },
+      { question: "What SQL dialect does it generate?", answer: "Standard ANSI-style INSERT INTO statements with single-quoted string values — compatible with MySQL, PostgreSQL, and SQLite without modification for typical use." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your CSV data into the Input box, with the header row on the first line.",
+        "Type your target table name into Option A — non-alphanumeric characters are stripped automatically.",
+        "The Output panel generates one INSERT INTO statement per data row, using the header row as column names.",
+        "Review the generated SQL, especially string escaping and NULL handling for empty cells.",
+        "Click Copy and paste the statements into your database client or migration script.",
+      ],
+      useCases: [
+        "Seed a local test database with realistic sample rows copied from a spreadsheet.",
+        "Turn a handful of rows from a client's CSV export into INSERT statements for a one-off data fix.",
+        "Generate demo data for a staging environment without writing INSERT statements by hand.",
+        "Quickly convert a lookup table exported from Excel or Google Sheets into SQL for a migration script.",
+      ],
+      limitations: [
+        "The CSV parser splits on every comma and does not understand quoted fields — commas embedded inside a quoted value will incorrectly become extra columns.",
+        "Column names are taken directly from the header row, so mismatched or misspelled headers will produce SQL that fails against your actual schema.",
+        "There is no data-type inference — every non-empty value is wrapped in single quotes as a string, so numeric and boolean columns may need manual adjustment.",
+      ],
+      privacy:
+        "Your CSV data and table name are processed entirely in your browser's memory — nothing is uploaded or sent to a server.",
+    },
     seo: {
       title: "CSV to SQL INSERT Converter - Free Browser Tool",
       description: "Convert CSV rows into SQL INSERT statements. Free, local, no upload, no account required.",
@@ -5008,6 +6246,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for csv to markdown table tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is CSV to Markdown Table free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Turning a spreadsheet export into a Markdown table for a GitHub README, wiki page, or pull request description without hand-formatting pipes and dashes." },
+      { question: "Does the first row become the header automatically?", answer: "Yes. The first line of your CSV input becomes the header row, and a separator row (---) is generated automatically beneath it." },
+      { question: "What happens to pipe characters in my data?", answer: "Any literal | character inside a cell is automatically escaped as \\| so it doesn't get misread as a column boundary in the rendered table." },
+      { question: "Does it support quoted CSV fields with commas inside them?", answer: "No — the parser splits on every comma and only trims a leading/trailing quote character, so a quoted field containing a comma will be split across extra columns incorrectly." },
+      { question: "Will the columns align visually in the raw text?", answer: "No. Markdown table renderers don't require padded, aligned pipes — GitHub, GitLab, and most Markdown processors render the table correctly regardless of raw whitespace." },
+      { question: "Can I generate a table with more than a few columns?", answer: "Yes, there's no fixed column limit, though very wide tables can become hard to read in the raw Markdown source even though they render fine." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your CSV data into the Input box, including the header row on the first line.",
+        "The tool automatically treats the first row as headers and generates a Markdown separator row beneath it.",
+        "Review the Output panel — it's already valid GitHub-flavored Markdown table syntax.",
+        "Click Copy and paste directly into a README, wiki page, or issue comment.",
+      ],
+      useCases: [
+        "Turn a data export into a formatted comparison table for a GitHub README.",
+        "Paste a spreadsheet of API parameters into a Markdown table for technical documentation.",
+        "Convert survey or benchmark results into a table for a blog post or pull request description.",
+        "Quickly document a small dataset in a wiki page without manually typing pipe separators.",
+      ],
+      limitations: [
+        "The CSV parser splits on every comma and does not respect quoted fields, so values containing commas will be split into extra columns incorrectly.",
+        "There's no column alignment control (left/right/center) — every column uses the default left-aligned separator.",
+        "Very large CSV inputs can produce a table that's unwieldy to read in raw Markdown form, even though it still renders correctly.",
+      ],
+      privacy:
+        "Your CSV data is converted entirely in your browser's memory using local JavaScript — nothing is uploaded or sent to a server.",
+    },
     seo: {
       title: "CSV to Markdown Table - Free Browser Tool",
       description: "Convert CSV data into a Markdown table. Free, local, no upload, no account required.",
@@ -5036,6 +6305,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for csv delimiter converter tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is CSV Delimiter Converter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Converting comma-separated data to the delimiter an older import tool, European spreadsheet locale, or legacy database loader expects." },
+      { question: "Which output delimiters are supported?", answer: "Tab (TSV), semicolon, and pipe (|). Tab is the default if Option A is left blank or set to anything other than 'semicolon' or 'pipe'." },
+      { question: "Why would I need semicolon-delimited output?", answer: "Many European locales configure Excel to use a comma as the decimal separator, so Excel expects semicolons between CSV fields instead of commas to avoid ambiguity." },
+      { question: "Does it convert from formats other than comma-separated?", answer: "No — the input must be comma-separated. This tool only changes the output delimiter, not the input format." },
+      { question: "Does it handle quoted fields with commas inside them?", answer: "No. The parser splits every line on commas and strips a leading/trailing quote character only, so a quoted field containing a comma will be split into extra columns incorrectly." },
+      { question: "Can I convert to TSV for pasting into Excel or Google Sheets?", answer: "Yes — tab-delimited output pastes directly into spreadsheet cells as separate columns, which is one of the most common uses for this converter." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your comma-separated data into the Input box.",
+        "Type your target delimiter into Option A: 'tab', 'semicolon', or 'pipe' (tab is used by default).",
+        "The Output panel updates instantly with each row rejoined using your chosen delimiter.",
+        "Click Copy, then paste the result into your spreadsheet, database import tool, or legacy system.",
+      ],
+      useCases: [
+        "Convert a comma-separated export to tab-delimited (TSV) for pasting directly into spreadsheet cells as separate columns.",
+        "Produce semicolon-delimited CSV for European Excel locales that treat commas as decimal separators.",
+        "Reformat data for an older import tool or legacy system that only accepts pipe-delimited files.",
+        "Prepare data for a database bulk-load utility that expects a specific field separator.",
+      ],
+      limitations: [
+        "The parser splits on every comma in the input and does not respect quoted fields, so commas embedded inside a quoted value will be split into extra columns incorrectly.",
+        "Only comma-separated input is accepted — it doesn't auto-detect or convert from other source delimiters.",
+        "Only three target delimiters are supported (tab, semicolon, pipe); custom or multi-character delimiters aren't available.",
+      ],
+      privacy:
+        "Your data is reformatted entirely in your browser's memory — nothing is uploaded or sent to a server.",
+    },
     seo: {
       title: "CSV Delimiter Converter - Free Browser Tool",
       description: "Convert CSV rows to TSV, semicolon, or pipe-delimited text. Free, local, no upload, no account required.",
@@ -5064,6 +6364,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for css clamp generator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is CSS Clamp Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Generating a fluid clamp() value for font-size, padding, or margin that scales smoothly between a minimum and maximum viewport width, without hand-calculating the vw slope." },
+      { question: "What do the three inputs mean?", answer: "The Input box is your minimum size in pixels (default 16), Option A is your maximum size in pixels (default 32), and Option B is the viewport width in pixels at which the minimum size applies (default 320)." },
+      { question: "What's the maximum viewport width used in the calculation?", answer: "It's fixed at 1200px — the size grows linearly from your minimum size at the Option B width up to your maximum size at 1200px viewport width, then holds steady beyond that." },
+      { question: "Can I use this for spacing or line-height, not just font-size?", answer: "Yes — clamp() works the same way for any length-based CSS property, including padding, margin, gap, and width. Just plug in the pixel values you want to scale between." },
+      { question: "Why use clamp() instead of media queries?", answer: "A single clamp() declaration replaces several breakpoint-specific rules and produces a smoothly interpolated value at every viewport width in between, rather than jumping between fixed sizes." },
+      { question: "Does the output include units other than px and vw?", answer: "No — the generated expression always uses px for the min/max bounds and vw for the fluid middle term, which is the standard, broadly supported pattern for fluid typography." },
+    ],
+    content: {
+      howToUse: [
+        "Enter your minimum font or spacing size in pixels in the Input box (defaults to 16 if left blank).",
+        "Enter your maximum size in pixels in Option A (defaults to 32).",
+        "Enter the viewport width in pixels where the minimum size should apply in Option B (defaults to 320).",
+        "The Output panel generates a ready-to-use clamp(min, preferred, max) expression.",
+        "Copy the value and paste it directly into a CSS property like font-size or padding.",
+      ],
+      useCases: [
+        "Build fluid typography that scales smoothly from a mobile-friendly minimum to a desktop maximum without breakpoint jumps.",
+        "Generate responsive padding or margin values that grow proportionally with viewport width.",
+        "Replace a stack of media-query font-size overrides with a single clamp() declaration.",
+        "Prototype a design system's type scale by testing different min/max pixel pairs quickly.",
+      ],
+      limitations: [
+        "The maximum viewport width used for the calculation is fixed at 1200px and isn't configurable.",
+        "Output is always in px/vw units — it doesn't generate rem-based or container-query-relative clamp values.",
+        "It computes only single-property clamp() expressions; it doesn't generate a full fluid type scale across multiple heading levels at once.",
+      ],
+      privacy:
+        "All calculations run locally in your browser using plain JavaScript arithmetic — no values are sent to a server.",
+    },
     seo: {
       title: "CSS Clamp Generator - Free Browser Tool",
       description: "Generate responsive CSS clamp() values for fluid sizing. Free, local, no upload, no account required.",
@@ -5092,6 +6424,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for css minifier tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is CSS Minifier free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Shrinking a small CSS snippet for a code embed, style prototype, or quick inline <style> block before shipping it." },
+      { question: "What exactly does it remove?", answer: "It strips /* comments */, collapses all whitespace and line breaks into single spaces, and removes the space around { } : ; , and > characters." },
+      { question: "Does it rename or shorten CSS variable names, hex colors, or class selectors?", answer: "No. This is a whitespace-and-comment minifier only — it doesn't shorten hex colors (like #ffffff to #fff), merge duplicate rules, or rename custom properties the way a build-tool minifier like cssnano would." },
+      { question: "Is it safe for production stylesheets?", answer: "It's designed for small snippets, embeds, and prototypes. For a full production build, a build-time minifier integrated into your bundler will catch more optimizations and is easier to keep in a repeatable pipeline." },
+      { question: "Will it break CSS that relies on specific whitespace, like content properties?", answer: "Whitespace inside string values (e.g. content: \" \";) is preserved since the minifier only touches whitespace between selectors and declarations, not inside quoted strings." },
+      { question: "Can I paste an entire stylesheet, or just single rules?", answer: "Either works — there's no artificial size limit, though very large stylesheets are better handled by a build-tool minifier that can also merge and dedupe rules." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your CSS into the Input box — a single rule or a full snippet with multiple selectors.",
+        "The Output panel updates instantly with comments removed and whitespace collapsed.",
+        "Check that the minified result still parses correctly by eye — this is a text transform, not a CSS validator.",
+        "Click Copy to grab the compact version for an embed, prototype, or inline style block.",
+      ],
+      useCases: [
+        "Shrink a CSS snippet before embedding it inline in an HTML email or a CMS widget with a size limit.",
+        "Compact a quick style prototype for sharing in a code review comment or Slack message.",
+        "Reduce the size of a small third-party CSS override before pasting it into a customer's site.",
+        "Strip development comments out of a CSS file before a one-off deployment without setting up a build pipeline.",
+      ],
+      limitations: [
+        "This is a whitespace-and-comment minifier only — it doesn't shorten color values, merge duplicate selectors, or remove unused rules.",
+        "It's not a CSS validator; syntactically broken CSS will be minified as-is without any error reported.",
+        "For production-scale stylesheets, a build-time minifier integrated into your bundler will produce smaller, more thoroughly optimized output.",
+      ],
+      privacy:
+        "Your CSS is minified entirely in your browser using local regular-expression processing — nothing is uploaded or sent to a server.",
+    },
     seo: {
       title: "CSS Minifier - Free Browser Tool",
       description: "Minify CSS snippets by removing comments and whitespace. Free, local, no upload, no account required.",
@@ -5120,6 +6483,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for html minifier tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is HTML Minifier free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Compacting a small HTML snippet — an email template, a widget embed, or a static page fragment — before pasting it somewhere space-constrained." },
+      { question: "What exactly does it remove?", answer: "It strips <!-- HTML comments -->, collapses whitespace between adjacent tags (>   < becomes ><), and reduces runs of two or more spaces down to one." },
+      { question: "Will it break whitespace-sensitive elements like <pre> or inline scripts?", answer: "It can. Because the minifier collapses whitespace between all tags indiscriminately, content inside <pre>, <textarea>, or formatted <code> blocks can lose meaningful spacing — review those sections after minifying." },
+      { question: "Does it minify inline CSS and JavaScript inside <style> and <script> tags?", answer: "No. It only processes HTML markup and whitespace — CSS inside <style> tags and JS inside <script> tags pass through unchanged, aside from surrounding whitespace collapse." },
+      { question: "Does it remove optional closing tags or attributes to shrink further?", answer: "No — this minifier only removes comments and collapses whitespace. It doesn't rewrite markup structure, drop optional tags, or shorten attribute syntax the way a build-tool HTML minifier does." },
+      { question: "Is this safe for a full production page?", answer: "It's best suited to small snippets and embeds where you can visually verify the result. For a full page or build pipeline, a dedicated build-time HTML minifier gives more control and avoids surprises in whitespace-sensitive sections." },
+    ],
+    content: {
+      howToUse: [
+        "Paste your HTML snippet into the Input box.",
+        "The Output panel updates instantly, with comments stripped and whitespace between tags collapsed.",
+        "Check the result for any whitespace-sensitive sections, like <pre> blocks, that may have been affected.",
+        "Click Copy to grab the compacted markup for your embed, template, or fragment.",
+      ],
+      useCases: [
+        "Compact an HTML email template's markup before pasting it into an email service provider's editor.",
+        "Shrink a widget or embed snippet that will be inserted into a CMS with limited character allowances.",
+        "Strip development comments out of a static HTML fragment before a quick, one-off deployment.",
+        "Clean up whitespace in HTML copied from a design tool or WYSIWYG editor before sharing it.",
+      ],
+      limitations: [
+        "Collapsing whitespace between all tags can alter rendering inside whitespace-sensitive elements like <pre>, <textarea>, or formatted <code> blocks — review those sections after minifying.",
+        "It does not minify CSS inside <style> tags or JavaScript inside <script> tags, only the surrounding HTML markup.",
+        "It doesn't restructure markup (removing optional tags, shortening attributes) the way a full build-tool HTML minifier does — it only strips comments and collapses whitespace.",
+      ],
+      privacy:
+        "Your HTML is minified entirely in your browser using local regular-expression processing — nothing is uploaded or sent to a server.",
+    },
     seo: {
       title: "HTML Minifier - Free Browser Tool",
       description: "Minify HTML snippets by removing comments and extra whitespace. Free, local, no upload, no account required.",
@@ -5148,6 +6542,38 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for markdown table generator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is Markdown Table Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Building a Markdown table from scratch by typing headers and rows separately, rather than starting from an existing CSV file." },
+      { question: "How do I enter headers and rows?", answer: "Type one header per line in the Input box (for example Name, then Email on the next line). In Option A, type one row per line with values separated by commas (for example Ada,ada@example.com)." },
+      { question: "How is this different from the CSV to Markdown Table tool?", answer: "That tool converts an existing comma-separated block of text where headers and data are already combined. This tool keeps headers and row data in two separate fields, which is more convenient when typing a table by hand rather than pasting one." },
+      { question: "Does it align or pad the columns?", answer: "No — it generates standard, unpadded Markdown table syntax. Markdown renderers don't require aligned pipes, so the table displays correctly regardless." },
+      { question: "Can I control per-column alignment (left, right, center)?", answer: "No, every column uses the default separator (---), which most renderers treat as left-aligned. There's no per-column alignment control." },
+      { question: "What happens if a row has more or fewer commas than there are headers?", answer: "The table is generated as-is, so mismatched row lengths will visually shift out of alignment with the header columns — double-check that each row has the same number of comma-separated values as you have headers." },
+    ],
+    content: {
+      howToUse: [
+        "Type each column header on its own line in the Input box (e.g. Name, then Email on the next line).",
+        "Type each row's values, comma-separated, one row per line in Option A (e.g. Ada,ada@example.com).",
+        "The Output panel builds the full Markdown table automatically, including the header separator row.",
+        "Check that every row has the same number of comma-separated values as you have headers.",
+        "Click Copy and paste the table into your README, wiki, or documentation.",
+      ],
+      useCases: [
+        "Hand-build a small comparison or feature table for a README without pasting from a spreadsheet.",
+        "Quickly draft a Markdown table of API parameters while writing documentation.",
+        "Create a table of options or settings for a GitHub issue or pull request description.",
+        "Sketch out a data table structure before populating it with real values.",
+      ],
+      limitations: [
+        "There's no per-column alignment control — every column uses the default left-aligned separator.",
+        "Row values are split on plain commas, so a value containing a comma will be split into an extra column incorrectly.",
+        "Rows with a different number of values than there are headers won't be flagged — the table will just render misaligned.",
+      ],
+      privacy:
+        "Your headers and row data are processed entirely in your browser's memory — nothing is uploaded or sent to a server.",
+    },
     seo: {
       title: "Markdown Table Generator - Free Browser Tool",
       description: "Build Markdown tables from headers and rows. Free, local, no upload, no account required.",
@@ -5176,6 +6602,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for uuid validator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is UUID Validator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Quickly checking whether a string you pulled from a log, database row, or API response is a syntactically valid UUID before you build logic around it." },
+      { question: "What does 'Valid UUID v#' actually verify?", answer: "It checks the string against the standard 8-4-4-4-12 hex format with RFC 4122 variant bits, and reports the version digit (1-8) found in the third group. It's a format check, not a lookup against any registry." },
+      { question: "Which UUID versions does it recognize?", answer: "Versions 1 through 8, covering time-based (v1), DCE security (v2), name-based MD5/SHA-1 (v3/v5), random (v4), and newer time-ordered formats (v6/v7/v8)." },
+      { question: "Does it check the UUID against a real database or registry?", answer: "No. It only validates format — hyphen placement, hex characters, version digit, and variant bits. It cannot tell you whether that UUID corresponds to a real, existing record anywhere." },
+      { question: "Will it flag a UUID with uppercase letters as invalid?", answer: "No — the check is case-insensitive, so uppercase and lowercase hex characters are both accepted as valid." },
+      { question: "What counts as an 'Invalid UUID'?", answer: "Anything that doesn't match the exact 36-character pattern: wrong length, missing hyphens in the wrong places, non-hex characters, or a version/variant digit outside the valid ranges." },
+    ],
+    content: {
+      howToUse: [
+        "Paste the UUID string you want to check into the Input box.",
+        "The Output panel updates instantly with either 'Valid UUID v#' (showing the detected version) or 'Invalid UUID'.",
+        "Use the version number to confirm you're working with the UUID type your system expects (e.g. v4 random IDs vs v7 time-ordered IDs).",
+        "If it reports invalid, check for missing hyphens, wrong length, or non-hex characters copied in by mistake.",
+      ],
+      useCases: [
+        "Confirm a value copied from a log file or error message is actually a well-formed UUID before searching for it in a database.",
+        "Check which UUID version an API or library is generating (v4 random vs v7 time-ordered) by pasting a sample ID.",
+        "Catch a truncated or corrupted UUID pasted from a spreadsheet cell that got reformatted.",
+        "Validate UUID format in test fixtures or seed data before running them against schema constraints.",
+      ],
+      limitations: [
+        "This checks format only — hyphen placement, hex characters, and version/variant bits — it does not verify the UUID exists in any database or system.",
+        "It validates one string at a time; there's no batch mode for checking a list of UUIDs at once.",
+        "It recognizes the standard RFC 4122-style format only, not non-standard or vendor-specific identifier variants that resemble UUIDs.",
+      ],
+      privacy:
+        "The UUID string is checked entirely in your browser using a local regular expression — nothing is sent to a server or logged.",
+    },
     seo: {
       title: "UUID Validator - Free Browser Tool",
       description: "Validate UUID strings and identify the UUID version. Free, local, no upload, no account required.",
@@ -5204,6 +6661,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for ulid generator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is ULID Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Generating sortable, time-ordered identifiers for test data, event logs, or database seed records without adding a ULID library to your project." },
+      { question: "What is a ULID and how is it different from a UUID?", answer: "A ULID is a 26-character identifier that encodes a timestamp in its first 10 characters, so ULIDs generated later sort lexicographically after earlier ones — unlike random UUIDv4s, which sort in no meaningful order." },
+      { question: "How many ULIDs can I generate at once?", answer: "Type a number into the Input box (defaults to 5) to generate that many ULIDs in one batch, each on its own line in the output." },
+      { question: "How is the randomness generated?", answer: "The random portion of each ULID uses the browser's crypto.getRandomValues() API, which is cryptographically strong — not Math.random()." },
+      { question: "Are ULIDs generated in the same millisecond guaranteed to sort correctly?", answer: "Their timestamp portion will be identical, so ordering between them falls entirely on the random suffix, which is not monotonic here — for guaranteed intra-millisecond ordering you'd need a monotonic ULID implementation, which this tool does not provide." },
+      { question: "Can I use these ULIDs as primary keys in a production database?", answer: "The format matches the ULID spec and is safe to use, but since generation happens per browser session, you're responsible for ensuring uniqueness the same way you would with any client-generated identifier — check your database's insert path for collision handling." },
+    ],
+    content: {
+      howToUse: [
+        "Type the number of ULIDs you want to generate into the Input box (defaults to 5 if left blank).",
+        "The Output panel generates that many ULIDs instantly, each on its own line, sorted in generation order.",
+        "Each ULID encodes the current timestamp in its first 10 characters and a random suffix in the remaining 16.",
+        "Click Copy to grab the full batch for use as test data, seed records, or event IDs.",
+      ],
+      useCases: [
+        "Generate a batch of sortable IDs for seeding a test or staging database.",
+        "Create event or log identifiers that sort naturally by creation time without a separate timestamp column.",
+        "Produce sample primary keys for a schema design or API mockup that uses ULIDs instead of UUIDs.",
+        "Quickly get a single ULID to paste into a manual test case or bug report.",
+      ],
+      limitations: [
+        "ULIDs generated within the same millisecond share an identical timestamp prefix and are not guaranteed to sort monotonically by their random suffix.",
+        "Generation is a one-off browser action — there's no persistence, history, or way to regenerate a previously seen ULID.",
+        "It does not integrate with a database or API; you copy the generated values and use them elsewhere manually.",
+      ],
+      privacy:
+        "ULIDs are generated entirely in your browser using the Web Crypto API's random number generator — nothing is sent to or stored on a server.",
+    },
     seo: {
       title: "ULID Generator - Free Browser Tool",
       description: "Generate sortable ULID identifiers locally. Free, local, no upload, no account required.",
@@ -5232,6 +6720,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for luhn validator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is Luhn Validator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Catching typos in a manually entered card number, IMEI, or other Luhn-checked identifier before it's submitted or stored, by running the same checksum algorithm those systems use." },
+      { question: "What is the Luhn algorithm actually checking?", answer: "It's a simple checksum: starting from the rightmost digit, every second digit is doubled (subtracting 9 if the result exceeds 9), then all digits are summed. If the total is divisible by 10, the number passes." },
+      { question: "Does 'Valid Luhn checksum' mean the card is real and active?", answer: "No. It only means the digit sequence is mathematically self-consistent under the Luhn formula — the same property every real card number has, but so does an enormous number of numbers nobody issued. It says nothing about whether an account exists, is active, or belongs to anyone." },
+      { question: "What kinds of numbers use Luhn checksums?", answer: "Credit and debit card numbers, IMEI numbers for mobile devices, Canadian Social Insurance Numbers, and several other identifier formats that include a Luhn check digit as their final digit." },
+      { question: "Does it ignore spaces and dashes in the input?", answer: "Yes — non-digit characters are stripped before the checksum runs, so formats like '4242 4242 4242 4242' or '4242-4242-4242-4242' work the same as a plain digit string." },
+      { question: "Why does a very short input always fail?", answer: "The algorithm requires at least two digits to compute a meaningful checksum; anything shorter is reported as invalid automatically." },
+    ],
+    content: {
+      howToUse: [
+        "Paste the card-like number into the Input box — spaces and dashes are stripped automatically.",
+        "The Output panel instantly reports 'Valid Luhn checksum' or 'Invalid Luhn checksum'.",
+        "Use a valid result to confirm the digit sequence is internally consistent, not that the account is real.",
+        "Use an invalid result to catch a likely typo before the number is submitted somewhere.",
+      ],
+      useCases: [
+        "Catch a transposed or mistyped digit in a card number entered manually into a test form.",
+        "Verify a sample or test card number used in a QA environment actually passes the same checksum production systems check.",
+        "Check whether an IMEI or other Luhn-checked identifier is internally consistent before further lookup.",
+        "Teach how card-validation checksums work without needing a real card number.",
+      ],
+      limitations: [
+        "It validates the checksum only — it cannot confirm a card is real, active, unexpired, or belongs to any account.",
+        "It doesn't identify the card network (Visa, Mastercard, etc.) or check length against network-specific rules.",
+        "It checks one number at a time; there's no batch mode for validating a list.",
+      ],
+      privacy:
+        "The number is checked entirely in your browser using local arithmetic — nothing is transmitted, logged, or stored on a server.",
+    },
     disclaimer: "This tool validates only the Luhn checksum. It does not verify whether a card or account exists.",
     seo: {
       title: "Luhn Validator - Free Browser Tool",
@@ -5261,6 +6780,37 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for mime type lookup tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is MIME Type Lookup free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "Quickly confirming the Content-Type header value for a common file extension when configuring an upload handler, API response, or static file server." },
+      { question: "How many file types does it recognize?", answer: "It covers a curated set of common web and document extensions — html, css, js, json, csv, txt, xml, pdf, png, jpg/jpeg, webp, svg, mp4, zip, and wasm. It is not an exhaustive IANA MIME type registry." },
+      { question: "Can I paste a full filename instead of just the extension?", answer: "Yes — type a full filename like report.pdf or photo.jpeg and the tool extracts the extension after the last dot automatically." },
+      { question: "What happens with an unrecognized extension?", answer: "It returns 'Unknown MIME type for .ext' rather than guessing — this tool only reports types from its built-in list, it doesn't infer types from unlisted extensions." },
+      { question: "Is the lookup case-sensitive?", answer: "No — extensions are lowercased before matching, so .JPG, .Jpg, and .jpg all resolve to the same result." },
+      { question: "Does it inspect the actual file content to detect its type?", answer: "No. It only looks at the extension text you type — it does not read file bytes, magic numbers, or actual file content, so a mislabeled extension will return the type for that extension, not the file's real format." },
+    ],
+    content: {
+      howToUse: [
+        "Type a file extension (like json) or a full filename (like data.json) into the Input box.",
+        "The tool extracts the extension automatically and looks it up in its built-in table.",
+        "The Output panel shows the matching Content-Type value, or reports the extension as unrecognized.",
+        "Copy the MIME type for use in an HTTP header, upload validator, or config file.",
+      ],
+      useCases: [
+        "Look up the correct Content-Type header value when configuring a file upload endpoint.",
+        "Confirm the MIME type to set for a static asset served from a custom web server config.",
+        "Check what Content-Type a browser or API client should expect for a given file extension while debugging.",
+        "Quickly reference common MIME types while writing API documentation or validation logic.",
+      ],
+      limitations: [
+        "The lookup table covers a curated set of common extensions only — it is not a complete IANA MIME type registry and will report many valid extensions as unknown.",
+        "It matches on the extension text alone; it does not inspect actual file content or magic bytes to verify the real file type.",
+        "It looks up one extension at a time; there's no batch lookup for a list of filenames.",
+      ],
+      privacy:
+        "The extension or filename you type is matched entirely in your browser against a local lookup table — nothing is sent to a server.",
+    },
     seo: {
       title: "MIME Type Lookup - Free Browser Tool",
       description: "Find common MIME types from file extensions. Free, local, no upload, no account required.",
@@ -5289,6 +6839,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for user-agent parser tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is User-Agent Parser free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "It is best for reading a raw user-agent string from a server log, support ticket, or analytics export and getting a readable browser/OS/device/engine summary in one pass." },
+      {
+        question: "What happens if I leave the input blank?",
+        answer: "The tool falls back to your own browser's live user-agent string, so you can see how your current setup is detected before pasting one from elsewhere.",
+      },
+      {
+        question: "Which browsers and operating systems does it recognize?",
+        answer: "It distinguishes Microsoft Edge, Chrome, Firefox, and Safari by checking for their distinct tokens (Edg/, Chrome/, Firefox/, Safari/), and detects Windows, macOS, Android, iOS, and Linux from standard platform substrings. Anything outside those patterns is reported as Unknown rather than guessed.",
+      },
+      {
+        question: "How does it tell WebKit/Blink apart from Gecko?",
+        answer: "It looks for the AppleWebKit token (used by both Chromium-based browsers and Safari) versus the Gecko/ token used by Firefox. It does not distinguish WebKit from Blink specifically, since both share the AppleWebKit marker in their UA strings.",
+      },
+      {
+        question: "Can it parse spoofed or custom user-agent strings?",
+        answer: "It parses whatever text you provide using substring matching, so a spoofed or hand-edited string will produce whatever result its tokens imply — the tool has no way to verify authenticity.",
+      },
+      {
+        question: "Does it identify bots, crawlers, or specific device models?",
+        answer: "No. It only classifies device type as Mobile or Desktop using a simple pattern match. It does not have a bot/crawler signature database or a device-model lookup.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste a full user-agent string into the input box — for example, one copied from a server access log or a browser's DevTools network panel.",
+        "Leave the box empty to instead inspect the user-agent of the browser tab you're currently using.",
+        "Read the summary lines for Browser, OS, Device, and Engine, followed by the original raw string for reference.",
+        "Copy the output with the Copy button to paste into a bug report, support ticket, or QA note.",
+        "Repeat with different strings to compare how the same site is reported across browsers or devices.",
+      ],
+      useCases: [
+        "Decode an unfamiliar user-agent string from a server access log while investigating a traffic spike or bot pattern.",
+        "Attach a readable browser/OS/device summary to a bug report instead of pasting the raw, hard-to-read UA string.",
+        "Confirm which browser and OS a customer was using from a support ticket that includes their user-agent.",
+        "Sanity-check analytics segment definitions by parsing sample user-agent strings from your own traffic logs.",
+      ],
+      limitations: [
+        "Detection is based on substring matching against a small set of known tokens, not a full user-agent parsing database — uncommon or minority browsers will often show as Unknown.",
+        "It cannot detect bots, crawlers, or specific device models, and it cannot verify whether a user-agent string has been spoofed.",
+        "Browser and engine detection order can misclassify unusual combinations, since it checks for tokens like Edg/ and Chrome/ in a fixed priority sequence.",
+      ],
+      privacy:
+        "The string you paste (or your browser's own user-agent if you leave it blank) is parsed entirely in your browser's memory using plain string matching — nothing is sent to a server.",
+    },
     seo: {
       title: "User-Agent Parser - Free Browser Tool",
       description: "Parse browser, OS, device, and engine hints from a user-agent. Free, local, no upload, no account required.",
@@ -5317,6 +6914,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for chmod calculator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is chmod Calculator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "It is best for converting between rwx-style permission strings and octal chmod numbers when writing deployment scripts, Dockerfiles, or server setup notes." },
+      {
+        question: "How does the tool know which direction to convert?",
+        answer: "It checks the input pattern: if you type 3 or 4 digits from 0-7 (like 755 or 0644), it converts octal to rwx notation. If you type an rwx-style string (like rwxr-xr-x), it converts that to octal.",
+      },
+      {
+        question: "Does it support the setuid, setgid, or sticky bit?",
+        answer: "The 4-digit octal form is accepted as input, but only the last three digits (owner/group/other) are converted to rwx — the special-permissions digit is not reflected separately in the rwx output.",
+      },
+      {
+        question: "What if I paste a permission string with a leading file-type character, like -rwxr-xr-x or drwxr-xr-x?",
+        answer: "The tool scans for rwx-pattern triplets anywhere in the string, so a leading -, d, or l character is simply ignored and the three permission groups after it are still converted correctly.",
+      },
+      {
+        question: "Can I convert multiple permission sets at once?",
+        answer: "No. The tool works on a single value at a time — one octal number or one rwx string per conversion. Paste one value, read the result, then replace it with the next.",
+      },
+      {
+        question: "What does each octal digit mean?",
+        answer: "Each digit is the sum of read (4), write (2), and execute (1) for one permission group — owner, group, then others. For example, 6 means read+write (4+2), and 7 means read+write+execute (4+2+1).",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Type an octal permission value like 755 or 644 into the input box to see its rwx equivalent.",
+        "Or type an rwx-style string like rwxr-xr-x or rw-r--r-- to see its octal equivalent.",
+        "The tool detects which format you entered automatically — there's no mode switch to toggle.",
+        "Copy the converted result with the Copy button to paste directly into a chmod command or Dockerfile.",
+        "Try common presets like 755 (scripts/directories), 644 (regular files), or 600 (private files) to see their rwx breakdown.",
+      ],
+      useCases: [
+        "Translate a chmod value like 755 from a deployment guide into rwx notation to confirm exactly which permissions it grants before running it.",
+        "Convert an rwxr-xr-x string seen in an ls -l output back to its octal form for a Dockerfile COPY --chmod instruction or shell script.",
+        "Double-check permission settings while writing server setup documentation so the notes show both notations side by side.",
+        "Teach the relationship between octal chmod numbers and read/write/execute permissions to someone new to Linux system administration.",
+      ],
+      limitations: [
+        "It converts one value at a time — it does not batch-process a list of files or a full directory listing.",
+        "The special permissions digit (setuid/setgid/sticky bit) in 4-digit octal input is accepted but not represented in the rwx output.",
+        "It performs a pure notation conversion locally; it does not check or change actual file permissions on any real filesystem.",
+      ],
+      privacy:
+        "The value you type is converted entirely in your browser using local string and arithmetic operations — nothing is sent to a server.",
+    },
     seo: {
       title: "chmod Calculator - Free Browser Tool",
       description: "Convert Unix permissions between rwx and octal notation. Free, local, no upload, no account required.",
@@ -5345,6 +6989,52 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
       { question: "What is this tool best for?", answer: "It is best for email validator tasks where you need fast, copyable output without opening a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is Email Validator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
+      { question: "What is this tool best for?", answer: "It is best for a fast syntax sanity check on a single email address before you paste it into a form, CRM field, or CSV row." },
+      {
+        question: "What exactly does the validator check?",
+        answer: "It checks for a practical email shape: a non-space, non-@ local part, followed by @, followed by a domain that contains a dot and a top-level segment of at least two characters. It is a pragmatic pattern, not the full RFC 5322 grammar.",
+      },
+      {
+        question: "Does 'valid' mean the email address actually exists?",
+        answer: "No. A syntax pass only means the text is shaped like an email address. It does not check MX records, does not send a verification email, and cannot confirm the mailbox is real or currently active.",
+      },
+      {
+        question: "What does the normalized output show?",
+        answer: "For a syntactically valid address, the tool also prints a lowercase version of what you entered. Email domains are case-insensitive by convention and many systems lowercase the local part too, so this is useful for deduplicating lists.",
+      },
+      {
+        question: "Will it catch typos like 'gmial.com' or 'yaho.com'?",
+        answer: "No. Those are syntactically valid email shapes even though the domain is misspelled, so this tool will mark them valid. Catching known-domain typos requires a separate lookup list, which this tool does not include.",
+      },
+      {
+        question: "Can I validate a whole list of emails at once?",
+        answer: "No, the tool checks one address per run. For a CSV or list of addresses, you'd need to check them one at a time or use a dedicated batch tool.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Type or paste a single email address into the input box.",
+        "Read the result: 'Valid email' with a normalized lowercase version, or 'Invalid email syntax' if the pattern doesn't match.",
+        "Use the normalized output to standardize casing before storing an address in a spreadsheet or database.",
+        "Replace the input with the next address and repeat for each one you need to check.",
+      ],
+      useCases: [
+        "Quickly check a single address a customer typed into a contact form before manually following up.",
+        "Confirm the syntax of an email pulled from a resume, business card, or scanned document before entering it into a CRM.",
+        "Normalize casing on an email address (e.g., Ada@Example.COM to ada@example.com) before deduplicating a contact list.",
+        "Spot-check a handful of suspicious-looking rows from a CSV export before running a larger cleanup pass elsewhere.",
+      ],
+      limitations: [
+        "This is a syntax check only — it does not verify inbox ownership, deliverability, or MX/DNS records for the domain.",
+        "It cannot catch misspelled but syntactically valid domains (like gmial.com), disposable email domains, or role-based address patterns.",
+        "It validates one address at a time; there is no bulk or CSV upload mode.",
+      ],
+      privacy:
+        "The email address you type is checked entirely in your browser using a local regular expression — nothing is sent to a server or looked up externally.",
+    },
     disclaimer: "This tool checks syntax only. It does not verify inbox ownership, deliverability, or MX records.",
     seo: {
       title: "Email Validator - Free Browser Tool",
@@ -5374,6 +7064,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
       { question: "What is this tool best for?", answer: "It is best for youtube url parser workflows where you need quick, copyable output without using a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is YouTube URL Parser free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
+      { question: "What is this tool best for?", answer: "It is best for pulling the video ID, playlist ID, channel handle, and timestamp out of a messy YouTube link in one step, instead of reading the query string by eye." },
+      {
+        question: "Which YouTube URL formats does it understand?",
+        answer: "Standard watch URLs (youtube.com/watch?v=...), shortened youtu.be/ links, URLs with a list= playlist parameter, channel handle paths (/@name), and t= or start= timestamp parameters.",
+      },
+      {
+        question: "What happens if I paste an invalid or non-YouTube URL?",
+        answer: "The tool reports 'Invalid YouTube URL' if the text can't be parsed as a URL at all. If it's a valid URL but missing certain parts (like no playlist), those fields show 'Not found' instead of guessing.",
+      },
+      {
+        question: "Can it extract the video ID from a Shorts URL?",
+        answer: "It parses the video ID from the v= query parameter or from a youtu.be/ path. A youtube.com/shorts/VIDEO_ID path is not one of the patterns it checks, so the video ID field will show 'Not found' for Shorts links.",
+      },
+      {
+        question: "Does it resolve channel handles or video IDs to actual channel/video data?",
+        answer: "No. It only extracts the handle or ID text that's already present in the URL — it does not call the YouTube API to look up the channel name, video title, or any other metadata.",
+      },
+      {
+        question: "Why does the timestamp field sometimes show a value like '43s' instead of seconds?",
+        answer: "It reads the raw t= or start= parameter exactly as it appears in the URL. YouTube sometimes writes this as a plain integer (seconds) and sometimes as a string like 1m30s — the tool doesn't normalize the format, it passes through what's in the link.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste a YouTube URL into the input box — a watch link, a youtu.be short link, a playlist link, or a channel handle link.",
+        "Read the parsed output: Video ID, Playlist ID, Channel handle, Timestamp, and the normalized Host.",
+        "Leave the box empty to see a worked example using a sample watch URL with a timestamp.",
+        "Copy the result with the Copy button to reuse the video ID or timestamp in a script, spreadsheet, or embed code.",
+        "Paste a different URL format (e.g., a playlist link) to confirm which fields are present for that link type.",
+      ],
+      useCases: [
+        "Pull the video ID out of a long watch URL to build a custom embed code or thumbnail link (img.youtube.com/vi/VIDEO_ID/...).",
+        "Extract the playlist ID from a shared link so you can reference it in a playlist-management script.",
+        "Check the timestamp parameter on a shared link to confirm it points to the intended moment in the video before sending it to someone.",
+        "Get a channel handle from a pasted URL when compiling a list of creators for outreach or research notes.",
+      ],
+      limitations: [
+        "It does not recognize youtube.com/shorts/ URLs as a distinct format, so the video ID for Shorts links may not be extracted.",
+        "It only reads what's already encoded in the URL — it cannot look up video titles, durations, or channel names since it makes no network requests.",
+        "Malformed or partial URLs (missing a scheme, for example) will be reported as invalid rather than partially parsed.",
+      ],
+      privacy:
+        "The URL you paste is parsed entirely in your browser using the built-in URL API — nothing is sent to YouTube or any other server.",
+    },
     seo: {
       title: "YouTube URL Parser - Free Browser Tool",
       description: "Extract video IDs, playlist IDs, handles, and timestamps from YouTube URLs. Free, local, no upload, no account required.",
@@ -5402,6 +7139,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
       { question: "What is this tool best for?", answer: "It is best for youtube chapter generator workflows where you need quick, copyable output without using a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is YouTube Chapter Generator free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
+      { question: "What is this tool best for?", answer: "It is best for cleaning up a rough list of timestamps and titles into the exact MM:SS Chapter Name (or HH:MM:SS) format YouTube expects in a description." },
+      {
+        question: "What input format does it expect?",
+        answer: "One chapter per line, each starting with a timestamp (MM:SS or HH:MM:SS) followed by a space and the chapter title, like '01:25 Setup' or '1:02:10 Q&A'.",
+      },
+      {
+        question: "What happens if a line is missing a timestamp?",
+        answer: "A line that doesn't start with a recognizable MM:SS or HH:MM:SS pattern is kept as a chapter title but given a 00:00 placeholder timestamp — it does not calculate or guess a time for it. Fix the timestamp manually on any line that shows 00:00 unexpectedly.",
+      },
+      {
+        question: "Does it enforce YouTube's chapter rules, like requiring the first chapter to start at 00:00?",
+        answer: "No. It reformats whatever timestamps you provide into consistent spacing; it does not check whether your first chapter starts at 0:00, whether chapters are in ascending order, or whether each chapter is at least 10 seconds long — all of which YouTube requires to actually display chapters.",
+      },
+      {
+        question: "Can it calculate timestamps from video length or chapter durations?",
+        answer: "No. You need to supply the timestamps yourself (for example, from your editing timeline). The tool only reformats and cleans up lines you already have timestamps for.",
+      },
+      {
+        question: "Where do I paste the output?",
+        answer: "Paste the generated lines directly into your YouTube video description, ideally right after the main description text. YouTube automatically turns a properly formatted timestamp list into clickable chapters once the video is published or updated.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste your rough timestamp and title lines into the input box, one chapter per line (e.g., '00:00 Intro', '1:25 Setup').",
+        "The tool normalizes spacing between the timestamp and the title for every line automatically as you type.",
+        "Check each line in the output — any line that shows 00:00 unexpectedly means the original line didn't start with a recognizable timestamp.",
+        "Make sure your first chapter starts at 00:00 and timestamps are in ascending order, since YouTube requires this to display chapters.",
+        "Copy the formatted list with the Copy button and paste it into your video description on YouTube.",
+      ],
+      useCases: [
+        "Convert a rough list of timestamps jotted down while editing into clean, consistently spaced chapter markup ready to paste into a description.",
+        "Standardize spacing on chapter lists copied from a script or shared doc where formatting varies between team members.",
+        "Prepare chapter markup for a long-form tutorial or podcast upload before publishing, without hand-aligning each timestamp.",
+        "Quickly reformat chapter notes exported from video editing software into YouTube's expected timestamp-then-title layout.",
+      ],
+      limitations: [
+        "It does not validate YouTube's chapter requirements — first chapter at 0:00, ascending order, and a 10-second minimum per chapter still need to be checked manually.",
+        "Lines without a leading timestamp are not assigned a calculated time; they're marked 00:00 as a placeholder that needs manual correction.",
+        "It cannot generate timestamps from a video file or transcript — you must already know the times you want to mark.",
+      ],
+      privacy:
+        "Your timestamp and title lines are reformatted entirely in your browser using local text parsing — nothing is uploaded or sent to YouTube.",
+    },
     seo: {
       title: "YouTube Chapter Generator - Free Browser Tool",
       description: "Format timestamp lines into clean YouTube chapters. Free, local, no upload, no account required.",
@@ -5430,6 +7214,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
       { question: "What is this tool best for?", answer: "It is best for youtube tag extractor workflows where you need quick, copyable output without using a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is YouTube Tag Extractor free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
+      { question: "What is this tool best for?", answer: "It is best for scanning a video title, description, or script draft and surfacing both the hashtags already in it and the words repeated often enough to be candidate keywords." },
+      {
+        question: "How does it find hashtags versus keyword candidates?",
+        answer: "Hashtags are pulled with a pattern that matches any '#' followed by letters, numbers, or underscores, then deduplicated and lowercased. Keyword candidates are a separate pass: it lowercases the text, extracts words of 3+ characters, filters out a small stopword list, counts repeats, and returns the top 20 by frequency.",
+      },
+      {
+        question: "Is this pulling real YouTube video tags via the API?",
+        answer: "No. YouTube's actual (hidden) video tags are only accessible to the video owner via YouTube Studio or the API. This tool works only on text you paste — it extracts hashtags and repeated words from that text, not tags attached to a published video.",
+      },
+      {
+        question: "What counts as a 'keyword candidate'?",
+        answer: "Any word of at least 3 characters that appears in your pasted text and isn't in the built-in stopword list (common words like 'the', 'and', 'with', plus a few Portuguese equivalents). It's ranked purely by how often it repeats in your input — it does not check real search volume or competition.",
+      },
+      {
+        question: "Can it suggest new tags I haven't thought of?",
+        answer: "No. It only surfaces words and hashtags that are already present in the text you paste. It does not generate new keyword suggestions or pull related-search data from any external source.",
+      },
+      {
+        question: "Will this guarantee better video rankings?",
+        answer: "No. It's a lightweight text-analysis helper for spotting repeated terms and existing hashtags, not an SEO ranking tool. Actual search performance depends on many factors outside what this tool can measure.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste a video title, description, script, or outline into the input box.",
+        "Review the Hashtags section for every '#tag' already present in your text, deduplicated and lowercased.",
+        "Review the Keyword candidates list — the top 20 words (3+ letters) ranked by how often they repeat, shown with their counts.",
+        "Use the frequency counts to spot which terms dominate your draft, and add or remove hashtags/phrasing accordingly.",
+        "Copy the output with the Copy button to paste into a content-planning doc.",
+      ],
+      useCases: [
+        "Check a draft description for accidental keyword stuffing by seeing which words repeat most often before publishing.",
+        "Pull every hashtag already typed into a caption or description into one deduplicated, lowercase list for reuse elsewhere.",
+        "Compare keyword frequency across several video description drafts to decide which phrasing to keep.",
+        "Get a quick word-frequency snapshot of a competitor's public video description (pasted manually) to see which terms they repeat.",
+      ],
+      limitations: [
+        "It does not access YouTube's actual video tag metadata — it only analyzes the text you paste in, not a video's real (often hidden) tags.",
+        "Keyword ranking is based purely on repetition in your input; it has no connection to real search volume, competition, or YouTube's ranking algorithm.",
+        "The stopword list is small and mixes English and Portuguese terms, so some common filler words in other languages may still appear as 'candidates.'",
+      ],
+      privacy:
+        "Text you paste is analyzed entirely in your browser using local pattern matching and counting — nothing is sent to YouTube or any server.",
+    },
     seo: {
       title: "YouTube Tag Extractor - Free Browser Tool",
       description: "Extract hashtags and keyword candidates from YouTube text. Free, local, no upload, no account required.",
@@ -5458,6 +7289,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
       { question: "What is this tool best for?", answer: "It is best for youtube title counter workflows where you need quick, copyable output without using a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is YouTube Title Counter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
+      { question: "What is this tool best for?", answer: "It is best for checking whether a draft video title is likely to get cut off in search results or suggested-video thumbnails before you publish." },
+      {
+        question: "What counts as 'High', 'Medium', and 'Low' truncation risk?",
+        answer: "The tool flags titles over 70 characters as High risk, titles over 55 characters as Medium risk, and anything at or below 55 characters as Low risk. These thresholds approximate where YouTube commonly truncates titles across search results, suggested videos, and mobile layouts.",
+      },
+      {
+        question: "Why does YouTube's own limit say 100 characters, but this tool warns earlier?",
+        answer: "YouTube allows up to 100 characters when uploading, but titles are visually truncated with an ellipsis well before that in many placements — search results, related-video sidebars, and mobile cards typically cut off in the 55-70 character range. This tool warns at those practical display limits, not the upload limit.",
+      },
+      {
+        question: "Does the word count matter for YouTube SEO?",
+        answer: "The word count is shown for reference (useful for gauging title style and readability), but this tool doesn't score or optimize based on word count — it's a length and truncation check, not a keyword-density tool.",
+      },
+      {
+        question: "Can I check a whole list of title options at once?",
+        answer: "No, the tool evaluates one title at a time. Replace the input text with each candidate title to compare their character counts individually.",
+      },
+      {
+        question: "Does it check for banned words, clickbait, or policy issues?",
+        answer: "No. It only measures character length, word count, and truncation risk — it does not check titles against YouTube's content or community guidelines.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Type or paste your draft video title into the input box.",
+        "Read the Characters count and compare it to the truncation-risk thresholds shown in the output.",
+        "Check the Likely truncation risk label — Low, Medium, or High — to see if the title is safe across most display placements.",
+        "Check the Words count for a quick sense of title length and readability style.",
+        "Trim or rephrase the title and watch the counts update live until the risk drops to Low.",
+      ],
+      useCases: [
+        "Test a few title variations before publishing to see which stays under the 55-character 'safe' threshold for search and suggested-video placements.",
+        "Check whether a long, descriptive title will get cut off with an ellipsis on mobile before finalizing an upload.",
+        "Compare character counts across A/B title candidates when planning a thumbnail-and-title pairing.",
+        "Quickly verify a translated or localized title hasn't grown past a safe length compared to the original.",
+      ],
+      limitations: [
+        "Truncation risk is estimated from fixed character thresholds (55/70), not YouTube's actual per-placement rendering, which can vary by font, device, and layout.",
+        "It checks one title at a time; there is no batch mode for comparing a list of title options side by side.",
+        "It does not check titles for clickbait patterns, banned terms, or YouTube's content policies — only length and estimated truncation.",
+      ],
+      privacy:
+        "The title text you type is measured entirely in your browser using local character and word counting — nothing is sent to YouTube or any server.",
+    },
     seo: {
       title: "YouTube Title Counter - Free Browser Tool",
       description: "Count YouTube title length and estimate truncation risk. Free, local, no upload, no account required.",
@@ -5486,6 +7364,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
       { question: "What is this tool best for?", answer: "It is best for youtube description cleaner workflows where you need quick, copyable output without using a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is YouTube Description Cleaner free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
+      { question: "What is this tool best for?", answer: "It is best for tidying up a description that's been copy-pasted between templates and picked up trailing spaces, stacked blank lines, or links crammed into a paragraph." },
+      {
+        question: "What exactly does the cleaner change?",
+        answer: "It removes trailing whitespace at the end of each line, collapses three or more consecutive blank lines down to a single blank line, and moves any URL onto its own line (surrounded by blank lines) so links aren't buried mid-sentence. It also trims leading/trailing whitespace from the whole block.",
+      },
+      {
+        question: "Does it remove or rewrite hashtags?",
+        answer: "No, despite the name overlap with other tools, this cleaner does not strip or move hashtags — it only affects whitespace and URL placement. Hashtags stay exactly where you typed them.",
+      },
+      {
+        question: "Will it fix broken or malformed links?",
+        answer: "No. It only repositions URLs that already appear as complete http:// or https:// links onto their own line — it doesn't validate, shorten, or repair the links themselves.",
+      },
+      {
+        question: "Can it restructure a description into sections (like adding timestamps or headers)?",
+        answer: "No. It's a whitespace and link-formatting cleaner, not a structuring tool — it doesn't add headers, chapter markers, or reorder content. Pair it with the YouTube Chapter Generator if you need timestamp formatting.",
+      },
+      {
+        question: "Is it safe to run this on a description with special characters or emoji?",
+        answer: "Yes. It only operates on whitespace and URL patterns, so emoji, punctuation, and non-Latin text are left untouched.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste your video description draft into the input box, including any messy spacing or awkwardly placed links.",
+        "The tool automatically trims trailing whitespace from every line as you type or paste.",
+        "Stacked blank lines (three or more) are automatically collapsed down to a single blank line.",
+        "Any full URL in the text is moved onto its own line so it stands out and isn't buried mid-paragraph.",
+        "Copy the cleaned description with the Copy button and paste it into YouTube Studio.",
+      ],
+      useCases: [
+        "Clean up a description template that's been copy-pasted across dozens of videos and accumulated extra blank lines and trailing spaces.",
+        "Reformat a description where a link got typed in the middle of a sentence, giving it its own clearly visible line instead.",
+        "Standardize spacing before reusing a description as a starting template for a new upload.",
+        "Tidy a description exported from a script or notes app that added inconsistent line breaks.",
+      ],
+      limitations: [
+        "It does not touch hashtags, timestamps, or chapter markers — only whitespace and URL line placement.",
+        "It cannot detect or fix broken/malformed links; it only relocates URLs that are already well-formed.",
+        "It performs formatting cleanup only — it does not check description content against YouTube's policies or character limits.",
+      ],
+      privacy:
+        "Your description text is cleaned entirely in your browser using local text processing — nothing is uploaded or sent to YouTube.",
+    },
     seo: {
       title: "YouTube Description Cleaner - Free Browser Tool",
       description: "Clean spacing, links, and hashtags in YouTube descriptions. Free, local, no upload, no account required.",
@@ -5514,6 +7439,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
       { question: "What is this tool best for?", answer: "It is best for instagram hashtag extractor workflows where you need quick, copyable output without using a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is Instagram Hashtag Extractor free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
+      { question: "What is this tool best for?", answer: "It is best for pulling every hashtag out of a caption you've already written or copied, deduplicating them, and getting a clean list ready to reuse or cross-post." },
+      {
+        question: "How does it detect hashtags?",
+        answer: "It matches any '#' immediately followed by letters or numbers in any language script (using Unicode letter/number categories) plus underscores, so it correctly picks up hashtags with accented characters or non-Latin scripts, not just plain ASCII.",
+      },
+      {
+        question: "Does it remove duplicate hashtags?",
+        answer: "Yes. Every match is lowercased and deduplicated, so #Marketing and #marketing appearing twice in your caption will only show up once in the output.",
+      },
+      {
+        question: "Does it preserve the original capitalization of hashtags?",
+        answer: "No. All extracted hashtags are lowercased in the output, since Instagram hashtags are case-insensitive for matching purposes. If you need mixed-case tags (like #SmallBusiness for readability) for the actual post, re-type the casing after extracting.",
+      },
+      {
+        question: "Can I use this to prepare a hashtag set for cross-posting to TikTok or Twitter/X?",
+        answer: "Yes — since it just extracts and dedupes '#word' patterns from plain text, the output list works the same way regardless of which platform you originally copied the caption from or intend to post it to.",
+      },
+      {
+        question: "Does it check whether a hashtag is banned, shadowbanned, or has bot spam attached on Instagram?",
+        answer: "No. It performs text extraction only — it has no connection to Instagram's servers, so it cannot check hashtag health, follower counts, or moderation status.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste a caption or block of text containing hashtags into the input box.",
+        "The tool automatically extracts every '#word' pattern, including non-Latin scripts and accented characters.",
+        "Review the deduplicated, lowercased hashtag list shown as a single space-separated line in the output.",
+        "Copy the list with the Copy button to paste into a hashtag tracking sheet, a caption for a different post, or a cross-posting draft.",
+        "If no hashtags are found, the output will say 'No hashtags found' so you know the input didn't contain any.",
+      ],
+      useCases: [
+        "Pull the hashtag set out of a high-performing old caption to reuse or adapt for a new post.",
+        "Audit how many unique hashtags a draft caption actually uses after accounting for accidental duplicates.",
+        "Build a reusable hashtag list for a content calendar by extracting hashtags from several past captions and combining them.",
+        "Prepare a hashtag batch to adapt for a different platform when repurposing an Instagram caption elsewhere.",
+      ],
+      limitations: [
+        "It only extracts hashtags already typed in your text — it does not suggest new, trending, or related hashtags.",
+        "Output hashtags are always lowercased, so any deliberate capitalization for readability is not preserved and must be re-added manually.",
+        "It has no connection to Instagram's servers, so it cannot check hashtag popularity, ban status, or reach — it's a text tool only.",
+      ],
+      privacy:
+        "Caption text you paste is scanned entirely in your browser using a local pattern match — nothing is sent to Instagram or any server.",
+    },
     seo: {
       title: "Instagram Hashtag Extractor - Free Browser Tool",
       description: "Extract and dedupe hashtags from Instagram captions. Free, local, no upload, no account required.",
@@ -5542,6 +7514,53 @@ export const apps: AppDefinition[] = [
       { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
       { question: "What is this tool best for?", answer: "It is best for instagram caption formatter workflows where you need quick, copyable output without using a heavier app." },
     ],
+    faqExpanded: [
+      { question: "Is Instagram Caption Formatter free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
+      { question: "Does this tool access social media accounts or download media?", answer: "No. It only processes text or URLs you paste into the browser. It does not log in, scrape, or download third-party content." },
+      { question: "What is this tool best for?", answer: "It is best for taking a messy caption draft and splitting it into three clean pieces — plain caption text, @mentions, and #hashtags — while also cleaning up spacing." },
+      {
+        question: "How is this different from the Instagram Hashtag Extractor?",
+        answer: "The Hashtag Extractor only pulls hashtags out and returns a single deduped list. This formatter goes further: it also cleans up whitespace and blank lines, separates out @mentions into their own list, and returns a version of the caption with hashtags and mentions stripped out so you can see the plain text on its own.",
+      },
+      {
+        question: "What whitespace cleanup does it apply to the caption?",
+        answer: "It removes trailing spaces at the end of each line, collapses three or more blank lines down to one, and puts any bare URL on its own line — the same normalization used by the description cleaner tools, applied before the mentions and hashtags are split out.",
+      },
+      {
+        question: "Does it preserve the original capitalization of mentions and hashtags?",
+        answer: "Mentions keep their original casing exactly as typed. Hashtags, however, are lowercased and deduplicated in the Hashtags section, matching how Instagram treats hashtags as case-insensitive.",
+      },
+      {
+        question: "What does the 'Caption' section in the output actually contain?",
+        answer: "It's your cleaned caption text with every #hashtag and @mention removed, so you can read the plain message on its own — useful for checking readability or reusing the caption body without the tags attached.",
+      },
+      {
+        question: "Can it detect mentions with periods or underscores in the username?",
+        answer: "Yes. It matches '@' followed by letters, numbers, periods, and underscores, which covers standard Instagram username formatting.",
+      },
+    ],
+    content: {
+      howToUse: [
+        "Paste your caption draft — including hashtags and @mentions — into the input box.",
+        "The tool cleans trailing whitespace, collapses extra blank lines, and gives standalone URLs their own line automatically.",
+        "Review the Caption section for the plain text with hashtags and mentions stripped out.",
+        "Review the separate Mentions and Hashtags sections, each deduplicated (mentions keep original casing; hashtags are lowercased).",
+        "Copy the full formatted output, or copy just the section you need, to rebuild your final post caption.",
+      ],
+      useCases: [
+        "Split a caption copied from a shared doc into clean body text, mentions, and hashtags before rebuilding the post in Instagram's composer.",
+        "Check the readability of a caption's plain message by viewing it with hashtags and mentions temporarily removed.",
+        "Audit which accounts a draft caption tags and which hashtags it uses, as two separate lists, before publishing.",
+        "Clean up spacing and stray blank lines in a caption pasted from a notes app before finalizing the post.",
+      ],
+      limitations: [
+        "It always separates hashtags and mentions from the caption body — there is no option to keep them inline in the cleaned caption output.",
+        "Hashtags are lowercased and deduplicated in their own section, so intentional stylized capitalization is not preserved there.",
+        "It performs local text formatting only — it cannot verify that a mentioned account exists or preview how the caption will render on Instagram.",
+      ],
+      privacy:
+        "Your caption text is split and reformatted entirely in your browser using local text processing — nothing is sent to Instagram or any server.",
+    },
     seo: {
       title: "Instagram Caption Formatter - Free Browser Tool",
       description: "Clean Instagram captions and separate mentions and hashtags. Free, local, no upload, no account required.",
@@ -5572,6 +7591,36 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Can this guarantee exactly 50KB?", answer: "No. Image complexity and dimensions affect compression. The tool tries to get close and lets you adjust quality." },
       { question: "Are images uploaded to a server?", answer: "No. Compression runs inside your browser and the image stays on your device." },
     ],
+    faqExpanded: [
+      { question: "Can this guarantee exactly 50KB?", answer: "No. Image complexity, dimensions, and color depth all affect the final size. The tool aims close to 50KB and lets you tighten the quality slider or resize first if the first pass isn't small enough." },
+      { question: "Are images uploaded to a server?", answer: "No. Compression runs inside your browser using the Canvas API and the image never leaves your device." },
+      { question: "Why do so many forms cap uploads at 50KB specifically?", answer: "50KB is a very tight limit typically used for small profile-photo or avatar fields — thumbnails displayed at 80-150 pixels don't need much data, so services set a low ceiling to keep storage and bandwidth costs down." },
+      { question: "Will a 50KB image look pixelated?", answer: "At small display sizes (avatars, thumbnails) a 50KB JPG usually still looks sharp because the display itself is small. The same 50KB file blown up to full-screen size would show visible compression artifacts." },
+      { question: "What's the fastest way to hit 50KB on a large photo?", answer: "Resize the image's pixel dimensions down first (most avatar fields display well under 300x300px), then compress — shrinking dimensions reduces file size far more effectively than lowering quality alone on a full-resolution photo." },
+      { question: "Does this work for scanned ID photos with strict limits?", answer: "Yes, though scanned documents with fine text may lose readability at very low quality settings — check the preview carefully before submitting a compressed ID scan anywhere official." },
+    ],
+    content: {
+      howToUse: [
+        "Select or drag-and-drop your JPG, PNG, or WebP image.",
+        "The tool starts with a tight 50KB target preset applied automatically.",
+        "If the result is still above 50KB, reduce the image's pixel dimensions before compressing again — this is usually the fastest way to hit a target this small.",
+        "Preview the compressed result and compare it against the original before downloading.",
+      ],
+      useCases: [
+        "Meet a strict 50KB avatar or profile-photo limit on a signup form or account settings page.",
+        "Shrink a headshot for a directory listing or forum profile with a tight upload cap.",
+        "Fit a small logo or icon under a CMS field's byte-size restriction.",
+        "Prepare a thumbnail-sized image for a form that rejects anything larger than 50KB.",
+      ],
+      limitations: [
+        "50KB is a very aggressive target — detailed or large-dimension photos often need resizing, not just quality reduction, to reach it.",
+        "PNG images compress less than JPG at this target since PNG is lossless; converting to JPG usually reaches 50KB with better visual results.",
+        "Fine text or small details (as in scanned documents) can become hard to read at the quality level needed to hit 50KB.",
+      ],
+      privacy:
+        "Compression happens entirely in your browser using the Canvas API. Your image is never uploaded to a server.",
+    },
+    disclaimer: "This tool targets roughly 50KB, but exact output is not guaranteed — very detailed or large images may need resizing first.",
     seo: {
       title: "Compress Image to 50KB - Free Online Image Compressor",
       description: "Compress JPG, PNG, or WebP images toward 50KB in your browser. Free local image compression with no upload and no account.",
@@ -5659,6 +7708,36 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Is 200KB always possible?", answer: "Not always. Very large or detailed images may need resizing before compression can reach that target." },
       { question: "Can I control quality?", answer: "Yes. Use the quality slider and run compression again until the output is close to your target." },
     ],
+    faqExpanded: [
+      { question: "Is 200KB always possible?", answer: "Not always. Very large or highly detailed images may need resizing before compression can reach that target without visible quality loss." },
+      { question: "Can I control quality?", answer: "Yes. Use the quality slider and run compression again until the output is close to your target size." },
+      { question: "Why is 200KB a common limit for application portals?", answer: "Government and college application systems, HR onboarding forms, and visa/passport photo uploaders frequently set 200KB as a middle-ground cap — loose enough to keep a document photo legible, tight enough to control storage on older government IT systems." },
+      { question: "Is 200KB enough to keep a document photo readable?", answer: "Usually yes. 200KB gives noticeably more headroom than a 50-100KB target, so most scanned documents and ID photos stay legible without needing aggressive quality reduction." },
+      { question: "Should I resize before compressing to 200KB?", answer: "For very large source photos (modern phone cameras often produce 10-30 MB images), resizing to a more reasonable pixel width first makes it much easier to land near 200KB without over-compressing." },
+      { question: "Does this differ from the 100KB version?", answer: "It's the same underlying compressor with a looser 200KB starting target — useful when your specific form's limit is 200KB rather than 100KB, so you don't have to manually adjust the slider from scratch." },
+    ],
+    content: {
+      howToUse: [
+        "Select or drag-and-drop your JPG, PNG, or WebP image.",
+        "The tool applies a 200KB target preset automatically.",
+        "Preview the result — 200KB usually preserves more visible detail than tighter targets like 50KB or 100KB.",
+        "Adjust the quality slider if you need to get closer to the limit, then download.",
+      ],
+      useCases: [
+        "Meet a 200KB attachment limit on a government or university application portal.",
+        "Upload a passport or visa photo to a system with a moderate file-size cap.",
+        "Fit a product or listing photo under a marketplace's upload restriction.",
+        "Prepare a document scan for an HR onboarding form without losing legibility.",
+      ],
+      limitations: [
+        "Very high-resolution or highly detailed photos may still need resizing to comfortably reach 200KB.",
+        "PNG files compress less aggressively than JPG at this target since PNG is lossless by design.",
+        "Actual output size varies by image content — two similarly sized photos can compress very differently.",
+      ],
+      privacy:
+        "Compression happens entirely in your browser using the Canvas API. Your image is never uploaded to a server.",
+    },
+    disclaimer: "This tool targets roughly 200KB, but exact output is not guaranteed and very large or detailed images may need resizing first.",
     seo: {
       title: "Compress Image to 200KB - Free Online Compressor",
       description: "Compress JPG, PNG, or WebP images toward 200KB locally. Free browser-based image size reducer with no server upload.",
@@ -5686,6 +7765,36 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Can every JPG be compressed to 100KB?", answer: "No. Some images need resizing or stronger quality reduction to get close to 100KB." },
       { question: "Is this different from the image compressor?", answer: "It uses the same compressor with a JPG-focused page and 100KB preset." },
     ],
+    faqExpanded: [
+      { question: "Can every JPG be compressed to 100KB?", answer: "No. Some images need resizing or stronger quality reduction to get close to 100KB, especially high-resolution photos with lots of fine detail or noise." },
+      { question: "Is this different from the image compressor?", answer: "It uses the same underlying compressor with a JPG-focused page and 100KB preset applied by default, so you don't have to pick the format or target manually." },
+      { question: "Why is JPG specifically easier to shrink than PNG at 100KB?", answer: "JPG uses lossy compression designed for photographs — it discards imperceptible detail to save space. PNG is lossless, so it can only shrink by re-encoding more efficiently, not by discarding data, which limits how small a PNG can get." },
+      { question: "What JPG quality setting is a good starting point for social media uploads?", answer: "Quality 75-85 usually keeps a JPG well under 100KB for typical social-post dimensions while remaining visually clean — most social platforms also re-compress on their end, so starting too low can compound quality loss." },
+      { question: "Does compressing a JPG twice make it worse?", answer: "Yes. JPG is a lossy format, so re-compressing an already-compressed JPG a second or third time introduces additional artifacts. Always compress from the original source image, not from a copy that's already been through this tool." },
+      { question: "Will EXIF metadata affect the 100KB target?", answer: "EXIF metadata (camera settings, GPS location, timestamps) adds a small amount of size, typically a few kilobytes — compression in this tool focuses on the image data itself, which is the overwhelming majority of file size." },
+    ],
+    content: {
+      howToUse: [
+        "Select or drag-and-drop your JPG or JPEG image.",
+        "The tool applies a 100KB target preset tuned for JPG's lossy compression behavior.",
+        "Preview the compressed result and compare visible quality against the original.",
+        "Lower the quality slider further if the file is still above 100KB, then download.",
+      ],
+      useCases: [
+        "Shrink a JPG photo for a social media post or profile picture upload limit.",
+        "Prepare a JPG attachment for an email or web form with a 100KB cap.",
+        "Reduce a phone-camera photo before embedding it in a blog post or listing.",
+        "Fit a JPG scan or photo under a marketplace or classifieds upload restriction.",
+      ],
+      limitations: [
+        "High-resolution or highly detailed JPG photos may need resizing, not just quality reduction, to comfortably reach 100KB.",
+        "Repeated compression of the same JPG file accumulates visible quality loss — always start from the original.",
+        "Output size depends heavily on image content; two JPGs of the same dimensions can compress very differently.",
+      ],
+      privacy:
+        "Compression happens entirely in your browser using the Canvas API. Your image is never uploaded to a server.",
+    },
+    disclaimer: "This tool targets roughly 100KB for JPG images, but exact output is not guaranteed and some photos may need resizing first.",
     seo: {
       title: "Compress JPG to 100KB - Free Online JPG Compressor",
       description: "Compress JPG or JPEG images toward 100KB in your browser. Free local JPG compressor with preview and no upload.",
@@ -5713,6 +7822,36 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Why are PNG files harder to shrink?", answer: "PNG is lossless by design. Some files may need resizing or conversion to reach small targets." },
       { question: "Does this upload the PNG?", answer: "No. The file is processed locally in your browser." },
     ],
+    faqExpanded: [
+      { question: "Why are PNG files harder to shrink?", answer: "PNG uses lossless compression, so it can only shrink by re-encoding pixel data more efficiently — it can't discard detail the way JPG does. Some files may need resizing or conversion to a lossy format to reach small targets like 100KB." },
+      { question: "Does this upload the PNG?", answer: "No. The file is processed locally in your browser using the Canvas API." },
+      { question: "Will compressing a PNG to 100KB destroy transparency?", answer: "No. PNG compression preserves the alpha (transparency) channel — this tool does not convert transparent PNGs to a non-transparent format automatically, so transparency stays intact." },
+      { question: "What kind of PNG compresses best toward 100KB?", answer: "Screenshots, UI graphics, and images with large flat-color areas or few distinct colors compress very well as PNG. Photographs saved as PNG compress poorly by comparison since they have continuous gradients and noise that lossless compression can't reduce much." },
+      { question: "Should I convert a PNG photo to JPG instead of compressing it?", answer: "If the image doesn't need transparency and is a photograph rather than a graphic, converting to JPG first (with the Image Format Converter) usually reaches 100KB with far better visual quality than forcing PNG compression alone." },
+      { question: "Why does the file barely shrink after compression?", answer: "If a PNG is already well-optimized (common for icons or exported UI assets), there may be little redundant data left to compress — in that case resizing the pixel dimensions is the more effective path to 100KB." },
+    ],
+    content: {
+      howToUse: [
+        "Select or drag-and-drop your PNG image.",
+        "The tool applies a 100KB target and compresses losslessly where possible.",
+        "If the file stays well above 100KB, consider converting to JPG first if transparency isn't required.",
+        "Preview the result and download once the size and quality are acceptable.",
+      ],
+      useCases: [
+        "Shrink a transparent logo or graphic for a web page without losing the transparent background.",
+        "Reduce a UI screenshot for a bug report or documentation page.",
+        "Fit a PNG icon or badge under a CMS or app-store asset size limit.",
+        "Prepare a PNG form image for an upload field with a 100KB restriction.",
+      ],
+      limitations: [
+        "PNG's lossless compression has a much narrower size-reduction range than JPG — some files won't reach 100KB without resizing.",
+        "Photographs saved as PNG compress poorly compared to JPG/WebP at the same visual quality.",
+        "Converting to another format is sometimes the more effective path when transparency isn't needed.",
+      ],
+      privacy:
+        "Compression happens entirely in your browser using the Canvas API. Your image is never uploaded to a server.",
+    },
+    disclaimer: "This tool targets roughly 100KB for PNG images, but exact output is not guaranteed — PNG's lossless compression has limited range.",
     seo: {
       title: "Compress PNG to 100KB - Free Browser PNG Compressor",
       description: "Compress PNG images toward 100KB locally in your browser. Free PNG size reducer with no uploads and no account.",
@@ -5740,6 +7879,36 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Can WebP always reach 100KB?", answer: "No. The final size depends on image dimensions, quality, and visual complexity." },
       { question: "Is this safe for private images?", answer: "Yes. The image is processed locally in the browser tab." },
     ],
+    faqExpanded: [
+      { question: "Can WebP always reach 100KB?", answer: "No. The final size depends on image dimensions, quality setting, and visual complexity — very large or detailed source images may need resizing first." },
+      { question: "Is this safe for private images?", answer: "Yes. The image is processed locally in the browser tab and never uploaded to a server." },
+      { question: "Why choose WebP over JPG or PNG for a 100KB target?", answer: "WebP typically produces 25-35% smaller files than JPG at equivalent visual quality, and unlike JPG it also supports transparency — so it often reaches 100KB with noticeably better detail retention than either JPG or PNG." },
+      { question: "Will every browser and platform accept a WebP upload?", answer: "Most modern browsers and CMS platforms support WebP natively, but some older tools, certain email clients, and a handful of legacy upload forms still expect JPG or PNG — check your target platform's accepted formats before relying on WebP." },
+      { question: "Is WebP a good choice for a CMS or blog with strict image limits?", answer: "Yes — WebP is widely used specifically for web publishing because it minimizes page-load weight while staying under typical CMS media-library size caps, often more effectively than the same image saved as JPG." },
+      { question: "Can I convert a JPG or PNG to WebP and then compress it here?", answer: "Yes — use the Image Format Converter to convert to WebP first if your source file is JPG or PNG, then compress it toward the 100KB target with this tool." },
+    ],
+    content: {
+      howToUse: [
+        "Select or drag-and-drop your WebP image (or convert a JPG/PNG to WebP first if needed).",
+        "The tool applies a 100KB target preset for WebP's compression behavior.",
+        "Preview the result — WebP usually retains more visible detail than JPG or PNG at the same file size.",
+        "Adjust quality if needed, then download the compressed WebP file.",
+      ],
+      useCases: [
+        "Prepare a web image that loads fast while staying under a CMS media-library size cap.",
+        "Shrink a product photo for an e-commerce listing that supports modern image formats.",
+        "Reduce a graphic that needs both transparency and small file size for a web page.",
+        "Optimize images for a website's Core Web Vitals / page-speed score.",
+      ],
+      limitations: [
+        "Not every platform accepts WebP uploads — check your destination's supported formats first.",
+        "Very large or highly detailed source images may still need resizing to comfortably reach 100KB.",
+        "Output size depends on image content — two WebP files of the same dimensions can compress differently.",
+      ],
+      privacy:
+        "Compression happens entirely in your browser using the Canvas API. Your image is never uploaded to a server.",
+    },
+    disclaimer: "This tool targets roughly 100KB for WebP images, but exact output is not guaranteed and depends on image content.",
     seo: {
       title: "Compress WebP to 100KB - Free Online WebP Compressor",
       description: "Compress WebP images toward 100KB locally in your browser. Free WebP compressor with preview and no upload.",
@@ -5816,6 +7985,36 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Why did my PDF get bigger?", answer: "Some PDFs are already optimized. The tool reports the result so you can decide whether to keep the original." },
       { question: "Does it reduce image quality?", answer: "No. This browser-safe version does not aggressively re-encode embedded images." },
     ],
+    faqExpanded: [
+      { question: "Why did my PDF get bigger?", answer: "Some PDFs are already well-optimized by the software that created them. The tool reports the actual result honestly so you can decide whether to keep the original or the processed copy." },
+      { question: "Does it reduce image quality?", answer: "No. This browser-safe version applies structural optimization only — it does not aggressively re-encode or degrade embedded images the way a server-side compressor might." },
+      { question: "Why is 200KB a common target for email and HR portals?", answer: "200KB is a frequent middle-ground cap for job-application portals, HR onboarding systems, and email attachments — tight enough to keep inboxes and legacy systems fast, loose enough to keep a text-based document fully readable." },
+      { question: "What kind of PDF reaches 200KB most easily?", answer: "Text-based documents (resumes, cover letters, contracts, forms with no scanned images) usually reach or start well under 200KB, since most of the file size in a typical PDF comes from embedded images, not text." },
+      { question: "My scanned PDF won't get anywhere near 200KB — why?", answer: "Scanned documents are essentially a sequence of embedded photos of each page. Structural optimization alone can't shrink that kind of file dramatically — you'd need image re-encoding (lowering scan resolution) to reach 200KB, which this browser-safe tool intentionally avoids to protect readability." },
+      { question: "Is this different from the 100KB or 500KB PDF compressor?", answer: "It's the same underlying compressor with a 200KB target framing — useful when your specific form or portal states a 200KB limit rather than 100KB or 500KB." },
+    ],
+    content: {
+      howToUse: [
+        "Select or drag in the PDF you want to reduce toward 200KB.",
+        "The tool runs browser-based structural optimization automatically.",
+        "Compare the original and optimized file sizes shown by the tool.",
+        "Download the optimized copy only if it fits your limit and still opens and displays correctly.",
+      ],
+      useCases: [
+        "Fit a resume or cover letter PDF under a job portal's 200KB attachment limit.",
+        "Prepare an HR onboarding document for a system with a moderate size cap.",
+        "Reduce a text-based contract or form before emailing it as an attachment.",
+        "Check whether structural optimization meaningfully shrinks a document before trying heavier tools.",
+      ],
+      limitations: [
+        "A 200KB result is not guaranteed — browser-safe optimization does not re-encode embedded images.",
+        "Scanned or image-heavy PDFs may remain well above 200KB since most of their size is image data.",
+        "Always open the downloaded file before submitting it to confirm it still displays correctly.",
+      ],
+      privacy:
+        "PDF processing happens in your browser. The document is not uploaded, stored, or sent to a remote compression service.",
+    },
+    disclaimer: "This tool tries to reduce PDF size toward 200KB, but exact output is not guaranteed and image-heavy PDFs may remain larger.",
     seo: {
       title: "Compress PDF to 200KB - Free Online PDF Tool",
       description: "Reduce PDF size toward 200KB locally in your browser. Free PDF compression with no upload, account, or server processing.",
@@ -5843,6 +8042,36 @@ const seoClusterApps: AppDefinition[] = [
       { question: "Is 500KB easier to reach than 100KB?", answer: "Usually, but not always. Scanned PDFs with large images may still remain above the target." },
       { question: "Can I use it for resumes?", answer: "Yes, if your resume is a PDF and you need a smaller local copy for upload." },
     ],
+    faqExpanded: [
+      { question: "Is 500KB easier to reach than 100KB?", answer: "Usually, but not always. 500KB gives noticeably more room for a text-heavy document or a resume with a headshot photo, though scanned PDFs with large embedded images may still remain above the target." },
+      { question: "Can I use it for resumes?", answer: "Yes — a 500KB target is a comfortable fit for most resume and cover-letter PDFs, including ones with a small headshot or a simple design, while still meeting most application portal limits." },
+      { question: "Why is 500KB a common attachment or storage limit?", answer: "500KB is a frequent cap for cloud storage quotas on free-tier accounts, résumé databases, and lightweight document-sharing platforms — generous enough for a multi-page document, small enough to keep bulk storage costs manageable." },
+      { question: "Will this preserve my resume's formatting and fonts?", answer: "Yes. Structural optimization removes redundant internal data but does not alter text, layout, or embedded fonts — the compressed PDF should look identical to the original when opened." },
+      { question: "What if my resume PDF already opens under 500KB?", answer: "If the file is already under the target, running it through the tool typically yields little or no further reduction — that's expected, since there's minimal redundant structural data left to optimize in an already-lean file." },
+      { question: "Does a multi-page document compress the same as a single page?", answer: "Structural optimization scales with the whole document, so a multi-page PDF with repeated fonts or styles across pages often sees a larger relative size reduction than a single simple page, since shared resources get deduplicated." },
+    ],
+    content: {
+      howToUse: [
+        "Select or drag in the PDF you want to reduce toward 500KB.",
+        "The tool runs browser-based structural optimization automatically.",
+        "Compare the original and optimized file sizes shown by the tool.",
+        "Download the optimized copy if it fits your needs and still displays correctly.",
+      ],
+      useCases: [
+        "Fit a resume or cover letter PDF under a job application portal's size limit.",
+        "Reduce a document before uploading it to a free-tier cloud storage account with a quota.",
+        "Shrink a multi-page report for easier email sharing.",
+        "Check whether structural optimization meaningfully reduces a specific document's size.",
+      ],
+      limitations: [
+        "Scanned or image-heavy PDFs may remain above 500KB since most of their size is embedded image data.",
+        "Already well-optimized PDFs may see little to no further reduction.",
+        "Always open the downloaded file before submitting it to confirm it still displays correctly.",
+      ],
+      privacy:
+        "PDF processing happens in your browser. The document is not uploaded, stored, or sent to a remote compression service.",
+    },
+    disclaimer: "This tool tries to reduce PDF size toward 500KB, but exact output is not guaranteed and image-heavy PDFs may remain larger.",
     seo: {
       title: "Compress PDF to 500KB - Free Browser PDF Compressor",
       description: "Compress PDF files toward 500KB locally in your browser. Free document size reducer with no upload required.",
