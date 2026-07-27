@@ -97,6 +97,7 @@ import HttpStatusCodesApp      from "@/tools/http-status-codes/HttpStatusCodesAp
 import ImageMetadataApp        from "@/tools/image-metadata/ImageMetadataApp";
 import ImageToTextApp          from "@/tools/image-to-text/ImageToTextApp";
 import PdfOcrApp               from "@/tools/pdf-ocr/PdfOcrApp";
+import SearchablePdfApp        from "@/tools/searchable-pdf/SearchablePdfApp";
 import JsonFlattenApp          from "@/tools/json-flatten/JsonFlattenApp";
 import JsonToXmlApp            from "@/tools/json-to-xml/JsonToXmlApp";
 import MarkdownPreviewApp      from "@/tools/markdown-preview/MarkdownPreviewApp";
@@ -150,7 +151,7 @@ const ALL_SLUGS = [
   "color-shades", "cron-parser", "css-unit-converter", "data-size-converter",
   "diff-viewer", "dummy-data-generator", "exif-viewer", "hex-dump",
   "html-formatter", "http-status-codes", "image-metadata", "image-to-text",
-  "jpg-to-text", "png-to-text", "screenshot-to-text", "pdf-ocr", "json-flatten",
+  "jpg-to-text", "png-to-text", "screenshot-to-text", "pdf-ocr", "searchable-pdf", "json-flatten",
   "json-to-xml", "markdown-preview", "meta-tag-generator", "morse-encoder",
   "number-formatter", "og-tag-generator", "qr-code-generator", "qr-code-reader",
   "screen-color-picker", "svg-to-png", "timezone-converter", "url-parser",
@@ -267,6 +268,7 @@ const ALL_SLUGS = [
 {slug === "png-to-text"            && <ImageToTextApp accept="image/png" sourceLabel="PNG image" client:visible />}
 {slug === "screenshot-to-text"     && <ImageToTextApp sourceLabel="screenshot" client:visible />}
 {slug === "pdf-ocr"                && <PdfOcrApp                  client:visible />}
+{slug === "searchable-pdf"         && <SearchablePdfApp           client:visible />}
 {slug === "json-flatten"           && <JsonFlattenApp             client:load />}
 {slug === "json-to-xml"            && <JsonToXmlApp               client:load />}
 {slug === "markdown-preview"       && <MarkdownPreviewApp         client:load />}
