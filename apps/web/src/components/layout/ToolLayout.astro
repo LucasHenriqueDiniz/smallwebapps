@@ -34,6 +34,8 @@ interface Props {
   fullWidth?: boolean;
   seoTitle?: string;
   seoDescription?: string;
+  /** Visible intro paragraph under the H1 (usually the app's longDescription). */
+  description?: string;
   features?: string[];
   faq?: AppFaq[];
   faqExpanded?: AppFaq[];
@@ -49,6 +51,7 @@ const {
   fullWidth = false,
   seoTitle,
   seoDescription,
+  description,
   features = [],
   faq = [],
   faqExpanded = [],
@@ -155,7 +158,7 @@ const breadcrumbSchema = {
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet" />
 </head>
 <body>
   <Header />
@@ -185,8 +188,30 @@ const breadcrumbSchema = {
 
     <!-- ── Tool content ── -->
     <div class={fullWidth ? 'tl-body-full' : 'tl-body'}>
-      <h1 class="tl-title">{name}</h1>
-      <slot />
+      <!-- Tool hero: title + the tool itself fill the fold; next section peeks below -->
+      <section class="tl-hero">
+        <div class="tl-hero-bg" aria-hidden="true"></div>
+        <div class="tl-head">
+          <h1 class="tl-title">{name}</h1>
+          {description && <p class="tl-desc">{description}</p>}
+        </div>
+        <div class="tl-tool">
+          <div class="tl-tool-chrome">
+            <span class="tl-dot tl-dot-r" aria-hidden="true"></span>
+            <span class="tl-dot tl-dot-y" aria-hidden="true"></span>
+            <span class="tl-dot tl-dot-g" aria-hidden="true"></span>
+            <span class="tl-chrome-title">{name}</span>
+            <span class="tl-chrome-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Runs locally
+            </span>
+          </div>
+          <div class="tl-tool-body">
+            <slot />
+          </div>
+        </div>
+      </section>
+      <slot name="related" />
       <ExpandedContent
         howToUse={content?.howToUse}
         useCases={content?.useCases}
@@ -261,18 +286,117 @@ body {
   padding: 32px 0 64px;
 }
 
+/* ── Tool hero: fills ~80% of the viewport so the tool is the main content
+      and the next section peeks below the fold ── */
+.tl-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* 80vh minus navbar (62px) + breadcrumb strip (44px) + body top padding */
+  min-height: calc(80vh - 138px);
+  min-height: calc(80svh - 138px);
+}
+.tl-hero-bg {
+  position: absolute;
+  inset: -32px -24px 0;
+  pointer-events: none;
+  background-image: radial-gradient(color-mix(in srgb, var(--text) 8%, transparent) 1.2px, transparent 1.2px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 60% at 50% 0%, black 15%, transparent 68%);
+  mask-image: radial-gradient(ellipse 85% 60% at 50% 0%, black 15%, transparent 68%);
+}
+/* ── The tool as an "app window": chrome bar + tinted stage body ── */
+.tl-tool {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--card-border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  box-shadow: 0 28px 60px -28px rgba(15, 23, 42, .22), 0 2px 10px rgba(15, 23, 42, .05);
+  overflow: hidden;
+}
+[data-theme="dark"] .tl-tool {
+  box-shadow: 0 28px 60px -28px rgba(0, 0, 0, .6), 0 2px 10px rgba(0, 0, 0, .3);
+}
+
+.tl-tool-chrome {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 16px;
+  background: var(--drop-header-bg);
+  border-bottom: 1px solid var(--card-border);
+  flex-shrink: 0;
+}
+.tl-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.tl-dot-r { background: #ff5f57; }
+.tl-dot-y { background: #febc2e; }
+.tl-dot-g { background: #28c840; }
+.tl-chrome-title {
+  flex: 1;
+  text-align: center;
+  font-size: .74rem;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 8px;
+}
+.tl-chrome-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: .67rem;
+  font-weight: 700;
+  color: #16a34a;
+  background: rgba(34, 197, 94, .1);
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+[data-theme="dark"] .tl-chrome-badge { color: #86efac; background: rgba(34, 197, 94, .13); }
+
+.tl-tool-body {
+  flex: 1;
+  min-width: 0;
+  padding: clamp(16px, 2.5vw, 28px);
+  background:
+    radial-gradient(100% 90% at 50% 0%, color-mix(in srgb, var(--blue) 5%, transparent), transparent 65%),
+    var(--bg);
+}
+
+.tl-head { position: relative; margin-bottom: 20px; }
 .tl-title {
-  margin: 0 0 16px 0;
+  margin: 0;
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2.2rem);
   font-weight: 800;
   line-height: 1.2;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
-.tl-body-full .tl-title { padding: 0 24px; }
+.tl-desc {
+  margin: 8px 0 0;
+  max-width: 760px;
+  font-size: .92rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.tl-body-full .tl-head { padding: 0 24px; }
 
 @media (max-width: 640px) {
   .tl-cat, .tl-sep { display: none; }
   .tl-body, .tl-body-full { padding: 16px 16px 48px; }
-  .tl-body-full .tl-title { padding: 0 16px; }
+  .tl-body-full .tl-head { padding: 0 16px; }
+  .tl-tool { border-radius: 16px; }
+  .tl-tool-chrome { padding: 9px 12px; }
+  .tl-chrome-title { display: none; }
+  .tl-chrome-badge { margin-left: auto; }
+  .tl-tool-body { padding: 12px; }
 }
 </style>

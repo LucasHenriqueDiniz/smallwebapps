@@ -21,6 +21,7 @@
   --orange: #ff6b35;
   --bg: #eef3fb;
   --shadow: 0 2px 16px rgba(0,0,0,0.08);
+  --font-display: 'Bricolage Grotesque', 'Inter', sans-serif;
 
   /* semantic */
   --nav-bg: #ffffff;

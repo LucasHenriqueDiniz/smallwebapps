@@ -3,25 +3,21 @@ interface Props {
   title: string;
   desc: string;
   href: string;
-  bg: string;
+  bg?: string;
   accent: string;
   icon: string;
   badge?: string;
 }
-const { title, desc, href, bg, accent, icon, badge } = Astro.props;
+const { title, desc, href, accent, icon, badge } = Astro.props;
 ---
 
-<a href={href} class="feat-card" style={`--card-bg: ${bg}; --card-accent: ${accent}`}>
-  {badge && <div class="feat-badge">{badge}</div>}
+<a href={href} class="feat-card" style={`--acc: ${accent}`}>
   <div class="feat-preview">
+    <div class="feat-rings" aria-hidden="true"></div>
     <div class="feat-icon-wrap">
       <Fragment set:html={icon} />
     </div>
-    <div class="feat-lines">
-      <div class="feat-line w-full"></div>
-      <div class="feat-line w-3x4"></div>
-      <div class="feat-line w-1x2"></div>
-    </div>
+    {badge && <div class="feat-badge">{badge}</div>}
   </div>
   <div class="feat-body">
     <h3>{title}</h3>
@@ -44,82 +40,87 @@ const { title, desc, href, bg, accent, icon, badge } = Astro.props;
   position: relative;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--shadow);
 }
 .feat-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.14);
-  border-color: var(--card-accent);
+  border-color: color-mix(in srgb, var(--acc) 55%, transparent);
+  box-shadow: 0 18px 40px -12px color-mix(in srgb, var(--acc) 35%, transparent);
 }
 .feat-card:active {
   transform: translateY(-2px) scale(0.98);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
   transition: transform 0.08s, box-shadow 0.08s;
 }
 
+/* ── Preview zone: accent tint + concentric rings behind the icon ── */
+.feat-preview {
+  position: relative;
+  height: 128px;
+  display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(120% 140% at 50% 0%, color-mix(in srgb, var(--acc) 12%, transparent), transparent 70%);
+  overflow: hidden;
+}
+.feat-rings {
+  position: absolute;
+  width: 220px; height: 220px;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--acc) 14%, transparent);
+  pointer-events: none;
+}
+.feat-rings::before, .feat-rings::after {
+  content: '';
+  position: absolute; border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--acc) 20%, transparent);
+}
+.feat-rings::before { inset: 34px; }
+.feat-rings::after  { inset: 66px; border-color: color-mix(in srgb, var(--acc) 28%, transparent); }
+
+.feat-icon-wrap {
+  position: relative; z-index: 1;
+  width: 56px; height: 56px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--acc) 85%, white 15%), var(--acc));
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 24px -6px color-mix(in srgb, var(--acc) 55%, transparent);
+  transition: transform .25s cubic-bezier(.32,.72,.32,1);
+}
+.feat-card:hover .feat-icon-wrap { transform: scale(1.08) rotate(-3deg); }
+
 .feat-badge {
   position: absolute;
-  top: 14px; right: 14px;
-  background: var(--card-accent);
-  color: white;
-  font-size: 0.65rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.06em;
+  top: 12px; right: 12px;
+  background: color-mix(in srgb, var(--acc) 12%, transparent);
+  color: var(--acc);
+  font-size: 0.63rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em;
   padding: 3px 9px; border-radius: 20px;
   z-index: 2;
 }
 
-.feat-preview {
-  padding: 24px 24px 16px;
-  display: flex; flex-direction: column;
-  align-items: flex-start; gap: 14px;
-  min-height: 140px;
-}
-.feat-icon-wrap {
-  width: 52px; height: 52px;
-  background: var(--card-accent);
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 14px color-mix(in srgb, var(--card-accent) 40%, transparent);
-}
-.feat-lines { width: 100%; display: flex; flex-direction: column; gap: 8px; }
-.feat-line  { height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; }
-.w-full { width: 100%; }
-.w-3x4  { width: 75%; }
-.w-1x2  { width: 50%; }
-
 .feat-body {
-  background: var(--card-bg);
-  padding: 18px 24px 22px;
-  border-top: 1px solid var(--border);
+  padding: 16px 20px 20px;
+  border-top: 1px solid var(--card-border);
   flex: 1;
   display: flex; flex-direction: column; gap: 6px;
 }
-.feat-body h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 0; }
-.feat-body p  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin: 0; flex: 1; }
+.feat-body h3 {
+  font-family: var(--font-display);
+  font-size: 1rem; font-weight: 700; color: var(--text);
+  letter-spacing: -0.01em; margin: 0;
+}
+.feat-body p  { font-size: 0.8rem; color: var(--muted); line-height: 1.55; margin: 0; flex: 1; }
 .feat-cta {
   display: inline-flex; align-items: center; gap: 4px;
-  font-size: 0.8rem; font-weight: 600;
-  color: var(--card-accent); margin-top: 6px;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--acc); margin-top: 6px;
 }
 .feat-arr { transition: transform 0.15s; }
 .feat-card:hover .feat-arr { transform: translateX(4px); }
 
-/* ── Dark mode — :global() escapes Astro scoping for ancestor selector ── */
-:global([data-theme="dark"]) .feat-card {
-  background: var(--surface-strong);
-  border-color: var(--border);
-}
-:global([data-theme="dark"]) .feat-card:hover {
-  border-color: var(--card-accent);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
-}
-:global([data-theme="dark"]) .feat-preview {
-  background: rgba(255,255,255,0.03);
-}
-:global([data-theme="dark"]) .feat-line {
-  background: rgba(255,255,255,0.07);
-}
-:global([data-theme="dark"]) .feat-body {
-  background: var(--surface-strong);
-  border-top-color: var(--border);
+@media (prefers-reduced-motion: reduce) {
+  .feat-card, .feat-icon-wrap, .feat-arr { transition: none; }
 }
 </style>

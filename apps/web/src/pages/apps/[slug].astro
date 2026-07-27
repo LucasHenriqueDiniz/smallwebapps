@@ -54,6 +54,7 @@ const categoryHref = `/apps?cat=${encodeURIComponent(app.category).replaceAll("%
   disclaimer={app.disclaimer}
   seoTitle={app.seo.title}
   seoDescription={app.seo.description}
+  description={app.longDescription}
   features={app.features}
   faq={app.faq}
   faqExpanded={app.faqExpanded}
@@ -61,6 +62,7 @@ const categoryHref = `/apps?cat=${encodeURIComponent(app.category).replaceAll("%
 >
   <ToolMount slug={app.slug} />
   <RelatedApps
+    slot="related"
     items={relatedApps}
     title={`More ${app.category} tools`}
     eyebrow="Similar tools"

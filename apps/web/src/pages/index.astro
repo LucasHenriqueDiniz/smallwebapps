@@ -106,7 +106,6 @@ const featured = [
     title: "JSON Formatter",
     desc: "Format, validate, and pretty-print JSON instantly — no server, no account.",
     href: "/apps/json-formatter",
-    bg: "#dbeafe",
     accent: "#2563eb",
     badge: "Dev Tool",
     icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>`,
@@ -115,7 +114,6 @@ const featured = [
     title: "AI Image Checker",
     desc: "Inspect images for AI-generation signals, metadata clues, and visual artifacts.",
     href: "/apps/ai-image-checker",
-    bg: "#ede9fe",
     accent: "#7c3aed",
     badge: "AI",
     icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>`,
@@ -124,7 +122,6 @@ const featured = [
     title: "YouTube Watch History Analyzer",
     desc: "Analyze your YouTube watch history from a Google Takeout export, fully local.",
     href: "/apps/tubetrace",
-    bg: "#dcfce7",
     accent: "#16a34a",
     badge: "YouTube",
     icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="23,7 16,12 23,17"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
@@ -133,7 +130,6 @@ const featured = [
     title: "CSV Cleaner",
     desc: "Preview, trim whitespace, and normalize CSV files — stays in the browser.",
     href: "/apps/csv-cleaner",
-    bg: "#fce7f3",
     accent: "#be185d",
     badge: "Data",
     icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
@@ -145,12 +141,10 @@ const featured = [
 
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
-  <div class="hero-bg">
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-    <div class="shape shape-3"></div>
-    <div class="shape shape-4"></div>
-    <div class="shape shape-5"></div>
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-glow hero-glow-blue"></div>
+    <div class="hero-glow hero-glow-orange"></div>
+    <div class="hero-dots"></div>
   </div>
   <div class="hero-content">
     <!-- Eyebrow -->
@@ -204,7 +198,7 @@ const featured = [
         </div>
         <div class="cat-arrow-row">
           <div class="cat-arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </div>
         </div>
         <div class="cat-featured">
@@ -232,10 +226,13 @@ const featured = [
 <!-- ═══════════════ POPULAR TOOLS ═══════════════ -->
 <section class="popular">
   <div class="popular-inner">
-    <h2 class="section-title-clone">Our Most Popular Tools</h2>
-    <p class="section-sub-clone">All free, browser-based, no sign-up required</p>
+    <div data-reveal>
+      <span class="section-eyebrow">Toolbox</span>
+      <h2 class="section-title-clone">Our Most Popular Tools</h2>
+      <p class="section-sub-clone">All free, browser-based, no sign-up required</p>
+    </div>
 
-    <div class="tabs">
+    <div class="tabs" data-reveal>
       <button class="tab-btn active" data-tab="All">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
         Top {POPULAR_TOOL_LIMIT}
@@ -247,7 +244,7 @@ const featured = [
       <button class="tab-btn" data-tab="Data Tools">Data</button>
     </div>
 
-    <div class="tools-grid" id="tools-grid">
+    <div class="tools-grid" id="tools-grid" data-reveal data-reveal-stagger>
       {popularTools.map(tool => (
         <ToolCard
           name={tool.name}
@@ -269,21 +266,21 @@ const featured = [
 <!-- ═══════════════ FEATURED TOOLS ═══════════════ -->
 <section class="featured">
   <div class="featured-inner">
-    <div class="featured-header">
+    <div class="featured-header" data-reveal>
       <div>
+        <span class="section-eyebrow" style="text-align:left">Featured</span>
         <h2 class="section-title-clone" style="text-align:left">Free Tools You'd Usually Pay For</h2>
         <p class="section-sub-sm">No limits. No sign-up. Open the tool and start immediately.</p>
       </div>
       <a href="/apps" class="see-all-btn">See all tools →</a>
     </div>
 
-    <div class="featured-cards">
+    <div class="featured-cards" data-reveal data-reveal-stagger>
       {featured.map(item => (
         <FeaturedCard
           title={item.title}
           desc={item.desc}
           href={item.href}
-          bg={item.bg}
           accent={item.accent}
           badge={item.badge}
           icon={item.icon}
@@ -304,7 +301,7 @@ const featured = [
 
   <div class="cta-inner">
     <!-- Left: copy -->
-    <div class="cta-copy">
+    <div class="cta-copy" data-reveal>
       <div class="cta-eyebrow">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Privacy first, always
@@ -321,7 +318,7 @@ const featured = [
     </div>
 
     <!-- Right: feature cards -->
-    <div class="cta-cards">
+    <div class="cta-cards" data-reveal data-reveal-stagger>
       <div class="cta-card">
         <div class="cta-card-icon" style="background:#1e40af20">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -417,6 +414,26 @@ const featured = [
   heroBtn?.addEventListener('click', doSearch);
   heroInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
 
+  // ── Scroll reveal — animation-based, so it never fights hover transitions ──
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target as HTMLElement;
+        if (el.hasAttribute('data-reveal-stagger')) {
+          Array.from(el.children).forEach((child, i) => {
+            (child as HTMLElement).style.setProperty('--d', `${Math.min(i * 60, 540)}ms`);
+          });
+        }
+        el.classList.add('revealed');
+        io.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+  }
+
   // Tab filter
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -431,15 +448,38 @@ const featured = [
   });
 </script>
 
+<style is:global>
+/* ── Scroll reveal (gated on .js-reveal so no-JS users always see content) ── */
+html.js-reveal [data-reveal]:not(.revealed):not([data-reveal-stagger]) { opacity: 0; }
+html.js-reveal [data-reveal].revealed:not([data-reveal-stagger]) {
+  animation: revealUp .6s cubic-bezier(.22,1,.36,1) backwards;
+}
+html.js-reveal [data-reveal-stagger]:not(.revealed) > * { opacity: 0; }
+html.js-reveal [data-reveal-stagger].revealed > * {
+  animation: revealUp .55s cubic-bezier(.22,1,.36,1) backwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(20px); }
+}
+</style>
+
 <style>
 *, *::before, *::after { box-sizing: border-box; }
 
 /* ─ shared ─ */
 .section-title-clone {
-  font-size: 2rem; font-weight: 800; text-align: center;
-  margin-bottom: 8px; color: var(--text); font-family: 'Inter', sans-serif;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem); font-weight: 800; text-align: center;
+  margin-bottom: 8px; color: var(--text); letter-spacing: -0.02em;
 }
 .section-sub-clone { text-align: center; color: var(--muted); margin-bottom: 36px; font-size: 0.95rem; }
+.section-eyebrow {
+  display: block; text-align: center;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 10px;
+}
 
 /* ══ HERO ══ */
 .hero {
@@ -448,19 +488,18 @@ const featured = [
   padding-bottom: 0; font-family: 'Inter', sans-serif;
 }
 .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-.shape {
-  position: absolute; opacity: 0.55;
-  animation: floatShape 5s ease-in-out infinite;
+.hero-glow {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px);
 }
-.shape-1 { width: 14px; height: 14px; background: #ff9800; top: 60px; left: 18%; border-radius: 3px; transform: rotate(45deg); animation-duration: 5.2s; }
-.shape-2 { width: 20px; height: 20px; background: #e91e90; top: 100px; left: 38%; border-radius: 50%; animation-delay: 0.8s; animation-duration: 4.5s; }
-.shape-3 { width: 16px; height: 16px; background: #9c27b0; top: 70px; right: 30%; border-radius: 4px; animation-delay: 1.4s; animation-duration: 6s; }
-.shape-4 { width: 24px; height: 24px; background: #ff6b35; top: 120px; right: 18%; border-radius: 4px; animation-delay: 0.4s; animation-duration: 4.8s; }
-.shape-5 { width: 12px; height: 12px; background: #4caf50; top: 200px; left: 10%; border-radius: 50%; animation-delay: 2s; animation-duration: 5.6s; }
-@keyframes floatShape {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  33%      { transform: translateY(-10px) rotate(8deg); }
-  66%      { transform: translateY(6px) rotate(-5deg); }
+.hero-glow-blue   { width: 560px; height: 560px; background: #1a73e8; top: -260px; left: 4%;  opacity: .16; }
+.hero-glow-orange { width: 440px; height: 440px; background: #f97316; top: -180px; right: 2%; opacity: .12; }
+.hero-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(color-mix(in srgb, var(--text) 9%, transparent) 1.2px, transparent 1.2px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 28%, black 25%, transparent 72%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 28%, black 25%, transparent 72%);
 }
 
 .hero-content {
@@ -494,31 +533,24 @@ const featured = [
 }
 
 .hero-title {
-  font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800;
-  color: var(--text); line-height: 1.25; margin-bottom: 18px;
-  letter-spacing: -0.5px;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem); font-weight: 800;
+  color: var(--text); line-height: 1.18; margin-bottom: 18px;
+  letter-spacing: -0.02em;
 }
 
 /* ─ Typewriter highlight ─ */
 .hero-highlight {
-  display: inline;
-  background: linear-gradient(135deg, #ff6b35 0%, #f97316 100%);
+  display: inline-block;
+  background: linear-gradient(135deg, #ff7a3d 0%, #f97316 100%);
   color: white;
-  /* padding horizontal only — altura = só o que a fonte pede */
-  padding: 0.12em 0.5em;
-  border-radius: 0.25em;
+  padding: 0.06em 0.45em 0.1em;
+  border-radius: 0.28em;
   vertical-align: baseline;
-  box-shadow: 0 4px 20px rgba(249,115,22,0.4);
+  box-shadow: 0 12px 30px -10px rgba(249,115,22,0.55);
   position: relative;
   white-space: nowrap;
-  /* shimmer via background */
-  background-image: linear-gradient(105deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #ff6b35, #f97316);
-  background-size: 200% 100%, 100% 100%;
-  animation: shimmer 3s ease-in-out infinite;
-}
-@keyframes shimmer {
-  0%   { background-position: 200% 0, 0 0; }
-  100% { background-position: -200% 0, 0 0; }
+  transform: rotate(-1.5deg);
 }
 .hero-word {
   font-weight: 800;
@@ -598,33 +630,39 @@ const featured = [
 
 .cat-card {
   flex: 1; min-width: 210px;
-  border-radius: 22px; padding: 0;
-  color: white; position: relative; overflow: hidden;
+  border-radius: 20px; padding: 0;
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  color: var(--text); position: relative; overflow: hidden;
   display: flex; flex-direction: column;
   text-decoration: none;
-  transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s;
+  transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s, border-color 0.2s;
   animation: cardSlideUp 0.5s ease both;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow);
 }
 @keyframes cardSlideUp {
   from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.cat-card:hover  { transform: translateY(-7px); box-shadow: 0 20px 48px rgba(0,0,0,0.25); }
+.cat-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--cat) 55%, transparent);
+  box-shadow: 0 18px 40px -12px color-mix(in srgb, var(--cat) 35%, transparent);
+}
 .cat-card:active { transform: translateY(-2px) scale(0.97); transition: transform 0.08s; }
 
-.cat-purple { background: linear-gradient(145deg, #8b5cf6 0%, #6d28d9 60%, #5b21b6 100%); }
-.cat-orange { background: linear-gradient(145deg, #fb923c 0%, #f97316 60%, #ea580c 100%); }
-.cat-red    { background: linear-gradient(145deg, #f43f5e 0%, #e11d48 60%, #be123c 100%); }
-.cat-blue   { background: linear-gradient(145deg, #3b82f6 0%, #2563eb 60%, #1d4ed8 100%); }
-.cat-teal   { background: linear-gradient(145deg, #14b8a6 0%, #0d9488 60%, #0f766e 100%); }
+.cat-purple { --cat: #7c3aed; }
+.cat-orange { --cat: #f97316; }
+.cat-red    { --cat: #e11d48; }
+.cat-blue   { --cat: #2563eb; }
+.cat-teal   { --cat: #0d9488; }
 
-/* Shine overlay */
+/* Soft tint from the top, per category */
 .cat-card::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  background: radial-gradient(130% 90% at 50% 0%, color-mix(in srgb, var(--cat) 9%, transparent), transparent 55%);
   pointer-events: none;
 }
 
@@ -635,19 +673,20 @@ const featured = [
 }
 .cat-header { display: flex; align-items: flex-start; justify-content: space-between; }
 .cat-icon {
-  background: rgba(255,255,255,0.2);
+  background: linear-gradient(140deg, color-mix(in srgb, var(--cat) 88%, white 12%), var(--cat));
   width: 46px; height: 46px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--cat) 35%, transparent);
 }
 .cat-badge {
-  background: rgba(255,255,255,0.22); backdrop-filter: blur(4px);
+  background: color-mix(in srgb, var(--cat) 11%, transparent);
+  color: var(--cat);
   font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
   letter-spacing: 0.02em;
 }
 .cat-info { margin-top: auto; }
-.cat-info h3 { font-size: 1.05rem; font-weight: 800; margin: 0 0 3px; letter-spacing: -0.2px; }
-.cat-info p  { font-size: 0.78rem; opacity: 0.8; margin: 0; }
+.cat-info h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin: 0 0 3px; letter-spacing: -0.2px; color: var(--text); }
+.cat-info p  { font-size: 0.78rem; color: var(--muted); margin: 0; }
 
 .cat-arrow-row {
   display: flex; align-items: center; justify-content: flex-end;
@@ -655,21 +694,22 @@ const featured = [
 }
 .cat-arrow {
   width: 28px; height: 28px; border-radius: 50%;
-  background: rgba(255,255,255,0.2);
+  background: color-mix(in srgb, var(--cat) 11%, transparent);
+  color: var(--cat);
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
 }
-.cat-card:hover .cat-arrow { background: rgba(255,255,255,0.35); transform: translateX(3px); }
+.cat-card:hover .cat-arrow { background: var(--cat); color: white; transform: translateX(3px); }
 
 /* Bottom strip */
 .cat-featured {
-  background: rgba(0,0,0,0.2); backdrop-filter: blur(4px);
   padding: 9px 18px; font-size: 0.73rem;
   display: flex; align-items: center; gap: 6px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid var(--card-border);
+  color: var(--muted);
 }
-.cat-featured-label { opacity: 0.7; }
-.cat-featured-name { font-weight: 700; }
+.cat-featured-label { opacity: 0.8; }
+.cat-featured-name { font-weight: 700; color: var(--cat); }
 
 /* ─ Stats ─ */
 .stats-bar {
@@ -679,9 +719,9 @@ const featured = [
 }
 .stat { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 48px; }
 .stat-num {
-  font-size: 2.2rem; font-weight: 800;
-  background: linear-gradient(135deg, #1a73e8, #0d9488);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-family: var(--font-display);
+  font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em;
+  color: var(--text);
 }
 .stat-label { font-size: 0.82rem; color: var(--muted); font-weight: 500; letter-spacing: 0.02em; }
 .stat-divider { width: 1px; height: 44px; background: var(--border); }
@@ -776,8 +816,9 @@ const featured = [
   font-size: .78rem; font-weight: 600; width: fit-content;
 }
 .cta-title {
-  font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900;
-  color: white; line-height: 1.1; letter-spacing: -1px; margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800;
+  color: white; line-height: 1.1; letter-spacing: -0.02em; margin: 0;
 }
 .cta-desc {
   font-size: .95rem; color: rgba(255,255,255,.55); line-height: 1.75; margin: 0;

@@ -161,18 +161,28 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
   const timers = new Map<HTMLElement, ReturnType<typeof setTimeout>>();
   navItems.forEach((item) => {
     item.addEventListener("mouseenter", () => {
-      timers.forEach((timer, current) => {
-        if (current !== item) {
-          clearTimeout(timer);
-          current.classList.remove("open");
+      // Is another menu currently showing? Then this is a switch, not a fresh open:
+      // the panel swaps instantly and only the inner content animates.
+      let switching = false;
+      navItems.forEach((other) => {
+        if (other !== item && other.classList.contains("open")) {
+          switching = true;
+          other.classList.add("quick");
+          other.classList.remove("open");
         }
+      });
+      timers.forEach((timer, current) => {
+        if (current !== item) clearTimeout(timer);
       });
       const timer = timers.get(item);
       if (timer) clearTimeout(timer);
+      item.classList.toggle("quick", switching);
       item.classList.add("open");
     });
     item.addEventListener("mouseleave", () => {
       const timer = setTimeout(() => {
+        // Full close: drop "quick" first so the panel fades out normally.
+        item.classList.remove("quick");
         item.classList.remove("open");
         timers.delete(item);
       }, 130);
@@ -181,7 +191,7 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
   });
   document.addEventListener("click", (event) => {
     if (!(event.target as HTMLElement).closest(".nav-item.dropdown")) {
-      navItems.forEach((item) => item.classList.remove("open"));
+      navItems.forEach((item) => item.classList.remove("open", "quick"));
     }
   });
 
@@ -363,7 +373,6 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
 .chevron { transition: transform .18s; }
 .nav-item.open .chevron { transform: rotate(180deg); }
 .mega {
-  display: none;
   position: fixed;
   top: 62px;
   left: 0;
@@ -372,8 +381,47 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
   border-bottom: 1px solid var(--border);
   box-shadow: 0 18px 50px rgba(15,23,42,.16);
   z-index: 300;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition:
+    opacity .2s ease,
+    transform .24s cubic-bezier(.32,.72,.32,1),
+    visibility 0s linear .24s;
 }
-.nav-item.open .mega { display: block; }
+.nav-item.open .mega {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    opacity .2s ease,
+    transform .24s cubic-bezier(.32,.72,.32,1),
+    visibility 0s;
+}
+/* Switching between menus: the panel swaps instantly (background looks continuous),
+   only the inner content animates */
+.nav-item.quick .mega { transition: none; }
+
+/* Inner content slides in laterally — animation (not transition) so it replays on every switch */
+.mega-summary, .mega-content { opacity: 0; }
+.nav-item.open .mega-summary {
+  animation: megaIn .32s cubic-bezier(.32,.72,.32,1) both;
+}
+.nav-item.open .mega-content {
+  animation: megaIn .32s cubic-bezier(.32,.72,.32,1) both;
+  animation-delay: .05s;
+}
+@keyframes megaIn {
+  from { opacity: 0; transform: translateX(26px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mega { transition: none; transform: none; }
+  .nav-item.open .mega-summary,
+  .nav-item.open .mega-content { animation: none; opacity: 1; }
+}
 .mega-shell {
   max-width: 1280px;
   margin: 0 auto;
