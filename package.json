@@ -1,7 +1,32 @@
 {
   "name": "smallwebapps",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "description": "Free, fast, private browser-based tools for PDF, images, development, data, and YouTube tasks. No accounts, no uploads, no servers.",
+  "keywords": [
+    "tools",
+    "utilities",
+    "browser",
+    "offline",
+    "pdf",
+    "images",
+    "developer",
+    "data",
+    "youtube",
+    "privacy",
+    "free",
+    "web-app",
+    "javascript",
+    "react",
+    "astro"
+  ],
+  "license": "MIT",
+  "author": "Lucas Diniz",
+  "homepage": "https://smallwebapps.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LucasHenriqueDiniz/smallwebapps"
+  },
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "dev": "pnpm --dir apps/web dev",

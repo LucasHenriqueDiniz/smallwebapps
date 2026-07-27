@@ -1,74 +1,167 @@
 # Small Web Apps
 
-Free browser-based tools for everyday PDF, image, developer, data, and YouTube tasks.
+> Free, fast, private browser tools for everyday PDF, image, developer, data, and YouTube tasks.
 
-**Website:** https://smallwebapps.com  
-**Tools:** https://smallwebapps.com/apps/  
-**GitHub:** https://github.com/LucasHenriqueDiniz/smallwebapps
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Website](https://img.shields.io/badge/website-smallwebapps.com-green.svg)](https://smallwebapps.com)
+[![Tools](https://img.shields.io/badge/tools-136%2B-brightgreen.svg)](https://smallwebapps.com/apps)
 
----
-
-## What is this?
-
-Small Web Apps is a collection of **136+ free, browser-based utilities** designed for privacy, speed, and simplicity. No accounts, no uploads, no servers. Tools run locally in your browser.
-
-Core principles:
-- Fast static pages
-- Clear tool descriptions before interacting
-- Useful pages even without JavaScript
-- Privacy and limitation notes
-- Internal links between related tools
+**Website:** [smallwebapps.com](https://smallwebapps.com)  
+**All Tools:** [smallwebapps.com/apps](https://smallwebapps.com/apps)
 
 ---
 
-## Featured tools
+## ✨ Why Small Web Apps?
 
-**Developer:** JSON Formatter, JWT Decoder, Base64 Encoder, Regex Tester, CSV Cleaner  
-**PDF:** Compressor, Extract Text, Merge, Split, Rotate, Watermark  
-**Images:** Optimizer, Resize, Crop, Metadata, Format Converter  
-**Data:** Word Counter, Keyword Density, Meta Tags Analyzer, Open Graph Checker  
-**YouTube:** Watch History Analyzer, Chapter Generator, Tag Extractor
+No uploads. No accounts. No servers. Every tool runs **entirely in your browser** with **zero data leaving your device**.
 
-Full list: https://smallwebapps.com/apps/
-
----
-
-## Technology
-
-- **Astro** — static pages, routing, SEO metadata
-- **React** — interactive tool islands (client-side hydration)
-- **TypeScript** — type safety for apps and metadata
-- **Tailwind CSS** — styling with CSS variables for dark mode
-- **Cloudflare Pages** — static hosting and deployment
+- ⚡ **Instant** — load and use immediately
+- 🔒 **Private** — nothing sent to servers
+- 📴 **Offline** — works without internet
+- 🎯 **Focused** — one job, done well
+- 🆓 **Forever free** — no ads, no paywalls
 
 ---
 
-## Development
+## 🛠️ Featured Tools
 
-Install and run:
+**Developer**  
+JSON Formatter · JWT Decoder · Base64 Encoder · Regex Tester · URL Encoder · Hash Generator
+
+**PDF**  
+Compressor · Merge · Split · Extract Text · Rotate · Watermark · Metadata Editor
+
+**Images**  
+Optimizer · Resizer · Cropper · Format Converter · Color Picker · Favicon Generator
+
+**Data**  
+CSV Cleaner · Word Counter · Keyword Density Checker · Meta Tags Analyzer · Open Graph Checker
+
+**YouTube**  
+Watch History Analyzer · Chapter Generator · Tag Extractor · Title Counter
+
+**Text & More**  
+Case Converter · Line Sorter · Password Generator · Unit Converter · Timestamp Converter · Age Calculator
+
+[→ Browse all 136+ tools](https://smallwebapps.com/apps)
+
+---
+
+## 🏗️ Architecture
+
+A lightweight, **content-first** monorepo optimized for speed, SEO, and privacy:
+
+- **Astro** — static pages, routing, metadata, sitemaps
+- **React** — interactive tool islands (hydrated on-demand)
+- **TypeScript** — type-safe tools and metadata
+- **Tailwind CSS** — responsive design with CSS variables for dark mode
+- **Cloudflare Pages** — CDN-fast static hosting
+
+Each tool is a self-contained React component; the site renders SEO-optimized pages via Astro, hydrating only the tool UI when needed.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- pnpm 10+
+
+### Development
 
 ```bash
+# Install dependencies
 pnpm install
-pnpm dev              # Development server
-pnpm build            # Full build
-pnpm --dir apps/web run build  # Astro build only
+
+# Start dev server (Astro on port 4321 by default)
+pnpm dev
+
+# Full monorepo build
+pnpm build
+
+# Preview production build
+pnpm preview
+
+# Type check
+pnpm check
 ```
 
-Edit tool metadata: [`apps/web/src/data/apps.ts`](./apps/web/src/data/apps.ts)  
-Add interactive tools: `apps/web/src/tools/{slug}/`  
-Register tools: [`apps/web/src/components/tools/ToolMount.astro`](./apps/web/src/components/tools/ToolMount.astro)
+### Project Structure
+
+```
+smallwebapps/
+├── apps/
+│   └── web/                          # Main Astro site
+│       ├── src/
+│       │   ├── pages/                # Routes (landing, /apps/[slug], etc)
+│       │   ├── tools/                # React tool implementations
+│       │   ├── components/           # Astro + React shared UI
+│       │   ├── data/apps.ts          # Tool metadata (single source of truth)
+│       │   └── styles/               # Global CSS + design tokens
+│       └── astro.config.mjs
+├── packages/
+│   └── data/                         # Shared TypeScript types
+└── scripts/
+    └── prepare-tubetrace-embed.mjs   # YouTube analysis tool setup
+```
+
+### Adding a Tool
+
+1. **Define metadata** in [`apps/web/src/data/apps.ts`](./apps/web/src/data/apps.ts):
+   ```typescript
+   {
+     slug: "my-tool",
+     name: "My Tool",
+     category: "Developer Tools",
+     shortDescription: "Brief description",
+     longDescription: "Full description shown on tool page",
+     features: ["Feature 1", "Feature 2"],
+     faq: [{ question: "Q?", answer: "A." }],
+     content: { howToUse: ["Step 1", "Step 2"] },
+   }
+   ```
+
+2. **Create React component** at `apps/web/src/tools/my-tool/MyToolApp.tsx`
+
+3. **Register** in [`apps/web/src/components/tools/ToolMount.astro`](./apps/web/src/components/tools/ToolMount.astro):
+   ```tsx
+   {slug === "my-tool" && <MyToolApp client:load />}
+   ```
+
+That's it—the site auto-generates the page with metadata, breadcrumbs, FAQ, and related tools.
 
 ---
 
-## Deployment
+## 📦 Deployment
 
-Production: **https://smallwebapps.com** (Cloudflare Pages)
+**Production:** https://smallwebapps.com (Cloudflare Pages)
 
-- Build command: `pnpm build`
-- Output directory: `apps/web/dist`
+### Deploy to Cloudflare Pages
+
+```bash
+pnpm run deploy:cloudflare
+```
+
+This runs `pnpm build` then deploys `apps/web/dist` to the `smallwebapps` Pages project.
 
 ---
 
-## License
+## 📝 License
 
-MIT License. See [LICENSE](./LICENSE) for details.
+MIT © 2024 [Lucas Diniz](https://github.com/LucasHenriqueDiniz)
+
+See [LICENSE](./LICENSE) for the full text.
+
+---
+
+## 🤝 Contributing
+
+Found a bug or have a feature idea? [Open an issue](https://github.com/LucasHenriqueDiniz/smallwebapps/issues) or submit a pull request.
+
+---
+
+## 📖 More Info
+
+- **Privacy Policy:** https://smallwebapps.com/privacy
+- **Terms of Service:** https://smallwebapps.com/terms
+- **Contact:** https://smallwebapps.com/contact
