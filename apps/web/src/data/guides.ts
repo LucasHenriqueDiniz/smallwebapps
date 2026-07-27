@@ -7,6 +7,8 @@ export interface GuideDefinition {
   publishedDate: string;
   modifiedDate: string;
   image: string;
+  relatedToolSlug: string;
+  relatedToolLabel: string;
 }
 
 export const guides: GuideDefinition[] = [
@@ -19,7 +21,9 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Google Takeout guide",
     publishedDate: "2026-06-02",
     modifiedDate: "2026-06-25",
-    image: "/og/site.svg"
+    image: "/og/site.svg",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Open YouTube Watch History Analyzer"
   },
   {
     slug: "how-to-analyze-youtube-watch-history",
@@ -30,7 +34,9 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Privacy-first analysis guide",
     publishedDate: "2026-06-02",
     modifiedDate: "2026-06-25",
-    image: "/og/site.svg"
+    image: "/og/site.svg",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Open YouTube Watch History Analyzer"
   },
   {
     slug: "json-formatting-and-validation",
@@ -41,7 +47,9 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "JSON best practices",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg"
+    image: "/og/site.svg",
+    relatedToolSlug: "json-formatter",
+    relatedToolLabel: "Open JSON Formatter"
   },
   {
     slug: "csv-cleaning-before-import",
@@ -52,7 +60,9 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Data preparation guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg"
+    image: "/og/site.svg",
+    relatedToolSlug: "csv-cleaner",
+    relatedToolLabel: "Open CSV Cleaner"
   },
   {
     slug: "browser-based-pdf-tools-safe-and-fast",
@@ -63,7 +73,9 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "PDF security guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg"
+    image: "/og/site.svg",
+    relatedToolSlug: "pdf-compress",
+    relatedToolLabel: "Open PDF Compressor"
   },
   {
     slug: "resize-compress-images-locally",
@@ -74,7 +86,9 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Image optimization guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg"
+    image: "/og/site.svg",
+    relatedToolSlug: "image-resize",
+    relatedToolLabel: "Open Image Resizer"
   },
   {
     slug: "privacy-first-file-tools-local-processing",
@@ -85,6 +99,8 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Privacy & security guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg"
+    image: "/og/site.svg",
+    relatedToolSlug: "",
+    relatedToolLabel: "Browse all tools"
   }
 ];
