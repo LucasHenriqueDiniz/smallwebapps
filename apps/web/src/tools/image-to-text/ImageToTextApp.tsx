@@ -114,24 +114,24 @@ export default function ImageToTextApp({ accept = "image/*", sourceLabel }: Prop
 
   return (
     <div className="flex flex-col gap-5">
-      <section className="flex flex-wrap items-center gap-3">
-        <label className="text-sm font-medium text-slate-700" htmlFor="ocr-language">
-          Text language
+      <section className="rounded-2xl border border-slate-200 bg-white p-4">
+        <label className="mb-1 block text-sm font-semibold text-slate-800" htmlFor="ocr-language">
+          Step 1 — Choose the text language
         </label>
+        <p className="mb-3 text-xs text-slate-500">
+          Pick the language the text is written in — it strongly affects accuracy.
+        </p>
         <select
           id="ocr-language"
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
           disabled={busy}
-          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700"
+          className="w-full max-w-xs rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800"
         >
           {LANGUAGES.map((l) => (
             <option key={l.code} value={l.code}>{l.label}</option>
           ))}
         </select>
-        <p className="text-xs text-slate-400">
-          Pick the language the text is written in — it strongly affects accuracy.
-        </p>
       </section>
 
       <section
