@@ -126,9 +126,38 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
         <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>
       </button>
       <a href="/apps" class="cta-btn">All tools</a>
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu-drawer">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+      </button>
     </div>
   </div>
 </header>
+
+<div class="mobile-menu-drawer" id="mobile-menu-drawer" aria-hidden="true">
+  <div class="mobile-menu-backdrop" id="mobile-menu-backdrop"></div>
+  <nav class="mobile-menu-panel" aria-label="Mobile navigation">
+    <div class="mobile-menu-header">
+      <span class="mobile-menu-title">Menu</span>
+      <button class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+      </button>
+    </div>
+    <div class="mobile-menu-links">
+      {categoryOrder.map((category) => {
+        const meta = categoryMeta[category];
+        const categoryApps = appsByCategory[category] ?? [];
+        return (
+          <a href={meta.href} class="mobile-menu-link">
+            <span>{meta.label}</span>
+            <span class="mobile-menu-count">{categoryApps.length}</span>
+          </a>
+        );
+      })}
+      <a href="/guides" class="mobile-menu-link">Guides</a>
+      <a href="/apps" class="mobile-menu-link mobile-menu-cta">All tools</a>
+    </div>
+  </nav>
+</div>
 
 <div class="search-overlay" id="search-overlay" aria-hidden="true">
   <div class="search-modal">
@@ -183,6 +212,31 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
     if (!(event.target as HTMLElement).closest(".nav-item.dropdown")) {
       navItems.forEach((item) => item.classList.remove("open"));
     }
+  });
+
+  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+  const mobileMenuDrawer = document.getElementById("mobile-menu-drawer");
+  const mobileMenuBackdrop = document.getElementById("mobile-menu-backdrop");
+  const mobileMenuClose = document.getElementById("mobile-menu-close");
+
+  function openMobileMenu() {
+    mobileMenuDrawer?.classList.add("open");
+    mobileMenuDrawer?.setAttribute("aria-hidden", "false");
+    mobileMenuToggle?.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+  function closeMobileMenu() {
+    mobileMenuDrawer?.classList.remove("open");
+    mobileMenuDrawer?.setAttribute("aria-hidden", "true");
+    mobileMenuToggle?.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+  mobileMenuToggle?.addEventListener("click", openMobileMenu);
+  mobileMenuClose?.addEventListener("click", closeMobileMenu);
+  mobileMenuBackdrop?.addEventListener("click", closeMobileMenu);
+  mobileMenuDrawer?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMobileMenu));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && mobileMenuDrawer?.classList.contains("open")) closeMobileMenu();
   });
 
   const trigger = document.getElementById("search-trigger");
@@ -554,6 +608,98 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
   white-space: nowrap;
 }
 .cta-btn:hover { background: var(--blue-dark); }
+.mobile-menu-toggle {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.mobile-menu-toggle:hover { border-color: var(--blue); color: var(--blue); }
+.mobile-menu-drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+}
+.mobile-menu-drawer.open { display: block; }
+.mobile-menu-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15,23,42,.55);
+  backdrop-filter: blur(2px);
+}
+.mobile-menu-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: var(--drop-bg);
+  box-shadow: 4px 0 24px rgba(0,0,0,.2);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform .2s ease-out;
+}
+.mobile-menu-drawer.open .mobile-menu-panel { transform: translateX(0); }
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-menu-title { font-weight: 800; font-size: .95rem; color: var(--text); }
+.mobile-menu-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--input-bg);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.mobile-menu-links { display: flex; flex-direction: column; padding: 8px 0; }
+.mobile-menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 13px 18px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: .88rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-menu-link:hover { background: var(--bg); }
+.mobile-menu-count {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: .7rem;
+  font-weight: 800;
+}
+.mobile-menu-cta { color: var(--blue); }
 .search-overlay {
   display: none;
   position: fixed;
@@ -659,13 +805,16 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
   .nav-links { display: none; }
   .navbar-inner { gap: 12px; }
   .navbar-right { margin-left: auto; }
+  .mobile-menu-toggle { display: flex; }
 }
 @media (max-width: 640px) {
   .navbar-inner { padding: 0 16px; }
   .search-trigger span,
   .search-trigger kbd,
   .cta-btn { display: none; }
-  .search-trigger { width: 36px; height: 36px; padding: 0; justify-content: center; }
+  .search-trigger { width: 44px; height: 44px; padding: 0; justify-content: center; }
+  .theme-toggle { width: 44px; height: 44px; }
+  .mobile-menu-toggle { width: 44px; height: 44px; }
   .logo-text { font-size: .95rem; }
 }
 </style>

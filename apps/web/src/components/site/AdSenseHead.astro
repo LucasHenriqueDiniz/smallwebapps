@@ -1,15 +1,14 @@
 ---
-const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+// Publisher ID is public by definition (see public/ads.txt). Default to it so the
+// loader ships even when PUBLIC_ADSENSE_CLIENT is unset in the build environment —
+// a missing loader leaves AdSense stuck on "Getting your site ready" forever.
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? "ca-pub-2600827684802809";
 ---
 
-{adsenseClient && (
-  <>
-    <meta name="google-adsense-account" content={adsenseClient} />
-    <script
-      is:inline
-      async
-      crossorigin="anonymous"
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-    />
-  </>
-)}
+<meta name="google-adsense-account" content={adsenseClient} />
+<script
+  is:inline
+  async
+  crossorigin="anonymous"
+  src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+/>

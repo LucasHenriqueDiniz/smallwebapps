@@ -2,6 +2,7 @@
 import Header from "@/components/site/Header.astro";
 import Footer from "@/components/site/Footer.astro";
 import CookieBanner from "@/components/site/CookieBanner.astro";
+import AdSenseHead from "@/components/site/AdSenseHead.astro";
 import { siteConfig } from "@/lib/site";
 import "../styles/global.css";
 
@@ -35,6 +36,7 @@ const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <AdSenseHead />
 </head>
 <body>
   <Header />
