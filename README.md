@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/banner.png" alt="Small Web Apps" width="100%" />
+</p>
+
 # Small Web Apps
 
 > Free, fast, private browser tools for everyday PDF, image, developer, data, and YouTube tasks.
