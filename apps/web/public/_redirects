@@ -1,1 +1,12 @@
 /sitemap.xml  /sitemap-index.xml  301
+
+# The TubeTrace standalone shell used to be published under /tubetrace-app/ by
+# scripts/prepare-tubetrace-embed.mjs. It is no longer copied there. Point the
+# old URLs at this site's equivalents rather than letting them 404.
+/tubetrace-app/               /apps/tubetrace     301
+/tubetrace-app/index.html     /apps/tubetrace     301
+/tubetrace-app/privacy        /privacy            301
+/tubetrace-app/privacy.html   /privacy            301
+/tubetrace-app/terms          /terms              301
+/tubetrace-app/terms.html     /terms              301
+/tubetrace-app/sitemap.xml    /sitemap-index.xml  301

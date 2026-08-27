@@ -40,6 +40,35 @@ if (existsSync(embedTargetDir)) {
 mkdirSync(embedTargetDir, { recursive: true });
 cpSync(tubetraceOutDir, embedTargetDir, { recursive: true });
 
+// TubeTrace's Vite build emits a complete standalone site: index.html, its own
+// privacy/terms pages, robots.txt, sitemap.xml and a PWA manifest, all branded
+// TubeTrace and canonicalised to https://tubetrace.pages.dev. Copying those into
+// apps/web/public publishes a second product's site on smallwebapps.com --
+// crawlable, off-brand, partly Portuguese on an English-first site, and pointing
+// at a domain AdSense rejected in the same batch as this one. Nothing here links
+// to them; the tool users reach at /apps/tubetrace is the native React port under
+// src/tools/tubetrace/native. Only the embed payload is worth keeping.
+const STANDALONE_SHELL = [
+  "index.html",
+  "privacy.html",
+  "terms.html",
+  "robots.txt",
+  "sitemap.xml",
+  "site.webmanifest",
+  "_redirects",
+  "og-image.png",
+  "favicon.ico",
+  "favicon.svg",
+  "favicon-96x96.png",
+  "apple-touch-icon.png",
+  "web-app-manifest-192x192.png",
+  "web-app-manifest-512x512.png"
+];
+
+for (const name of STANDALONE_SHELL) {
+  rmSync(path.join(embedTargetDir, name), { force: true });
+}
+
 const assetNames = readdirSync(path.join(embedTargetDir, "assets"));
 const jsAsset = assetNames.find((name) => name.endsWith(".js"));
 const cssAsset = assetNames.find((name) => name.endsWith(".css"));
