@@ -281,13 +281,17 @@ body {
 
 /* Body */
 .tl-body {
+  --tl-gutter: 24px;
+  --tl-pad-top: 32px;
   flex: 1;
   max-width: 1280px; width: 100%; margin: 0 auto;
-  padding: 32px 24px 64px;
+  padding: var(--tl-pad-top) var(--tl-gutter) 64px;
 }
 .tl-body-full {
+  --tl-gutter: 0px;
+  --tl-pad-top: 32px;
   flex: 1; width: 100%;
-  padding: 32px 0 64px;
+  padding: var(--tl-pad-top) var(--tl-gutter) 64px;
 }
 
 /* ── Tool hero: fills ~80% of the viewport so the tool is the main content
@@ -302,7 +306,9 @@ body {
 }
 .tl-hero-bg {
   position: absolute;
-  inset: -32px -24px 0;
+  /* Bleed out to the body padding edge only. A hardcoded inset overshoots
+     once the gutter shrinks at <= 640px and the page scrolls sideways. */
+  inset: calc(-1 * var(--tl-pad-top)) calc(-1 * var(--tl-gutter)) 0;
   pointer-events: none;
   background-image: radial-gradient(color-mix(in srgb, var(--text) 8%, transparent) 1.2px, transparent 1.2px);
   background-size: 26px 26px;
@@ -395,7 +401,11 @@ body {
 
 @media (max-width: 640px) {
   .tl-cat, .tl-sep { display: none; }
-  .tl-body, .tl-body-full { padding: 16px 16px 48px; }
+  .tl-body, .tl-body-full {
+    --tl-gutter: 16px;
+    --tl-pad-top: 16px;
+    padding: var(--tl-pad-top) var(--tl-gutter) 48px;
+  }
   .tl-body-full .tl-head { padding: 0 16px; }
   .tl-tool { border-radius: 16px; }
   .tl-tool-chrome { padding: 9px 12px; }

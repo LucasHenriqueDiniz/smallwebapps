@@ -3,11 +3,10 @@
   "configurations": [
     {
       "name": "web",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["astro", "dev"],
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "apps/web", "run", "dev", "--", "--port", "4321"],
       "port": 4321,
-      "autoPort": true,
-      "cwd": "apps/web"
+      "autoPort": true
     }
   ]
 }
