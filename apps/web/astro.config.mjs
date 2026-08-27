@@ -5,6 +5,8 @@ import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   site: "https://smallwebapps.com",
+  // Respect an assigned dev port (e.g. from preview tooling); default stays 4321
+  server: { port: process.env.PORT ? Number(process.env.PORT) : 4321 },
   integrations: [
     react(),
     tailwind(),

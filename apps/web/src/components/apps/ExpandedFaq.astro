@@ -10,89 +10,103 @@ const { items } = Astro.props;
 
 {items.length > 0 && (
 <section class="faq-section">
-  <div class="faq-inner">
-    <div class="faq-head">
-      <span>FAQ</span>
-      <h2>Frequently asked questions</h2>
-    </div>
-    <div class="faq-list">
-      {items.map((item) => (
-        <details class="faq-item">
-          <summary>{item.question}</summary>
-          <p>{item.answer}</p>
-        </details>
-      ))}
-    </div>
+  <div class="faq-head">
+    <span class="faq-eyebrow">FAQ</span>
+    <h2>Frequently asked questions</h2>
+  </div>
+  <div class="faq-list">
+    {items.map((item) => (
+      <details class="faq-item">
+        <summary>
+          {item.question}
+          <svg class="faq-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
   </div>
 </section>
 )}
 
 <style>
 .faq-section {
-  margin-top: 28px;
+  margin-top: 48px;
   border-top: 1px solid var(--border);
-  padding-top: 28px;
+  padding-top: 40px;
 }
 
-.faq-inner {
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--card-bg);
-  box-shadow: var(--shadow);
-  padding: 22px;
-}
-
-.faq-head { margin-bottom: 16px; }
-.faq-head span {
+.faq-head { margin-bottom: 18px; }
+.faq-eyebrow {
   display: block;
-  color: var(--muted);
   font-size: .68rem;
-  font-weight: 800;
-  letter-spacing: .12em;
+  font-weight: 700;
+  letter-spacing: .16em;
   text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
 }
 .faq-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--text);
-  font-size: 1.15rem;
-  font-weight: 800;
-  margin: 6px 0 0;
+  line-height: 1.3;
 }
 
 .faq-list { display: flex; flex-direction: column; gap: 10px; }
 
 .faq-item {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--page-bg);
-  padding: 14px 16px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--card-bg);
+  padding: 0 18px;
+  transition: border-color .25s ease;
 }
+.faq-item:hover, .faq-item[open] { border-color: color-mix(in srgb, var(--blue) 40%, transparent); }
 
 .faq-item summary {
   cursor: pointer;
   list-style: none;
-  font-size: .9rem;
+  padding: 15px 0;
+  font-size: .92rem;
   font-weight: 700;
   color: var(--text);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  -webkit-tap-highlight-color: transparent;
 }
 .faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::after {
-  content: "+";
+.faq-chev {
   flex-shrink: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
   color: var(--muted);
-  transition: transform .15s;
+  transition: transform .3s cubic-bezier(.32,.72,.32,1), color .2s ease;
 }
-.faq-item[open] summary::after { content: "−"; }
+.faq-item[open] .faq-chev { transform: rotate(180deg); color: var(--blue); }
 
 .faq-item p {
-  margin: 10px 0 0;
-  font-size: .85rem;
-  line-height: 1.6;
+  margin: 0;
+  padding: 0 0 16px;
+  font-size: .88rem;
+  line-height: 1.65;
   color: var(--muted);
+  max-width: 720px;
+}
+.faq-item[open] p { animation: faqIn .28s ease both; }
+@keyframes faqIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item[open] p { animation: none; }
+  .faq-chev { transition: none; }
+}
+@media (max-width: 700px) {
+  .faq-section { margin-top: 32px; padding-top: 28px; }
+  .faq-head h2 { font-size: 1.15rem; }
 }
 </style>

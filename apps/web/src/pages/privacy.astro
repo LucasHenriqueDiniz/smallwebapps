@@ -1,53 +1,227 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
+
+const lastUpdated = "27 August 2026";
 ---
 
 <MainLayout
   title="Privacy Policy"
-  description="Read the Small Web Apps privacy overview and how browser-first tools handle your data."
+  description="How Small Web Apps handles your data: browser-only tool processing, hosting logs, cookies, Google AdSense advertising, and your privacy rights."
   canonicalPath="/privacy"
 >
   <section class="static-page">
     <div class="static-inner">
       <span class="static-eyebrow">Privacy</span>
-      <h1>A browser-first privacy posture,<br/>explained plainly</h1>
+      <h1>Privacy Policy</h1>
+      <p class="static-meta">Last updated: {lastUpdated}</p>
+
       <div class="static-card">
-        <p><strong>Browser-Based Processing</strong></p>
-        <p>Small Web Apps focuses on lightweight browser-based utilities. Tool inputs are processed in the browser unless a tool page clearly says otherwise.</p>
-        <p>We do not run accounts, paywalls, or server-side file uploads for the tools. Some site-level services may still receive standard web request data, such as IP address, browser information, referrer, and page URL.</p>
+        <p>
+          This policy explains what data Small Web Apps collects, what it does not collect, and how
+          third parties — principally Google — use cookies and similar technologies when you visit
+          this site. It applies to <strong>smallwebapps.com</strong> and every tool and guide page on it.
+        </p>
 
-        <p style="margin-top: 16px;"><strong>Advertising & Analytics</strong></p>
-        <p>If advertising or analytics is enabled, Google AdSense and related vendors may serve personalized or non-personalized ads based on your browsing history and interests. Third-party vendors (including Google) use cookies and similar technologies to deliver these ads.</p>
+        <h2>1. Who runs this site</h2>
+        <p>
+          Small Web Apps is an independent project built and operated by <strong>Lucas Diniz</strong>
+          as an individual, not as a registered company. For the purposes of the EU and UK GDPR, Lucas
+          Diniz is the data controller for this site.
+        </p>
+        <p>
+          Privacy questions and data requests:
+          <!--email_off-->
+          <a class="prose-link" href="mailto:lucas.hdo@hotmail.com">lucas.hdo@hotmail.com</a>
+          <!--/email_off-->
+          — see the <a class="prose-link" href="/contact">Contact page</a> for other channels.
+        </p>
 
-        <p style="margin-top: 16px;"><strong>Third-Party Cookies & Tracking</strong></p>
-        <p>Google AdSense and other advertising partners may place cookies on your browser to:</p>
-        <ul style="margin: 8px 0 0 20px; padding: 0;">
-          <li style="margin: 6px 0;">Deliver targeted ads based on your visit history</li>
-          <li style="margin: 6px 0;">Track ad performance and conversions</li>
-          <li style="margin: 6px 0;">Prevent click fraud and other abuse</li>
-          <li style="margin: 6px 0;">Show personalized ads when you visit other sites</li>
+        <h2>2. What the tools do with your files and text</h2>
+        <p>
+          Every tool on this site runs entirely inside your browser tab. When you select a file, paste
+          text, or type into a tool, that content is processed locally using JavaScript and standard
+          browser APIs. <strong>It is never uploaded to a server, never transmitted to us, and never
+          stored by us.</strong> Closing or refreshing the tab discards it from memory.
+        </p>
+        <p>
+          This is a technical property of how the site is built, not just a promise: Small Web Apps is
+          a static site with no application backend, no database, and no file-upload endpoint. If a
+          future tool ever needs a network request to work, that tool's own page will say so explicitly
+          in its limitations section.
+        </p>
+
+        <h2>3. What is collected automatically</h2>
+        <p>
+          The site is hosted on Cloudflare Pages. Like any web host, Cloudflare processes standard
+          request data in order to deliver pages and protect the site from abuse. This typically includes:
+        </p>
+        <ul class="static-list">
+          <li>your IP address;</li>
+          <li>your browser type, version, and operating system (user agent);</li>
+          <li>the page URL you requested and the referring page, if any;</li>
+          <li>the date and time of the request.</li>
+        </ul>
+        <p>
+          We do not maintain our own server logs, and we do not build profiles, accounts, or mailing
+          lists from this data. Cloudflare's handling of it is governed by
+          <a class="prose-link" href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare's privacy policy</a>.
+        </p>
+
+        <h2>4. Cookies and local storage</h2>
+        <p>
+          Small Web Apps itself sets no first-party tracking cookies. It uses your browser's local
+          storage for two small preferences that never leave your device:
+        </p>
+        <ul class="static-list">
+          <li><strong><code>swa-theme</code></strong> — remembers whether you chose light or dark mode.</li>
+          <li><strong><code>swa_consent</code></strong> — remembers your choice from the cookie banner, so you are not asked again on every page.</li>
+        </ul>
+        <p>
+          Third-party cookies set by advertising are described in the next section. You can clear both
+          local-storage values at any time through your browser's site-data settings.
+        </p>
+
+        <h2>5. Advertising</h2>
+        <p>
+          This site uses <strong>Google AdSense</strong> to display advertising, which is what keeps the
+          tools free to use. The following applies whenever ads are served:
+        </p>
+        <ul class="static-list">
+          <li>
+            Third-party vendors, <strong>including Google</strong>, use cookies to serve ads based on your
+            prior visits to this site or other sites.
+          </li>
+          <li>
+            Google's use of advertising cookies enables it and its partners to serve ads to you based on
+            your visit to this and other sites on the internet.
+          </li>
+          <li>
+            Third parties may also use web beacons, device identifiers, and your IP address to measure ad
+            performance, limit how often you see the same ad, and detect invalid clicks or fraud.
+          </li>
+          <li>
+            Where required by law, personalized advertising is only used after you consent through the
+            cookie banner. If you decline, ads may still be shown but are non-personalized.
+          </li>
+        </ul>
+        <p>
+          Advertising is never placed inside a tool's working area, and ads are never disguised as tool
+          controls, navigation, or download buttons.
+        </p>
+
+        <h2>6. Analytics</h2>
+        <p>
+          Small Web Apps does not currently run Google Analytics or any other visitor-analytics product.
+          If that changes, this policy will be updated before analytics is enabled, and analytics storage
+          will remain subject to the same consent choice as advertising.
+        </p>
+
+        <h2>7. Your choices and controls</h2>
+        <ul class="static-list">
+          <li>
+            <strong>The cookie banner on this site</strong> — accept or decline advertising and analytics
+            storage. Your choice is applied through Google Consent Mode, which defaults to <em>denied</em>
+            until you choose otherwise.
+          </li>
+          <li>
+            <a class="prose-link" href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ad Settings</a>
+            — review the interests Google associates with you and turn off personalized ads across Google services.
+          </li>
+          <li>
+            <a class="prose-link" href="https://optout.networkadvertising.org" target="_blank" rel="noopener noreferrer">Network Advertising Initiative opt-out</a>
+            — opt out of interest-based ads from participating NAI member networks.
+          </li>
+          <li>
+            <a class="prose-link" href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer">Digital Advertising Alliance WebChoices</a>
+            — manage interest-based advertising from participating DAA companies.
+          </li>
+          <li>
+            <a class="prose-link" href="https://www.google.com/settings/ads/anonymous" target="_blank" rel="noopener noreferrer">Google's ads opt-out page</a>
+            — opt out of personalized advertising served by Google specifically.
+          </li>
+          <li>
+            <strong>Your browser</strong> — block or delete third-party cookies, or use private browsing.
+            The tools on this site work normally with third-party cookies blocked.
+          </li>
         </ul>
 
-        <p style="margin-top: 16px;"><strong>Cookie Types Used When Ads Are Enabled</strong></p>
-        <ul style="margin: 8px 0 0 20px; padding: 0;">
-          <li style="margin: 6px 0;"><strong>Advertising cookies:</strong> Placed by Google AdSense and ad networks to serve personalized ads</li>
-          <li style="margin: 6px 0;"><strong>Analytics cookies:</strong> Track site usage and user behavior (if Google Analytics is enabled)</li>
-          <li style="margin: 6px 0;"><strong>Consent cookies:</strong> Remember your choice from the cookie banner (accept or decline)</li>
+        <h2>8. If you are in the EEA, UK, or Switzerland</h2>
+        <p>
+          Where the GDPR or UK GDPR applies, the legal basis for processing is:
+          <strong>consent</strong> for advertising and analytics storage (Article 6(1)(a)), and
+          <strong>legitimate interests</strong> for the security and delivery of the site
+          (Article 6(1)(f)) — specifically, serving pages reliably and protecting the site from abuse.
+        </p>
+        <p>You have the right to:</p>
+        <ul class="static-list">
+          <li>request access to personal data held about you;</li>
+          <li>request correction or erasure of that data;</li>
+          <li>object to or request restriction of processing;</li>
+          <li>withdraw consent at any time, without affecting processing carried out before withdrawal;</li>
+          <li>lodge a complaint with your national data protection authority.</li>
         </ul>
+        <p>
+          Because this site holds no accounts and no user database, in most cases the only personal data
+          connected to you is held by Cloudflare and Google under their own policies. Requests sent to the
+          contact address above will be answered, and pointed to the right controller where that applies.
+        </p>
 
-        <p style="margin-top: 16px;"><strong>Control Personalized Ads</strong></p>
-        <p>You can control how Google and other advertisers use your data:</p>
-        <ul style="margin: 8px 0 0 20px; padding: 0;">
-          <li style="margin: 6px 0;"><a class="prose-link" href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ad Preferences</a> — View and manage your interests; opt out of personalized ads</li>
-          <li style="margin: 6px 0;"><a class="prose-link" href="https://optout.networkadvertising.org" target="_blank" rel="noopener noreferrer">Network Advertising Initiative (NAI)</a> — Opt out of interest-based ads from NAI members</li>
-          <li style="margin: 6px 0;"><a class="prose-link" href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer">Digital Advertising Alliance (DAA)</a> — Use the WebChoice tool to control personalized ads</li>
-        </ul>
+        <h2>9. If you are in California or another US state with privacy rights</h2>
+        <p>
+          Small Web Apps does not sell personal information and does not share it for cross-context
+          behavioural advertising in exchange for money. Advertising cookies set by Google may still
+          constitute "sharing" under the CPRA; declining through the cookie banner, or using Google's
+          opt-out links above, is the way to limit that. You may also request to know, delete, or correct
+          personal information by writing to the contact address above, and you will not be treated
+          differently for exercising those rights.
+        </p>
 
-        <p style="margin-top: 16px;"><strong>Site-Level Privacy</strong></p>
-        <p>This privacy page is a site-level overview. Each app page remains responsible for accurately describing its own data handling and limitations.</p>
+        <h2>10. Children</h2>
+        <p>
+          This site is a general-audience developer and productivity toolset. It is not directed at
+          children under 13 (or under 16 in the EEA/UK), and it does not knowingly collect personal
+          information from them. Ad serving on this site is not configured as child-directed. If you
+          believe a child has provided personal information here, contact us and it will be removed.
+        </p>
+
+        <h2>11. Data retention</h2>
+        <p>
+          We hold no user database, so there is nothing on our side to retain or delete. Tool content
+          exists only in your browser's memory for the duration of your session. Hosting request logs are
+          retained by Cloudflare under its own retention schedule, and advertising data is retained by
+          Google under Google's.
+        </p>
+
+        <h2>12. Links to other sites</h2>
+        <p>
+          Some guides and tool pages link to external resources such as Google Takeout, documentation, or
+          the project's GitHub repository. Those sites have their own privacy policies, and this policy
+          does not cover them.
+        </p>
+
+        <h2>13. Changes to this policy</h2>
+        <p>
+          If this policy changes materially — for example if analytics is introduced, or a tool begins
+          sending data to a server — the "last updated" date at the top will change and the change will be
+          described here. Continued use of the site after an update means you accept the revised policy.
+        </p>
+
+        <h2>14. Contact</h2>
+        <p>
+          Questions about this policy, or about how a specific tool handles data, can be sent to
+          <!--email_off-->
+          <a class="prose-link" href="mailto:lucas.hdo@hotmail.com">lucas.hdo@hotmail.com</a>
+          <!--/email_off-->
+          or raised on the
+          <a class="prose-link" href="https://github.com/LucasHenriqueDiniz/smallwebapps/issues" target="_blank" rel="noopener noreferrer">project issue tracker</a>.
+        </p>
+
         <div class="static-highlight">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <p>Private tool content, such as pasted text or selected files, is handled locally by browser-based tools unless the specific tool page states a network dependency.</p>
+          <p>
+            The short version: your files and text stay in your browser. What leaves your device is
+            ordinary web-request data to the host, and advertising cookies you can decline.
+          </p>
         </div>
       </div>
     </div>
@@ -71,19 +245,37 @@ h1 {
   font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900;
   color: var(--text); letter-spacing: -.5px; line-height: 1.15; margin: 0;
 }
+.static-meta {
+  margin: -8px 0 0; font-size: .82rem; color: var(--muted); font-weight: 500;
+}
 .static-card {
   background: var(--surface-strong); border: 1px solid var(--border);
   border-radius: 20px; padding: 32px;
-  display: flex; flex-direction: column; gap: 16px;
+  display: flex; flex-direction: column; gap: 14px;
   box-shadow: var(--shadow);
 }
 .static-card p {
   font-size: .95rem; line-height: 1.8; color: var(--muted); margin: 0;
 }
+.static-card h2 {
+  font-size: 1.05rem; font-weight: 700; color: var(--text);
+  margin: 18px 0 0; letter-spacing: -.2px;
+}
+.static-card h2:first-of-type { margin-top: 8px; }
+.static-card code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .85em; background: rgba(26,115,232,.08);
+  padding: 1px 6px; border-radius: 5px; color: var(--blue);
+}
+.static-list {
+  margin: 0; padding-left: 20px;
+  font-size: .95rem; line-height: 1.8; color: var(--muted);
+}
+.static-list li { margin: 6px 0; }
 .static-highlight {
   display: flex; align-items: flex-start; gap: 12px;
   background: rgba(26,115,232,.07); border: 1px solid rgba(26,115,232,.15);
-  border-radius: 12px; padding: 16px 18px; margin-top: 8px;
+  border-radius: 12px; padding: 16px 18px; margin-top: 12px;
   color: var(--blue);
 }
 .static-highlight svg { flex-shrink: 0; margin-top: 2px; }

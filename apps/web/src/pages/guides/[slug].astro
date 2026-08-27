@@ -280,8 +280,8 @@ const structuredData = [
   <CTASection
     title="Continue into the actual tool"
     copy="Use the guide to understand the workflow, then move into the app page for local interaction."
-    primaryHref="/apps/tubetrace"
-    primaryLabel="Open YouTube analyzer"
+    primaryHref={guide.relatedToolSlug ? `/apps/${guide.relatedToolSlug}` : "/apps"}
+    primaryLabel={guide.relatedToolLabel}
     secondaryHref="/guides"
     secondaryLabel="Back to guides"
   />

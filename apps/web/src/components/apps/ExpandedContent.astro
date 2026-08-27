@@ -21,34 +21,63 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
   <div class="expanded-content">
     {howToUse.length > 0 && (
       <section class="content-section">
-        <h2>How to use</h2>
-        <ol class="content-list">
-          {howToUse.map((step) => <li>{step}</li>)}
+        <div class="cs-head">
+          <span class="cs-eyebrow">Guide</span>
+          <h2>How to use</h2>
+        </div>
+        <ol class="steps">
+          {howToUse.map((step, i) => (
+            <li class="step">
+              <span class="step-num" aria-hidden="true">{i + 1}</span>
+              <p>{step}</p>
+            </li>
+          ))}
         </ol>
       </section>
     )}
 
     {useCases.length > 0 && (
       <section class="content-section">
-        <h2>Use cases</h2>
-        <ul class="content-list">
-          {useCases.map((useCase) => <li>{useCase}</li>)}
+        <div class="cs-head">
+          <span class="cs-eyebrow">Scenarios</span>
+          <h2>Use cases</h2>
+        </div>
+        <ul class="cases">
+          {useCases.map((useCase) => (
+            <li class="case">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <p>{useCase}</p>
+            </li>
+          ))}
         </ul>
       </section>
     )}
 
     {(limitations.length > 0 || privacy) && (
       <section class="content-section">
-        <h2>Limitations &amp; Privacy</h2>
+        <div class="cs-head">
+          <span class="cs-eyebrow">Good to know</span>
+          <h2>Limitations &amp; Privacy</h2>
+        </div>
         {privacy && (
           <div class="privacy-box">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <p>{privacy}</p>
+            <div class="privacy-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <strong>Private by design</strong>
+              <p>{privacy}</p>
+            </div>
           </div>
         )}
         {limitations.length > 0 && (
-          <ul class="content-list">
-            {limitations.map((item) => <li>{item}</li>)}
+          <ul class="limits">
+            {limitations.map((item) => (
+              <li class="limit">
+                <span class="limit-dot" aria-hidden="true"></span>
+                <p>{item}</p>
+              </li>
+            ))}
           </ul>
         )}
       </section>
@@ -59,81 +88,143 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
 <style>
 .expanded-content {
   margin-top: 48px;
-  padding-top: 48px;
+  padding-top: 40px;
   border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-.content-section {
-  margin-bottom: 36px;
-}
-
-.content-section h2 {
-  margin: 0 0 16px 0;
-  font-size: 1.3rem;
+/* ── Standard section head: eyebrow + display title ── */
+.cs-head { margin-bottom: 18px; }
+.cs-eyebrow {
+  display: block;
+  font-size: .68rem;
   font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.cs-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--text);
   line-height: 1.3;
 }
 
-.content-section:last-child {
-  margin-bottom: 0;
-}
-
-.content-list {
-  margin: 0;
-  padding-left: 24px;
-  display: flex;
-  flex-direction: column;
+/* ── How to use: numbered step cards ── */
+.steps {
+  margin: 0; padding: 0; list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+  counter-reset: step;
 }
-
-.content-list li {
-  font-size: 0.95rem;
+.step {
+  display: flex; align-items: flex-start; gap: 13px;
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.step-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--blue) 11%, transparent);
+  color: var(--blue);
+  font-family: var(--font-display);
+  font-size: .85rem; font-weight: 800;
+}
+.step p {
+  margin: 2px 0 0;
+  font-size: .9rem;
   line-height: 1.6;
   color: var(--text);
 }
 
+/* ── Use cases: check grid ── */
+.cases {
+  margin: 0; padding: 0; list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+}
+.case {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 4px 0;
+}
+.case svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #16a34a;
+}
+.case p {
+  margin: 0;
+  font-size: .9rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+/* ── Privacy box ── */
 .privacy-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 14px;
+  background: color-mix(in srgb, var(--blue) 6%, var(--card-bg));
+  border: 1.5px solid color-mix(in srgb, var(--blue) 22%, transparent);
+  border-radius: 14px;
+  padding: 16px 18px;
   margin-bottom: 16px;
 }
-
-.privacy-box svg {
+.privacy-icon {
   flex-shrink: 0;
-  margin-top: 2px;
+  width: 38px; height: 38px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--blue) 12%, transparent);
   color: var(--blue);
 }
-
+.privacy-box strong {
+  display: block;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
 .privacy-box p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: .87rem;
   line-height: 1.6;
   color: var(--muted);
 }
 
-@media (max-width: 640px) {
-  .expanded-content {
-    margin-top: 32px;
-    padding-top: 32px;
-  }
+/* ── Limitations ── */
+.limits {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.limit { display: flex; align-items: flex-start; gap: 10px; }
+.limit-dot {
+  flex-shrink: 0;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+  margin-top: 8px;
+}
+.limit p {
+  margin: 0;
+  font-size: .88rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
 
-  .content-section h2 {
-    font-size: 1.1rem;
-  }
-
-  .content-list {
-    padding-left: 20px;
-    gap: 10px;
-  }
-
-  .content-list li {
-    font-size: 0.9rem;
-  }
+@media (max-width: 700px) {
+  .expanded-content { margin-top: 32px; padding-top: 28px; gap: 30px; }
+  .steps, .cases { grid-template-columns: 1fr; }
+  .cs-head h2 { font-size: 1.15rem; }
 }
 </style>
