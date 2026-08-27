@@ -310,6 +310,17 @@ export const apps: AppDefinition[] = [
       },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What this can honestly tell you",
+          body: [
+            "This inspects an image for signals associated with AI generation and reports what it finds. It does not, and cannot, tell you definitively whether an image was generated. Treat every result as evidence to weigh rather than a verdict.",
+            "The strongest signals are metadata rather than pixels. Several generators write identifying information into the file, and some pipelines embed provenance data deliberately. When that is present it is fairly reliable — but it is trivially removed, so its absence proves nothing at all. An image stripped of metadata, or re-saved by any editor, looks identical to a camera photograph that went through the same process.",
+            "Visual heuristics are weaker still, and getting weaker as models improve. The artefacts that once gave generated images away are exactly what each generation of models is trained to eliminate, so a negative result increasingly means only that the generator was recent.",
+            "Both error directions are real. Heavily edited, filtered, or upscaled photographs can trip the same signals, and a careful generation can pass cleanly. If a decision matters — a claim, a dispute, a piece of journalism — this is a starting point for investigation, never the basis for a conclusion.",
+          ],
+        },
+      ],
       howToUse: [
         "Select an image file from your device.",
         "Review the file format, dimensions, file size, and available metadata clues.",
@@ -472,6 +483,16 @@ export const apps: AppDefinition[] = [
       { question: "What can I do with the extracted text?", answer: "Copy it into a word processor, search it with Ctrl+F, paste it into a translation tool, or feed it into another Small Web Apps tool like Word Counter or Word Frequency Counter." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Why a PDF sometimes has no text to extract",
+          body: [
+            "Extraction pulls the text objects the document already contains. When a PDF was generated from a word processor or a web page, those objects exist and extraction is exact.",
+            "When the PDF came from a scanner or a camera, there are no text objects at all. Each page is a single image of a page, and no extractor can read it, because there is nothing to read — the letters are pixels. An empty result from a scanned document is the correct answer, not a failure. That case needs optical character recognition instead.",
+            "Even in a true text PDF, reading order can surprise you. A PDF records where each run of characters sits on the page, not that a page has two columns. Multi-column layouts, sidebars and footnotes therefore come out interleaved, because the extractor is reporting the order the document stored them in rather than the order a human reads them.",
+          ],
+        },
+      ],
       howToUse: [
         "Click the upload area and select a PDF file from your device, or drag and drop it in.",
         "Choose whether to extract text from all pages or specify a custom page range (e.g. 1-5).",
@@ -531,6 +552,16 @@ export const apps: AppDefinition[] = [
       { question: "Does this work for password-protected PDFs?", answer: "If the PDF requires a password to open, the browser cannot decrypt it without that password, so rendering will fail. Remove the password using a PDF editor first." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Rendering pages, and why resolution is a choice",
+          body: [
+            "Each page is rendered the way a PDF viewer draws it, then captured as an image. A PDF page is defined in points rather than pixels, so there is no single correct output size — the renderer has to be told what scale to draw at.",
+            "That scale is the whole quality question. Rendering at screen scale gives a small file that looks correct on a monitor and blurry when printed or zoomed. Rendering large gives crisp text and a much heavier file, and the cost is paid in your device's memory, because a full-page bitmap has to exist in the browser before it can be saved.",
+            "Rendering is also one-directional. The output is pixels: the text stops being selectable, searchable, or extractable, and no image can be turned back into the original vector page.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload your PDF by clicking the upload area or dragging the file in.",
         "Wait for the tool to render a preview of each page using PDF.js and the canvas API.",
@@ -589,6 +620,16 @@ export const apps: AppDefinition[] = [
       { question: "Is there a page count limit?", answer: "No hard limit is enforced, but very large PDFs (hundreds of pages) take longer to process since pdf-lib loads the entire document into memory first." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Splitting is extraction, not deletion",
+          body: [
+            "Splitting builds a new document containing the pages you selected and leaves your original file untouched on disk. Nothing is removed from the source, which means you can run several different selections against the same file without re-uploading it.",
+            "Because each output is a freshly constructed document, the same document-level caveat as merging applies: page content is copied faithfully, while bookmarks and interactive form fields are document-level structures that do not follow a page into a new file.",
+            "Page numbers here are the physical sheet order in the file, counting from 1. That is often not the number printed on the page — a document with roman-numbered front matter will have its printed 'page 1' somewhere around physical page 9.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload your PDF file by clicking the upload area or dragging it in.",
         "Choose a mode: 'Split all pages' to extract every page as its own PDF, or 'Page range' to extract a specific set of pages as one PDF.",
@@ -648,6 +689,16 @@ export const apps: AppDefinition[] = [
       { question: "Can I remove an image after adding it?", answer: "Yes. Each added image has a remove option so you can adjust your selection before generating the final PDF." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "How images become pages",
+          body: [
+            "Each image becomes one page, embedded at its native pixel dimensions. Nothing is resampled, so a 12-megapixel photo produces a physically large page carrying every original pixel, and the output PDF is at least as large as the images that went into it.",
+            "JPEG data is embedded as-is rather than decoded and re-encoded, which keeps photographs from losing a second generation of quality. PNG content has to be handled differently because PDF has no native PNG: lossless image data is embedded in a form the format supports, which is why a PNG-sourced page can be considerably heavier than the same picture as a JPEG.",
+            "Page order follows the order you add the files, not the filename order your operating system shows. If the sequence matters, add them deliberately rather than selecting a folder at once.",
+          ],
+        },
+      ],
       howToUse: [
         "Click the upload area or drag and drop one or more JPG, PNG, or WebP images.",
         "Reorder the images using the up/down controls — this determines the page order in the final PDF.",
@@ -707,6 +758,16 @@ export const apps: AppDefinition[] = [
       { question: "Will resizing remove EXIF data like camera info or GPS location?", answer: "Yes. The canvas-based resize process re-encodes the image and does not carry over EXIF metadata, which can be a privacy benefit before sharing photos." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Resampling, and what it costs",
+          body: [
+            "Resizing redraws the image at new dimensions, computing each output pixel from the input pixels around it. Reducing size is generally safe and often improves apparent sharpness.",
+            "Enlarging is where expectations break. There is no additional detail to recover — the algorithm can only interpolate between pixels that already exist, so an upscaled image is a smoother version of the same information, not a more detailed one. Doubling the dimensions of a small image produces a large soft image, never a sharp one.",
+            "One consequence is worth knowing before you use the result. Processing happens by drawing the image onto a canvas and encoding what was drawn, and a canvas holds pixels only. Every piece of metadata is therefore dropped: EXIF, the camera model, the timestamp, the colour profile, and any embedded GPS coordinates. That is excellent if you are stripping location data before posting a photo, and a real loss if you were relying on capture dates to keep an archive in order. Keep the original.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload a JPG, PNG, WebP, or GIF image by clicking the upload area or dragging it in.",
         "Enter a target width and height in pixels, or switch to percentage mode to scale proportionally.",
@@ -766,6 +827,16 @@ export const apps: AppDefinition[] = [
       { question: "Does the preview match the final downloaded image exactly?", answer: "Yes. The preview is rendered from the same canvas operation used to generate the downloadable PNG, so what you see is what you get." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Cropping removes data permanently",
+          body: [
+            "Cropping writes a new image containing only the region you kept. The discarded area is not hidden or stored in a corner of the file — it is gone from the output.",
+            "That makes cropping a genuine way to remove something from a picture, unlike drawing a box over it. If you are cropping to keep a face, a document number, or a background detail out of a shared image, the cropped file really does not contain it.",
+            "One consequence is worth knowing before you use the result. Processing happens by drawing the image onto a canvas and encoding what was drawn, and a canvas holds pixels only. Every piece of metadata is therefore dropped: EXIF, the camera model, the timestamp, the colour profile, and any embedded GPS coordinates. That is excellent if you are stripping location data before posting a photo, and a real loss if you were relying on capture dates to keep an archive in order. Keep the original.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload an image by clicking the upload area or dragging it in.",
         "Choose an aspect ratio preset (1:1, 16:9, 4:3, 3:2) or select 'Custom' to enter your own dimensions.",
@@ -825,6 +896,17 @@ export const apps: AppDefinition[] = [
       { question: "Why would I optimize images for my website?", answer: "Smaller image files load faster, which improves page speed scores, reduces bandwidth costs, and can improve search rankings since page speed is a ranking factor." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What the quality setting actually does",
+          body: [
+            "The quality slider controls how aggressively the encoder discards visual information. It is not a percentage of the original file size, and the relationship between the two is not linear.",
+            "In practice the curve has a knee. Between roughly 100 and 80 the file shrinks substantially while the difference is hard to see on most photographs. Below about 60 the losses become visible: soft blocking in flat areas like skies, and coloured fringing around hard edges and text. Where exactly that happens depends on the picture — a photograph tolerates far more compression than a screenshot of an interface.",
+            "Re-compressing an already-compressed image compounds the damage, because the encoder is discarding information from a picture that has already had information discarded. Always optimise from the best original you have rather than from a file that has been through this once already.",
+            "One consequence is worth knowing before you use the result. Processing happens by drawing the image onto a canvas and encoding what was drawn, and a canvas holds pixels only. Every piece of metadata is therefore dropped: EXIF, the camera model, the timestamp, the colour profile, and any embedded GPS coordinates. That is excellent if you are stripping location data before posting a photo, and a real loss if you were relying on capture dates to keep an archive in order. Keep the original.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload a JPG or PNG image by clicking the upload area or dragging it in.",
         "Adjust the quality slider or set a target maximum file size.",
@@ -2938,6 +3020,18 @@ export const apps: AppDefinition[] = [
       { question: "Why would I convert an image to WebP?", answer: "WebP often reduces file size significantly compared to JPG or PNG at similar quality, which can improve page load times if your website and CDN support serving WebP images." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Choosing between PNG, JPEG and WebP",
+          body: [
+            "The three formats are not interchangeable, and picking by habit is how people end up with needlessly large files or visibly damaged ones.",
+            "PNG is lossless and keeps transparency, which makes it right for screenshots, interface assets, logos and anything with text or hard edges. Its cost is size: a photograph saved as PNG is typically several times larger than the same photograph as JPEG, with no visible benefit. Because PNG is lossless, the quality setting does not apply to it at all.",
+            "JPEG is lossy and has no transparency, but it is extremely efficient on photographs, where the detail it discards is detail the eye does not miss. It is a poor choice for text and line art, where its artefacts land exactly on the edges you care about.",
+            "WebP handles both cases and generally produces smaller files than either at comparable quality, with transparency support. It is supported across current browsers, and the reason to avoid it is compatibility with older software rather than quality.",
+            "One consequence is worth knowing before you use the result. Processing happens by drawing the image onto a canvas and encoding what was drawn, and a canvas holds pixels only. Every piece of metadata is therefore dropped: EXIF, the camera model, the timestamp, the colour profile, and any embedded GPS coordinates. That is excellent if you are stripping location data before posting a photo, and a real loss if you were relying on capture dates to keep an archive in order. Keep the original.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload an image by clicking the upload area or dragging it in.",
         "Choose the target format: PNG, JPG, or WebP.",
@@ -2997,6 +3091,17 @@ export const apps: AppDefinition[] = [
       { question: "What format is the downloaded file?", answer: "The transformed image is downloaded as a PNG, regardless of the original file's format." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Rotation, mirroring, and the orientation tag",
+          body: [
+            "Flipping and rotating redraw the image in its new orientation and encode the result, so the output is oriented correctly everywhere, in every viewer.",
+            "That matters because photographs carry an EXIF orientation tag: many cameras store the picture in sensor order and record separately that it should be displayed rotated. Software that reads the tag shows it upright while software that ignores it shows it sideways, which is why the same photo can look correct in one application and wrong in another.",
+            "Redrawing settles the question by baking the orientation into the pixels themselves. There is no longer a tag to disagree about.",
+            "One consequence is worth knowing before you use the result. Processing happens by drawing the image onto a canvas and encoding what was drawn, and a canvas holds pixels only. Every piece of metadata is therefore dropped: EXIF, the camera model, the timestamp, the colour profile, and any embedded GPS coordinates. That is excellent if you are stripping location data before posting a photo, and a real loss if you were relying on capture dates to keep an archive in order. Keep the original.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload an image by clicking the upload area or dragging it in.",
         "Click Flip Horizontal, Flip Vertical, Rotate 90° CW, Rotate 90° CCW, or Rotate 180°.",
@@ -3056,6 +3161,17 @@ export const apps: AppDefinition[] = [
       { question: "Will the filter affect transparency in PNG images?", answer: "Transparent areas remain transparent — the filters affect color and brightness of visible pixels only, not the alpha channel." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Grayscale conversion is not just desaturation",
+          body: [
+            "Converting to grayscale collapses three colour channels into one brightness value, and how that collapse is weighted decides whether the result looks right.",
+            "The human eye is far more sensitive to green than to red, and least sensitive to blue. A naive average of the three channels therefore renders greens too dark and blues too light, which is why averaged conversions look muddy. Perceptual weighting — green counting for roughly twice red and far more than blue — matches how brightness is actually perceived.",
+            "The practical consequence shows up in images where colours carry meaning. A red chart line and a green one at similar saturation can converge to nearly the same grey, making a legible colour chart unreadable in grayscale. Check the result rather than assuming information survived.",
+            "One consequence is worth knowing before you use the result. Processing happens by drawing the image onto a canvas and encoding what was drawn, and a canvas holds pixels only. Every piece of metadata is therefore dropped: EXIF, the camera model, the timestamp, the colour profile, and any embedded GPS coordinates. That is excellent if you are stripping location data before posting a photo, and a real loss if you were relying on capture dates to keep an archive in order. Keep the original.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload an image by clicking the upload area or dragging it in.",
         "Select a filter: Grayscale, Sepia, Invert, or High Contrast.",
@@ -3235,6 +3351,17 @@ export const apps: AppDefinition[] = [
       { question: "What's a typical use case for merging PDFs?", answer: "Combining scanned documents, joining multiple invoices into one file for accounting, or assembling a report from separate chapter PDFs." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What survives a merge and what does not",
+          body: [
+            "Merging copies pages out of each source document and into a new one. Everything that lives on a page comes with it — text, images, vector art, and page-level annotations.",
+            "What does not come with it is anything stored at document level rather than on a page. Bookmarks and outlines are the ones people miss most: a 200-page manual with a full table-of-contents tree arrives merged and bookmark-free. Interactive form fields are the other. An AcroForm is a document-level structure, so merging two fillable PDFs produces a document where the fields' appearance is drawn on the page but the fields themselves no longer function.",
+            "If you need the bookmarks or the form, merge is the wrong operation and no browser tool will do better — that requires rebuilding the outline tree and the form dictionary, not copying pages.",
+            "Files are opened with encryption ignored, so a PDF carrying owner restrictions — the flags that disable printing or copying — will still open here. That is not password cracking: a document locked with a user password, the kind that demands a password before it renders at all, cannot be opened without it and will simply fail to load.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload two or more PDF files using the upload area or drag and drop.",
         "Review the file list — each entry shows the file name and page count.",
@@ -3294,6 +3421,16 @@ export const apps: AppDefinition[] = [
       { question: "Can I preview the rotation before downloading?", answer: "The tool applies the rotation and produces the output PDF directly; open the downloaded file in a PDF viewer to confirm the result before using it further." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Rotation changes a flag, not the pixels",
+          body: [
+            "A PDF page carries a rotation value that viewers apply when drawing it. Rotating here sets that value; it does not re-render, re-encode, or resample anything on the page.",
+            "That is why rotation is lossless and near-instant even on a large scanned document, and why the output file is essentially the same size as the input. Nothing was recompressed because nothing was redrawn.",
+            "Rotation is stored in 90-degree increments. A page that is slightly skewed — the usual result of a hand-fed scanner — cannot be straightened by a few degrees here, because the format has no place to record that. Deskewing requires rasterising and redrawing the page, which is a different and lossy operation.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload a PDF file using the upload area or drag and drop.",
         "Choose to rotate all pages or specify a page range (e.g. 1-3, 5, 7-9).",
@@ -3353,6 +3490,16 @@ export const apps: AppDefinition[] = [
       { question: "Can I remove a watermark added by this tool?", answer: "Not directly — the watermark becomes part of the page content. To remove it, you'd need to start from the original (unwatermarked) PDF again." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "A watermark is drawn content, not protection",
+          body: [
+            "The watermark is drawn onto each page as ordinary page content. That makes it durable in the sense that it prints, flattens, and survives conversion — it is part of the page, not an overlay toggled by the viewer.",
+            "It is not a security measure, and it is worth being blunt about that. Anything drawn on a page can be removed by anyone with a PDF editor, and text drawn over an image does not stop the image underneath from being extracted. Treat a watermark as a statement of provenance for honest readers, not as a control over dishonest ones.",
+            "For the same reason a watermark does not redact. If you need something in the document to be unreadable, covering it does not work — the content is still there underneath and comes straight out with any text extractor.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload a PDF file using the upload area or drag and drop.",
         "Enter the watermark text.",
@@ -3412,6 +3559,16 @@ export const apps: AppDefinition[] = [
       { question: "Does it show metadata for scanned PDFs?", answer: "Yes — scanned PDFs still have a document information dictionary (often filled in by scanning software), which this tool reads the same way as any other PDF." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What a PDF quietly records about its origin",
+          body: [
+            "PDF documents carry an information dictionary that most people never look at and most tools populate automatically. It routinely includes the title, the author, the creating application, and the producer library, plus creation and modification timestamps.",
+            "Those fields leak more than they look like they do. The author field is frequently the account name of whoever first saved the file, the creator names the software and often its version, and the timestamps record when the document was actually made rather than when it was sent. A document circulated as neutral or anonymous often is not.",
+            "This viewer reads those fields locally so you can see what a file discloses before you send it. The same information is what a recipient sees in any PDF reader's document properties panel — there is nothing privileged about it, only unnoticed.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload a PDF file using the upload area or drag and drop.",
         "View the extracted metadata fields: title, author, subject, creator, producer, dates, and more.",
@@ -3470,6 +3627,16 @@ export const apps: AppDefinition[] = [
       { question: "Can I compress an already-compressed PDF again?", answer: "Yes, but if the file was already optimized (by this tool or another), running it again typically yields little to no further reduction." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What this can and cannot shrink",
+          body: [
+            "This tool re-saves the document structure. It does not touch the images inside it, and that distinction decides whether you will see any useful saving at all.",
+            "In a typical scanned or image-heavy PDF, the images are the file. They usually account for the overwhelming majority of the bytes, and leaving them untouched means the file barely moves. A text-heavy document generated by a word processor has far more structural overhead relative to its content, so structural changes matter more there.",
+            "Real compression of a scanned PDF requires re-encoding every page image at lower quality, which is a lossy operation that permanently degrades the document. A tool that promises to hit an arbitrary target size is doing exactly that, whatever it says on the button. If you need a scan materially smaller, the honest route is to re-scan at a lower DPI rather than to crush an already-compressed JPEG a second time.",
+          ],
+        },
+      ],
       howToUse: [
         "Upload a PDF file using the upload area or drag and drop.",
         "The tool analyzes the file and rebuilds it with structural optimizations.",
@@ -4243,6 +4410,24 @@ export const apps: AppDefinition[] = [
       { question: "Can I remove EXIF data with this tool?", answer: "This tool is for viewing metadata only. To strip EXIF data before sharing, use an image tool that re-saves or re-encodes the file without metadata." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What EXIF records, and why it matters",
+          body: [
+            "EXIF is written by the camera at the moment of capture and travels inside the image file. It commonly carries the make and model of the camera or phone, the lens, the full exposure settings, and the date and time down to the second.",
+            "The field that matters most for privacy is location. Phones with location services enabled write GPS coordinates and altitude directly into the photo, precise enough to identify a building. That data is invisible in every normal photo viewer and travels with the file whenever it is sent as an attachment or uploaded somewhere that does not strip it.",
+            "Major social platforms generally strip EXIF on upload, which has taught people that photos are safe to share. Email attachments, cloud folder links, messaging apps that send 'as a file', and direct downloads from a personal site typically do not strip anything.",
+          ],
+          definitions: [
+            { term: "Make / Model", definition: "The camera or phone that took the picture, often identifying a specific device model." },
+            { term: "DateTimeOriginal", definition: "When the shutter fired, per the device clock — distinct from the file's modification date, which changes when the file is copied or edited." },
+            { term: "GPSLatitude / GPSLongitude", definition: "Where the picture was taken. Present whenever location services were enabled for the camera, and accurate enough to identify an address." },
+            { term: "GPSAltitude", definition: "Height above sea level at capture, which on a multi-storey site can narrow the location further." },
+            { term: "Exposure settings", definition: "Shutter speed, aperture, ISO and focal length — useful for photographers, harmless for privacy." },
+            { term: "Orientation", definition: "How the image should be rotated for display. Software that ignores it shows the photo sideways." },
+          ],
+        },
+      ],
       howToUse: [
         "Select or drag-and-drop an image file (JPEG or TIFF work best).",
         "View the extracted EXIF fields: camera info, capture settings, dimensions, and timestamps.",
@@ -4480,6 +4665,16 @@ export const apps: AppDefinition[] = [
       { question: "Does it read GPS location data?", answer: "This tool's EXIF extraction is a lightweight scan for date and camera fields specifically — it does not extract GPS coordinates. Use the EXIF Viewer tool if you need to check for embedded location data." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Reading the file's own structure",
+          body: [
+            "This inspects the file at byte level rather than asking the browser to decode the picture. A JPEG begins with a two-byte start-of-image marker and is then a chain of segments, each declaring its own length, and metadata lives in specific segments within that chain.",
+            "Walking the chain directly means the extension is irrelevant. A file named .jpg that is really a PNG is immediately visible, which is a common source of confusion when an upload is rejected for the wrong format despite an apparently correct filename.",
+            "It also means what you see is what the file contains, not what a viewer chose to show you. Metadata is routinely present and invisible in normal image viewers, which is exactly why files get shared with more information attached than the sender intended.",
+          ],
+        },
+      ],
       howToUse: [
         "Drag and drop an image onto the drop zone, or click it to browse and select a file.",
         "The tool reads the image and displays file name, size, MIME type, dimensions, aspect ratio, and megapixels.",
@@ -5082,6 +5277,16 @@ export const apps: AppDefinition[] = [
       { question: "Does it work with photos of documents taken with a phone?", answer: "Often, yes — if the photo is straight-on, in focus, and evenly lit. Strong angles, shadows, and glare significantly reduce accuracy." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "How the recognition actually works",
+          body: [
+            "Recognition runs on Tesseract compiled to WebAssembly, executing in a worker thread inside your browser. The first run downloads the trained data for the language you picked and caches it, so the initial recognition is noticeably slower than every one after it. No image is uploaded — the engine comes to the file rather than the file going to a server.",
+            "The language setting matters more than people expect, because it is not a hint. Tesseract loads a different trained model per language, and each one encodes that language's character set and letter-sequence probabilities. Running Portuguese text through the English model does not degrade gracefully; accented characters have no good match and the engine's guesses about likely letter sequences are actively wrong.",
+            "Accuracy is decided before the engine runs. Resolution is the dominant factor — small text that occupies few pixels per character has too little information to identify, and enlarging the image afterwards adds no detail. Straight, high-contrast, evenly lit text does well. Skew, shadow across the page, JPEG artefacts around letter edges, and photographs taken at an angle all cost accuracy, and handwriting is not what this engine was trained for.",
+          ],
+        },
+      ],
       howToUse: [
         "Select the language of the text in your image — this strongly affects accuracy.",
         "Drag and drop an image onto the drop zone, click it to browse, or paste an image from your clipboard.",
@@ -5145,6 +5350,17 @@ export const apps: AppDefinition[] = [
       { question: "Does it preserve the document's formatting?", answer: "No — the output is plain text with a '--- Page N ---' marker between pages. Columns, tables, fonts, and images are not reconstructed." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Rendering each page, then reading it",
+          body: [
+            "This is a two-stage pipeline. Every page is first rendered to an image the way a PDF viewer draws it, and each rendered page is then passed through recognition. Both stages run in your browser.",
+            "Recognition runs on Tesseract compiled to WebAssembly, executing in a worker thread inside your browser. The first run downloads the trained data for the language you picked and caches it, so the initial recognition is noticeably slower than every one after it. No image is uploaded — the engine comes to the file rather than the file going to a server.",
+            "Because every page is rendered and recognised individually, time scales with page count and a long document takes a long time. It is also worth checking first whether you need this at all: if the PDF already contains real text, plain extraction is instant and exact, and OCR would throw that away to re-read pictures of the same words.",
+            "The language setting matters more than people expect, because it is not a hint. Tesseract loads a different trained model per language, and each one encodes that language's character set and letter-sequence probabilities. Running Portuguese text through the English model does not degrade gracefully; accented characters have no good match and the engine's guesses about likely letter sequences are actively wrong.",
+          ],
+        },
+      ],
       howToUse: [
         "Select the language the document is written in — this strongly affects accuracy.",
         "Drop a scanned PDF onto the drop zone, or click it to browse.",
@@ -5209,6 +5425,17 @@ export const apps: AppDefinition[] = [
       { question: "How many pages can it handle?", answer: "Up to 50 pages per run, to keep memory use reasonable. For longer documents, split the PDF first and process each part." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "The invisible text layer",
+          body: [
+            "A searchable PDF keeps the scanned page image exactly as it is and adds recognised text behind it in an invisible rendering mode. You see the original scan; your reader's search finds the text underneath.",
+            "This is the right output for archives precisely because it is additive. The scan is not replaced by a transcription, so nothing is lost if recognition made mistakes — and it will make some. The visual record stays authoritative while the text layer makes the document findable.",
+            "Recognition runs on Tesseract compiled to WebAssembly, executing in a worker thread inside your browser. The first run downloads the trained data for the language you picked and caches it, so the initial recognition is noticeably slower than every one after it. No image is uploaded — the engine comes to the file rather than the file going to a server.",
+            "Expect the file to grow. You are keeping every original page image and adding a text layer on top, so a searchable PDF is always somewhat larger than the scan it came from.",
+          ],
+        },
+      ],
       howToUse: [
         "Select the language the document is written in — this strongly affects accuracy.",
         "Drop a scanned PDF onto the drop zone, or click it to browse.",
@@ -5271,6 +5498,17 @@ export const apps: AppDefinition[] = [
       { question: "Why is my result full of mistakes?", answer: "Common causes: the wrong language selected, blur, a strong angle, shadows or glare, or small text captured at low resolution. Crop tight around the text and use the highest-resolution version you have." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Reading text out of a JPEG",
+          body: [
+            "Recognition runs on Tesseract compiled to WebAssembly, executing in a worker thread inside your browser. The first run downloads the trained data for the language you picked and caches it, so the initial recognition is noticeably slower than every one after it. No image is uploaded — the engine comes to the file rather than the file going to a server.",
+            "JPEG deserves one specific warning. It is a lossy format that compresses by discarding high-frequency detail, and the sharp edge between a black letter and a white page is exactly that kind of detail. A heavily compressed JPEG shows soft haloes and blocky fringes around characters, and those artefacts are what the recogniser has to work with.",
+            "If you control how the image is produced, capture text as PNG. If you only have the JPEG, a tighter crop around the text region usually helps more than any setting here.",
+            "The language setting matters more than people expect, because it is not a hint. Tesseract loads a different trained model per language, and each one encodes that language's character set and letter-sequence probabilities. Running Portuguese text through the English model does not degrade gracefully; accented characters have no good match and the engine's guesses about likely letter sequences are actively wrong.",
+          ],
+        },
+      ],
       howToUse: [
         "Select the language of the text in your JPG — this strongly affects accuracy.",
         "Drop the JPG onto the drop zone, click it to browse, or paste an image from your clipboard.",
@@ -5331,6 +5569,16 @@ export const apps: AppDefinition[] = [
       { question: "Why is my result full of mistakes?", answer: "Common causes: the wrong language selected, very small text (upscale or re-capture at higher resolution), low contrast between text and background, or decorative fonts." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Why PNG is the better source for OCR",
+          body: [
+            "Recognition runs on Tesseract compiled to WebAssembly, executing in a worker thread inside your browser. The first run downloads the trained data for the language you picked and caches it, so the initial recognition is noticeably slower than every one after it. No image is uploaded — the engine comes to the file rather than the file going to a server.",
+            "PNG is lossless, so letter edges stay exactly as they were drawn. There are no compression artefacts around characters, which removes the single most common source of recognition error in screenshots and exported documents. If you have a choice of source format, this is the one to use.",
+            "Accuracy is decided before the engine runs. Resolution is the dominant factor — small text that occupies few pixels per character has too little information to identify, and enlarging the image afterwards adds no detail. Straight, high-contrast, evenly lit text does well. Skew, shadow across the page, JPEG artefacts around letter edges, and photographs taken at an angle all cost accuracy, and handwriting is not what this engine was trained for.",
+          ],
+        },
+      ],
       howToUse: [
         "Select the language of the text in your PNG — this strongly affects accuracy.",
         "Drop the PNG onto the drop zone, click it to browse, or paste an image from your clipboard.",
@@ -5391,6 +5639,17 @@ export const apps: AppDefinition[] = [
       { question: "Which languages are supported?", answer: "English, Portuguese, Spanish, French, German, Italian, Dutch, Polish, Turkish, Russian, Japanese, and Simplified Chinese. Pick the language that matches the text on screen." },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "Screenshots are the easy case, with one exception",
+          body: [
+            "Recognition runs on Tesseract compiled to WebAssembly, executing in a worker thread inside your browser. The first run downloads the trained data for the language you picked and caches it, so the initial recognition is noticeably slower than every one after it. No image is uploaded — the engine comes to the file rather than the file going to a server.",
+            "Screenshots are close to ideal input. The text was rendered by a computer rather than photographed, so it is perfectly sharp, perfectly aligned, and evenly lit — none of the problems that come with a phone photo of a page apply.",
+            "The exception is scale. A screenshot taken on a standard-density display captures interface text at roughly the pixel size it was drawn, which can be small enough to leave few pixels per character. Capturing on a high-density screen, or zooming the page in before capturing, gives the recogniser materially more to work with. Dark mode is fine; the engine handles light text on dark backgrounds.",
+            "The language setting matters more than people expect, because it is not a hint. Tesseract loads a different trained model per language, and each one encodes that language's character set and letter-sequence probabilities. Running Portuguese text through the English model does not degrade gracefully; accented characters have no good match and the engine's guesses about likely letter sequences are actively wrong.",
+          ],
+        },
+      ],
       howToUse: [
         "Take a screenshot (PrintScreen, Win+Shift+S, or Cmd+Shift+4).",
         "Select the language of the text, click the drop zone, and paste with Ctrl/Cmd+V — or drop a saved screenshot file.",
