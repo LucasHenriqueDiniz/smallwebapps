@@ -50,12 +50,7 @@ const grouped = categoryOrder
             <a href={categoryHref(category)}>{categoryLabel[category] ?? category}</a>
             <span>{groupApps.length}</span>
           </h4>
-          {groupApps.slice(0, 6).map((app) => (
-            <a href={app.appUrl}>
-              {app.name}
-            </a>
-          ))}
-          {groupApps.length > 6 && <a href={categoryHref(category)} class="see-all">View all {groupApps.length}</a>}
+          <a href={categoryHref(category)} class="see-all">Browse all {groupApps.length}</a>
         </div>
       ))}
 

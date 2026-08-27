@@ -22,6 +22,7 @@ import ContentInfoLink from "../tools/ContentInfoLink.astro";
 import ExpandedFaq from "../apps/ExpandedFaq.astro";
 import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
+import { isIndexable } from "@/data/indexing";
 import type { AppContent, AppFaq } from "@smallwebapps/data";
 import "../../styles/global.css";
 
@@ -63,6 +64,7 @@ const pageDesc     = seoDescription ?? `Free browser-based ${name.toLowerCase()}
 const canonicalUrl = new URL(`/apps/${slug}/`, siteConfig.siteUrl).toString();
 const ogImageUrl   = new URL(`/og/${slug}.svg`, siteConfig.siteUrl).toString();
 const isLive       = status === "live";
+const indexable    = isIndexable(slug);
 const displayFaq   = faqExpanded.length ? faqExpanded : faq;
 const schemaCategoryByLabel: Record<string, string> = {
   "Developer Tools": "DeveloperApplication",
@@ -113,6 +115,7 @@ const breadcrumbSchema = {
   <title>{pageTitle}</title>
   <meta name="description" content={pageDesc} />
   <link rel="canonical" href={canonicalUrl} />
+  {!indexable && <meta name="robots" content="noindex, follow" />}
   <link rel="icon" type="image/svg+xml"  href="/favicon.svg" />
   <link rel="icon" type="image/png"      href="/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/x-icon"   href="/favicon.ico" />

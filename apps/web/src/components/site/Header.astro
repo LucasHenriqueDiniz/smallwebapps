@@ -1,5 +1,6 @@
 ---
 import { apps } from "@/data/apps";
+import { isIndexable } from "@/data/indexing";
 
 const categoryOrder = [
   "PDF Tools",
@@ -49,8 +50,10 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
       {categoryOrder.map((category) => {
         const meta = categoryMeta[category];
         const categoryApps = appsByCategory[category] ?? [];
-        const featured = categoryApps.filter((app) => app.status === "live").slice(0, 4);
-        const visibleList = categoryApps.slice(0, 14);
+        // Surface the pages worth ranking. Alphabetical order otherwise puts the
+        // noindexed size variants ("Compress PDF to 100KB", ...) in every menu.
+        const live = categoryApps.filter((app) => app.status === "live");
+        const featured = [...live.filter((app) => isIndexable(app.slug)), ...live].slice(0, 4);
         return (
           <div class="nav-item dropdown">
             <a href={meta.href} class="nav-btn">
@@ -71,7 +74,6 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
                   </div>
                   <p class="mega-label">{category}</p>
                   <strong>{categoryApps.length} tools</strong>
-                  <span>{categoryApps.filter((app) => app.status === "live").length} live, all browser-based.</span>
                   <a href={meta.href} class="mega-all">Browse all {meta.label} tools</a>
                 </div>
 
@@ -82,29 +84,11 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
                       {featured.map((app) => (
                         <a href={app.appUrl} class="feature-link">
                           <strong>{app.name}</strong>
-                          <span>{app.shortDescription}</span>
                         </a>
                       ))}
                     </div>
                   </div>
 
-                  <div class="mega-section">
-                    <p class="mega-label">Tool directory</p>
-                    <div class="tool-list">
-                      {visibleList.map((app) => (
-                        <a href={app.appUrl} class="tool-link">
-                          <span>{app.name}</span>
-                          <em class={app.status === "live" ? "live" : "soon"}>{app.status === "live" ? "Live" : "Soon"}</em>
-                        </a>
-                      ))}
-                      {categoryApps.length > visibleList.length && (
-                        <a href={meta.href} class="tool-link more-link">
-                          <span>View {categoryApps.length - visibleList.length} more</span>
-                          <em>&rarr;</em>
-                        </a>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
+import { isIndexableUrl } from "./src/data/indexing.ts";
 
 export default defineConfig({
   site: "https://smallwebapps.com",
@@ -20,7 +21,8 @@ export default defineConfig({
         if (page.includes('/admin') || page.includes('/preview')) {
           return false;
         }
-        return true;
+        // A noindexed page must not be advertised in the sitemap.
+        return isIndexableUrl(page);
       },
       serialize: (item) => {
         // Custom priority based on URL patterns
