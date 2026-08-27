@@ -1,44 +1,16 @@
 ---
-import Header from "@/components/site/Header.astro";
-import Footer from "@/components/site/Footer.astro";
-import CookieBanner from "@/components/site/CookieBanner.astro";
-import { siteConfig } from "@/lib/site";
-import "../styles/global.css";
+import MainLayout from "@/components/layout/MainLayout.astro";
+import { apps } from "@/data/apps";
 
-const pageTitle = "About Small Web Apps";
-const pageDesc = "Learn about Small Web Apps, a collection of free browser-based utilities built with privacy and simplicity in mind.";
-const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
+const toolCount = apps.length;
+const lastUpdated = "August 2026";
 ---
 
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{pageTitle} | {siteConfig.name}</title>
-  <meta name="description" content={pageDesc} />
-  <link rel="canonical" href={canonicalUrl} />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
-  <meta name="theme-color" content="#1a73e8" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={pageTitle} />
-  <meta property="og:description" content={pageDesc} />
-  <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={new URL("/og/site.svg", siteConfig.siteUrl).toString()} />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={pageTitle} />
-  <meta name="twitter:description" content={pageDesc} />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-</head>
-<body>
-  <Header />
-
+<MainLayout
+  title="About Small Web Apps"
+  description="Learn about Small Web Apps, a collection of free browser-based utilities built with privacy and simplicity in mind, and about the person who builds and maintains it."
+  canonicalPath="/about"
+>
   <div class="about-page">
     <div class="about-container">
       <h1>About Small Web Apps</h1>
@@ -46,7 +18,7 @@ const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
       <section class="about-section">
         <h2>Our Mission</h2>
         <p>
-          Small Web Apps is a collection of 136+ free, browser-based utilities designed to solve everyday tasks
+          Small Web Apps is a collection of {toolCount} free, browser-based utilities designed to solve everyday tasks
           with simplicity, speed, and privacy in mind. Every tool runs entirely in your browser — no uploads,
           no accounts, no servers required.
         </p>
@@ -67,7 +39,7 @@ const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
           <li><strong>100% Browser-Based:</strong> All processing happens locally in your browser using JavaScript and Web APIs. No server uploads, period.</li>
           <li><strong>Privacy First:</strong> We don't collect, log, or store your files. Refreshing the page clears everything from memory.</li>
           <li><strong>No Accounts or Paywalls:</strong> Sign up, login walls, and premium tiers don't exist here. Use any tool, anytime, free.</li>
-          <li><strong>Fast & Reliable:</strong> Tools are optimized to run instantly on modern browsers without external dependencies.</li>
+          <li><strong>Fast &amp; Reliable:</strong> Tools are optimized to run instantly on modern browsers without external dependencies.</li>
           <li><strong>Open Source:</strong> Source code is publicly available on GitHub, so you can verify security, fork, or contribute improvements.</li>
         </ul>
       </section>
@@ -82,10 +54,25 @@ const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
       </section>
 
       <section class="about-section">
+        <h2>How This Site Is Funded</h2>
+        <p>
+          Small Web Apps is free and has no paid tier. Hosting and development are funded by advertising served
+          through Google AdSense. Ads are placed around content — never inside a tool's working area, never
+          styled to look like tool controls or download buttons, and never in place of navigation.
+        </p>
+        <p>
+          Advertising does not change how the tools work: no tool sends your files anywhere, with or without ads.
+          The <a href="/privacy">Privacy Policy</a> explains exactly what advertising cookies do and how to decline them.
+        </p>
+      </section>
+
+      <section class="about-section">
         <h2>Built and Maintained By</h2>
         <p>
           Small Web Apps is built and maintained by <strong>Lucas Diniz</strong>, a developer passionate about creating simple, useful tools
           that respect user privacy. The project is a labor of love and a commitment to keeping the web free from unnecessary friction.
+          Work happens in the open — you can read every line of the site's source, file an issue, or send a patch on
+          <a href="https://github.com/LucasHenriqueDiniz/smallwebapps" target="_blank" rel="noopener noreferrer">GitHub</a>.
         </p>
       </section>
 
@@ -104,7 +91,7 @@ const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
       </section>
 
       <section class="about-section">
-        <h2>Contact & Feedback</h2>
+        <h2>Contact &amp; Feedback</h2>
         <p>
           Found a bug? Have a feature request? Want to discuss something about the tools or privacy approach?
           Head over to the <a href="/contact">Contact page</a> to get in touch.
@@ -113,7 +100,7 @@ const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
 
       <section class="about-section about-footer-section">
         <p>
-          <em>Last updated: June 2026</em>
+          <em>Last updated: {lastUpdated}</em>
         </p>
         <div class="about-links">
           <a href="/privacy">Privacy Policy</a> •
@@ -123,28 +110,13 @@ const canonicalUrl = new URL("/about", siteConfig.siteUrl).toString();
       </section>
     </div>
   </div>
-
-  <Footer />
-  <CookieBanner />
-</body>
-</html>
+</MainLayout>
 
 <style>
-*, *::before, *::after { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--page-bg);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-}
-
 .about-page {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 62px);
 }
 
 .about-container {
@@ -256,15 +228,6 @@ h1 {
 
   .about-section {
     margin-bottom: 32px;
-  }
-
-  .about-list {
-    padding-left: 20px;
-    gap: 10px;
-  }
-
-  .about-list li {
-    font-size: 0.95rem;
   }
 }
 </style>

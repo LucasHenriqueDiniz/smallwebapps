@@ -4,33 +4,159 @@ import MainLayout from "@/components/layout/MainLayout.astro";
 
 <MainLayout
   title="Contact"
-  description="Contact Small Web Apps for feedback, bug reports, or tool requests."
+  description="Contact Small Web Apps for bug reports, tool requests, guide suggestions, privacy questions, or security disclosures. Email and GitHub Issues, answered by the person who builds the site."
   canonicalPath="/contact"
 >
-  <section class="section-shell pt-12">
-    <span class="eyebrow">Contact</span>
-    <h1 class="mt-4 section-title">Send feedback, bug reports, or tool requests</h1>
-    <div class="mt-8 grid gap-5 md:grid-cols-2">
-      <div class="card-surface rounded-[2rem] p-7 text-sm leading-7 text-slate-600 md:text-base">
-        <p>
-          <strong>For questions, bug reports, feature requests, or privacy inquiries:</strong>
-        </p>
-        <ul class="mt-4 space-y-2">
-          <li><strong>Email:</strong> <a class="prose-link" href="mailto:lucas.hdo@hotmail.com">lucas.hdo@hotmail.com</a></li>
-          <li><strong>GitHub Issues:</strong> <a class="prose-link" href="https://github.com/LucasHenriqueDiniz/smallwebapps/issues">github.com/LucasHenriqueDiniz/smallwebapps/issues</a></li>
-          <li><strong>Response time:</strong> Typically within 7 days</li>
-        </ul>
-      </div>
+  <section class="static-page">
+    <div class="static-inner">
+      <span class="static-eyebrow">Contact</span>
+      <h1>Get in touch</h1>
+      <p class="static-meta">Bug reports, tool requests, privacy questions, and everything else</p>
 
-      <div class="rounded-[2rem] bg-slate-950 p-7 text-white shadow-soft">
-        <h2 class="text-xl font-semibold">Suggested contact targets</h2>
-        <ul class="mt-4 space-y-3 text-sm leading-6 text-slate-200">
-          <li>Bug report for an embedded tool</li>
-          <li>Guide topic request</li>
-          <li>Feature request for YouTube analysis tools or JSON Formatter</li>
-          <li>Monetization or partnership inquiry later on</li>
+      <div class="static-card">
+        <p>
+          Small Web Apps is built and maintained by <strong>Lucas Diniz</strong>. Messages are read and
+          answered by the same person who writes the tools — there is no support queue and no ticket
+          system in between.
+        </p>
+
+        <h2>How to reach me</h2>
+        <ul class="static-list">
+          <li>
+            <strong>Email:</strong>
+            <!--email_off-->
+            <a class="prose-link" href="mailto:lucas.hdo@hotmail.com">lucas.hdo@hotmail.com</a>
+            <!--/email_off-->
+            — best for privacy questions, security reports, and anything you would rather not post publicly.
+          </li>
+          <li>
+            <strong>GitHub Issues:</strong>
+            <a class="prose-link" href="https://github.com/LucasHenriqueDiniz/smallwebapps/issues" target="_blank" rel="noopener noreferrer">github.com/LucasHenriqueDiniz/smallwebapps/issues</a>
+            — best for bugs and feature requests, because the discussion stays attached to the code.
+          </li>
+          <li>
+            <strong>Response time:</strong> usually within 7 days. This is a side project, so replies come
+            in evenings and weekends rather than business hours.
+          </li>
         </ul>
+
+        <h2>Reporting a bug</h2>
+        <p>
+          Tools run entirely in your browser, which means a bug often depends on your specific browser,
+          file, or input. The more of the following you can include, the faster it gets fixed:
+        </p>
+        <ul class="static-list">
+          <li>which tool it was, and the page URL;</li>
+          <li>what you expected to happen, and what happened instead;</li>
+          <li>your browser and version, and whether you are on desktop or mobile;</li>
+          <li>the input that triggered it — a small sample is far more useful than a description;</li>
+          <li>anything shown in the browser console, if you are comfortable opening it.</li>
+        </ul>
+        <p>
+          Please do not send confidential files. If a bug only reproduces with sensitive data, describe the
+          shape of the data instead — number of columns, encoding, file size, unusual characters — and a
+          synthetic sample is usually enough to reproduce it.
+        </p>
+
+        <h2>Requesting a tool or a feature</h2>
+        <p>
+          Requests are welcome, and a good number of the tools on this site started as one. What helps most
+          is the workflow behind the request rather than the feature itself: what you are trying to get
+          done, what you use today, and where that breaks down. That usually leads to a better tool than a
+          feature description would.
+        </p>
+        <p>
+          Not every request gets built. Anything that would require uploading your files to a server is
+          declined by default — that constraint is the point of the site, not a limitation to work around.
+        </p>
+
+        <h2>Suggesting a guide</h2>
+        <p>
+          The <a class="prose-link" href="/guides">guides section</a> covers the workflows behind the tools —
+          exporting data, cleaning it, and processing it without handing it to a third party. If there is a
+          workflow you keep having to explain to other people, that is usually a good guide topic.
+        </p>
+
+        <h2>Privacy and data requests</h2>
+        <p>
+          For questions about what this site collects, or to exercise a data right under the GDPR, UK GDPR,
+          or a US state privacy law, email the address above with "Privacy" in the subject line. The
+          <a class="prose-link" href="/privacy">Privacy Policy</a> explains what is collected, which is very
+          little — the site holds no accounts and no user database.
+        </p>
+
+        <h2>Security disclosure</h2>
+        <p>
+          If you find a security issue — a cross-site scripting vector in a tool, a dependency with a known
+          vulnerability, a misconfigured header — please report it by email rather than opening a public
+          issue, and allow a reasonable window to fix it before disclosing. Reports are welcome and will be
+          credited if you want them to be.
+        </p>
+
+        <h2>Advertising and partnerships</h2>
+        <p>
+          The site is funded by Google AdSense. Enquiries about direct advertising, sponsorship, or
+          partnerships can be sent to the email above, but note that sponsored placements are not accepted
+          if they would be hard to distinguish from tools or editorial content.
+        </p>
+
+        <div class="static-highlight">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H5.17L4 17.17V4z"/></svg>
+          <p>
+            No contact form on purpose — a form would need a server to receive it, and the rest of this site
+            deliberately has none. Email and GitHub both reach me directly.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 </MainLayout>
+
+<style>
+.static-page {
+  max-width: 760px; margin: 0 auto; padding: 64px 24px 80px;
+  font-family: 'Inter', sans-serif;
+}
+.static-inner { display: flex; flex-direction: column; gap: 20px; }
+.static-eyebrow {
+  display: inline-flex; align-items: center;
+  background: rgba(26,115,232,.1); color: var(--blue);
+  padding: 4px 14px; border-radius: 20px;
+  font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  width: fit-content;
+}
+h1 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900;
+  color: var(--text); letter-spacing: -.5px; line-height: 1.15; margin: 0;
+}
+.static-meta {
+  margin: -8px 0 0; font-size: .82rem; color: var(--muted); font-weight: 500;
+}
+.static-card {
+  background: var(--surface-strong); border: 1px solid var(--border);
+  border-radius: 20px; padding: 32px;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: var(--shadow);
+}
+.static-card p {
+  font-size: .95rem; line-height: 1.8; color: var(--muted); margin: 0;
+}
+.static-card h2 {
+  font-size: 1.05rem; font-weight: 700; color: var(--text);
+  margin: 18px 0 0; letter-spacing: -.2px;
+}
+.static-card h2:first-of-type { margin-top: 8px; }
+.static-list {
+  margin: 0; padding-left: 20px;
+  font-size: .95rem; line-height: 1.8; color: var(--muted);
+}
+.static-list li { margin: 6px 0; }
+.static-highlight {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: rgba(26,115,232,.07); border: 1px solid rgba(26,115,232,.15);
+  border-radius: 12px; padding: 16px 18px; margin-top: 12px;
+  color: var(--blue);
+}
+.static-highlight svg { flex-shrink: 0; margin-top: 2px; }
+.static-highlight p  { color: var(--blue) !important; font-weight: 500; font-size: .88rem !important; line-height: 1.6 !important; }
+</style>
