@@ -884,6 +884,25 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
   .search-trigger { width: 44px; height: 44px; padding: 0; justify-content: center; }
   .theme-toggle { width: 44px; height: 44px; }
   .mobile-menu-toggle { width: 44px; height: 44px; }
-  .logo-text { font-size: .95rem; }
+  /* The icon row keeps its 44px touch targets, so the wordmark is what gives
+     way when space runs short instead of widening the document. */
+  .logo { flex-shrink: 1; min-width: 0; }
+  .logo-img { flex-shrink: 0; }
+  .logo-text {
+    font-size: .95rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media (max-width: 380px) {
+  /* Tighten the icon row first, so the wordmark keeps its full width longer. */
+  .navbar-right { gap: 6px; }
+}
+@media (max-width: 359px) {
+  /* 320px viewports (iPhone SE 1st gen, Galaxy Fold cover screen) cannot fit
+     the wordmark beside three 44px targets: drop the decorative " Apps"
+     suffix. The logo image keeps the full name in its alt text. */
+  .logo-apps { display: none; }
 }
 </style>
