@@ -3,6 +3,12 @@ import MainLayout from "@/components/layout/MainLayout.astro";
 import CTASection from "@/components/apps/CTASection.astro";
 import { guides } from "@/data/guides";
 
+interface GuideSection {
+  heading: string;
+  body: string[];
+  list?: string[];
+}
+
 export function getStaticPaths() {
   return guides.map((guide) => ({
     params: { slug: guide.slug }
@@ -16,6 +22,363 @@ if (!guide) {
 }
 
 const contentMap = {
+  "youtube-watch-history-json-format": {
+    intro:
+      "Google Takeout exports YouTube watch history as a single JSON array where every element is one viewing event. The structure is stable and small, which is good news: a decade of viewing is usually a few megabytes of text, not the multi-gigabyte archive people brace for. What trips people up is not the size but the assumptions. The file records far less than most viewers expect, and several fields quietly disappear on videos that no longer exist. This reference walks the format field by field so you know what any analysis of it can honestly claim.",
+    sections: [
+      {
+        heading: "The shape of a single entry",
+        body: [
+          "Each element of the array is a flat object. There is no nesting beyond a single subtitles array, and no per-video metadata block. The same handful of keys repeat for every entry from your first watch to your most recent.",
+          "The fields that matter for analysis are the following.",
+        ],
+        list: [
+          "title — the video title, prefixed with the literal string 'Watched '. The prefix is part of the value, not a separate field, so any parser has to strip it.",
+          "titleUrl — the canonical watch URL in the form https://www.youtube.com/watch?v=VIDEO_ID. This is where a video ID comes from; there is no separate id field.",
+          "subtitles — an array that in practice holds a single object with name and url, identifying the channel.",
+          "time — an ISO 8601 timestamp for the view. Every chart anyone builds from this file ultimately comes from this one field.",
+          "activityControls — an array naming which Google setting recorded the entry. Watch events list 'YouTube watch history'.",
+        ],
+      },
+      {
+        heading: "What disappears on removed and private videos",
+        body: [
+          "This is the single biggest source of confusion. When a video is deleted, made private, or taken down after you watched it, YouTube can no longer supply its metadata, and Takeout writes a degraded entry instead of omitting it.",
+          "Those entries read 'Watched a video that has been removed'. There is no real title to recover, no titleUrl, and typically no subtitles array, which means no channel name either. The timestamp survives.",
+          "The practical consequence is that removed videos still count toward your totals and still appear in your activity timeline, but they cannot appear in a top-channels ranking, because there is no channel attached. A tool that shows 4,000 views but only attributes 3,600 of them to channels is not losing data; it is being honest about a gap that Google created. Our analyzer labels these 'Unknown Channel' rather than dropping them, so the totals stay consistent.",
+        ],
+      },
+      {
+        heading: "What the export does not contain",
+        body: [
+          "The omissions matter more than the fields. watch-history.json is a log of events, not of engagement, and it carries none of the following.",
+          "There is no watch duration. The file does not record whether you watched ten seconds or the whole video. There is also no video length, so duration cannot be derived either. Any tool that shows you 'total hours watched' from a Takeout export is multiplying your view count by an assumed average length. That is an estimate wearing the costume of a measurement, and it can be wrong by an order of magnitude if you watch a lot of Shorts or a lot of long-form video.",
+          "There is also no like, comment, or subscription data in this file, no view counts, no categories or tags, and no thumbnail. Those live in separate Takeout files or nowhere at all. And there is no device or location field, so the export cannot tell you whether a view happened on a phone or a TV.",
+        ],
+      },
+      {
+        heading: "Reading timestamps correctly",
+        body: [
+          "The time field is an ISO 8601 string, which makes it unambiguous — it carries its own offset, so there is no guessing about which timezone a view happened in.",
+          "That matters for the charts people care about most. A 'what hour do I watch?' histogram is only meaningful if every timestamp is normalised the same way, and it will shift if some entries are interpreted as local time and others as UTC. This is the main technical reason to prefer the JSON export over the HTML one, where dates are written in your account's display language and have to be parsed heuristically.",
+          "If you travel across timezones, remember that the histogram shows clock time at the moment of viewing, not time relative to your body. A month abroad will smear your evening peak.",
+        ],
+      },
+      {
+        heading: "Where the file sits in the archive",
+        body: [
+          "Inside the Takeout archive, the file lives under the 'YouTube and YouTube Music' folder, in a 'history' subfolder, named watch-history.json.",
+          "You do not have to go looking for it manually. Our analyzer accepts the .zip or .tgz straight from Takeout and locates the history file inside, scoring candidates by filename and content so that a combined MyActivity.json export is also recognised. The tar reader runs in your browser alongside the rest of the analysis, so unpacking never requires uploading anything.",
+        ],
+      },
+      {
+        heading: "Getting a video ID out of titleUrl",
+        body: [
+          "There is no id field. The video ID has to come out of titleUrl, and the obvious approach of splitting the string on 'v=' and taking what follows is the one that breaks.",
+          "It breaks because the watch URL can carry more than one parameter. A link copied out of a playlist arrives with a list= value attached, one copied from the mobile app arrives with a share-tracking si= parameter, and a link shared at a timestamp carries t=. Split naively and the ID silently absorbs whatever came after it, so the same video ends up counted as several different videos and your top-videos list fragments.",
+          "Parse the URL properly and read the v parameter as a parameter. In a browser that is one line: new URL(entry.titleUrl).searchParams.get('v'). The distinct-video count you get afterwards is the one worth trusting.",
+        ],
+      },
+      {
+        heading: "Sanity checks before you trust any analysis",
+        body: [
+          "Before reading conclusions off a chart, spend thirty seconds confirming the file is what you think it is. Three checks catch almost every problem.",
+          "Check the size. Watch history is text only, so even many years of heavy viewing usually lands in single-digit megabytes. A file of a few kilobytes means the export did not include history; a file of hundreds of megabytes means you exported far more than history.",
+          "Check the date range against your memory. If the earliest entry is far more recent than when you started using the account, something trimmed the tail — most often auto-delete.",
+          "Check the removed-video share. A large gap between total views and views with a known channel is normal for old histories, but if nearly everything is unattributed, you are probably looking at a parsing failure rather than a decade of deleted videos.",
+        ],
+      },
+      {
+        heading: "How a history file is recognised inside an archive",
+        body: [
+          "You can hand our analyzer the whole Takeout archive rather than hunting for the right file, because it scores every candidate it finds and takes the best one rather than trusting a fixed path. Google has changed folder layouts before, and localised account exports do not always use English folder names.",
+          "The scoring is weighted toward filename first: watch-history.json scores highest, watch-history.html slightly lower, and a combined MyActivity.json lower again but still eligible. Path hints add to the score when the route contains 'youtube', 'history', or 'takeout'.",
+          "Content is then checked as a tiebreak. A file whose opening bytes mention 'youtube watch history' gains a large bonus, and one containing 'watched ' or the content-cell class used by the HTML export gains a smaller one. The result is that a correctly named file in an unexpected folder still wins, and a plausible-looking file with the wrong contents loses.",
+        ],
+      },
+    ],
+  },
+  "why-youtube-watch-counts-differ": {
+    intro:
+      "Run the same Takeout export through two different watch-history analyzers and you will often get two different totals, sometimes differing by thousands. Neither tool is necessarily broken. The number depends entirely on what each one decides counts as a view, and that decision is rarely documented. This guide explains the filtering choices that produce the gap, so you can work out which number is answering your actual question.",
+    sections: [
+      {
+        heading: "The array length is not your view count",
+        body: [
+          "The laziest possible implementation reads the JSON file and reports its array length. That number is always the largest, and it is almost always wrong.",
+          "It is wrong because the array may contain entries that are not watch events at all, and because it treats degraded entries and real ones identically without saying so. If a tool gives you a suspiciously round, suspiciously large number instantly, this is usually why.",
+        ],
+      },
+      {
+        heading: "Combined exports mix in searches and other activity",
+        body: [
+          "If you exported all YouTube data rather than just history, or if you took a combined Google activity export, you may be holding a MyActivity.json rather than a clean watch-history.json. Those files interleave several activity types in one array: videos watched, searches performed, and other recorded actions, all as sibling objects.",
+          "Search entries look structurally similar to watch entries. They have a title, a time, and an activityControls array. The distinguishing detail is the title prefix: watch events begin with 'Watched ', searches begin with 'Searched for '.",
+          "Our analyzer applies two filters before counting anything. An entry is included only if its activityControls array contains 'YouTube watch history', and only if its title begins with 'Watched '. A tool that checks neither will report your searches as videos. This is the single largest source of inflated counts.",
+        ],
+      },
+      {
+        heading: "Removed videos: counted, but not attributable",
+        body: [
+          "Deleted and private videos remain in the export as entries reading 'Watched a video that has been removed', with no title, URL, or channel.",
+          "Tools disagree about what to do with them. Some drop them entirely, which lowers the total. Some count them but exclude them from channel rankings, which keeps the total honest while leaving a visible gap between your view count and the sum of your per-channel counts. Some silently attribute them to a placeholder channel, which makes the numbers add up at the cost of inventing a channel that does not exist.",
+          "We count them and label them 'Unknown Channel'. If your top-channels list does not sum to your total, that difference is your removed-video count, and it is a genuinely interesting number — it is a measure of how much of your viewing history has rotted away.",
+        ],
+      },
+      {
+        heading: "Rewatches, Shorts, and ads",
+        body: [
+          "Watching the same video three times produces three entries with three timestamps. That is correct behaviour for a log of events, but it means 'videos watched' and 'unique videos watched' are different questions with different answers, and tools do not always say which one they are showing you.",
+          "Shorts are recorded as ordinary watch events. Because they are seconds long and easy to scroll through by the dozen, a heavy Shorts habit can dominate a view count in a way that badly misrepresents time spent. This is another reason 'hours watched' estimates derived from view counts fall apart.",
+          "Ads are not separated out. If an entry was recorded as a watch event, we count it as one; the export gives no reliable flag to do otherwise.",
+        ],
+      },
+      {
+        heading: "Which number should you trust",
+        body: [
+          "Ask what you want to know. For 'how many times did I open a video', the filtered event count is right. For 'how many different videos have I seen', you want a distinct count on video ID, which will be substantially lower. For 'how much time did I spend', the honest answer is that this export cannot tell you.",
+          "The more useful test of any analyzer is whether it tells you which question it answered. A tool that states its filters can be checked. A tool that shows one big number and no methodology cannot, and the fact that its number is bigger is not evidence that it is better.",
+        ],
+      },
+      {
+        heading: "A worked example of where the numbers diverge",
+        body: [
+          "Picture an export whose array holds 12,000 objects. Four tools can legitimately report four different totals from it.",
+          "A tool reporting array length says 12,000. A tool that filters to genuine watch events — activityControls containing 'YouTube watch history' and a title beginning 'Watched ' — might say 9,400, having set aside 2,600 search entries that were riding along in a combined export. A tool that also discards degraded entries says 8,900, dropping 500 removed videos. A tool reporting distinct video IDs says 6,100, because rewatches collapse.",
+          "Every one of those four numbers is defensible. They answer different questions: how many records exist, how many views happened, how many views can be attributed, and how many different videos were seen. The problem is not that the numbers differ; it is that most tools present one of them as 'videos watched' without saying which.",
+        ],
+      },
+      {
+        heading: "Auditing a count yourself",
+        body: [
+          "You do not need to trust anyone's arithmetic. The raw file is text, and a couple of checks will tell you which question a tool answered.",
+          "Open the JSON in any editor with a search-count function and count occurrences of '\"Watched ' including the quote and the trailing space. That approximates the genuine watch events. Then count occurrences of 'has been removed' to get your degraded entries. If a tool's headline number matches the first figure, it filtered properly; if it is noticeably higher, it counted things that are not views.",
+          "For distinct videos, the honest answer needs deduplication on the extracted ID rather than a text search, which is where a tool earns its keep. But the two counts above are enough to tell whether a total is inflated.",
+        ],
+      },
+      {
+        heading: "Why the same account gives different totals over time",
+        body: [
+          "Two exports taken months apart will disagree even if no tool changed, and the direction of the change is informative.",
+          "The total normally grows as you keep watching. It shrinks at the tail if auto-delete is enabled, because activity older than your chosen window of 3, 18, or 36 months is being removed continuously. It shrinks in the middle if you cleared a range by hand. And it stops growing while watch history is paused, which produces a plateau rather than a gap at the edge.",
+          "So a falling total is not evidence of a broken export. It usually means one of Google's retention controls is doing exactly what it was set to do.",
+        ],
+      },
+    ],
+  },
+  "youtube-takeout-json-vs-html": {
+    intro:
+      "When you export YouTube history, Takeout lets you pick JSON or HTML. The choice looks cosmetic and is not. The two formats carry the same viewing events but encode the timestamp very differently, and that single difference determines whether any time-based analysis of your history is trustworthy. If you only read one thing here: choose JSON.",
+    sections: [
+      {
+        heading: "What each format actually is",
+        body: [
+          "The JSON export is structured data. Every viewing event is an object with named fields, and the timestamp is an ISO 8601 string that carries its own UTC offset. There is exactly one way to read it, and every parser reads it the same way.",
+          "The HTML export is a rendered web page meant for a human to scroll. Entries live in elements with the class content-cell. Inside one of those, the word 'Watched ' is a bare text node sitting before the links, the first link is the video, a later link is the channel, and the date is whichever remaining text node happens to contain a four-digit year. Nothing is labelled; the structure has to be inferred from position.",
+        ],
+      },
+      {
+        heading: "The timestamp problem",
+        body: [
+          "Here is the part that catches people. In the HTML export, the date is written the way your Google account displays dates — in your account's language, with localised month names and a local timezone abbreviation.",
+          "So the same view might be written as 'Jan 5, 2026, 8:31:04 PM EST' for one account and '5 de jan. de 2026, 20:31:04 BRT' for another. A parser has to recognise the language before it can read the date, and there is no field telling it which language to expect.",
+          "Our HTML parser handles the English format and the Portuguese 'DD de MMM de YYYY' form, including the BRT and BRST offsets. Anything else falls through to the browser's own date parser, which will either produce a wrong date or refuse the string entirely. If your account displays dates in German, Japanese, or Hindi and you exported HTML, your activity timeline may be silently wrong.",
+          "The JSON export has none of this ambiguity, because ISO 8601 is not localised.",
+        ],
+      },
+      {
+        heading: "Fragility beyond dates",
+        body: [
+          "Positional parsing is brittle in other ways too. The HTML export's markup is a Google implementation detail, not a documented format, and it has changed before. A layout change that a human reader would not even notice — an extra link, a reordered element — can break a parser that depends on 'the second anchor is the channel'.",
+          "HTML is also far heavier. The same history carries markup, inline styles, and repeated wrapper elements around every entry, so the file is several times larger than the JSON for identical information.",
+        ],
+      },
+      {
+        heading: "If you already have an HTML export",
+        body: [
+          "You do not necessarily have to redo the export. Our analyzer reads watch-history.html as well as watch-history.json, and will accept either from inside a .zip or .tgz archive without unpacking.",
+          "Check the results before trusting them. Look at the activity timeline and ask whether the date range matches your memory. If views are bunched into a single implausible day, or the range starts years later than you expect, the dates did not parse and you should re-export.",
+          "Re-exporting is not expensive. A history-only export is small and usually ready in minutes rather than hours, because you are asking for a few megabytes of text rather than the media-heavy products that make Takeout slow.",
+        ],
+      },
+      {
+        heading: "Choosing at export time",
+        body: [
+          "In Takeout, deselect everything, choose 'YouTube and YouTube Music', open the data selector, and narrow it to history. That single step is the difference between a few-megabyte download and an archive that includes every video you ever uploaded.",
+          "Then set the format to JSON where Takeout offers the choice. It is a dropdown people skip past, and it is the most consequential setting on the page for anyone who intends to analyse the result rather than skim it.",
+        ],
+      },
+      {
+        heading: "Checking whether your HTML dates parsed at all",
+        body: [
+          "If you already loaded an HTML export, the failure mode is quiet: you get charts, and the charts are wrong. There is no error, because an unparseable date usually falls back to something rather than nothing.",
+          "Three symptoms give it away. A large share of views landing on a single day, usually today, means the fallback produced the current date. An activity timeline that starts years later than you know you started watching means early entries failed and were discarded. An hour-of-day histogram that looks flat, with viewing spread evenly across 3am and 3pm alike, means the times are noise — real human viewing is never uniform across the clock.",
+          "If you see any of those, do not try to interpret the result. Re-export as JSON.",
+        ],
+      },
+      {
+        heading: "Why the size difference is not just cosmetic",
+        body: [
+          "The HTML export carries the same events wrapped in markup: a container per entry, inline styling, repeated class attributes, and link markup around every title and channel. The same history is several times larger than the equivalent JSON.",
+          "That matters because this analysis runs in your browser tab, on your device. A larger file means more memory to hold the parsed document and more work to walk it, and the gap is felt most on phones and older laptops — exactly the devices where a tab is most likely to be killed mid-analysis.",
+          "JSON parsing is also handled by the browser's native JSON reader, which is far faster than constructing a full DOM and querying it. On a large history the difference is the difference between a moment and a visible wait.",
+        ],
+      },
+      {
+        heading: "What to do if you cannot re-export",
+        body: [
+          "Occasionally re-exporting is not practical — you are working from an archive someone kept years ago, or from an account you no longer control.",
+          "In that case, load the HTML and treat the aggregate counts as usable while treating everything time-based as suspect. Total views, top channels, and the removed-video share do not depend on date parsing and will be correct. The activity timeline, the hour-of-day histogram, and anything described as a streak or a session do.",
+          "That split is worth knowing generally: in this dataset, counting is robust and timing is fragile. Every conclusion that depends on when something happened rests on one field being read correctly.",
+        ],
+      },
+    ],
+  },
+  "what-your-youtube-history-reveals": {
+    intro:
+      "People hand their YouTube watch history to random web tools far more casually than they would hand over their browser history, even though the two are closely comparable. A timestamped log of everything you chose to watch is not a list of videos; it is a behavioural record. This guide sets out what can actually be inferred from the export — not to alarm, but because the answer is the reason our analyzer runs entirely in your browser.",
+    sections: [
+      {
+        heading: "Your schedule, in detail",
+        body: [
+          "The timestamps alone reconstruct a routine. Cluster views by hour of day and day of week and a shape appears almost immediately: when you wake, when you commute, when you stop working, when you go to bed, and which days break the pattern.",
+          "Extended gaps are as informative as the clusters. A week with no activity reads as travel, illness, or a holiday. A sudden shift in the evening peak reads as a new job or a new schedule. A run of 3am views reads as insomnia or shift work.",
+          "None of this is hidden or clever. It falls out of a histogram of a single field.",
+        ],
+      },
+      {
+        heading: "What the topics imply",
+        body: [
+          "Channel names and video titles carry more than interests. Watch histories routinely contain searches for symptoms before a diagnosis, tutorials for a skill someone is quietly learning for a career change, content in a language someone is studying, material tied to a religious practice, political commentary, and content associated with a specific life event — pregnancy, bereavement, addiction recovery, a breakup.",
+          "Several of those categories are treated as sensitive under privacy law precisely because inference from them is consequential. And inference here does not require sophistication: a run of twenty videos from one channel over two days is legible to anyone reading the list.",
+          "It is worth noting what the export does not settle. It records that a video was opened, not that it was watched, agreed with, or enjoyed. A history is evidence of attention, not endorsement — a distinction that matters if this data is ever read by someone inclined to judge it.",
+        ],
+      },
+      {
+        heading: "Why an upload is different from a download",
+        body: [
+          "A file on your disk has one copy under your control. The moment it is uploaded, that stops being true in ways that are hard to reverse.",
+          "The file may be retained after the page closes. It may sit in server logs or backups outside whatever the interface deletes. It may be readable by staff, by a future acquirer of the service, or by anyone who breaches it. And a privacy policy is a promise about intent, not a technical constraint — it can be amended, and it does not survive a bankruptcy sale or a subpoena.",
+          "Free tools have a particular version of this problem: the processing costs money and the tool charges nothing, so it is fair to ask what the business model is. Sometimes the answer is benign. Sometimes the data is the answer.",
+        ],
+      },
+      {
+        heading: "What local processing changes",
+        body: [
+          "Our analyzer parses the file in your browser tab using ordinary JavaScript. The file is read from your disk into memory, analysed, and discarded when you close or refresh the page. It is never transmitted, because there is no server behind this site to transmit it to — the whole site is static files.",
+          "You do not have to take that on faith, which is the point. Open your browser's developer tools, switch to the Network tab, and load your export. If a tool is uploading a file, a request carrying it appears there. This check works on any tool, including ours, and it is the only privacy claim that can be verified from outside.",
+          "A stronger version of the same test: disconnect from the network after the page loads, then run the analysis. Local processing keeps working.",
+        ],
+      },
+      {
+        heading: "Sensible handling either way",
+        body: [
+          "Treat the export like a password manager backup rather than a photo. Delete it from your downloads folder when you are finished, since the file will happily sit there for years otherwise. Be careful about screenshots of results, which often contain video titles you did not intend to share. And if you want to share findings, share the aggregate numbers, not the underlying file.",
+        ],
+      },
+      {
+        heading: "Who realistically ends up reading this file",
+        body: [
+          "The dramatic threat models are not usually the relevant ones. The export ends up exposed through ordinary carelessness far more often than through attack.",
+          "It sits in your Downloads folder indefinitely, which is a problem on any shared or work machine and on any laptop that gets sold or repaired. It gets swept into cloud sync if Downloads is synced, which quietly copies it somewhere with a different access model. It lands in automated backups that outlive the original. And on a work device it may sit within reach of endpoint management software and IT staff who have no interest in your viewing habits but do have access.",
+          "None of that requires anyone to be malicious. It requires only that the file still exists somewhere you stopped thinking about.",
+        ],
+      },
+      {
+        heading: "The export identifies you even with your name stripped",
+        body: [
+          "A common instinct is that the file is anonymous because it contains no name, email, or account ID. That intuition is wrong, and it is worth understanding why.",
+          "A viewing history is close to unique. The specific combination of channels someone follows, at the specific times they watch, is rarely shared by anyone else — and much of it maps to public information. Local news channels indicate a region. School or university content indicates an institution. A niche hobby channel with a small audience narrows the population sharply. Language and posting-time patterns narrow it further.",
+          "Research on de-anonymisation has repeatedly shown that a handful of behavioural data points is often enough to single out an individual within a large dataset. Treat the export as identifying, because in practice it is.",
+        ],
+      },
+      {
+        heading: "Sharing results without sharing yourself",
+        body: [
+          "Watch-history stats are fun to post, and the screenshots people share usually give away more than intended.",
+          "Aggregate numbers are safe: total views, views per year, the shape of your hour-of-day curve. Top-channel lists are much less so, because a small set of channels is close to a fingerprint and often reveals politics, health, religion, or sexuality by implication. Individual video titles are the most revealing of all, and they appear in screenshots more often than anywhere else.",
+          "Before posting a screenshot, read every visible title as though a future employer, a relative, or a stranger with a grudge were reading it, because in principle all three can. If that feels excessive, crop to the charts and leave the titles out.",
+        ],
+      },
+    ],
+  },
+  "pause-delete-youtube-history": {
+    intro:
+      "Pausing history, deleting it, and setting auto-delete are three different controls with three different effects, and all three eventually show up in your Takeout export as missing data. If you have ever analysed your own history and found a hole you could not explain, one of these is usually the reason. Here is what each control does and how it looks after the fact.",
+    sections: [
+      {
+        heading: "Pausing stops recording, going forward only",
+        body: [
+          "When watch history is turned off, YouTube Help states that videos you watch while history is off will not show up in your history. That is a forward-looking switch: it prevents new entries and leaves everything already recorded intact.",
+          "In a later export, a pause appears as a clean gap. There is no marker saying 'history was paused here' — the entries simply stop and later resume. That is genuinely ambiguous in your own data, because a two-week gap could equally be a holiday.",
+          "If you intend to analyse your viewing over time, it is worth noting when you paused, because your export will not remember for you.",
+        ],
+      },
+      {
+        heading: "Deleting removes entries and affects recommendations",
+        body: [
+          "Deletion is retroactive. You can remove individual videos or clear a selected time range, and deleted entries are gone from the record that Takeout exports.",
+          "Deletion also reaches beyond your own view of the data. YouTube Help is explicit that if you delete some or all of your watch history, YouTube will not base future video recommendations on that content. That is the intended effect for anyone deleting to reset their feed, and an unwanted side effect for anyone deleting purely for privacy who liked their recommendations.",
+          "Google also notes that when you lack recent history and have recommendations turned off, YouTube features such as homepage recommendations are removed rather than merely degraded.",
+        ],
+      },
+      {
+        heading: "Auto-delete runs on a schedule you set once",
+        body: [
+          "Auto-delete is the control most people forget they enabled. Google offers automatic deletion of activity older than 3 months, 18 months, or 36 months, configured from My Activity, and it then runs continuously without further prompting.",
+          "This produces the most confusing export of all: a history with a hard floor. If you set 18-month auto-delete two years ago and export today, your data appears to begin exactly 18 months ago, no matter how long you have used YouTube. People routinely read that as a broken export or a broken analyzer.",
+          "The test is simple. If your earliest entry sits suspiciously close to exactly 3, 18, or 36 months before the export date, auto-delete is trimming the tail, and no tool can recover what Google has already removed.",
+        ],
+        list: [
+          "3 months — the shortest retention window offered.",
+          "18 months — the middle option, and the one most commonly enabled by default flows.",
+          "36 months — the longest, and still a hard limit on any long-term analysis.",
+          "Off — activity is retained until you delete it yourself.",
+        ],
+      },
+      {
+        heading: "Reading gaps in your own export",
+        body: [
+          "Put together, a gap in your watch history has four plausible explanations, and the export cannot distinguish them for you: you did not watch anything, history was paused, you deleted that range, or auto-delete trimmed it.",
+          "A useful heuristic is the shape of the boundary. Auto-delete produces a sharp floor at a round age relative to today, and that floor moves forward every day. A manual deletion produces a gap with arbitrary edges, often aligned to calendar dates you chose in the interface. A pause produces a gap that ends when you remembered to switch it back on.",
+        ],
+      },
+      {
+        heading: "If you want a durable record",
+        body: [
+          "The one thing all three controls have in common is that they are irreversible from the outside. Once Google has deleted an entry, no export and no analyzer can bring it back.",
+          "If your history matters to you as a personal record, export it periodically and keep the archives, particularly before you enable auto-delete or clear a range. Takeout can be set to export on a recurring schedule for exactly this reason.",
+          "Then analyse the archive locally. The whole point of keeping your own copy is defeated if you hand it to a service whose retention policy you do not control any more than you controlled Google's.",
+        ],
+      },
+      {
+        heading: "Where each control actually lives",
+        body: [
+          "The three controls sit in two different places, which is part of why people lose track of what they switched on.",
+          "Pausing and auto-delete are Google Account settings, managed through My Activity rather than through YouTube itself. That is also where the auto-delete schedule is chosen, and it applies to the activity type rather than to a single device or session.",
+          "Deleting individual items or a date range can be done from My Activity as well, and clearing watch history is additionally offered inside YouTube's own settings. The same underlying record is affected either way.",
+          "Because pausing is an account-level setting rather than a per-device one, turning it off on your laptop also stops recording on your phone and your TV. People are frequently surprised by this when a later export shows nothing from any device.",
+        ],
+      },
+      {
+        heading: "Export before you delete, not after",
+        body: [
+          "This is the ordering mistake that cannot be undone. Takeout exports the record as it exists at the moment the archive is built, so anything already deleted is simply absent, and nothing recovers it.",
+          "If you are clearing history to reset your recommendations, or enabling auto-delete for privacy, request the export first and confirm the archive downloaded and opens correctly before you touch anything. A Takeout job can take a while to prepare and the download link does not stay available indefinitely, so leave yourself room rather than doing both in one sitting.",
+          "The same applies to auto-delete in a subtler way: because it runs continuously, every day you wait after enabling it is another day of history quietly leaving the window.",
+        ],
+      },
+      {
+        heading: "What deleting your history does not do",
+        body: [
+          "It is worth being precise about scope, because 'delete my history' is often heard as broader than it is.",
+          "Clearing watch history removes the record of what you watched. It does not remove your subscriptions, your playlists, your likes, your comments, or your uploads — those are separate records with separate controls, and they remain in a Takeout export after a full history wipe.",
+          "It also does not affect copies you already made. An archive you downloaded last year is yours and is unaffected by anything you delete at Google, which is precisely why keeping your own periodic exports is the only durable option if this record matters to you.",
+          "And it is not a privacy action against third parties who already received data. Deletion governs what Google holds and what it feeds into your recommendations going forward; it cannot reach anywhere the data has already gone.",
+        ],
+      },
+    ],
+  },
   "how-to-export-youtube-watch-history": {
     intro:
       "Google does not let you download your YouTube watch history directly from youtube.com — the only official path is Google Takeout, Google's data export tool for every product tied to your account. Takeout works, but it is easy to get wrong: pick the wrong export format, forget to deselect the dozens of unrelated Google services bundled into a full account export, or wait hours for a multi-gigabyte archive when you only wanted a few megabytes of watch-history JSON. This guide walks through the export step by step so the first attempt produces a file you can actually use.\n\nThe watch-history export is also where most privacy mistakes happen. People often paste this data into random online \"YouTube history analyzer\" tools without checking what those tools do with the file once it is uploaded. Because the export contains a timestamped log of nearly everything you have watched, it is worth treating it with the same care as a browser history file — export it, inspect it locally first, and only use tools that are explicit about not uploading the file to a server.",
@@ -192,22 +555,32 @@ const contentMap = {
 const content = contentMap[guide.slug as keyof typeof contentMap];
 const canonicalUrl = `https://smallwebapps.com/guides/${guide.slug}/`;
 const imageUrl = new URL(guide.image, "https://smallwebapps.com").toString();
-const howToSchema = {
+const points: string[] = (content as { points?: string[] })?.points ?? [];
+const sections: GuideSection[] = (content as { sections?: GuideSection[] })?.sections ?? [];
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric", month: "long", day: "numeric", timeZone: "UTC"
+});
+const formatDate = (iso: string) => dateFormatter.format(new Date(`${iso}T00:00:00Z`));
+
+// HowTo only describes guides that really are ordered steps. Explainer and
+// reference guides emit Article + BreadcrumbList alone, because structured
+// data has to match what the page actually shows.
+const howToSchema = points.length > 0 ? {
   "@context": "https://schema.org",
   "@type": "HowTo",
   name: guide.title,
   description: guide.description,
   image: imageUrl,
   estimatedCost: { "@type": "PriceSpecification", priceCurrency: "USD", price: "0" },
-  step: content?.points.map((point, idx) => ({
+  step: points.map((point, idx) => ({
     "@type": "HowToStep",
     position: idx + 1,
     name: point.split(".")[0],
     text: point
-  })) || []
-};
+  }))
+} : null;
 const structuredData = [
-  howToSchema,
+  ...(howToSchema ? [howToSchema] : []),
   {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -257,22 +630,34 @@ const structuredData = [
     <h1 class="mt-4 section-title">{guide.title}</h1>
     <p class="mt-4 section-copy">{guide.description}</p>
     <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
-      <span>Published <time datetime={guide.publishedDate}>June 2, 2026</time></span>
-      <span>Updated <time datetime={guide.modifiedDate}>June 25, 2026</time></span>
+      <span>Published <time datetime={guide.publishedDate}>{formatDate(guide.publishedDate)}</time></span>
+      <span>Updated <time datetime={guide.modifiedDate}>{formatDate(guide.modifiedDate)}</time></span>
       <span>By Small Web Apps</span>
     </div>
   </section>
 
   <section class="section-shell pt-10">
     <div class="max-w-3xl">
-      <article class="card-surface rounded-[2rem] p-7">
+      <article class="card-surface rounded-[2rem] p-7 guide-article">
         <p class="text-sm leading-7 text-slate-600 md:text-base">{content.intro}</p>
-        <ul class="mt-6 space-y-4 text-sm leading-7 text-slate-600 md:text-base">
-          {content.points.map((point) => <li>{point}</li>)}
-        </ul>
-        <p class="mt-6 text-sm leading-7 text-slate-600 md:text-base">
-          The purpose of this guide is to strengthen the app page with supporting context, not to replace the app itself.
-        </p>
+
+        {points.length > 0 && (
+          <ul class="mt-6 space-y-4 text-sm leading-7 text-slate-600 md:text-base">
+            {points.map((point) => <li>{point}</li>)}
+          </ul>
+        )}
+
+        {sections.map((section) => (
+          <section class="guide-section">
+            <h2>{section.heading}</h2>
+            {section.body.map((para) => <p>{para}</p>)}
+            {section.list && section.list.length > 0 && (
+              <ul class="guide-list">
+                {section.list.map((item) => <li>{item}</li>)}
+              </ul>
+            )}
+          </section>
+        ))}
       </article>
     </div>
   </section>
@@ -287,3 +672,39 @@ const structuredData = [
   />
 </MainLayout>
 
+<style>
+.guide-section { margin-top: 30px; }
+.guide-section h2 {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text);
+  letter-spacing: -.2px;
+}
+.guide-section p {
+  margin: 0 0 12px;
+  font-size: .95rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.guide-section p:last-child { margin-bottom: 0; }
+.guide-list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: .95rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.guide-article code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .85em;
+  background: rgba(26,115,232,.08);
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: var(--blue);
+}
+</style>

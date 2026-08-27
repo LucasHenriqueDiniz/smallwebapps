@@ -102,5 +102,70 @@ export const guides: GuideDefinition[] = [
     image: "/og/site.svg",
     relatedToolSlug: "",
     relatedToolLabel: "Browse all tools"
+  },
+  {
+    slug: "youtube-watch-history-json-format",
+    title: "watch-history.json: A Field-by-Field Reference",
+    description:
+      "Every field Google Takeout writes into watch-history.json, what each one means, which are missing on removed videos, and what the export does not record at all.",
+    category: "YouTube Analysis",
+    publishedLabel: "Format reference",
+    publishedDate: "2026-08-27",
+    modifiedDate: "2026-08-27",
+    image: "/og/site.svg",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Open the watch history analyzer"
+  },
+  {
+    slug: "why-youtube-watch-counts-differ",
+    title: "Why Your YouTube Watch Count Differs Between Tools",
+    description:
+      "Two analyzers reading the same Takeout export routinely disagree on how many videos you watched. The difference comes from filtering rules, not from bugs.",
+    category: "YouTube Analysis",
+    publishedLabel: "Data accuracy",
+    publishedDate: "2026-08-27",
+    modifiedDate: "2026-08-27",
+    image: "/og/site.svg",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Open the watch history analyzer"
+  },
+  {
+    slug: "youtube-takeout-json-vs-html",
+    title: "Takeout JSON or HTML: Which Watch History Export to Choose",
+    description:
+      "Takeout offers watch history as JSON or HTML. They are not equivalent. One has unambiguous timestamps; the other has dates written in your account's language.",
+    category: "YouTube Analysis",
+    publishedLabel: "Export formats",
+    publishedDate: "2026-08-27",
+    modifiedDate: "2026-08-27",
+    image: "/og/site.svg",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Open the watch history analyzer"
+  },
+  {
+    slug: "what-your-youtube-history-reveals",
+    title: "What Your YouTube Watch History Reveals About You",
+    description:
+      "A timestamped log of what you watched is more revealing than most people expect. What can be inferred from the export, and why that argues for local analysis.",
+    category: "YouTube Analysis",
+    publishedLabel: "Privacy analysis",
+    publishedDate: "2026-08-27",
+    modifiedDate: "2026-08-27",
+    image: "/og/site.svg",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Open the watch history analyzer"
+  },
+  {
+    slug: "pause-delete-youtube-history",
+    title: "Pausing and Deleting YouTube History: What Remains in Takeout",
+    description:
+      "How pausing, deleting, and auto-delete change what a future Takeout export contains, and how each one shows up as a gap in your own data.",
+    category: "YouTube Analysis",
+    publishedLabel: "History controls",
+    publishedDate: "2026-08-27",
+    modifiedDate: "2026-08-27",
+    image: "/og/site.svg",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Open the watch history analyzer"
   }
 ];
