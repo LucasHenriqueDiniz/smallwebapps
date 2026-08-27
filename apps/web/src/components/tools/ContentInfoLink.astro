@@ -1,0 +1,54 @@
+---
+/**
+ * ContentInfoLink — "How this tool works" jump link in the breadcrumb strip.
+ *
+ * This used to be a modal that re-rendered howToUse / useCases / limitations /
+ * privacy, which meant every tool page shipped that copy twice (median 39% of
+ * each page's body text was a literal duplicate of itself). ExpandedContent is
+ * the canonical, crawlable copy; this only points at it.
+ *
+ * Renders nothing if `content` has no usable fields, so the strip stays clean
+ * on tools that carry no written content.
+ */
+import type { AppContent } from "@smallwebapps/data";
+
+interface Props {
+  content?: AppContent;
+  targetId?: string;
+}
+
+const { content, targetId = "tool-guide" } = Astro.props;
+
+const hasContent =
+  (content?.howToUse?.length ?? 0) > 0 ||
+  (content?.useCases?.length ?? 0) > 0 ||
+  (content?.limitations?.length ?? 0) > 0 ||
+  !!content?.privacy;
+---
+
+{hasContent && (
+  <a class="info-trigger" href={`#${targetId}`} aria-label="How this tool works">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <span class="info-label">How this tool works</span>
+  </a>
+)}
+
+<style>
+.info-trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .76rem; font-weight: 600; color: var(--blue);
+  background: none; border: 1px solid var(--border); border-radius: 999px;
+  padding: 5px 12px; cursor: pointer; flex-shrink: 0;
+  transition: border-color .15s, background .15s;
+  white-space: nowrap; text-decoration: none;
+}
+.info-trigger:hover { border-color: var(--blue); background: var(--input-bg); }
+.info-trigger:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* Collapse to icon-only on narrow screens — the label overflowed the
+   breadcrumb strip at 375px. aria-label keeps the accessible name. */
+@media (max-width: 640px) {
+  .info-trigger { padding: 5px 8px; }
+  .info-label { display: none; }
+}
+</style>

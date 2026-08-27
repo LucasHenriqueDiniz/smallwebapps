@@ -18,7 +18,7 @@ import Header from "../site/Header.astro";
 import Footer from "../site/Footer.astro";
 import CookieBanner from "../site/CookieBanner.astro";
 import AdSenseHead from "../site/AdSenseHead.astro";
-import ContentInfoModal from "../tools/ContentInfoModal.astro";
+import ContentInfoLink from "../tools/ContentInfoLink.astro";
 import ExpandedFaq from "../apps/ExpandedFaq.astro";
 import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
@@ -182,7 +182,7 @@ const breadcrumbSchema = {
           </span>
         )}
         <span class="tl-spacer"></span>
-        <ContentInfoModal name={name} content={content} />
+        <ContentInfoLink content={content} />
       </div>
     </div>
 

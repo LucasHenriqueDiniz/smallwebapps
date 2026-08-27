@@ -18,7 +18,7 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
 ---
 
 {hasContent && (
-  <div class="expanded-content">
+  <div class="expanded-content" id="tool-guide">
     {howToUse.length > 0 && (
       <section class="content-section">
         <div class="cs-head">
@@ -87,6 +87,7 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
 
 <style>
 .expanded-content {
+  scroll-margin-top: 80px;
   margin-top: 48px;
   padding-top: 40px;
   border-top: 1px solid var(--border);
