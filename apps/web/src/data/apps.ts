@@ -3603,12 +3603,12 @@ export const apps: AppDefinition[] = [
     mode: "embedded",
     implemented: true,
     shortDescription: "Structurally compress PDF files to reduce file size — no image re-encoding.",
-    longDescription: "PDF Compressor uses pdf-lib to rebuild a PDF with structural optimizations: removing redundant cross-reference streams and normalizing the object layout. This can reduce file size for PDFs with inflated structure. Note: image content is not re-encoded, so image-heavy PDFs may see minimal reduction.",
+    longDescription: "PDF Compressor uses pdf-lib to rebuild a PDF around object streams and a cross-reference stream. These pack the document's internal objects into compressed streams instead of listing them in a plain cross-reference table, which is where the saving comes from. Files written by older software often use the plain table and can lose roughly half their size; a file already built this way is returned unchanged rather than rebuilt. Image content is not re-encoded, so image-heavy PDFs see little movement either way.",
     appUrl: "/apps/pdf-compress",
     landingUrl: "/apps/pdf-compress",
     tags: ["PDF compress", "reduce PDF size", "optimize PDF", "pdf-lib", "PDF tools"],
     features: [
-      "Structural compression by removing redundant XRef streams",
+      "Rebuilds the document around object streams and a cross-reference stream",
       "Before/after file size comparison",
       "Honest disclaimer about image content limitations",
       "Uses pdf-lib in the browser — your file never leaves your device",
@@ -3619,8 +3619,8 @@ export const apps: AppDefinition[] = [
     ],
     faqExpanded: [
       { question: "Why didn't my PDF get smaller?", answer: "If a PDF is already efficiently structured or its size is dominated by images, structural compression will have little effect. Re-encoding images — which this tool intentionally does not do — is the main way to shrink image-heavy PDFs." },
-      { question: "Is the PDF quality affected?", answer: "No. Structural compression removes overhead data only — redundant cross-reference streams and object layout bloat. Page content, fonts, and images are preserved exactly as in the original." },
-      { question: "What kinds of PDFs benefit most?", answer: "PDFs created or repeatedly edited by certain software often accumulate redundant objects and incremental update data. Those tend to see the biggest reduction from structural compression." },
+      { question: "Is the PDF quality affected?", answer: "No. The rebuild only changes how the document's objects are stored and indexed, not what they contain. Page content, fonts and images are preserved exactly, and the original Producer and modification date are left in place." },
+      { question: "What kinds of PDFs benefit most?", answer: "Text-heavy documents written with a plain cross-reference table, which is what older generators and many export pipelines still produce. Those roughly halve. A PDF whose bytes are mostly images barely moves, because the images are left alone." },
       { question: "Why does this tool have a disclaimer?", answer: "We'd rather be upfront: structural compression alone won't shrink image-heavy PDFs much. If you need real size reduction for scanned or photo-heavy PDFs, you'd need image re-encoding, which isn't what this tool does." },
       { question: "Is there a tool that compresses images inside a PDF?", answer: "Not currently on this site. For image-heavy PDFs, consider extracting images, compressing them with Image Optimizer, and rebuilding the PDF." },
       { question: "Does compression affect text searchability or selection?", answer: "No. Text remains fully selectable and searchable since the underlying text objects and fonts are untouched." },
@@ -3653,6 +3653,7 @@ export const apps: AppDefinition[] = [
         "Image content is not re-encoded — image-heavy PDFs may see minimal reduction.",
         "Already well-optimized PDFs may show little to no size change.",
         "Does not remove embedded fonts, attachments, or metadata that contribute to size.",
+        "A PDF that already uses object streams is returned unchanged rather than rebuilt.",
       ],
       privacy:
         "Compression runs locally in your browser using pdf-lib. Your PDF is never uploaded to a server.",
@@ -3660,7 +3661,7 @@ export const apps: AppDefinition[] = [
     disclaimer: "This tool applies browser-side structural optimization. File size reduction varies by PDF, and exact target sizes are not guaranteed.",
     seo: {
       title: "PDF Compressor — Reduce PDF File Size Online Free",
-      description: "Compress PDF files by removing structural overhead, with before/after size comparison. Browser-based with pdf-lib, no upload. Free.",
+      description: "Compress PDF files by rebuilding them around object streams, with before/after size comparison. Browser-based with pdf-lib, no upload. Free.",
     },
   },
 
