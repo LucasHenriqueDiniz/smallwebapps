@@ -45,10 +45,12 @@ const hasContent =
 .info-trigger:hover { border-color: var(--blue); background: var(--input-bg); }
 .info-trigger:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
-/* Collapse to icon-only on narrow screens — the label overflowed the
-   breadcrumb strip at 375px. aria-label keeps the accessible name. */
+/* Hidden on narrow screens. The breadcrumb strip is `overflow-x: hidden` and
+   its content already exceeds the box at 375px, so this link sat past the clip
+   edge — rendered but unreachable. Nothing is lost: it only jumps to a section
+   that is a short scroll below on a phone, and that section carries its own
+   visible heading. */
 @media (max-width: 640px) {
-  .info-trigger { padding: 5px 8px; }
-  .info-label { display: none; }
+  .info-trigger { display: none; }
 }
 </style>

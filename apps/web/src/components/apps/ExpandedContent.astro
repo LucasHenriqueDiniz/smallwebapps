@@ -3,18 +3,19 @@
  * ExpandedContent — renders visible how-to, use cases, limitations, and privacy sections.
  * These sections are indexable by search engines and visible to users without JS.
  */
-import type { AppContent } from "@smallwebapps/data";
+import type { AppDeepDive } from "@smallwebapps/data";
 
 interface Props {
   howToUse?: string[];
   useCases?: string[];
   limitations?: string[];
   privacy?: string;
+  deepDive?: AppDeepDive[];
 }
 
-const { howToUse = [], useCases = [], limitations = [], privacy } = Astro.props;
+const { howToUse = [], useCases = [], limitations = [], privacy, deepDive = [] } = Astro.props;
 
-const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.length > 0 || !!privacy;
+const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.length > 0 || !!privacy || deepDive.length > 0;
 ---
 
 {hasContent && (
@@ -82,6 +83,33 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
         )}
       </section>
     )}
+
+    {deepDive.map((section) => (
+      <section class="content-section">
+        <div class="cs-head">
+          <span class="cs-eyebrow">Reference</span>
+          <h2>{section.heading}</h2>
+        </div>
+        <div class="deep-body">
+          {section.body.map((para) => <p>{para}</p>)}
+        </div>
+        {section.definitions && section.definitions.length > 0 && (
+          <dl class="deep-defs">
+            {section.definitions.map((d) => (
+              <div class="deep-def">
+                <dt>{d.term}</dt>
+                <dd>{d.definition}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        {section.source && (
+          <p class="deep-source">
+            Source: <a href={section.source.url} target="_blank" rel="noopener noreferrer">{section.source.label}</a>
+          </p>
+        )}
+      </section>
+    ))}
   </div>
 )}
 
@@ -227,5 +255,30 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
   .expanded-content { margin-top: 32px; padding-top: 28px; gap: 30px; }
   .steps, .cases { grid-template-columns: 1fr; }
   .cs-head h2 { font-size: 1.15rem; }
+}
+.deep-body { display: flex; flex-direction: column; gap: 12px; }
+.deep-body p {
+  margin: 0; font-size: .95rem; line-height: 1.75; color: var(--muted);
+}
+.deep-defs {
+  margin: 16px 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.deep-def {
+  display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 14px;
+  padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--input-bg);
+}
+.deep-def dt {
+  margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .82rem; font-weight: 600; color: var(--blue); word-break: break-word;
+}
+.deep-def dd {
+  margin: 0; font-size: .9rem; line-height: 1.6; color: var(--muted);
+}
+.deep-source { margin: 14px 0 0; font-size: .82rem; color: var(--muted); }
+.deep-source a { color: var(--blue); }
+@media (max-width: 640px) {
+  .deep-def { grid-template-columns: 1fr; gap: 4px; }
 }
 </style>

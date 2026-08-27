@@ -75,6 +75,39 @@ export const apps: AppDefinition[] = [
       },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What watch-history.json actually contains",
+          body: [
+            "Google Takeout exports your YouTube watch history as a flat JSON array. Every element is one viewing event, and the fields are the same whether the export covers a week or a decade. Knowing the shape matters because it explains what this analyzer can and cannot tell you.",
+            "The export is text only. It records that you watched something and when, but carries no watch duration, no percentage watched, and no video length. Any tool claiming to show your total hours watched from a Takeout export is estimating, not measuring.",
+          ],
+          definitions: [
+            { term: "title", definition: "The video title prefixed with the literal string 'Watched '. For videos that were later deleted or made private, the value reads 'Watched a video that has been removed' and no real title is recoverable." },
+            { term: "titleUrl", definition: "The canonical watch URL, in the form https://www.youtube.com/watch?v=VIDEO_ID. Absent on removed videos." },
+            { term: "subtitles[0].name", definition: "The channel name. This analyzer falls back to 'Unknown Channel' when the field is missing, which is normal for removed or private videos." },
+            { term: "subtitles[0].url", definition: "The channel URL. Same caveat as the name field." },
+            { term: "time", definition: "An ISO 8601 timestamp for the view. This is the field every chart on this page is built from." },
+            { term: "activityControls", definition: "An array naming the Google setting that recorded the entry. Watch events list 'YouTube watch history'." },
+          ],
+        },
+        {
+          heading: "How this analyzer decides what counts as a view",
+          body: [
+            "Two filters run before anything is counted. An entry is included only if its activityControls array contains 'YouTube watch history', and only if its title begins with 'Watched '. Everything else in the file is discarded.",
+            "That second filter matters more than it looks. A combined MyActivity.json export mixes searches, comments, and subscriptions into the same array, and those entries begin with 'Searched for' or similar. Filtering on the 'Watched ' prefix keeps searches out of your view count. It also means this tool reports a lower number than any tool that simply counts array length — that difference is intentional, not a bug.",
+            "Ads are not separated out. If an entry was recorded as a watch event, it is counted as one.",
+          ],
+        },
+        {
+          heading: "JSON versus the HTML export, and why the format matters",
+          body: [
+            "Takeout offers both JSON and HTML for watch history. This analyzer reads either, plus the .zip or .tgz archive straight from Takeout without you having to unpack it first — the tar reader runs in the browser alongside everything else.",
+            "Prefer JSON. The HTML export is a rendered page, not structured data: entries live in .content-cell blocks where 'Watched ' is a bare text node, the first link is the video, the second is the channel, and the timestamp is whichever text node happens to contain a four-digit year.",
+            "That timestamp is written in your Google account's display language, so parsing it is locale-dependent. This tool currently handles the English format and the Portuguese 'DD de MMM de YYYY' format including BRT and BRST offsets. Other locales fall back to the browser's own date parser and may produce wrong dates. If your charts look shifted, re-export as JSON — the ISO timestamps there are unambiguous.",
+          ],
+        },
+      ],
       howToUse: [
         "Go to takeout.google.com while signed into the Google account whose YouTube history you want to inspect.",
         "Click 'Deselect all', then check only 'YouTube and YouTube Music', and set the export format to JSON.",
@@ -7507,6 +7540,16 @@ export const apps: AppDefinition[] = [
       },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "The URL shapes a YouTube link can take",
+          body: [
+            "A single video is reachable through several different URL forms, which is why naive string-splitting on 'v=' fails so often. The video ID may sit in a query parameter, in the path, or in neither.",
+            "Query-string forms put the ID in v=, as in youtube.com/watch?v=VIDEO_ID. Path forms put it in the last segment instead: the youtu.be short link, /embed/, /shorts/, and /live/ all carry the ID directly in the path with no v= parameter anywhere.",
+            "Extra parameters ride along and are easy to mistake for part of the ID. A t= or start= value is a playback offset in seconds; list= is a playlist the video is being viewed within, which is a different resource from the video itself; and si= is a share-tracking parameter that YouTube appends when you copy a link from the app. None of the three belong in a stored video ID.",
+          ],
+        },
+      ],
       howToUse: [
         "Paste a YouTube URL into the input box — a watch link, a youtu.be short link, a playlist link, or a channel handle link.",
         "Read the parsed output: Video ID, Playlist ID, Channel handle, Timestamp, and the normalized Host.",
@@ -7582,6 +7625,17 @@ export const apps: AppDefinition[] = [
       },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "The three rules chapters must satisfy",
+          body: [
+            "Chapters are not a setting you switch on. YouTube generates them from timestamps in the description, and it only does so when all three of the following hold at once. Miss any one and the timestamps stay plain text.",
+            "First, the opening timestamp must be 00:00. Second, the video needs at least three timestamps, listed in ascending order. Third, every chapter must run at least 10 seconds.",
+            "Nearly every 'my chapters are not showing' case is one of those three. The most common is a description that opens at 00:15 with an intro rather than 00:00, followed by two chapters that sit less than ten seconds apart.",
+          ],
+          source: { label: "YouTube Help — Video Chapters", url: "https://support.google.com/youtube/answer/9884579" },
+        },
+      ],
       howToUse: [
         "Paste your rough timestamp and title lines into the input box, one chapter per line (e.g., '00:00 Intro', '1:25 Setup').",
         "The tool normalizes spacing between the timestamp and the title for every line automatically as you type.",
@@ -7657,6 +7711,17 @@ export const apps: AppDefinition[] = [
       },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "What Google actually says about tags",
+          body: [
+            "This is worth stating plainly, because most tag tools imply the opposite. YouTube Help says that tags play a minimal role in your video's discovery, and that your title, thumbnail, and description are the more important pieces of metadata.",
+            "The one case YouTube does call out is misspelling: tags can help when your content is commonly misspelled, because they give the system a spelling variant to match against that you would not want in a visible title.",
+            "So use this tool to see which terms a title and description already carry, and to catch spelling variants worth adding — not in the belief that a longer tag list ranks better. Stuffing tags with unrelated popular terms is separately against YouTube's spam policies.",
+          ],
+          source: { label: "YouTube Help — Add tags to your videos", url: "https://support.google.com/youtube/answer/146402" },
+        },
+      ],
       howToUse: [
         "Paste a video title, description, script, or outline into the input box.",
         "Review the Hashtags section for every '#tag' already present in your text, deduplicated and lowercased.",
@@ -7732,6 +7797,17 @@ export const apps: AppDefinition[] = [
       },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "The real limit, and where titles get cut off",
+          body: [
+            "YouTube Help states plainly that video titles have a character limit of 100 characters and cannot include invalid characters. That 100 is a hard ceiling enforced at upload — the Studio field simply stops accepting input.",
+            "The number that actually costs you views is much smaller, and YouTube does not publish it, because it is not one number. A title is truncated at different widths in search results, in the suggested-videos sidebar, on a mobile home feed, and on a TV app, and truncation is by rendered width rather than character count. A title of capital letters runs out of room sooner than the same count in lowercase.",
+            "The practical consequence: put the words that identify the video first. Treat everything past roughly the first half of the limit as text that some surfaces will hide behind an ellipsis, and never let the distinguishing detail live at the end.",
+          ],
+          source: { label: "YouTube Help — Edit video settings", url: "https://support.google.com/youtube/answer/57404" },
+        },
+      ],
       howToUse: [
         "Type or paste your draft video title into the input box.",
         "Read the Characters count and compare it to the truncation-risk thresholds shown in the output.",
@@ -7807,6 +7883,17 @@ export const apps: AppDefinition[] = [
       },
     ],
     content: {
+      deepDive: [
+        {
+          heading: "The 5,000-character description budget",
+          body: [
+            "YouTube Help states that video descriptions have a character limit of 5,000 characters and cannot include invalid characters. Hitting the ceiling is easy once a description carries chapter timestamps, links, credits, affiliate disclosures, and a standard channel footer.",
+            "Only the first two or three lines appear before the 'more' fold, and that fold is where the description does its work for a viewer deciding whether to watch. Everything below it is for people who already committed.",
+            "Cleaning matters because descriptions are frequently pasted in from word processors, which brings along non-breaking spaces, smart quotes, and zero-width characters. Those are invisible in the editor, still consume characters against the 5,000 limit, and can break a chapter timestamp that otherwise looks correct.",
+          ],
+          source: { label: "YouTube Help — Edit video settings", url: "https://support.google.com/youtube/answer/57404" },
+        },
+      ],
       howToUse: [
         "Paste your video description draft into the input box, including any messy spacing or awkwardly placed links.",
         "The tool automatically trims trailing whitespace from every line as you type or paste.",

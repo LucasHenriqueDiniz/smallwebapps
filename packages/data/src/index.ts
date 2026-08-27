@@ -11,8 +11,27 @@ export interface AppSeo {
   description: string;
 }
 
+/**
+ * A prose section for tools that have genuinely original reference material —
+ * a documented file format, an official platform limit, a parsing rule. Bullets
+ * cannot carry that, so this renders as headed paragraphs below the tool.
+ *
+ * Optional and deliberately sparse: only add one where there is something
+ * specific and verifiable to say. Padding every tool with generic prose is the
+ * "low value content" pattern this field exists to avoid.
+ */
+export interface AppDeepDive {
+  heading: string;
+  /** Paragraphs. Each string renders as its own <p>. */
+  body: string[];
+  /** Optional term/definition pairs, e.g. fields of a file format. */
+  definitions?: { term: string; definition: string }[];
+  /** Optional source link backing the claims in this section. */
+  source?: { label: string; url: string };
+}
+
 export interface AppContent {
-  /** Step-by-step "how to use" instructions, shown in the info modal. */
+  /** Step-by-step "how to use" instructions. */
   howToUse?: string[];
   /** Real-world use cases / scenarios for this tool. */
   useCases?: string[];
@@ -20,6 +39,8 @@ export interface AppContent {
   limitations?: string[];
   /** Privacy/processing note (e.g. "Your file never leaves your device"). */
   privacy?: string;
+  /** Original reference material. Omit unless there is something concrete to document. */
+  deepDive?: AppDeepDive[];
 }
 
 export interface AppDefinition {
