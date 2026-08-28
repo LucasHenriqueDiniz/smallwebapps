@@ -23,7 +23,7 @@ Use `smallwebapps.com` as the canonical production domain.
 - Keep shared product types in `packages/data/src`.
 - Keep tool implementations under `apps/web/src/tools/{slug}`.
 - Keep tool pages data-driven through `apps/web/src/pages/apps/[slug].astro` and `ToolLayout.astro`.
-- Preserve `apps/tubetrace` as the imported TubeTrace source workspace when changing the embedded TubeTrace route.
+- `/apps/tubetrace` is served by the React port in `apps/web/src/tools/tubetrace`, not by an embed. `apps/tubetrace` is the upstream standalone product, deployed separately to its own Cloudflare Pages project; it is not built or published by this site. Port changes across by hand.
 - `apps/botschannel` is not part of this repository’s current Small Web Apps scope. Do not recreate, build, deploy, commit, or modify it unless the user explicitly changes scope.
 
 ## Tool page contract
