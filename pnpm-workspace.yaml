@@ -2,6 +2,13 @@ packages:
   - apps/*
   - packages/*
 
+allowBuilds:
+  core-js: true
+  esbuild: true
+  sharp: true
+  tesseract.js: true
+  workerd: true
+
 catalog:
   '@tailwindcss/vite': ^4.1.14
   '@tanstack/react-query': ^5.90.21
