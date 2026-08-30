@@ -6,34 +6,38 @@ on:
   pull_request:
     branches: [main, develop]
 
-jobs:
-  lint:
-    name: Lint & Type Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # Sem 'version': a action lê o campo packageManager do package.json, que é
-      # o que mantém o CI e as máquinas locais na mesma versão de pnpm.
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: 'pnpm'
-      - run: pnpm install
-      - run: pnpm run lint --recursive 2>/dev/null || true
-      - run: pnpm run typecheck --recursive 2>/dev/null || true
+# A action de pnpm não recebe 'version' — ela lê o campo packageManager do
+# package.json, que é o que mantém o CI e as máquinas locais na mesma versão.
 
-  test:
-    name: Tests
+jobs:
+  typecheck:
+    name: Type Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # Sem 'version': a action lê o campo packageManager do package.json, que é
-      # o que mantém o CI e as máquinas locais na mesma versão de pnpm.
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: 'pnpm'
-      - run: pnpm install
-      - run: pnpm run test --recursive 2>/dev/null || true
+      - run: pnpm install --frozen-lockfile
+      # apps/web usa astro check; apps/tubetrace usa tsc. Não há um script
+      # comum aos dois, então cada um é chamado pelo nome que realmente tem.
+      - name: Check apps/web
+        run: pnpm run check
+      - name: Typecheck apps/tubetrace
+        run: pnpm run typecheck:tubetrace
+
+  build:
+    name: Build
+    needs: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
