@@ -1,0 +1,4 @@
+# Store LF, check out LF, on every platform. This account has moved repos between
+# Windows and macOS, and Git's Windows default (core.autocrlf=true) rewrites checked-out
+# files to CRLF — which has already broken a script at parse time in a sibling repo.
+* text=auto eol=lf
