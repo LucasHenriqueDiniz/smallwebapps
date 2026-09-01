@@ -1,6 +1,17 @@
+# clone/ is deliberately outside this list. It is a tracked Astro project
+# (tinywow-clone) committed once in June as a snapshot and untouched since, and it
+# defines a build script — adding it here would put an unmaintained experiment into
+# every pnpm -r build. Decide whether it belongs in the repo before wiring it in.
 packages:
   - apps/*
   - packages/*
+
+allowBuilds:
+  core-js: true
+  esbuild: true
+  sharp: true
+  tesseract.js: true
+  workerd: true
 
 catalog:
   '@tailwindcss/vite': ^4.1.14
