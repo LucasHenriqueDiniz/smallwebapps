@@ -6,12 +6,12 @@ on:
   pull_request:
     branches: [main, develop]
 
-# A action de pnpm não recebe 'version' — ela lê o campo packageManager do
-# package.json, que é o que mantém o CI e as máquinas locais na mesma versão.
+# The pnpm action gets no 'version' — it reads the packageManager field from
+# package.json, which is what keeps CI and local machines on the same version.
 
-# Sem job de build: o Cloudflare Pages constrói os DOIS apps (smallwebapps e
-# tubetrace) a cada push e reporta cada um como check. O build daqui cobria só
-# apps/web — era subconjunto do que o host já faz.
+# No build job: Cloudflare Pages builds BOTH apps (smallwebapps and tubetrace)
+# on every push and reports each one as a check. A build here covered only
+# apps/web — a subset of what the host already does.
 
 jobs:
   typecheck:
@@ -25,8 +25,8 @@ jobs:
           node-version-file: .nvmrc
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      # apps/web usa astro check; apps/tubetrace usa tsc. Não há um script
-      # comum aos dois, então cada um é chamado pelo nome que realmente tem.
+      # apps/web uses astro check; apps/tubetrace uses tsc. There is no script
+      # common to both, so each is called by the name it actually has.
       - name: Check apps/web
         run: pnpm run check
       - name: Typecheck apps/tubetrace

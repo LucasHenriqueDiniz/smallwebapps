@@ -24,7 +24,7 @@
 ## Validation Checklist
 
 - [ ] `pnpm --dir apps/web run build` passes (144 pages expected)
-- [ ] `./.claude/skills/seo-checker.sh` passes (if relevant)
+- [ ] `./.claude/skills/seo-adsense-validator.sh` passes (if relevant)
 - [ ] No botschannel references introduced
 - [ ] Tool metadata in `apps/web/src/data/apps.ts` is aligned with implementation
 - [ ] If new tool: page is useful without JavaScript (H1, description, FAQ, links)

@@ -10,3 +10,8 @@ yarn.lock
 .logs/
 .audit-tmp/
 smallwebapps.com-audit/
+
+# Claude Code's local permission file. Never commit it: allow-rules accumulate by
+# clicking, and a rule that allowlists a command with a token in it puts that token
+# in the repo.
+**/.claude/settings.local.json

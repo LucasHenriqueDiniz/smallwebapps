@@ -33,7 +33,7 @@ packages/data/src/          # Shared types (not actively used yet)
 ./.claude/skills/build-validator.sh
 
 # Check SEO essentials
-./.claude/skills/seo-checker.sh
+./.claude/skills/seo-adsense-validator.sh
 
 # Then commit
 git add [files]
@@ -68,7 +68,7 @@ git commit -m "..."
 When Claude agents work in this repo:
 
 1. **Respect the product definition** in CLAUDE.md — optimize for indexable content, AdSense, fast tools, simple deployment
-2. **Validate before shipping** — run build-validator and seo-checker
+2. **Validate before shipping** — run build-validator and seo-adsense-validator
 3. **Reuse existing patterns** — check apps.ts metadata, ToolMount.astro registration, and [slug].astro page layout before inventing new systems
 4. **Keep scope tight** — a tool addition doesn't require refactoring unrelated systems; three similar lines beat a premature abstraction
 5. **Test in browser** if the change is observable (UI, tool flow, metadata) — don't rely on tests alone
@@ -77,7 +77,7 @@ When Claude agents work in this repo:
 ## Skills & Automation
 
 - **build-validator.sh**: Runs `pnpm --dir apps/web run build`, checks dist/ structure, validates critical files
-- **seo-checker.sh**: Validates robots.txt, sitemap, app metadata, and guide schema
+- **seo-adsense-validator.sh**: Validates robots.txt, sitemap, app metadata, and guide schema
 - Both are shell scripts; integrate via hooks if you want pre-commit validation
 
 ## Links

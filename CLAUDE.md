@@ -89,7 +89,7 @@ Use the Claude Code validation skills before committing:
 ./.claude/skills/build-validator.sh
 
 # Validate SEO essentials
-./.claude/skills/seo-checker.sh
+./.claude/skills/seo-adsense-validator.sh
 ```
 
 Before committing:
@@ -103,9 +103,9 @@ Before committing:
 
 The `.claude/` directory contains automated behaviors, skills, and templates:
 
-- **`.claude/settings.json`**: Project model (Opus 4.8), permissions, build/preview commands
+- **`.claude/settings.json`**: Permissions and build/preview commands. It sets no model, so whatever the CLI is running with applies
 - **`.claude/INSTRUCTIONS.md`**: Detailed guidance for Claude agents working in this repo
-- **`.claude/skills/`**: Executable validation scripts (build-validator, seo-checker)
+- **`.claude/skills/`**: Executable validation scripts (build-validator, seo-adsense-validator)
 - **`.claude/hooks.json`**: Pre-commit and pre-push hooks (disabled by default; enable via `/config`)
 - **`.claude/templates/`**: PR and issue templates following Small Web Apps conventions
 

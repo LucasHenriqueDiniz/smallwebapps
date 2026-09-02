@@ -6,7 +6,7 @@ Claude Code project-specific configuration and automation for **Small Web Apps**
 
 ### `settings.json`
 Project-level settings for Claude Code:
-- **Model**: No default — choose per-task (flexible)
+- **Model**: not set here — the file has no `model` key, so the CLI's own model applies
 - **Permissions**: Git, bash, pnpm, node, npm
 - **Build command**: `pnpm --dir apps/web run build`
 - **Output**: `apps/web/dist`
@@ -21,7 +21,7 @@ claude /config
 - Project structure
 - Before-commit checklist
 - Key constraints (no botschannel, centralized metadata)
-- Skill usage (build-validator, seo-checker)
+- Skill usage (build-validator, seo-adsense-validator)
 - Adding new tools
 - Deployment details
 
@@ -70,7 +70,7 @@ GitHub templates for consistency:
 #### `PULL_REQUEST.md`
 Standard PR template enforcing:
 - Type of change (new tool, bug, perf, etc.)
-- Validation checklist (build passes, seo-checker, no botschannel)
+- Validation checklist (build passes, seo-adsense-validator, no botschannel)
 - Testing notes
 
 #### `ISSUE.md`

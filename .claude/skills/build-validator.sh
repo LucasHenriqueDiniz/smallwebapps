@@ -36,8 +36,10 @@ for file in "${critical_files[@]}"; do
   fi
 done
 
+page_count=$(find apps/web/dist -type f -name '*.html' | wc -l | tr -d ' ')
+
 echo "✓ Build validation passed"
-echo "  - 144 pages generated"
+echo "  - $page_count pages generated"
 echo "  - robots.txt present"
 echo "  - sitemap-index.xml present"
 echo "  - agent discovery configured"
