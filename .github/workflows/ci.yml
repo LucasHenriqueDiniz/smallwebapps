@@ -9,6 +9,10 @@ on:
 # A action de pnpm não recebe 'version' — ela lê o campo packageManager do
 # package.json, que é o que mantém o CI e as máquinas locais na mesma versão.
 
+# Sem job de build: o Cloudflare Pages constrói os DOIS apps (smallwebapps e
+# tubetrace) a cada push e reporta cada um como check. O build daqui cobria só
+# apps/web — era subconjunto do que o host já faz.
+
 jobs:
   typecheck:
     name: Type Check
@@ -28,16 +32,3 @@ jobs:
       - name: Typecheck apps/tubetrace
         run: pnpm run typecheck:tubetrace
 
-  build:
-    name: Build
-    needs: typecheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
