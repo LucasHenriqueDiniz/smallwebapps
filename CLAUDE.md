@@ -2,6 +2,20 @@
 
 This is the canonical instruction file for every coding agent working in this repository. `AGENTS.md` redirects here; do not create a separate `CODEX.md` instruction file.
 
+## Where the house rules come from
+
+The coding rules this repo follows are **not on disk**. They ship as skills in the `hexagram` plugin,
+installed once per machine, and this repo picks up whatever version the machine has:
+
+`architecture`, `naming`, `git`, `language`, `testing`, `clean-code`, `diagrams`, `workflow`,
+`terraform`, `setup-machine`, `research`, `postmortem`, `lint`.
+
+**There is no `.claude/rules/` directory, and that is deliberate** — a copied rule file goes stale the
+moment the plugin changes, and two repos then disagree about the same rule. Look the rule up in the
+plugin, not in this tree. What `.claude/` does hold is this repo's own material: validation scripts,
+templates and settings, described under [Claude Code Configuration](#claude-code-configuration)
+below.
+
 ## Product definition
 
 Small Web Apps is a single-domain product hub for free browser-based utilities. Optimize the codebase for:
@@ -89,7 +103,7 @@ Use the Claude Code validation skills before committing:
 ./.claude/skills/build-validator.sh
 
 # Validate SEO essentials
-./.claude/skills/seo-checker.sh
+./.claude/skills/seo-adsense-validator.sh
 ```
 
 Before committing:
@@ -103,9 +117,9 @@ Before committing:
 
 The `.claude/` directory contains automated behaviors, skills, and templates:
 
-- **`.claude/settings.json`**: Project model (Opus 4.8), permissions, build/preview commands
+- **`.claude/settings.json`**: Permissions and build/preview commands. It sets no model, so whatever the CLI is running with applies
 - **`.claude/INSTRUCTIONS.md`**: Detailed guidance for Claude agents working in this repo
-- **`.claude/skills/`**: Executable validation scripts (build-validator, seo-checker)
+- **`.claude/skills/`**: Executable validation scripts (build-validator, seo-adsense-validator)
 - **`.claude/hooks.json`**: Pre-commit and pre-push hooks (disabled by default; enable via `/config`)
 - **`.claude/templates/`**: PR and issue templates following Small Web Apps conventions
 
@@ -119,3 +133,16 @@ All agents should reference `.claude/INSTRUCTIONS.md` for quick context and vali
 - Output directory: `apps/web/dist`
 
 Deploy only when explicitly requested. Do not deploy another workspace as part of a Small Web Apps task.
+
+## Commit hook
+
+`.githooks/commit-msg` strips AI attribution trailers from commit messages. Git does not version
+`.git/hooks`, so what makes the hook run is one line of local config — and a fresh clone does not
+have it. The root `prepare` script sets it on `pnpm install`, and only when nothing else claims it:
+
+```
+git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks
+```
+
+If you already point `core.hooksPath` somewhere else, the script leaves your value alone and this
+repo's hook stays inert — wire it by hand, or move the file into whatever directory you do use.

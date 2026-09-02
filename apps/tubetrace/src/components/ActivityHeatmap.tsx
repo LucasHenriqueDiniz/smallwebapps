@@ -85,7 +85,7 @@ export function ActivityHeatmap() {
       >
         <div className="overflow-x-auto">
           <div className="relative min-w-max">
-            {/* Meses */}
+            {/* Months */}
             <div className="flex mb-1 ml-7">
               {monthPositions.map((mp, i) => (
                 <div
@@ -99,7 +99,7 @@ export function ActivityHeatmap() {
             </div>
 
             <div className="flex mt-4">
-              {/* Dias da semana */}
+              {/* Days of week */}
               <div className="flex flex-col mr-1.5" style={{ gap: CELL_GAP }}>
                 {DAY_LABELS_PT.map((d, i) => (
                   <div
@@ -136,7 +136,7 @@ export function ActivityHeatmap() {
               </div>
             </div>
 
-            {/* Legenda */}
+            {/* Legend */}
             <div className="flex items-center gap-1.5 mt-3 justify-end">
               <span className="text-[10px] text-muted-foreground">Menos</span>
               {intensityClasses.map((cls, i) => (

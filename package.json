@@ -37,7 +37,8 @@
     "dev:tubetrace": "pnpm --dir apps/tubetrace dev",
     "build:tubetrace": "pnpm --dir apps/tubetrace build",
     "typecheck:tubetrace": "pnpm --dir apps/tubetrace typecheck",
-    "sync:tubetrace": "node scripts/prepare-tubetrace-embed.mjs"
+    "sync:tubetrace": "node scripts/prepare-tubetrace-embed.mjs",
+    "prepare": "git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "devDependencies": {
     "wrangler": "^3.90.0"

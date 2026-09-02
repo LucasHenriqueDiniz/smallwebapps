@@ -142,7 +142,7 @@ export function FunInsights() {
         ))}
       </div>
 
-      {/* Radial por período */}
+      {/* Radial by time of day */}
       <motion.div
         variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
         className="mt-4 bg-card border border-border/60 rounded-2xl p-6"

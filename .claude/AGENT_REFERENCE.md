@@ -45,7 +45,7 @@ Quick reference for Claude and other agents working in this repository.
 ```
 1. Edit apps/web/src/data/apps.ts (title, description, faqSchema)
    OR apps/web/src/pages/guides/[slug].astro (article schema)
-2. Run: ./.claude/skills/seo-checker.sh
+2. Run: ./.claude/skills/seo-adsense-validator.sh
 3. Build to validate: pnpm --dir apps/web run build
 4. Commit & push
 ```
@@ -72,7 +72,7 @@ Cloudflare Pages auto-deploys from origin/main:
 ### ✅ Always
 - Keep tool pages useful without JavaScript (H1, description, FAQ, links)
 - Validate with build-validator.sh before committing
-- Check SEO essentials with seo-checker.sh
+- Check SEO essentials with seo-adsense-validator.sh
 - Centralize metadata in apps/web/src/data/apps.ts
 - Lazy-load heavy libraries (PDF, image, compression)
 - Test in browser if change is observable (UI, tool, metadata)
@@ -100,8 +100,8 @@ apps/web/
 
 .claude/
 ├── INSTRUCTIONS.md      ← Detailed agent guidance (READ THIS)
-├── settings.json        ← Model, build commands, permissions
-├── skills/              ← Validation scripts (build-validator, seo-checker)
+├── settings.json        ← Build commands, permissions (no model key)
+├── skills/              ← Validation scripts (build-validator, seo-adsense-validator)
 ├── hooks.json           ← Pre-commit/push automation
 └── templates/           ← PR & issue templates
 
@@ -165,7 +165,7 @@ pnpm --dir apps/web run build
 ### SEO not indexing
 ```bash
 # Run SEO checker
-./.claude/skills/seo-checker.sh
+./.claude/skills/seo-adsense-validator.sh
 
 # Check robots.txt
 cat apps/web/dist/robots.txt

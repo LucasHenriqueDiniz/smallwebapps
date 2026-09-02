@@ -52,7 +52,7 @@ export function BingeSessions() {
               )}
 
               <div className="flex flex-wrap items-center gap-6">
-                {/* Duração */}
+                {/* Duration */}
                 <div className="flex items-center gap-2.5">
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
                     isBiggest ? "bg-primary/15 text-primary" : "bg-secondary text-muted-foreground"
@@ -67,7 +67,7 @@ export function BingeSessions() {
                   </div>
                 </div>
 
-                {/* Vídeos */}
+                {/* Videos */}
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
                     <Play className="w-4 h-4" />
@@ -78,7 +78,7 @@ export function BingeSessions() {
                   </div>
                 </div>
 
-                {/* Data e hora */}
+                {/* Date and time */}
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
                     <Clock className="w-4 h-4" />
@@ -93,7 +93,7 @@ export function BingeSessions() {
                   </div>
                 </div>
 
-                {/* Canais */}
+                {/* Channels */}
                 {channels.length > 0 && (
                   <div className="flex flex-wrap gap-2 md:ml-auto">
                     {channels.map((ch) => (

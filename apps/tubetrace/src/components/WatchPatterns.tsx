@@ -48,7 +48,7 @@ export function WatchPatterns() {
       />
 
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Hora do dia */}
+        {/* Hour of day */}
         <ChartCard title="Hora do dia">
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={data.activityByHour} margin={{ left: -20, right: 0, top: 0, bottom: 0 }}>
@@ -69,7 +69,7 @@ export function WatchPatterns() {
           </ResponsiveContainer>
         </ChartCard>
 
-        {/* Dia da semana */}
+        {/* Day of week */}
         <ChartCard title="Dia da semana">
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={dayData} margin={{ left: -20, right: 0, top: 0, bottom: 0 }}>
@@ -84,7 +84,7 @@ export function WatchPatterns() {
           </ResponsiveContainer>
         </ChartCard>
 
-        {/* Atividade por mês */}
+        {/* Activity by month */}
         <ChartCard title="Atividade por mês">
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={data.activityByMonth} margin={{ left: -20, right: 10, top: 5, bottom: 0 }}>
@@ -119,7 +119,7 @@ export function WatchPatterns() {
           </ResponsiveContainer>
         </ChartCard>
 
-        {/* Ano ou horário do dia */}
+        {/* Year or time of day */}
         {hasMultiYear ? (
           <ChartCard title="Atividade por ano">
             <ResponsiveContainer width="100%" height={200}>

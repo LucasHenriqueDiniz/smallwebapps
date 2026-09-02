@@ -55,7 +55,7 @@ export function TopChannels() {
       />
 
       <div className="grid md:grid-cols-5 gap-6">
-        {/* ── Lista top 10 ── */}
+        {/* ── Top 10 list ── */}
         <motion.div
           variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}
           className="md:col-span-3 bg-card border border-border/60 rounded-2xl p-6"
@@ -107,7 +107,7 @@ export function TopChannels() {
           </div>
         </motion.div>
 
-        {/* ── Gráfico top 5 ── */}
+        {/* ── Top 5 chart ── */}
         <motion.div
           variants={{ hidden: { opacity: 0, x: 20 }, show: { opacity: 1, x: 0 } }}
           className="md:col-span-2 bg-card border border-border/60 rounded-2xl p-6"
