@@ -2,6 +2,20 @@
 
 This is the canonical instruction file for every coding agent working in this repository. `AGENTS.md` redirects here; do not create a separate `CODEX.md` instruction file.
 
+## Where the house rules come from
+
+The coding rules this repo follows are **not on disk**. They ship as skills in the `hexagram` plugin,
+installed once per machine, and this repo picks up whatever version the machine has:
+
+`architecture`, `naming`, `git`, `language`, `testing`, `clean-code`, `diagrams`, `workflow`,
+`terraform`, `setup-machine`, `research`, `postmortem`, `lint`.
+
+**There is no `.claude/rules/` directory, and that is deliberate** — a copied rule file goes stale the
+moment the plugin changes, and two repos then disagree about the same rule. Look the rule up in the
+plugin, not in this tree. What `.claude/` does hold is this repo's own material: validation scripts,
+templates and settings, described under [Claude Code Configuration](#claude-code-configuration)
+below.
+
 ## Product definition
 
 Small Web Apps is a single-domain product hub for free browser-based utilities. Optimize the codebase for:
