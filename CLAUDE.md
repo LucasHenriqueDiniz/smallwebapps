@@ -16,6 +16,12 @@ plugin, not in this tree. What `.claude/` does hold is this repo's own material:
 templates and settings, described under [Claude Code Configuration](#claude-code-configuration)
 below.
 
+**Where this file and a plugin skill collide, the skill wins.** This file describes *this repo* —
+its product, its routes, its data shapes, its deployment — and does not restate, narrow or override
+a skill rule. It sets no limit of its own on file size, function size, naming or commit format;
+those are `clean-code`, `naming` and `git`, and they apply here as written. Settled 2026-09-03 after
+`apps.ts` sat under two contradictory rules for months; see `docs/architecture/ARCHITECTURE.md`.
+
 ## Product definition
 
 Small Web Apps is a single-domain product hub for free browser-based utilities. Optimize the codebase for:
@@ -33,7 +39,11 @@ Use `smallwebapps.com` as the canonical production domain.
 - Astro owns routing, SEO pages, metadata, and static content.
 - React islands own interactive tool surfaces only.
 - `/apps/[slug]` is the canonical URL for each tool.
-- Keep shared app metadata centralized in `apps/web/src/data/apps.ts`.
+- Keep shared app metadata behind a single import surface, so 142 tools cannot each invent their own
+  metadata shape. Today that surface is `apps/web/src/data/apps.ts`. **How many files sit behind it
+  is the `clean-code` skill's call, not this file's** — and that file is 9088 lines against the
+  skill's 1500-line hard limit, so it is a standing refactor target rather than a layout to
+  preserve. See `docs/architecture/ARCHITECTURE.md`.
 - Keep shared product types in `packages/data/src`.
 - Keep tool implementations under `apps/web/src/tools/{slug}`.
 - Keep tool pages data-driven through `apps/web/src/pages/apps/[slug].astro` and `ToolLayout.astro`.

@@ -1,77 +1,89 @@
 ---
-status: blocked
+status: todo
 kanban: 6f320ad9-93df-48ce-85ca-63f7d1c03047
 ---
 
 # Slice 2 — Decide which TubeTrace copy is the source
 
-**Blocked on the owner: only he can decide whether `tubetrace.pages.dev` stays a shipping product.**
-Every technical route below is cheap; choosing between them is a product call about a second
-domain, and no agent can make it. Unblock by answering the question in "The question" and recording
-the answer here.
+**The product call is made.** The owner ruled on 2026-09-03 that `tubetrace.pages.dev` stays a
+shipping product and is the original: Small Web Apps carries one tool that *imitates* TubeTrace, so
+`apps/tubetrace/src/` is the source and `apps/web/src/tools/tubetrace/native/` is derived output
+that stops being maintained by hand. Recorded in the `## Decisions` section of
+`docs/architecture/ARCHITECTURE.md`. This slice is no longer blocked.
 
 ## Delivers
 
-`docs/decisions/tubetrace-source-of-truth.md` — a decision record naming one directory as the
-source, saying what the other becomes, and listing what the choice rules out. Nothing else in this
-plan can be built before it, because the generator in slice 3 runs in whichever direction this
-picks.
+The decision record, which now exists and already names the source, the generator direction, the
+disposition of all five divergent files, and the answer on canonical URLs. **One question in it is
+still open**, and closing it is what remains of this slice:
+
+> `pnpm build` runs `sync:tubetrace`, which Vite-builds `apps/tubetrace` and writes
+> `apps/web/public/tubetrace-app/`. Nothing on the site loads that output, and the part of it the
+> build keeps on purpose — `embed.js`, `embed.css`, `assets/*` — is publicly fetchable: the
+> `_redirects` entries cover only the seven exact shell paths the build already deletes. So the step
+> publishes an unreferenced bundle, not an unreachable one. Does the step get dropped?
+
+That is a build- and deploy-configuration change, so it needs the owner too — but it is a much
+smaller question than the one just answered, and slice 3 does not wait on it. The generator rewrites
+`native/` either way.
 
 ## Needs
 
-- Slice 1 merged, so the decision argues over measured numbers rather than an impression.
-- The owner's answer. There is no time budget on this one; it is not reading, it is a choice.
+- Nothing to start. Slice 1's detector is no longer a prerequisite for *this* slice: the file-by-file
+  classification the record needed was measured directly and is written down. The detector is still
+  what slice 3 verifies against.
+- The owner's answer on the dead `tubetrace-app` build step.
 
-## The question
+## The decision, in one line
 
-`apps/tubetrace` is a separately deployed product, not just a source directory:
+`apps/tubetrace/src/` → `apps/web/src/tools/tubetrace/native/`. One direction, never the reverse: a
+fix to shared behaviour lands upstream and reaches the embed by regeneration.
 
-- `apps/tubetrace/wrangler.toml` exists
-- `apps/tubetrace/package.json` has `"deploy": "… wrangler pages deploy ./dist/public --project-name=tubetrace"`
-- `git grep -l "tubetrace.pages.dev" -- apps/tubetrace` returns five tracked files
-- `.github/workflows/ci.yml` records that Cloudflare Pages builds both apps on every push
+## What was measured, not assumed
 
-Meanwhile its build output is dead inside `apps/web`: `pnpm build` runs `sync:tubetrace`, which
-writes `apps/web/public/tubetrace-app/`, and no source file under `apps/web/src` references that
-path while `apps/web/public/_redirects` 301s every path under it away.
+Re-run on this branch off `19367d6`:
 
-So: **does `tubetrace.pages.dev` stay a product?**
+| claim | result |
+|---|---|
+| files under `native/` | 78 tracked, 8685 lines |
+| classification against `apps/tubetrace/src/` | 11 identical, 62 rewrite-only, 5 divergent |
+| divergent files | `components/Dashboard.tsx`, `components/Footer.tsx`, `components/Header.tsx`, `components/UploadSection.tsx`, `lib/shareCard.ts` |
+| `tubetrace.pages.dev` in `apps/tubetrace` | **6** tracked files — the pitch says five, which was true when it was written |
+| `apps/web/src` references to `tubetrace-app` | none — and none to `embed.js` or `embed.css` either |
+| `_redirects` coverage of `/tubetrace-app/` | 7 exact paths, **no wildcard** (`_redirects:6-12`); they match the shell files `scripts/prepare-tubetrace-embed.mjs:51-70` deletes, so `embed.js`, `embed.css` and `assets/*` are not redirected and ship fetchable under `X-Robots-Tag: noindex` (`_headers:16`) |
 
-- **If yes** — the two copies are two products sharing a UI, `apps/tubetrace/src` is the source, and
-  `native/` becomes generated output with the rebrand applied as a documented patch set.
-- **If no** — `apps/tubetrace` is deleted along with `sync:tubetrace`, the `tubetrace-app` build
-  step, the `_redirects` block and the `_headers` block, `native/` becomes the only copy and stops
-  being a fork at all.
+`components/UploadSection.tsx` turned out to be a mixed file, not a pure SSR fix: it carries the
+rebrand strings *and* the locale-guess move out of the `useState` initializer. `lib/shareCard.ts:108`
+is mixed the same way — `localmente` for `no TubeTrace` is intended rebrand, the literal `?` for `ó`
+is the hand-copy encoding loss. Both distinctions matter to slice 3's patch set, which is why they
+are in the record rather than here.
 
 ## Tests
 
 A decision record is prose; its check is that the next slice can be started from it without asking
-another question. Concretely, it must state:
-
-- which directory is the source
-- what happens to `sync:tubetrace` and `apps/web/public/tubetrace-app/`
-- whether `tubetrace.pages.dev` keeps its canonical URLs
-- the five divergent files: which of them are intended rebrand and stay as patches, and which are
-  drift to be erased (`lib/shareCard.ts:108` in `native/` carries `"Meu hist?rico"` where the source
-  has `"Meu histórico"` — that one is drift, not rebrand)
+another question. Slice 3 can: it knows the direction, the substitution, and which of the five files
+are patches.
 
 ## Done when
 
 ```
-ls docs/decisions/tubetrace-source-of-truth.md && grep -c "^## " docs/decisions/tubetrace-source-of-truth.md
+grep -c "^### " docs/architecture/ARCHITECTURE.md
+grep -n "tubetrace.pages.dev" docs/architecture/ARCHITECTURE.md
 ```
 
-lists the file and reports at least 4 sections, and
-
-```
-grep -n "tubetrace.pages.dev" docs/decisions/tubetrace-source-of-truth.md
-```
-
-returns at least one line — i.e. the record answers the domain question rather than skipping it.
+report at least one dated decision entry and at least one line answering the domain question — both
+already true — and the record no longer carries a "deliberately still open" paragraph about
+`sync:tubetrace`.
 
 ## If stuck
 
-If the owner will not decide now, do not guess and do not start slice 3. Ship the smaller
-independent fix instead: correct `"Meu hist?rico"` to `"Meu histórico"` in
-`apps/web/src/tools/tubetrace/native/lib/shareCard.ts:108`. It is a real user-visible defect in the
-copy that ships, and it is correct under either answer.
+If the owner does not want to touch the build step now, close this slice anyway and move the open
+question to its own one-slice plan. Leaving a made decision marked unfinished because of a leftover
+build script is how the next agent concludes the source question is still open.
+
+**Still standing, independent of all of the above:** the copy that ships today has
+`"Meu hist?rico do YouTube analisado localmente"` at
+`apps/web/src/tools/tubetrace/native/lib/shareCard.ts:108`, and it renders on a share card users
+see. Correcting the `?` to `ó` is a one-line fix, correct under this decision, and it does not wait
+for the generator — which may be several slices away. It was the fallback of this slice while it was
+blocked and it has not been done.
