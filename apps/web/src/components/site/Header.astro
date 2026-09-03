@@ -296,14 +296,13 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
     // href="..." inside this bundled script would otherwise be picked up as a
     // link by naive crawlers that scan raw page source.
     const fragment = document.createDocumentFragment();
-    filtered.forEach((app, i) => {
+    filtered.forEach((app) => {
       const color = catColors[app.category] ?? { bg: "#f1f5f9", color: "#475569", darkBg: "rgba(71,85,105,.18)" };
       const isLive = app.status === "live";
 
       const anchor = document.createElement("a");
       anchor.setAttribute("href", app.appUrl);
       anchor.className = "sr-item";
-      anchor.dataset.idx = String(i);
 
       const icon = document.createElement("div");
       icon.className = "sr-icon";
