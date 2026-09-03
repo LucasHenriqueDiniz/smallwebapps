@@ -8,7 +8,8 @@ kanban: 9ea3ea78-8361-467a-9142-53a230dd748e
 ## Delivers
 
 Two more sibling modules with tests — `statistics-calculator/statistics.ts` and
-`case-converter/case.ts` — and a `test` job in `.github/workflows/ci.yml`, so a broken pure function
+`case-converter/case.ts` — and a job keyed `test` in `.github/workflows/ci.yml` whose step runs
+`pnpm --dir apps/web test --run`, the same invocation slice 1 establishes, so a broken pure function
 fails a pull request instead of a local command nobody runs.
 
 `statistics-calculator` is chosen because a wrong percentile is the exact silent-failure shape the
@@ -47,13 +48,18 @@ Same bar as slice 1: a test that survives the function being stubbed out is rewr
 pnpm --dir apps/web test --run
 ```
 
-exits 0 and reports 3 test files, and
+exits 0 and reports 3 test files — 0 exist today, slice 1 adds the first — and
 
 ```
-grep -n "test" .github/workflows/ci.yml
+grep -nE '^  test:' .github/workflows/ci.yml && grep -n 'run: pnpm --dir apps/web test' .github/workflows/ci.yml
 ```
 
-shows the suite invoked as a job step.
+exits 0, printing the job key and the step that invokes the suite.
+
+Both greps have to be discriminating, which is why neither of them is just `test`: a bare
+`grep -n "test" .github/workflows/ci.yml` already exits 0 on today's file, matching
+`runs-on: ubuntu-latest` on line 19, so it would pass with no work done at all. The pair above
+exits 1 on today's file.
 
 ## If stuck
 
