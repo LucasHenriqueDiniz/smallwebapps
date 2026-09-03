@@ -5,6 +5,11 @@ epic: tubetrace
 
 # TubeTrace has two live copies and no generator
 
+> **Decided 2026-09-03.** The question this pitch left open — whether `tubetrace.pages.dev` stays
+> a product — was answered yes: it is the source, and the embedded copy becomes generated output.
+> The argument below stands as written; the record is the `## Decisions` section of
+> `docs/architecture/ARCHITECTURE.md`.
+
 `apps/tubetrace/src/` and `apps/web/src/tools/tubetrace/native/` are the same application twice.
 Nothing produces one from the other, and both ship.
 

@@ -5,6 +5,11 @@ epic: catalog
 
 # The house rule and this repo's own rule disagree about apps.ts
 
+> **Decided 2026-09-03.** The plugin wins: `clean-code`'s 1500-line limit binds and `CLAUDE.md`
+> now defers to it instead of naming a permanent home for the catalog. The layout is still open.
+> The argument below stands as written; the record is the `## Decisions` section of
+> `docs/architecture/ARCHITECTURE.md`.
+
 ## What is actually true
 
 ```
