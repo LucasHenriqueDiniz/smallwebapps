@@ -46,9 +46,16 @@ Vite build and copies a bundle; it does not produce `native/`.
 
 **One of the two builds ships nothing anyone can reach.** `pnpm build` runs `sync:tubetrace` first,
 which builds `apps/tubetrace` and writes `apps/web/public/tubetrace-app/`. No `.astro`, `.tsx` or
-`.ts` file under `apps/web/src` references `tubetrace-app`, and `apps/web/public/_redirects` 301s
-every path under it away. The tool users reach at `/apps/tubetrace` is the `native/` copy, mounted
-in `ToolMount.astro:175`.
+`.ts` file under `apps/web/src` references `tubetrace-app`. The tool users reach at
+`/apps/tubetrace` is the `native/` copy, mounted in `ToolMount.astro:175`.
+
+> **Correction, 2026-09-03.** This paragraph said `_redirects` "301s every path under it away".
+> It does not: `apps/web/public/_redirects:6-12` is seven exact paths with no wildcard, and they
+> match the shell files `scripts/prepare-tubetrace-embed.mjs:51-70` already deletes. What the script
+> keeps on purpose — `embed.js`, `embed.css`, `assets/*` — is redirected by nothing and ships
+> publicly fetchable behind `X-Robots-Tag: noindex` (`_headers:16`). The heading still holds by the
+> other half of the evidence: nothing references the output, so nobody reaches it. It is
+> unreferenced, not unreachable.
 
 **Drift has already produced a defect.** `apps/web/src/tools/tubetrace/native/lib/shareCard.ts:108`
 reads `"Meu hist?rico do YouTube analisado localmente"` where the source file has

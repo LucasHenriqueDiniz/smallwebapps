@@ -18,7 +18,10 @@ disposition of all five divergent files, and the answer on canonical URLs. **One
 still open**, and closing it is what remains of this slice:
 
 > `pnpm build` runs `sync:tubetrace`, which Vite-builds `apps/tubetrace` and writes
-> `apps/web/public/tubetrace-app/`. That output ships unreachable. Does the step get dropped?
+> `apps/web/public/tubetrace-app/`. Nothing on the site loads that output, and the part of it the
+> build keeps on purpose — `embed.js`, `embed.css`, `assets/*` — is publicly fetchable: the
+> `_redirects` entries cover only the seven exact shell paths the build already deletes. So the step
+> publishes an unreferenced bundle, not an unreachable one. Does the step get dropped?
 
 That is a build- and deploy-configuration change, so it needs the owner too — but it is a much
 smaller question than the one just answered, and slice 3 does not wait on it. The generator rewrites
@@ -46,7 +49,8 @@ Re-run on this branch off `19367d6`:
 | classification against `apps/tubetrace/src/` | 11 identical, 62 rewrite-only, 5 divergent |
 | divergent files | `components/Dashboard.tsx`, `components/Footer.tsx`, `components/Header.tsx`, `components/UploadSection.tsx`, `lib/shareCard.ts` |
 | `tubetrace.pages.dev` in `apps/tubetrace` | **6** tracked files — the pitch says five, which was true when it was written |
-| `apps/web/src` references to `tubetrace-app` | none |
+| `apps/web/src` references to `tubetrace-app` | none — and none to `embed.js` or `embed.css` either |
+| `_redirects` coverage of `/tubetrace-app/` | 7 exact paths, **no wildcard** (`_redirects:6-12`); they match the shell files `scripts/prepare-tubetrace-embed.mjs:51-70` deletes, so `embed.js`, `embed.css` and `assets/*` are not redirected and ship fetchable under `X-Robots-Tag: noindex` (`_headers:16`) |
 
 `components/UploadSection.tsx` turned out to be a mixed file, not a pure SSR fix: it carries the
 rebrand strings *and* the locale-guess move out of the `useState` initializer. `lib/shareCard.ts:108`

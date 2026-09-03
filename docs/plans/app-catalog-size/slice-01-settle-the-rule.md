@@ -49,15 +49,26 @@ What it no longer needs to say is which of the two rules cedes. That is decided 
 
 ## Done when
 
+**Not by the block this slice used to carry.** It was
+`grep -nE "clean-code|CLAUDE\.md:36" docs/architecture/ARCHITECTURE.md` and
+`ls docs/plans/app-catalog-*/`, and both pass on this branch right now with none of the remaining
+work done: the grep returns four lines and exit 0 because the ruling is already recorded, and the
+`ls` returns exit 0 because the glob matches this slice's own directory,
+`docs/plans/app-catalog-size/`, which existed before the ruling. It read as "a follow-up plan
+exists" and measured "this plan exists".
+
 The layout is written down and a follow-up plan exists to execute it:
 
 ```
-grep -nE "clean-code|CLAUDE\.md:36" docs/architecture/ARCHITECTURE.md
-ls docs/plans/app-catalog-*/
+grep -n "^## The layout" docs/plans/app-catalog-size/slice-01-settle-the-rule.md
+ls docs/plans/app-catalog-layout/
 ```
 
-the first citing both conflicting rules by name — already true — and the second listing the plan that
-performs the split.
+Both exit 1 today. The first passes once this file gains a `## The layout` section that names the
+target layout concretely enough to move files against, what each of the eight importers imports
+instead, and what happens to `seoClusterApps`. The second passes once a separate plan directory
+exists — `docs/plans/app-catalog-layout/`, a path nothing in the tree uses — holding the slices that
+perform the move.
 
 ⚠️ **Do not close this slice by reporting the ruling.** The ruling is already in the tree; closing on
 it would leave a 9088-line file under a binding limit and no plan to bring it down.

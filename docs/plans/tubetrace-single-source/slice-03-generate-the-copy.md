@@ -23,8 +23,12 @@ slice was to be deleted rather than written — is ruled out. This slice stands.
 `scripts/generate-tubetrace-native.mjs`, which rewrites `apps/web/src/tools/tubetrace/native/` from
 `apps/tubetrace/src/` by applying the `@/` → `@/tools/tubetrace/native/` substitution and then the
 recorded rebrand patch for the five files the decision record marks as intended. After it,
-`native/` is generated output and the `clean-code` exception for generated code applies to all 8685
-lines of it.
+`native/` is generated output and stops being reviewed as hand-written code. **No file-size
+exception is claimed, because the plugin has none:** `clean-code`'s only `Exceptions:` list is
+`SKILL.md:53-55`, under `## Function size`; `## File size` (`SKILL.md:57-66`) carries no exception.
+Nor is one needed — of the 78 files the largest is 728 lines
+(`components/ui/sidebar.tsx`) against a 1500-line hard limit, and only 2 pass the 500-line soft
+limit.
 
 ## Needs
 

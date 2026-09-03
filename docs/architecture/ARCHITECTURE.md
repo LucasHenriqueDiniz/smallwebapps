@@ -53,15 +53,28 @@ except one string:
   original product with its own rebranded derivative.
 - Deleting `apps/tubetrace` and the `tubetrace` Cloudflare project, which was the other live option
   in `docs/plans/tubetrace-single-source/slice-02-decide-the-source.md`.
-- Treating the embed's 8685 lines as hand-written code for review purposes. Once generated, the
-  `clean-code` skill's generated-code exception covers them.
+- Treating the embed's 8685 lines as hand-written code for review purposes. Note what the plugin
+  does **not** say here. In `hexagram/skills/clean-code/SKILL.md` the only `Exceptions:` list is
+  `SKILL.md:53-55`, under `## Function size`, and generated code is one of its two entries;
+  `## File size` (`SKILL.md:57-66`) carries no exception at all. Generated status therefore excuses
+  the function bodies from the 80/200-line limits and nothing else — there is no file-size exception
+  to invoke. None is needed either: measured on this branch, the largest file under `native/` is 728
+  lines (`components/ui/sidebar.tsx`) against a 1500-line hard limit, and only 2 of the 78 pass the
+  500-line soft limit.
 
 **What is deliberately still open.** `pnpm build` runs `sync:tubetrace`, which Vite-builds
-`apps/tubetrace` and writes `apps/web/public/tubetrace-app/`. No file under `apps/web/src`
-references that path (`git grep -n "tubetrace-app" -- apps/web/src` returns nothing) and
-`apps/web/public/_redirects` 301s every path under it away, so that output ships unreachable. Whether
-the step is dropped is a build- and deploy-configuration change, and this record does not make it —
-it is the remaining question in slice 2 of the plan.
+`apps/tubetrace` and writes `apps/web/public/tubetrace-app/`. Nothing consumes it: a
+`git grep -n` over `apps/web/src` for `tubetrace-app`, `embed.js` and `embed.css` returns nothing
+for all three. But it ships **reachable and unreferenced**, not unreachable.
+`apps/web/public/_redirects:6-12` is seven exact paths with no wildcard — `/tubetrace-app/`,
+`/index.html`, `/privacy`, `/privacy.html`, `/terms`, `/terms.html`, `/sitemap.xml` — and those are
+the standalone-shell files `scripts/prepare-tubetrace-embed.mjs:51-70` already deletes. What the
+script keeps on purpose — `embed.js`, `embed.css` and `assets/*`, under the comment at
+`prepare-tubetrace-embed.mjs:50`, *"Only the embed payload is worth keeping"* — is redirected by
+nothing and is publicly fetchable, covered only by `X-Robots-Tag: noindex, follow` at
+`apps/web/public/_headers:16`. The step therefore publishes a bundle no page loads. Whether it is
+dropped is a build- and deploy-configuration change, and this record does not make it — it is the
+remaining question in slice 2 of the plan.
 
 ### 2026-09-03 — The `hexagram` plugin outranks this repo's own instruction files
 
@@ -70,8 +83,11 @@ it is the remaining question in slice 2 of the plan.
 large"*, `apps/web/src/data/apps.ts` is 9088 lines — six times that limit and ten times the next
 largest file in the repo — and `CLAUDE.md:36` told every agent to keep all shared app metadata in
 that one file (line 36 as the pitch cited it; the reworded bullet is now `CLAUDE.md:42`, and the
-precedence paragraph this decision added is `CLAUDE.md:19`). Both instructions were live and obeyed. Neither `clean-code` exception applies:
-`apps.ts` is a hand-maintained catalog, not generated code and not a many-armed `switch`.
+precedence paragraph this decision added is `CLAUDE.md:19`). Both instructions were live and
+obeyed. And the size limit is unconditional: `## File size` (`SKILL.md:57-66`) lists no exception,
+and the skill's only `Exceptions:` list (`SKILL.md:53-55`) sits under `## Function size`, so neither
+of its two entries — many-armed `match`/`switch` arms, and generated code — reaches a file-size
+limit at all. `apps.ts` would not have qualified anyway: it is a hand-maintained catalog.
 
 **Decision.** The owner ruled that the plugin chooses — everything follows the `hexagram` skills.
 So `clean-code`'s 1500-line hard limit binds `apps.ts` with no exception, the centralization rule
