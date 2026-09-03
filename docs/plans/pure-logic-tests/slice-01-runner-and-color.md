@@ -9,7 +9,7 @@ kanban: 5cb926ee-34a0-431f-b9b3-af341fdcdfb5
 
 `pnpm --dir apps/web test` runs and passes. It runs against
 `apps/web/src/tools/color-converter/color.ts` — a new module holding the five functions currently
-private to `ColorConverterApp.tsx` lines 3–94 (`hexToRgb`, `rgbToHsl`, `rgbToHsv`, `rgbToCmyk`,
+private to `ColorConverterApp.tsx` lines 3–92 (`hexToRgb`, `rgbToHsl`, `rgbToHsv`, `rgbToCmyk`,
 `parseAnyColor`), now exported — and `color.test.ts` beside it. `ColorConverterApp.tsx` imports them
 instead of declaring them, and renders identically.
 
@@ -30,14 +30,16 @@ outside this repo, so the tests assert arithmetic rather than restating the impl
 
 The list is the definition of done:
 
-- `hexToRgb` — `#fff` and `#ffffff` both give `[255,255,255]`; a leading `#` is optional; `#ggg` and
-  `#ff` give `null`
+- `hexToRgb` — `#ffffff` gives `[255,255,255]`; a leading `#` is optional; `#ggg`, `#ff` and the
+  3-digit `#fff` all give `null`. Its regex matches six digits only; the shorthand expansion lives in
+  `parseAnyColor` (lines 53–58), and this slice moves both functions as they are rather than widening
+  either one
 - `rgbToHsl` — pure red is `[0,100,50]`; grey has saturation `0`; hue wraps correctly across the
   red boundary rather than going negative
 - `rgbToHsv` — black is `[0,0,0]`; pure red is `[0,100,100]`
 - `rgbToCmyk` — black gives `k = 100`; white gives `[0,0,0,0]`
-- `parseAnyColor` — accepts the hex, `rgb()` and `hsl()` forms the component's input box accepts, and
-  returns `null` for text that is not a colour
+- `parseAnyColor` — accepts the hex, `rgb()` and `hsl()` forms the component's input box accepts, with
+  `#fff` and `#ffffff` both giving `[255,255,255]`, and returns `null` for text that is not a colour
 - one round-trip: for a fixed table of hex values, `rgbToHsl` then back is within one unit per
   channel
 
