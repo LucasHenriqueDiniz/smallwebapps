@@ -76,23 +76,55 @@ export function parseAnyColor(input: string): [number, number, number] | null {
     return [Math.round(hue2rgb(h + 1 / 3) * 255), Math.round(hue2rgb(h) * 255), Math.round(hue2rgb(h - 1 / 3) * 255)];
   }
   // CSS named color via canvas.
-  //
-  // ⚠️ This branch does not reject junk. Assigning an invalid value to
-  // ctx.fillStyle is a no-op in the browser, so fillStyle keeps its default
-  // #000000, the alpha guard below sees 255, and "not a color" comes back as
-  // [0, 0, 0] rather than null. Verified in Chrome. The unit tests cannot see
-  // it: they run under vitest's "node" environment, where document is
-  // undefined and the catch returns null for a different reason entirely.
-  // Left as-is here because this module is an extraction, not a rewrite.
+  return resolveCssColor(s);
+}
+
+/**
+ * The slice of CanvasRenderingContext2D that {@link readCssColor} touches, kept
+ * narrow so a test can hand it a stand-in: this module's suite runs under
+ * vitest's "node" environment, where no canvas exists.
+ */
+export type CanvasColorProbe = {
+  fillStyle: string | CanvasGradient | CanvasPattern;
+  fillRect(x: number, y: number, width: number, height: number): void;
+  getImageData(x: number, y: number, width: number, height: number): { data: ArrayLike<number> };
+};
+
+// Assigning an invalid value to fillStyle is a no-op per the HTML spec: the
+// property keeps whatever it held before. A fresh context holds #000000, so
+// without a seed of our own, junk input paints black and reads back as an
+// opaque [0, 0, 0] instead of being rejected. Seeding a known value first makes
+// an unchanged fillStyle the proof that the browser refused the assignment.
+//
+// Two seeds, because a single one would misjudge an input equal to it. A valid
+// colour can serialize to at most one, so only a rejected input survives both.
+const PROBE_SEEDS = ["#010203", "#040506"] as const;
+
+export function readCssColor(
+  probe: CanvasColorProbe,
+  input: string,
+): [number, number, number] | null {
+  const accepted = PROBE_SEEDS.some((seed) => {
+    probe.fillStyle = seed;
+    probe.fillStyle = input;
+    return probe.fillStyle !== seed;
+  });
+  if (!accepted) return null;
+
+  probe.fillRect(0, 0, 1, 1);
+  const pixel = probe.getImageData(0, 0, 1, 1).data;
+  if (pixel[3] === 0) return null;
+  return [pixel[0], pixel[1], pixel[2]];
+}
+
+function resolveCssColor(input: string): [number, number, number] | null {
   try {
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = 1;
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
-    ctx.fillStyle = s;
-    ctx.fillRect(0, 0, 1, 1);
-    const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
-    if (a === 0) return null;
-    return [r, g, b];
-  } catch { return null; }
+    return readCssColor(ctx, input);
+  } catch {
+    return null;
+  }
 }
