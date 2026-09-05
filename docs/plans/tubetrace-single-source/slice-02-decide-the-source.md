@@ -18,7 +18,10 @@ kanban: 6f320ad9-93df-48ce-85ca-63f7d1c03047
 >   were tracked and therefore published, so they are historic URLs, not dead weight. The
 >   `_headers` noindex rule for the prefix is dropped — nothing ships under it now;
 > - **the fallback this slice named as "still standing"** — `"Meu hist?rico…"` at
->   `lib/shareCard.ts:108` — fixed at `d6ee4bb`.
+>   `lib/shareCard.ts:108` — fixed at `d6ee4bb`. With the caveat the record adds and this slice
+>   never checked: that file is in `native/`, nothing outside `native/` imports `native/`, and the
+>   island that ships at `/apps/tubetrace` is `YouTubeWatchHistoryAnalyzerApp.tsx` alone. The share
+>   card the slice said "users see" is not reachable.
 >
 > Slices 1 and 3 are cancelled by the same ruling; they existed to serve two copies. The record is
 > *TubeTrace is a tool of this site, and `apps/tubetrace` is deleted* in

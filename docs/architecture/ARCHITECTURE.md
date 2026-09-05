@@ -24,10 +24,17 @@ has one slug, `tubetrace`; one route, `/apps/tubetrace`; one implementation dire
 `apps/web/src/tools/tubetrace/`. Therefore:
 
 - **`apps/web/src/tools/tubetrace/` is the only copy, and it is hand-maintained source.** Measured
-  at `d6ee4bb`: 79 tracked files, 9229 lines, of which `native/` is 78 files and 8685 lines. It is
-  reviewed as ordinary code, under the same `clean-code` limits as everything else — which it meets:
-  the largest file is 728 lines (`native/components/ui/sidebar.tsx`) against a 1500-line hard limit,
-  and 3 of the 79 pass the 500-line soft limit.
+  at `d6ee4bb`: 79 tracked files, 9229 lines. It is reviewed as ordinary code, under the same
+  `clean-code` limits as everything else — which it meets: the largest file is 728 lines
+  (`native/components/ui/sidebar.tsx`) against a 1500-line hard limit, and 3 of the 79 pass the
+  500-line soft limit.
+- **Of those 79 files, only one ships.** `ToolMount.astro:175` mounts
+  `YouTubeWatchHistoryAnalyzerApp.tsx` — 544 lines, importing `react` and `fflate` and nothing else.
+  The other 78 files, the whole 8685-line `native/` tree, are imported by nothing outside themselves:
+  `git grep -n "tools/tubetrace/native" -- apps/web/src` returns hits only from inside `native/`, and
+  the built island `dist/_astro/YouTubeWatchHistoryAnalyzerApp.*.js` is 14 KB with no `Dashboard`,
+  `UploadSection` or `shareCard` in it. `astro check` typechecks the tree; the bundler drops all of
+  it. This is measured here and settled nowhere — see below.
 - **There is no second source, no generator and no drift.** Nothing has to be kept in step with
   anything, so nothing has to detect that it drifted.
 - **There is no second domain.** The canonical URL of this tool is
@@ -52,8 +59,7 @@ whatever it last deployed, and this repo no longer contains the code behind it.
 - A generator, in either direction, and the drift detector that was to verify it. Both were answers
   to a two-copy problem that no longer exists.
 - Treating `apps/web/src/tools/tubetrace/native/` as generated output. It is hand-written code and
-  gets reviewed as such — including the `native/` layer name, which now describes nothing and is a
-  fair thing to flatten later.
+  gets reviewed as such.
 - Reading the rebrand as a patch set. The Small Web Apps wordmark, footer links, favicon, share-card
   strings and the `useState` → effect move for the locale guess in `native/components/UploadSection.tsx`
   are simply what this tool's code says. There is no upstream to reconcile them with.
@@ -61,6 +67,16 @@ whatever it last deployed, and this repo no longer contains the code behind it.
 **What is lost, and where to find it.** `apps/tubetrace` was 98 tracked files and 14882 lines. It is
 not gone, it is in git: **`d8508be`** is the last commit that carries it, and
 `git show d8508be:apps/tubetrace/...` reads any file of it back.
+
+**What this opens, and does not answer.** The whole epic — the pitch, all three slices and both
+decision records — argued about which of two copies of the TubeTrace UI is the source, and none of
+them checked whether either copy is on the site. Neither is. `native/` is 8685 unreferenced lines,
+and the tool users actually get is a 544-line file that shares no code with it. So the deletion above
+removed one dead copy and left another, and the real question was never the one being asked:
+**is `native/` an abandoned port, or an unfinished one somebody means to land?** That is an owner
+call — an abandoned port is 78 files to delete, an unfinished one is the next version of the tool —
+and it is not made here. Until it is, `native/` stays, and the `?`-for-`ó` fix at `d6ee4bb` is a fix
+to code that compiles and ships to nobody.
 
 ### 2026-09-03 — `tubetrace.pages.dev` is the product and the source; the embedded copy is generated
 
