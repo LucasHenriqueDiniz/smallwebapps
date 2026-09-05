@@ -1,14 +1,20 @@
 ---
-status: active
+status: done
 epic: tubetrace
 ---
 
 # TubeTrace has two live copies and no generator
 
-> **Decided 2026-09-03.** The question this pitch left open — whether `tubetrace.pages.dev` stays
-> a product — was answered yes: it is the source, and the embedded copy becomes generated output.
-> The argument below stands as written; the record is the `## Decisions` section of
-> `docs/architecture/ARCHITECTURE.md`.
+> **Resolved 2026-09-05, and not the way this pitch or its plan expected.** The problem it describes
+> was real and the measurements below are correct; the fix was not a generator. The owner ruled that
+> TubeTrace is a tool of this site and never was a separate product, so `apps/tubetrace` was deleted
+> and `apps/web/src/tools/tubetrace/` is the only copy. Two copies, so no second copy to generate.
+> The record is *TubeTrace is a tool of this site, and `apps/tubetrace` is deleted* in the
+> `## Decisions` section of `docs/architecture/ARCHITECTURE.md`.
+>
+> An earlier note here said the question was decided on 2026-09-03 in favour of keeping
+> `tubetrace.pages.dev` as the source. That record is superseded; this pitch is kept as the
+> historical statement of the problem, not as a live proposal.
 
 `apps/tubetrace/src/` and `apps/web/src/tools/tubetrace/native/` are the same application twice.
 Nothing produces one from the other, and both ship.

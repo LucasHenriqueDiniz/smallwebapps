@@ -1,9 +1,29 @@
 ---
-status: todo
+status: done
 kanban: 6f320ad9-93df-48ce-85ca-63f7d1c03047
 ---
 
 # Slice 2 — Decide which TubeTrace copy is the source
+
+> **Done 2026-09-05 — and the answer below is not the one that closed it.** This slice asked which
+> of the two copies is the source. The owner answered that the question was malformed: TubeTrace is
+> a tool of this site and never was a separate product, so there is one copy,
+> `apps/web/src/tools/tubetrace/`, and `apps/tubetrace` is deleted. Everything the slice was still
+> waiting on is settled by that:
+>
+> - **the source** — `apps/web/src/tools/tubetrace/`, hand-maintained, no upstream;
+> - **the dead `tubetrace-app` build step**, which was this slice's one open item — dropped, along
+>   with `scripts/prepare-tubetrace-embed.mjs`, the four `*:tubetrace` root scripts and the CI
+>   typecheck, at `516d019`. The seven `/tubetrace-app/` redirects stay: `6b8bd24` shows those URLs
+>   were tracked and therefore published, so they are historic URLs, not dead weight. The
+>   `_headers` noindex rule for the prefix is dropped — nothing ships under it now;
+> - **the fallback this slice named as "still standing"** — `"Meu hist?rico…"` at
+>   `lib/shareCard.ts:108` — fixed at `d6ee4bb`.
+>
+> Slices 1 and 3 are cancelled by the same ruling; they existed to serve two copies. The record is
+> *TubeTrace is a tool of this site, and `apps/tubetrace` is deleted* in
+> `docs/architecture/ARCHITECTURE.md`, and the 2026-09-03 record the text below relies on is marked
+> superseded there.
 
 **The product call is made.** The owner ruled on 2026-09-03 that `tubetrace.pages.dev` stays a
 shipping product and is the original: Small Web Apps carries one tool that *imitates* TubeTrace, so
