@@ -21,7 +21,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Google Takeout guide",
     publishedDate: "2026-06-02",
     modifiedDate: "2026-06-25",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open YouTube Watch History Analyzer"
   },
@@ -34,7 +34,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Privacy-first analysis guide",
     publishedDate: "2026-06-02",
     modifiedDate: "2026-06-25",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open YouTube Watch History Analyzer"
   },
@@ -47,7 +47,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "JSON best practices",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "json-formatter",
     relatedToolLabel: "Open JSON Formatter"
   },
@@ -60,7 +60,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Data preparation guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "csv-cleaner",
     relatedToolLabel: "Open CSV Cleaner"
   },
@@ -73,7 +73,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "PDF security guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "pdf-compress",
     relatedToolLabel: "Open PDF Compressor"
   },
@@ -86,7 +86,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Image optimization guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "image-resize",
     relatedToolLabel: "Open Image Resizer"
   },
@@ -99,7 +99,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Privacy & security guide",
     publishedDate: "2026-06-26",
     modifiedDate: "2026-06-26",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "",
     relatedToolLabel: "Browse all tools"
   },
@@ -112,7 +112,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Format reference",
     publishedDate: "2026-08-27",
     modifiedDate: "2026-08-27",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
   },
@@ -125,7 +125,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Data accuracy",
     publishedDate: "2026-08-27",
     modifiedDate: "2026-08-27",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
   },
@@ -138,7 +138,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Export formats",
     publishedDate: "2026-08-27",
     modifiedDate: "2026-08-27",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
   },
@@ -151,7 +151,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "Privacy analysis",
     publishedDate: "2026-08-27",
     modifiedDate: "2026-08-27",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
   },
@@ -164,7 +164,7 @@ export const guides: GuideDefinition[] = [
     publishedLabel: "History controls",
     publishedDate: "2026-08-27",
     modifiedDate: "2026-08-27",
-    image: "/og/site.svg",
+    image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
   }

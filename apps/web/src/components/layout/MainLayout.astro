@@ -21,7 +21,7 @@ const {
   title = siteConfig.title,
   description = siteConfig.description,
   canonicalPath = "/",
-  image = "/og/site.svg",
+  image = "/og/site.png",
   ogType = "website",
   structuredData,
   noindex = false
@@ -48,7 +48,8 @@ const organizationSchema: Record<string, unknown> = {
   "@type": "Organization",
   name: siteConfig.name,
   url: siteConfig.siteUrl,
-  logo: new URL("/favicon.svg", siteConfig.siteUrl).toString(),
+  // Google's logo guidance wants a raster file; favicon.svg does not qualify.
+  logo: new URL("/web-app-manifest-512x512.png", siteConfig.siteUrl).toString(),
   description: siteConfig.description,
 };
 const schemaPayload = structuredData
@@ -112,6 +113,7 @@ const schemaPayload = structuredData
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={imageAlt} />
