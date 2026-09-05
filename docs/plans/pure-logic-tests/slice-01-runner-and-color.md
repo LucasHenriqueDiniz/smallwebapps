@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 kanban: 5cb926ee-34a0-431f-b9b3-af341fdcdfb5
 ---
 
@@ -69,3 +69,22 @@ proves the arithmetic either way, and the alias is a config problem, not a testi
 If vitest and Astro's Vite version conflict outright, fall back to `node --test` with `tsx`. It is
 worse ergonomics and no watch mode, but the point of this slice is that a wrong colour conversion
 fails a command — not which runner prints the failure.
+
+## Closed 2026-09-05
+
+Merged in #11 at `1bff42b`. `vitest` is a devDependency of `apps/web` alone, `vitest.config.ts`
+derives the `@/` alias from `tsconfig.json`'s own `paths` rather than restating it, and the five
+functions moved to `color-converter/color.ts` unchanged apart from `export`.
+
+The slice asked for at least 6 tests in `color.test.ts`; it landed with 25, and the commit was
+verified green on its own in a detached checkout before slice 2 existed.
+
+Two things the slice did not anticipate, both recorded in #11:
+
+- `returns null for text that is not a color` passed for the wrong reason. Under vitest's `node`
+  environment `document` is undefined, so `parseAnyColor`'s canvas branch throws and the `catch`
+  answers. In a browser that branch runs and returns `[0, 0, 0]`, because assigning an invalid
+  value to `ctx.fillStyle` is a no-op. The test now says what it pins; the product bug it was
+  hiding is filed separately.
+- `#fff` cannot prove the three-digit hex expansion — a repdigit is identical whether each
+  character is doubled or the whole string is repeated. The fixture is `#abc`.
