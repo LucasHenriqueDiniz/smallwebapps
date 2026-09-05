@@ -78,7 +78,7 @@ const COMMODITY = [
   // codes, colour pickers, social
   "qr-code-generator", "qr-code-reader", "barcode-generator", "favicon-generator",
   "color-palette-extractor", "image-color-picker", "screen-color-picker", "svg-to-png",
-  "instagram-caption-formatter", "instagram-hashtag-extractor", "simple-utilities",
+  "instagram-caption-formatter", "instagram-hashtag-extractor",
 ];
 
 /** Slugs served with `noindex, follow` and kept out of the sitemap. */

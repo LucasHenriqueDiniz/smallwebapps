@@ -42,7 +42,7 @@ export const guides: GuideDefinition[] = [
     slug: "json-formatting-and-validation",
     title: "JSON Formatting & Validation in the Browser",
     description:
-      "Learn how to format, validate, and debug JSON in your browser without uploading files. Understand common JSON errors, when to minify, and best practices for working with APIs.",
+      "Format, validate and debug JSON in your browser without uploading files. Common JSON errors, when to minify, and practices for working with APIs.",
     category: "Developer Tools",
     publishedLabel: "JSON best practices",
     publishedDate: "2026-06-26",
@@ -55,7 +55,7 @@ export const guides: GuideDefinition[] = [
     slug: "csv-cleaning-before-import",
     title: "CSV Cleaning Checklist Before Importing",
     description:
-      "Prepare your CSV data for import with a practical checklist. Learn how to identify common issues, clean messy spreadsheet exports, and avoid data loss during processing.",
+      "A practical checklist for preparing CSV data before an import: how to spot common issues, clean messy spreadsheet exports, and avoid losing rows.",
     category: "Data Tools",
     publishedLabel: "Data preparation guide",
     publishedDate: "2026-06-26",
@@ -68,7 +68,7 @@ export const guides: GuideDefinition[] = [
     slug: "browser-based-pdf-tools-safe-and-fast",
     title: "Browser-Based PDF Tools: Safe & Fast",
     description:
-      "Discover why processing PDFs locally in your browser is safer and faster than cloud-based tools. Learn compression strategies, file size expectations, and when to use local vs. cloud approaches.",
+      "Why processing PDFs locally is safer and faster than cloud tools: compression strategies, realistic file-size expectations, and when cloud still wins.",
     category: "PDF Tools",
     publishedLabel: "PDF security guide",
     publishedDate: "2026-06-26",
@@ -81,7 +81,7 @@ export const guides: GuideDefinition[] = [
     slug: "resize-compress-images-locally",
     title: "How to Resize & Compress Images Without Uploading",
     description:
-      "Optimize images locally in your browser without uploading to third-party services. Learn format selection (JPG, PNG, WebP), quality trade-offs, and how to preserve or remove metadata safely.",
+      "Optimize images locally, with no upload to a third party: choosing between JPG, PNG and WebP, quality trade-offs, and handling metadata safely.",
     category: "Image / Inspection",
     publishedLabel: "Image optimization guide",
     publishedDate: "2026-06-26",
@@ -94,7 +94,7 @@ export const guides: GuideDefinition[] = [
     slug: "privacy-first-file-tools-local-processing",
     title: "Privacy-First File Tools: How Local Processing Works",
     description:
-      "Understand how browser-based file processing protects your privacy. Learn the technical difference between local and cloud tools, what stays on your device, and why client-side processing is safer for sensitive files.",
+      "How browser-based file processing protects privacy: the real difference between local and cloud tools, and what actually stays on your device.",
     category: "Data Tools",
     publishedLabel: "Privacy & security guide",
     publishedDate: "2026-06-26",
@@ -157,7 +157,7 @@ export const guides: GuideDefinition[] = [
   },
   {
     slug: "pause-delete-youtube-history",
-    title: "Pausing and Deleting YouTube History: What Remains in Takeout",
+    title: "Pausing YouTube History: What Takeout Keeps",
     description:
       "How pausing, deleting, and auto-delete change what a future Takeout export contains, and how each one shows up as a gap in your own data.",
     category: "YouTube Analysis",

@@ -26,13 +26,13 @@ import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
 import { canonicalUrl as toCanonicalUrl } from "@/lib/urls";
 import { isIndexable } from "@/data/indexing";
-import type { AppContent, AppFaq } from "@smallwebapps/data";
+import type { AppContent, AppFaq, AppStatus } from "@smallwebapps/data";
 import "../../styles/global.css";
 
 interface Props {
   name: string;
   category: string;
-  status: "live";
+  status: AppStatus;
   slug: string;
   disclaimer?: string;
   fullWidth?: boolean;
@@ -167,7 +167,7 @@ const breadcrumbSchema = {
         </a>
         <span class="tl-sep">›</span>
         <span class="tl-name">{name}</span>
-        <span class="tl-badge live">● Live</span>
+        <span class={`tl-badge ${isLive ? "live" : "soon"}`}>● {isLive ? "Live" : "Coming soon"}</span>
         <span class="tl-cat">{category}</span>
         {disclaimer && (
           <span class="tl-disclaimer">

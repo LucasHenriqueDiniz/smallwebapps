@@ -134,7 +134,7 @@ export const apps: AppDefinition[] = [
     seo: {
       title: "YouTube Watch History Analyzer — Local Google Takeout Tool",
       description:
-        "Free YouTube watch history analyzer. Upload your Google Takeout watch-history.json and see total videos, top channels, and viewing patterns — entirely in your browser, nothing uploaded.",
+        "Free YouTube watch history analyzer. Open your Google Takeout watch-history.json and see totals, top channels and viewing patterns in your browser.",
     },
   },
 
@@ -235,7 +235,7 @@ export const apps: AppDefinition[] = [
         "Your JSON is processed entirely in your browser's memory using built-in JavaScript APIs. Nothing is sent to a server, logged, or stored — refreshing the page clears everything.",
     },
     seo: {
-      title: "JSON Formatter & Validator — Format JSON Online | Small Web Apps",
+      title: "JSON Formatter & Validator — Format JSON Online Free",
       description:
         "Free online JSON formatter and validator. Pretty-print, minify, and inspect JSON instantly in your browser — no signup, no upload, no limits.",
     },
@@ -345,7 +345,7 @@ export const apps: AppDefinition[] = [
     seo: {
       title: "AI Image Checker — Inspect Image Signals Locally",
       description:
-        "Inspect images for AI-generation signals, metadata clues, and dimension patterns — all locally in your browser. An inspection assistant, not a definitive detector.",
+        "Inspect images for AI-generation signals, metadata clues and dimension patterns, locally in your browser. An assistant, not a definitive detector.",
     },
   },
 
@@ -2630,7 +2630,7 @@ export const apps: AppDefinition[] = [
         "All ratio and scaling calculations run locally in your browser using JavaScript. No dimensions are sent to a server.",
     },
     seo: {
-      title: "Aspect Ratio Calculator — Simplify Ratios and Scale Dimensions",
+      title: "Aspect Ratio Calculator — Simplify and Scale Ratios",
       description: "Calculate and simplify aspect ratios, scale dimensions proportionally, and preview visually. Common presets included. Free browser tool.",
     },
   },
@@ -2689,7 +2689,7 @@ export const apps: AppDefinition[] = [
         "All strings are generated locally using the Web Crypto API's crypto.getRandomValues(). Nothing is sent to a server or logged.",
     },
     seo: {
-      title: "Random String Generator — Cryptographically Secure Tokens and Keys",
+      title: "Random String Generator — Secure Tokens and Keys",
       description: "Generate random strings of any length from custom character sets using crypto.getRandomValues(). Bulk generation with copy-all. Free.",
     },
   },
@@ -2982,7 +2982,7 @@ export const apps: AppDefinition[] = [
         "All calculations and the live preview run locally in your browser. Nothing is sent to a server.",
     },
     seo: {
-      title: "CSS Border Radius Generator — Per-Corner Control with Live Preview",
+      title: "CSS Border Radius Generator — Per-Corner Live Preview",
       description: "Generate CSS border-radius for all four corners independently. Toggle px or %, live preview, and copy CSS. Free browser tool.",
     },
   },
@@ -3839,7 +3839,7 @@ export const apps: AppDefinition[] = [
         "The file is read and hashed entirely in your browser using the File API and Web Crypto API's SubtleCrypto. It is never uploaded or transmitted to a server.",
     },
     seo: {
-      title: "File Hash Calculator — SHA-256, SHA-512 Checksum for Any File",
+      title: "File Hash Calculator — SHA-256 and SHA-512 Checksums",
       description: "Calculate SHA-1, SHA-256, and SHA-512 checksums for any file in your browser. Uses Web Crypto API. No upload, free.",
     },
   },
