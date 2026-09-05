@@ -5,6 +5,7 @@ import Footer from "../site/Footer.astro";
 import CookieBanner from "../site/CookieBanner.astro";
 import AdSenseHead from "../site/AdSenseHead.astro";
 import { siteConfig } from "@/lib/site";
+import { canonicalUrl as toCanonicalUrl } from "@/lib/urls";
 
 interface Props {
   title?: string;
@@ -27,7 +28,7 @@ const {
 } = Astro.props;
 
 const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.name}`;
-const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
+const canonicalUrl = toCanonicalUrl(canonicalPath);
 const imageUrl = new URL(image, siteConfig.siteUrl).toString();
 const imageAlt = `${siteConfig.name} — free browser-based tools`;
 const websiteSchema: Record<string, unknown> = {
@@ -38,7 +39,7 @@ const websiteSchema: Record<string, unknown> = {
   description: siteConfig.description,
   potentialAction: {
     "@type": "SearchAction",
-    target: `${new URL("/apps", siteConfig.siteUrl).toString()}?q={search_term_string}`,
+    target: `${toCanonicalUrl("/apps")}?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
 };

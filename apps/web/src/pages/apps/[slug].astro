@@ -3,6 +3,7 @@ import ToolLayout from "@/components/layout/ToolLayout.astro";
 import ToolMount from "@/components/tools/ToolMount.astro";
 import RelatedApps from "@/components/apps/RelatedApps.astro";
 import { apps, appMap } from "@/data/apps";
+import { categoryPath } from "@/lib/urls";
 
 export function getStaticPaths() {
   return apps.map((app) => ({ params: { slug: app.slug } }));
@@ -43,7 +44,7 @@ const relatedApps = apps
   .slice(0, 6)
   .map(({ item }) => item);
 
-const categoryHref = `/apps?cat=${encodeURIComponent(app.category).replaceAll("%20", "+")}`;
+const categoryHref = categoryPath(app.category);
 ---
 
 <ToolLayout

@@ -22,6 +22,7 @@ import ContentInfoLink from "../tools/ContentInfoLink.astro";
 import ExpandedFaq from "../apps/ExpandedFaq.astro";
 import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
+import { canonicalUrl as toCanonicalUrl } from "@/lib/urls";
 import { isIndexable } from "@/data/indexing";
 import type { AppContent, AppFaq } from "@smallwebapps/data";
 import "../../styles/global.css";
@@ -61,7 +62,7 @@ const {
 
 const pageTitle    = seoTitle    ?? `${name} — ${siteConfig.name}`;
 const pageDesc     = seoDescription ?? `Free browser-based ${name.toLowerCase()} tool. No uploads, no accounts.`;
-const canonicalUrl = new URL(`/apps/${slug}/`, siteConfig.siteUrl).toString();
+const canonicalUrl = toCanonicalUrl(`/apps/${slug}`);
 const ogImageUrl   = new URL(`/og/${slug}.svg`, siteConfig.siteUrl).toString();
 const isLive       = status === "live";
 const indexable    = isIndexable(slug);
@@ -101,7 +102,7 @@ const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.siteUrl },
-    { "@type": "ListItem", position: 2, name: "Tools", item: new URL("/apps", siteConfig.siteUrl).toString() },
+    { "@type": "ListItem", position: 2, name: "Tools", item: toCanonicalUrl("/apps") },
     { "@type": "ListItem", position: 3, name, item: canonicalUrl },
   ],
 };
@@ -170,7 +171,7 @@ const breadcrumbSchema = {
     <!-- ── Breadcrumb strip ── -->
     <div class="tl-strip">
       <div class="tl-strip-inner">
-        <a href="/apps" class="tl-back">
+        <a href="/apps/" class="tl-back">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
           All tools
         </a>

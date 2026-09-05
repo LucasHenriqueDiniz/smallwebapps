@@ -6,6 +6,12 @@ import { isIndexableUrl } from "./src/data/indexing.ts";
 
 export default defineConfig({
   site: "https://smallwebapps.com",
+  // Cloudflare Pages serves a `directory` build at the trailing-slash URL:
+  // /about/index.html answers /about/ with 200 and 301s /about onto it. Pinning
+  // both settings is what keeps the sitemap, every canonical tag and every
+  // internal href on the one URL shape that is not a redirect.
+  trailingSlash: "always",
+  build: { format: "directory" },
   // Respect an assigned dev port (e.g. from preview tooling); default stays 4321
   server: { port: process.env.PORT ? Number(process.env.PORT) : 4321 },
   integrations: [
