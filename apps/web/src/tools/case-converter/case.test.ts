@@ -24,6 +24,10 @@ describe("toSentenceCase", () => {
     expect(toSentenceCase(mixed)).toBe("Hello world-foo_bar");
     expect(toSentenceCase("hello there. how are you? fine!")).toBe("Hello there. How are you? Fine!");
   });
+
+  it("raises the first word even when the string opens with whitespace", () => {
+    expect(toSentenceCase("   hello world.")).toBe("   Hello world.");
+  });
 });
 
 describe("toCamelCase", () => {

@@ -75,7 +75,15 @@ export function parseAnyColor(input: string): [number, number, number] | null {
     };
     return [Math.round(hue2rgb(h + 1 / 3) * 255), Math.round(hue2rgb(h) * 255), Math.round(hue2rgb(h - 1 / 3) * 255)];
   }
-  // CSS named color via canvas
+  // CSS named color via canvas.
+  //
+  // ⚠️ This branch does not reject junk. Assigning an invalid value to
+  // ctx.fillStyle is a no-op in the browser, so fillStyle keeps its default
+  // #000000, the alpha guard below sees 255, and "not a color" comes back as
+  // [0, 0, 0] rather than null. Verified in Chrome. The unit tests cannot see
+  // it: they run under vitest's "node" environment, where document is
+  // undefined and the catch returns null for a different reason entirely.
+  // Left as-is here because this module is an extraction, not a rewrite.
   try {
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = 1;

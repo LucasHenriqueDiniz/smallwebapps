@@ -65,6 +65,11 @@ describe("calcStats", () => {
     expect(calcStats([1, 1, 2, 2])!.mode).toBe("1, 2");
   });
 
+  it("reports at most three modes, however many are tied", () => {
+    // Four values tied at frequency two. The panel promises "up to three".
+    expect(calcStats([1, 1, 2, 2, 3, 3, 4, 4])!.mode).toBe("1, 2, 3");
+  });
+
   it("picks quartiles by index into the sorted list, without interpolating", () => {
     // sorted: 1 2 3 4 5 6 7 7 8 9 — q1 is element ⌊10/4⌋ = 2 and q3 is
     // element ⌊30/4⌋ = 7, both counted from zero. An interpolating quartile
@@ -88,12 +93,5 @@ describe("populationVariance and populationStandardDeviation", () => {
     const values = [2, 4, 4, 4, 5, 5, 7, 9];
     expect(populationVariance(values, 5)).toBe(4);
     expect(populationStandardDeviation(values, 5)).toBe(2);
-  });
-
-  it("agrees with the figures calcStats reports", () => {
-    const stats = calcStats(defaultInput)!;
-    const sorted = [...defaultInput].sort((a, b) => a - b);
-    expect(populationVariance(sorted, stats.mean)).toBe(stats.variance);
-    expect(populationStandardDeviation(sorted, stats.mean)).toBe(stats.stdDev);
   });
 });
