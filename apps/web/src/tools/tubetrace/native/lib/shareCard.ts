@@ -105,7 +105,7 @@ export async function shareCard(data: AnalyticsData): Promise<"shared" | "downlo
       await nav.share({
         files: [file],
         title: "YouTube Watch History Analyzer",
-        text: "Meu hist?rico do YouTube analisado localmente",
+        text: "Meu histórico do YouTube analisado localmente",
       });
       return "shared";
     } catch {
