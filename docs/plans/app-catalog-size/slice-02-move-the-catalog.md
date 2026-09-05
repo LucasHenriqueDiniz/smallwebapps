@@ -1,5 +1,6 @@
 ---
 status: todo
+kanban: 5e3243d9-2147-4fa3-aa98-3f463284311e
 ---
 
 # Slice 2 — Move the catalog into per-tool modules

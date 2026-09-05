@@ -5,10 +5,13 @@
 # index.html, privacy.html, terms.html and sitemap.xml among the files that were
 # tracked and therefore deployed. Nothing writes that directory any more, so
 # these seven are the historic URLs and they stay redirected rather than 404.
-/tubetrace-app/               /apps/tubetrace     301
-/tubetrace-app/index.html     /apps/tubetrace     301
-/tubetrace-app/privacy        /privacy            301
-/tubetrace-app/privacy.html   /privacy            301
-/tubetrace-app/terms          /terms              301
-/tubetrace-app/terms.html     /terms              301
+#
+# Targets carry the trailing slash. Without it each of these costs two hops:
+# this 301, then Cloudflare's own 301 from /apps/tubetrace to /apps/tubetrace/.
+/tubetrace-app/               /apps/tubetrace/    301
+/tubetrace-app/index.html     /apps/tubetrace/    301
+/tubetrace-app/privacy        /privacy/           301
+/tubetrace-app/privacy.html   /privacy/           301
+/tubetrace-app/terms          /terms/             301
+/tubetrace-app/terms.html     /terms/             301
 /tubetrace-app/sitemap.xml    /sitemap-index.xml  301
