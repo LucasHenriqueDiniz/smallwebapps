@@ -20,8 +20,12 @@
     ad_personalization: 'denied',
     wait_for_update:    500,
   });
-  // Restore a previous choice, if the visitor already made one.
-  var saved = localStorage.getItem('swa_consent');
+  // Restore a previous choice, if the visitor already made one. Reading
+  // localStorage throws outright in a browser set to block site data, and an
+  // uncaught throw here would take out everything after it in this inline
+  // script. Denied-by-default above already stands; this only ever upgrades.
+  var saved = null;
+  try { saved = localStorage.getItem('swa_consent'); } catch (e) {}
   if (saved) {
     var granted = saved === 'granted' ? 'granted' : 'denied';
     gtag('consent', 'update', {

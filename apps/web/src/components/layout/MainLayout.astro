@@ -75,7 +75,11 @@ const schemaPayload = structuredData
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
+    {/* No canonical on a noindex page whose URL is not a real address: /404/
+        is served for every unmatched path and exists at none of them, so a
+        self-referencing canonical there points at nothing. Tool pages served
+        noindex, follow keep theirs — those URLs do resolve. */}
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="generator" content={Astro.generator} />
     <!-- Dark theme: apply BEFORE paint to avoid flash -->

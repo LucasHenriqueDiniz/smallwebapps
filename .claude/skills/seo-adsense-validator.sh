@@ -35,7 +35,9 @@ echo "📋 AdSense Configuration"
 echo "------------------------"
 
 if [ -f "apps/web/public/ads.txt" ]; then
-  adsense_id=$(grep -oP 'pub-\d+' apps/web/public/ads.txt 2>/dev/null || echo "NOT_FOUND")
+  # -oE, not -oP: BSD grep on macOS has no -P, so the Perl form found nothing
+  # and this check reported a missing ID on an ads.txt that has one.
+  adsense_id=$(grep -oE 'pub-[0-9]+' apps/web/public/ads.txt 2>/dev/null || echo "NOT_FOUND")
   if [ "$adsense_id" != "NOT_FOUND" ]; then
     check_pass "ads.txt present with AdSense ID ($adsense_id)"
   else

@@ -157,7 +157,7 @@ export const guides: GuideDefinition[] = [
   },
   {
     slug: "pause-delete-youtube-history",
-    title: "Pausing YouTube History: What Takeout Keeps",
+    title: "Pausing & Deleting YouTube History: What Takeout Keeps",
     description:
       "How pausing, deleting, and auto-delete change what a future Takeout export contains, and how each one shows up as a gap in your own data.",
     category: "YouTube Analysis",

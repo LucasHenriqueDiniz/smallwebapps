@@ -19,7 +19,18 @@ import { isIndexableUrl } from "@/data/indexing";
  * There is no second list.
  */
 
-/** Cloudflare Pages sets CF_PAGES_BRANCH on every build, preview or not. */
+/**
+ * Cloudflare Pages sets CF_PAGES=1 and CF_PAGES_BRANCH on every build it runs,
+ * preview or not. Both are read, and which one is missing matters:
+ *
+ * - On Cloudflare (CF_PAGES set) the branch decides, and an absent or
+ *   unrecognised branch is treated as a preview. Failing closed there costs
+ *   nothing but revenue on one deploy; failing open serves real ads from a
+ *   preview URL, which is invalid traffic and how accounts get suspended.
+ * - Off Cloudflare (CF_PAGES unset) the only way this runs under PROD is the
+ *   owner's own `pnpm deploy:cloudflare`, which is a deliberate production
+ *   publish from a local machine. That one is allowed.
+ */
 const PRODUCTION_BRANCH = "main";
 
 const ERROR_PAGES = new Set(["/404", "/404/"]);
@@ -31,8 +42,9 @@ function isProductionDeploy(): boolean {
   if (!import.meta.env.PROD) return false;
   if (import.meta.env.PUBLIC_ADSENSE_DISABLED === "true") return false;
 
-  const branch = process.env.CF_PAGES_BRANCH;
-  return branch === undefined || branch === PRODUCTION_BRANCH;
+  const onCloudflare = Boolean(process.env.CF_PAGES);
+  if (!onCloudflare) return true;
+  return process.env.CF_PAGES_BRANCH === PRODUCTION_BRANCH;
 }
 
 export function shouldLoadAds(pathname: string): boolean {
