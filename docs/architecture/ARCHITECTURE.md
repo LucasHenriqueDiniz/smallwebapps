@@ -1,16 +1,74 @@
 # Architecture
 
-`apps/web` is the Small Web Apps Astro site and the primary product: Astro owns routing, SEO pages
-and static content, React islands own interactive tool surfaces. `apps/tubetrace` is a second,
-separately deployed single-page product whose UI this repo also embeds. The coding rules that shape
-all of it are not on disk — they ship as `hexagram` plugin skills, as `CLAUDE.md` explains.
+`apps/web` is the Small Web Apps Astro site and the only product this repo builds: Astro owns
+routing, SEO pages and static content, React islands own interactive tool surfaces. The coding rules
+that shape all of it are not on disk — they ship as `hexagram` plugin skills, as `CLAUDE.md`
+explains.
 
 ## Decisions
 
 Newest first. A superseded decision stays, marked — knowing why an alternative lost is worth as
 much as knowing why the winner won.
 
+### 2026-09-05 — TubeTrace is a tool of this site, and `apps/tubetrace` is deleted
+
+**Context.** The record below it, dated two days earlier, read the owner as ruling that
+`tubetrace.pages.dev` stays a shipping product and is the source of the embedded copy. The owner has
+since said — and says it was said before — that *"o tubetrace não deveria ser algo separado, ele é
+apenas uma ferramenta"*. So the option that record listed under **What this rules out** —
+*"Deleting `apps/tubetrace` and the `tubetrace` Cloudflare project"* — is the actual decision, and
+everything the 2026-09-03 record built on top of the other reading falls with it.
+
+**Decision.** TubeTrace is one of the tools of Small Web Apps, no different from the other 141. It
+has one slug, `tubetrace`; one route, `/apps/tubetrace`; one implementation directory,
+`apps/web/src/tools/tubetrace/`. Therefore:
+
+- **`apps/web/src/tools/tubetrace/` is the only copy, and it is hand-maintained source.** Measured
+  at `d6ee4bb`: 79 tracked files, 9229 lines, of which `native/` is 78 files and 8685 lines. It is
+  reviewed as ordinary code, under the same `clean-code` limits as everything else — which it meets:
+  the largest file is 728 lines (`native/components/ui/sidebar.tsx`) against a 1500-line hard limit,
+  and 3 of the 79 pass the 500-line soft limit.
+- **There is no second source, no generator and no drift.** Nothing has to be kept in step with
+  anything, so nothing has to detect that it drifted.
+- **There is no second domain.** The canonical URL of this tool is
+  `https://smallwebapps.com/apps/tubetrace/`, produced by `ToolLayout.astro` like every other tool
+  page. Nothing inside the React island sets a canonical of its own — measured, a `git grep -n` for
+  `tubetrace.pages.dev` over `apps/web/src` returns nothing, and the only absolute URLs left under
+  `apps/web/src/tools/tubetrace/` are two links to the upstream GitHub repository and two to
+  `takeout.google.com`, which are ordinary outbound links and stay.
+- **`apps/tubetrace` leaves the repository**, and with it `scripts/prepare-tubetrace-embed.mjs`, the
+  `apps/web/public/tubetrace-app/` output, the four root `*:tubetrace` scripts, `pnpm sync:tubetrace`
+  at the front of `build`, and the CI typecheck step. That closes the question the 2026-09-03 record
+  left open under **What is deliberately still open** — the build step that published a bundle no
+  page loads is gone, because the workspace it built is gone.
+
+**This PR changes nothing in Cloudflare.** It stops producing and publishing the bundle; the
+`tubetrace` Pages project keeps running until the owner switches it off, which is an action outside
+this repository. Note the consequence while it does: `tubetrace.pages.dev` still serves the app from
+whatever it last deployed, and this repo no longer contains the code behind it.
+
+**What this rules out.**
+
+- A generator, in either direction, and the drift detector that was to verify it. Both were answers
+  to a two-copy problem that no longer exists.
+- Treating `apps/web/src/tools/tubetrace/native/` as generated output. It is hand-written code and
+  gets reviewed as such — including the `native/` layer name, which now describes nothing and is a
+  fair thing to flatten later.
+- Reading the rebrand as a patch set. The Small Web Apps wordmark, footer links, favicon, share-card
+  strings and the `useState` → effect move for the locale guess in `native/components/UploadSection.tsx`
+  are simply what this tool's code says. There is no upstream to reconcile them with.
+
+**What is lost, and where to find it.** `apps/tubetrace` was 98 tracked files and 14882 lines. It is
+not gone, it is in git: **`d8508be`** is the last commit that carries it, and
+`git show d8508be:apps/tubetrace/...` reads any file of it back.
+
 ### 2026-09-03 — `tubetrace.pages.dev` is the product and the source; the embedded copy is generated
+
+> **Superseded 2026-09-05** by *TubeTrace is a tool of this site, and `apps/tubetrace` is deleted*,
+> above. The owner's ruling was the opposite of what this record captured: TubeTrace was never a
+> separate product. The alternative this record rules out below is the one that won. Kept as
+> written, because the measurements in it are correct and the reasoning is why the wrong branch
+> looked right.
 
 **Context.** `docs/pitches/tubetrace-single-source.md` established that the TubeTrace UI exists
 twice with nothing producing one from the other. Re-measured on this branch, off `19367d6`:
