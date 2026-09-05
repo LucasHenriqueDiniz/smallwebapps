@@ -1,8 +1,10 @@
 /sitemap.xml  /sitemap-index.xml  301
 
-# The TubeTrace standalone shell used to be published under /tubetrace-app/ by
-# scripts/prepare-tubetrace-embed.mjs. It is no longer copied there. Point the
-# old URLs at this site's equivalents rather than letting them 404.
+# A TubeTrace standalone shell really did ship under /tubetrace-app/ on this
+# domain: `git show 6b8bd24 --stat -- apps/web/public/tubetrace-app` lists
+# index.html, privacy.html, terms.html and sitemap.xml among the files that were
+# tracked and therefore deployed. Nothing writes that directory any more, so
+# these seven are the historic URLs and they stay redirected rather than 404.
 /tubetrace-app/               /apps/tubetrace     301
 /tubetrace-app/index.html     /apps/tubetrace     301
 /tubetrace-app/privacy        /privacy            301

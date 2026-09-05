@@ -47,7 +47,12 @@ Use `smallwebapps.com` as the canonical production domain.
 - Keep shared product types in `packages/data/src`.
 - Keep tool implementations under `apps/web/src/tools/{slug}`.
 - Keep tool pages data-driven through `apps/web/src/pages/apps/[slug].astro` and `ToolLayout.astro`.
-- Preserve `apps/tubetrace` as the imported TubeTrace source workspace when changing the embedded TubeTrace route.
+- TubeTrace is a tool like any other, not a separate product. It lives under
+  `apps/web/src/tools/tubetrace/`, hand-maintained and reviewed as ordinary source; there is no
+  second copy to sync and no `apps/tubetrace` workspace. **What the site actually serves is
+  `YouTubeWatchHistoryAnalyzerApp.tsx`** — the 78 files under `tubetrace/native/` are not reached by
+  anything, and whether they get deleted or finished is an open owner question. Do not treat
+  `native/` as the tool. Decided 2026-09-05; see `docs/architecture/ARCHITECTURE.md`.
 - `apps/botschannel` is not part of this repository’s current Small Web Apps scope. Do not recreate, build, deploy, commit, or modify it unless the user explicitly changes scope.
 
 ## Tool page contract

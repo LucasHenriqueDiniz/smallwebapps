@@ -103,10 +103,8 @@ smallwebapps/
 │       │   ├── data/apps.ts          # Tool metadata (single source of truth)
 │       │   └── styles/               # Global CSS + design tokens
 │       └── astro.config.mjs
-├── packages/
-│   └── data/                         # Shared TypeScript types
-└── scripts/
-    └── prepare-tubetrace-embed.mjs   # YouTube analysis tool setup
+└── packages/
+    └── data/                         # Shared TypeScript types
 ```
 
 ### Adding a Tool
