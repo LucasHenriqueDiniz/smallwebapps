@@ -65,23 +65,37 @@ echo ""
 echo "🔐 Google Consent Mode v2"
 echo "------------------------"
 
-if grep -q "Google Consent Mode" apps/web/src/components/layout/MainLayout.astro; then
+# The consent block used to be inlined in MainLayout. It is one component now,
+# shared with ToolLayout, so that the two layouts cannot disagree about whether
+# it runs before the ad loader.
+consent_component="apps/web/src/components/site/ConsentMode.astro"
+
+if grep -q "consent', 'default'" "$consent_component"; then
   check_pass "Consent Mode v2 script present"
 else
   check_fail "Consent Mode v2 script missing"
 fi
 
-if grep -q "ad_storage.*denied" apps/web/src/components/layout/MainLayout.astro; then
+if grep -q "ad_storage.*denied" "$consent_component"; then
   check_pass "Consent defaults to DENIED (privacy-first)"
 else
   check_fail "Consent defaults not privacy-first"
 fi
 
-if grep -q "swa_consent" apps/web/src/components/layout/MainLayout.astro; then
+if grep -q "swa_consent" "$consent_component"; then
   check_pass "Consent choice persistence implemented"
 else
   check_fail "Consent choice persistence missing"
 fi
+
+# The component is worth nothing if a layout puts the ad loader above it.
+for layout in apps/web/src/components/layout/MainLayout.astro apps/web/src/components/layout/ToolLayout.astro; do
+  if [ "$(grep -n "ConsentMode" "$layout" | tail -1 | cut -d: -f1)" -lt "$(grep -n "<AdSenseHead" "$layout" | tail -1 | cut -d: -f1)" ]; then
+    check_pass "$(basename "$layout"): consent defaults precede the ad loader"
+  else
+    check_fail "$(basename "$layout"): ad loader precedes the consent defaults"
+  fi
+done
 
 # ===================
 # 3. SECURITY HEADERS
