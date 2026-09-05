@@ -1,0 +1,34 @@
+---
+/**
+ * Google Consent Mode v2 defaults, denied until the visitor chooses.
+ *
+ * This has to run BEFORE the AdSense loader, or the loader is in the document
+ * before any consent signal exists. Both layouts used to inline their own copy
+ * of this block and they had drifted: MainLayout had it first, ToolLayout had
+ * it after <AdSenseHead />, which is ~142 tool pages loading ads ahead of the
+ * default. One component means the two cannot disagree again — put it above
+ * <AdSenseHead /> and the order is right by construction.
+ */
+---
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage:         'denied',
+    analytics_storage:  'denied',
+    ad_user_data:       'denied',
+    ad_personalization: 'denied',
+    wait_for_update:    500,
+  });
+  // Restore a previous choice, if the visitor already made one.
+  var saved = localStorage.getItem('swa_consent');
+  if (saved) {
+    var granted = saved === 'granted' ? 'granted' : 'denied';
+    gtag('consent', 'update', {
+      ad_storage:         granted,
+      analytics_storage:  granted,
+      ad_user_data:       granted,
+      ad_personalization: granted,
+    });
+  }
+</script>
