@@ -3,6 +3,8 @@ import ToolLayout from "@/components/layout/ToolLayout.astro";
 import ToolMount from "@/components/tools/ToolMount.astro";
 import RelatedApps from "@/components/apps/RelatedApps.astro";
 import { apps, appMap } from "@/data/apps";
+import { isIndexable } from "@/data/indexing";
+import { categoryPath } from "@/lib/urls";
 
 export function getStaticPaths() {
   return apps.map((app) => ({ params: { slug: app.slug } }));
@@ -26,6 +28,21 @@ const curatedRelatedSlugs: Record<string, string[]> = {
   "base64-encoder": ["json-formatter", "jwt-decoder", "url-encoder", "hash-generator"],
 };
 const curatedRelated = new Set(curatedRelatedSlugs[app.slug] ?? []);
+
+/**
+ * Related-tool ranking, with a thumb on the scale for indexable slugs.
+ *
+ * The rule: an indexable page is worth one notch, not a category. At 5 it
+ * outranks a shared tag (3) and settles every tie, so among tools that are
+ * equally related the crawlable one goes first — but it stays below the
+ * same-category weight (10), so a genuinely related noindex tool still beats
+ * an indexable one from a different category. Relevance decides the set;
+ * indexability decides the order within it.
+ *
+ * Curated pairs keep their 25 and stay on top. Those links are the owner's
+ * editorial call (a compressor pointing at its own size variants) and they are
+ * accurate; demoting them would trade a true relationship for a crawl signal.
+ */
 const relatedApps = apps
   .filter((item) => item.slug !== app.slug && item.implemented)
   .map((item) => {
@@ -33,9 +50,10 @@ const relatedApps = apps
     const sameCategory = item.category === app.category ? 1 : 0;
     const liveBoost = item.status === "live" ? 1 : 0;
     const curatedBoost = curatedRelated.has(item.slug) ? 25 : 0;
+    const indexableBoost = isIndexable(item.slug) ? 5 : 0;
     return {
       item,
-      score: curatedBoost + sameCategory * 10 + sharedTags * 3 + liveBoost,
+      score: curatedBoost + sameCategory * 10 + indexableBoost + sharedTags * 3 + liveBoost,
     };
   })
   .filter(({ score }) => score > 0)
@@ -43,13 +61,13 @@ const relatedApps = apps
   .slice(0, 6)
   .map(({ item }) => item);
 
-const categoryHref = `/apps?cat=${encodeURIComponent(app.category).replaceAll("%20", "+")}`;
+const categoryHref = categoryPath(app.category);
 ---
 
 <ToolLayout
   name={app.name}
   category={app.category}
-  status="live"
+  status={app.status}
   slug={app.slug}
   disclaimer={app.disclaimer}
   seoTitle={app.seo.title}

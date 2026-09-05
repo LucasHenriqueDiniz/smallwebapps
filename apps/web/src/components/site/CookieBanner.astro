@@ -8,46 +8,89 @@
       </svg>
       <p>
         We use cookies to serve ads and analyse traffic.
-        See our <a href="/privacy">Privacy Policy</a> for details.
+        See our <a href="/privacy/">Privacy Policy</a> for details.
+        <span class="cb-current" id="cb-current" hidden></span>
       </p>
     </div>
     <div class="cb-actions">
-      <button class="cb-decline" id="cb-decline">Decline</button>
-      <button class="cb-accept"  id="cb-accept">Accept all</button>
+      <button type="button" class="cb-decline" id="cb-decline">Decline</button>
+      <button type="button" class="cb-accept"  id="cb-accept">Accept all</button>
+      <button type="button" class="cb-close" id="cb-close" aria-label="Close without changing your choice" hidden>&times;</button>
     </div>
   </div>
 </div>
 
 <script>
+  /**
+   * Consent has to be as easy to withdraw as it was to give, so this banner is
+   * reopenable: anything carrying `data-cookie-settings` (the footer link) puts
+   * it back on screen, showing the choice currently stored and letting the
+   * visitor change it or close without changing anything.
+   *
+   * Deliberately still one choice rather than per-purpose toggles. There is
+   * exactly one processing purpose on this site today — advertising — and no
+   * analytics product runs at all, so an "analytics" switch would be a control
+   * that does nothing. Splitting it is a change to make alongside a real
+   * consent-management platform, not before one.
+   */
   const COOKIE_KEY = 'swa_consent';
-  const banner     = document.getElementById('cookie-banner')!;
+  const banner  = document.getElementById('cookie-banner')!;
+  const current = document.getElementById('cb-current')!;
+  const closeBtn = document.getElementById('cb-close')!;
 
-  function getConsent(): string | null {
-    return localStorage.getItem(COOKIE_KEY);
+  type Consent = 'granted' | 'denied';
+
+  function getConsent(): Consent | null {
+    const stored = localStorage.getItem(COOKIE_KEY);
+    return stored === 'granted' || stored === 'denied' ? stored : null;
   }
 
-  function setConsent(value: 'granted' | 'denied') {
-    localStorage.setItem(COOKIE_KEY, value);
+  function applyConsent(value: Consent) {
+    if (typeof (window as any).gtag !== 'function') return;
+    (window as any).gtag('consent', 'update', {
+      ad_storage:         value,
+      analytics_storage:  value,
+      ad_user_data:       value,
+      ad_personalization: value,
+    });
+  }
+
+  function hide() {
     banner.style.display = 'none';
-
-    // Update Google Consent Mode v2
-    if (typeof (window as any).gtag === 'function') {
-      (window as any).gtag('consent', 'update', {
-        ad_storage:              value === 'granted' ? 'granted' : 'denied',
-        analytics_storage:       value === 'granted' ? 'granted' : 'denied',
-        ad_user_data:            value === 'granted' ? 'granted' : 'denied',
-        ad_personalization:      value === 'granted' ? 'granted' : 'denied',
-      });
-    }
   }
 
-  // Show only if no prior choice
-  if (!getConsent()) {
+  function show() {
+    const stored = getConsent();
+    // Reopened after a choice: say what the choice is, and offer a way out that
+    // does not force the visitor to pick again.
+    const reopened = stored !== null;
+    current.textContent = stored === 'granted'
+      ? ' Your current choice: advertising cookies accepted.'
+      : ' Your current choice: advertising cookies declined.';
+    current.hidden = !reopened;
+    closeBtn.hidden = !reopened;
     banner.style.display = 'block';
   }
 
+  function setConsent(value: Consent) {
+    localStorage.setItem(COOKIE_KEY, value);
+    applyConsent(value);
+    hide();
+  }
+
+  if (!getConsent()) show();
+
   document.getElementById('cb-accept')?.addEventListener('click',  () => setConsent('granted'));
   document.getElementById('cb-decline')?.addEventListener('click', () => setConsent('denied'));
+  closeBtn.addEventListener('click', hide);
+
+  // Delegated, so any page can offer the entry point without importing anything.
+  document.addEventListener('click', (event) => {
+    const trigger = (event.target as HTMLElement | null)?.closest('[data-cookie-settings]');
+    if (!trigger) return;
+    event.preventDefault();
+    show();
+  });
 </script>
 
 <style>
@@ -96,7 +139,18 @@
 .cb-text a   { color: #60a5fa; text-decoration: underline; text-underline-offset: 2px; }
 .cb-text a:hover { color: #93c5fd; }
 
-.cb-actions { display: flex; gap: 10px; flex-shrink: 0; }
+/* A plain `display: block` would beat the UA rule for [hidden]. */
+.cb-current:not([hidden]) { display: block; margin-top: 4px; font-weight: 600; opacity: .85; }
+
+.cb-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.cb-close {
+  background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.5); font-size: 1.25rem; line-height: 1;
+  padding: 4px 8px; border-radius: 8px;
+}
+.cb-close:hover { color: white; }
+:root:not([data-theme="dark"]) .cb-close { color: #94a3b8; }
+:root:not([data-theme="dark"]) .cb-close:hover { color: #0f172a; }
 .cb-decline {
   background: transparent; color: rgba(255,255,255,0.55);
   border: 1px solid rgba(255,255,255,0.2);

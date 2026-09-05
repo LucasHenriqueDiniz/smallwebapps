@@ -1,5 +1,6 @@
 ---
 import { apps } from "@/data/apps";
+import { categoryPath } from "@/lib/urls";
 
 const categoryOrder = [
   "PDF Tools",
@@ -17,7 +18,6 @@ const categoryLabel: Record<string, string> = {
   "YouTube / Data": "YouTube Analysis",
 };
 
-const categoryHref = (category: string) => `/apps?cat=${encodeURIComponent(category).replaceAll("%20", "+")}`;
 const grouped = categoryOrder
   .map((category) => ({
     category,
@@ -47,28 +47,29 @@ const grouped = categoryOrder
       {grouped.map(({ category, apps: groupApps }) => (
         <div class="footer-col">
           <h4>
-            <a href={categoryHref(category)}>{categoryLabel[category] ?? category}</a>
+            <a href={categoryPath(category)}>{categoryLabel[category] ?? category}</a>
             <span>{groupApps.length}</span>
           </h4>
-          <a href={categoryHref(category)} class="see-all">Browse all {groupApps.length}</a>
+          <a href={categoryPath(category)} class="see-all">Browse all {groupApps.length}</a>
         </div>
       ))}
 
       <div class="footer-col footer-nav">
         <h4>Site</h4>
         <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/apps">All tools</a>
-        <a href="/guides">Guides</a>
-        <a href="/contact">Contact</a>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Service</a>
+        <a href="/about/">About</a>
+        <a href="/apps/">All tools</a>
+        <a href="/guides/">Guides</a>
+        <a href="/contact/">Contact</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/terms/">Terms of Service</a>
+        <button type="button" class="footer-link-btn" data-cookie-settings>Cookie settings</button>
       </div>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <span>© {new Date().getFullYear()} Small Web Apps. Built by <a href="/about" style="color: inherit; text-decoration: underline;">Lucas Diniz</a>. All rights reserved.</span>
+    <span>© {new Date().getFullYear()} Small Web Apps. Built by <a href="/about/" style="color: inherit; text-decoration: underline;">Lucas Diniz</a>. All rights reserved.</span>
     <span>Browser-first · No file uploads · Consent-gated ads</span>
   </div>
 </footer>
@@ -187,6 +188,19 @@ const grouped = categoryOrder
   font-size: .62rem;
   font-weight: 800;
 }
+.footer-link-btn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: .82rem;
+  line-height: 1.35;
+  color: rgba(255,255,255,.57);
+  text-align: left;
+}
+.footer-link-btn:hover { color: white; }
 .see-all {
   color: #93c5fd !important;
   font-weight: 800;

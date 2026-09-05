@@ -601,7 +601,7 @@ const structuredData = [
       url: "https://smallwebapps.com/",
       logo: {
         "@type": "ImageObject",
-        url: "https://smallwebapps.com/favicon.svg"
+        url: "https://smallwebapps.com/web-app-manifest-512x512.png"
       }
     }
   },
@@ -665,9 +665,9 @@ const structuredData = [
   <CTASection
     title="Continue into the actual tool"
     copy="Use the guide to understand the workflow, then move into the app page for local interaction."
-    primaryHref={guide.relatedToolSlug ? `/apps/${guide.relatedToolSlug}` : "/apps"}
+    primaryHref={guide.relatedToolSlug ? `/apps/${guide.relatedToolSlug}/` : "/apps/"}
     primaryLabel={guide.relatedToolLabel}
-    secondaryHref="/guides"
+    secondaryHref="/guides/"
     secondaryLabel="Back to guides"
   />
 </MainLayout>

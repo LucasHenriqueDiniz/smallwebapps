@@ -4,7 +4,9 @@ import Header from "../site/Header.astro";
 import Footer from "../site/Footer.astro";
 import CookieBanner from "../site/CookieBanner.astro";
 import AdSenseHead from "../site/AdSenseHead.astro";
+import ConsentMode from "../site/ConsentMode.astro";
 import { siteConfig } from "@/lib/site";
+import { canonicalUrl as toCanonicalUrl } from "@/lib/urls";
 
 interface Props {
   title?: string;
@@ -20,14 +22,24 @@ const {
   title = siteConfig.title,
   description = siteConfig.description,
   canonicalPath = "/",
-  image = "/og/site.svg",
+  image = "/og/site.png",
   ogType = "website",
   structuredData,
   noindex = false
 } = Astro.props;
 
-const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.name}`;
-const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
+/**
+ * Google truncates a SERP title around 60 characters. The brand suffix is the
+ * expendable half — a guide whose own title is 52 characters became 69 with
+ * " | Small Web Apps" appended and lost the end of its actual title in the
+ * snippet. So the suffix is added only when it fits, rather than every title
+ * being written 17 characters shorter to make room for it.
+ */
+const SERP_TITLE_LIMIT = 60;
+const brandedTitle = `${title} | ${siteConfig.name}`;
+const pageTitle =
+  title === siteConfig.title || brandedTitle.length > SERP_TITLE_LIMIT ? title : brandedTitle;
+const canonicalUrl = toCanonicalUrl(canonicalPath);
 const imageUrl = new URL(image, siteConfig.siteUrl).toString();
 const imageAlt = `${siteConfig.name} — free browser-based tools`;
 const websiteSchema: Record<string, unknown> = {
@@ -38,7 +50,7 @@ const websiteSchema: Record<string, unknown> = {
   description: siteConfig.description,
   potentialAction: {
     "@type": "SearchAction",
-    target: `${new URL("/apps", siteConfig.siteUrl).toString()}?q={search_term_string}`,
+    target: `${toCanonicalUrl("/apps")}?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
 };
@@ -47,7 +59,8 @@ const organizationSchema: Record<string, unknown> = {
   "@type": "Organization",
   name: siteConfig.name,
   url: siteConfig.siteUrl,
-  logo: new URL("/favicon.svg", siteConfig.siteUrl).toString(),
+  // Google's logo guidance wants a raster file; favicon.svg does not qualify.
+  logo: new URL("/web-app-manifest-512x512.png", siteConfig.siteUrl).toString(),
   description: siteConfig.description,
 };
 const schemaPayload = structuredData
@@ -62,7 +75,11 @@ const schemaPayload = structuredData
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
+    {/* No canonical on a noindex page whose URL is not a real address: /404/
+        is served for every unmatched path and exists at none of them, so a
+        self-referencing canonical there points at nothing. Tool pages served
+        noindex, follow keep theirs — those URLs do resolve. */}
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="generator" content={Astro.generator} />
     <!-- Dark theme: apply BEFORE paint to avoid flash -->
@@ -72,28 +89,6 @@ const schemaPayload = structuredData
                 (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', t);
       })();
-    </script>
-    <!-- Google Consent Mode v2 — default DENIED until user accepts -->
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', {
-        ad_storage:         'denied',
-        analytics_storage:  'denied',
-        ad_user_data:       'denied',
-        ad_personalization: 'denied',
-        wait_for_update:    500,
-      });
-      // Restore previous consent choice if any
-      var saved = localStorage.getItem('swa_consent');
-      if (saved) {
-        gtag('consent', 'update', {
-          ad_storage:         saved === 'granted' ? 'granted' : 'denied',
-          analytics_storage:  saved === 'granted' ? 'granted' : 'denied',
-          ad_user_data:       saved === 'granted' ? 'granted' : 'denied',
-          ad_personalization: saved === 'granted' ? 'granted' : 'denied',
-        });
-      }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -111,6 +106,7 @@ const schemaPayload = structuredData
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={imageAlt} />
@@ -119,6 +115,7 @@ const schemaPayload = structuredData
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:image:alt" content={imageAlt} />
+    <ConsentMode />
     <AdSenseHead />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaPayload)} />
   </head>
