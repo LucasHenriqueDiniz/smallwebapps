@@ -10,9 +10,40 @@ explains.
 Newest first. A superseded decision stays, marked — knowing why an alternative lost is worth as
 much as knowing why the winner won.
 
+### 2026-09-05 — The app catalog becomes one module per tool behind a barrel
+
+**Context.** The 2026-09-03 ruling below bound `apps/web/src/data/apps.ts` to `clean-code`'s
+1500-line hard limit and left the layout open. Measured on this branch off `d8508be`: 9088 lines,
+**129** entries in `apps` (lines 3-8333), **13** in `seoClusterApps` (8335-9084, not exported,
+merged into `apps` by `apps.push(...)` on line 9086), `appMap` on 9088; entries run 57-136 lines,
+mean 63.8. All eight importers under `apps/web/src` consume the entire array.
+
+**Decision.** The import surface stays at `apps/web/src/data/apps.ts`, which shrinks to ~20 lines and
+composes `[...coreApps, ...seoClusterApps]`. The 129 entries become one module each under
+`apps/web/src/data/catalog/`, registered in a ~135-line `catalog/index.ts`; the 13 long-tail variants
+become `apps/web/src/data/seo-clusters/` with its own index, and stay a separate array. **All eight
+import statements are unchanged, byte for byte** — that is the point of keeping a real `apps.ts`
+rather than a directory barrel.
+
+**What this rules out.** Splitting by category, which the measurements kill outright: three of the
+five files would still breach the hard limit (Developer Tools 3268 lines, Data Tools 2507, Image /
+Inspection 1722). Extracting `seoClusterApps` alone, which leaves 8340 lines and is folded into the
+move as one of its steps rather than treated as a layout. Astro content collections, available since
+the repo runs `astro@^5` and genuinely unused here (no `src/content/`, no collection config, no
+`astro:content` import anywhere) — rejected because it changes the shape all eight importers and the
+four `AppDefinition`-typed components see, and duplicates the 66-line shared interface in
+`packages/data/src` as a Zod schema. Also `import.meta.glob`, which would order the catalog by
+filename and change shipped output.
+
+**The long argument, the four candidates costed one by one, the before/after import table for all
+eight files, and the new `CLAUDE.md` wording: `docs/decisions/app-catalog-layout.md`.** The move
+itself is `docs/plans/app-catalog-size/slice-02-move-the-catalog.md`. Until it lands, `apps.ts` is
+still the single file and the six prose files that say so are still describing the truth.
+
 ### 2026-09-05 — TubeTrace is a tool of this site, and `apps/tubetrace` is deleted
 
-**Context.** The record below it, dated two days earlier, read the owner as ruling that
+**Context.** The 2026-09-03 record below — *`tubetrace.pages.dev` is the product and the source*
+— read the owner as ruling that
 `tubetrace.pages.dev` stays a shipping product and is the source of the embedded copy. The owner has
 since said — and says it was said before — that TubeTrace should not be something separate: it is
 just a tool. So the option that record listed under **What this rules out** —
