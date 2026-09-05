@@ -557,7 +557,11 @@ export default function SimpleUtilityApp({ tool }: Props) {
   return (
     <div className="mx-auto max-w-5xl rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-5">
-        <h1 className="text-2xl font-extrabold tracking-tight text-slate-950">{meta.title}</h1>
+        {/* The page H1 is ToolLayout's `.tl-title`, which already prints this exact
+            string. This island is a section inside that page, so it takes an h2.
+            The classes are unchanged and Tailwind's preflight zeroes heading
+            margins and sizes, so nothing moves. */}
+        <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{meta.title}</h2>
         <p className="mt-2 text-sm leading-6 text-slate-600">{meta.helper} Everything runs locally in this tab.</p>
       </div>
 

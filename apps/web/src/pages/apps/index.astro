@@ -2,6 +2,7 @@
 import MainLayout from "@/components/layout/MainLayout.astro";
 import { apps } from "@/data/apps";
 import { siteConfig } from "@/lib/site";
+import { canonicalUrl, categoryPath } from "@/lib/urls";
 
 const categoryOrder = [
   "PDF Tools",
@@ -46,7 +47,7 @@ const collectionSchema = {
       "@type": "ListItem",
       position: index + 1,
       name: app.name,
-      url: new URL(`${app.appUrl}/`, siteConfig.siteUrl).toString(),
+      url: canonicalUrl(app.appUrl),
     })),
   },
 };
@@ -115,7 +116,7 @@ const collectionSchema = {
                   <p class="section-kicker" style={`color:${p.color}`}>{groupApps.length} tools</p>
                   <h2>{categoryDisplay[category] ?? category}</h2>
                 </div>
-                <a href={`/apps?cat=${encodeURIComponent(category).replaceAll("%20", "+")}`} style={`color:${p.color}`}>Filter category</a>
+                <a href={categoryPath(category)} style={`color:${p.color}`}>Filter category</a>
               </div>
               <div class="tool-grid">
                 {groupApps.map((app) => (

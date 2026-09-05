@@ -18,18 +18,21 @@ import Header from "../site/Header.astro";
 import Footer from "../site/Footer.astro";
 import CookieBanner from "../site/CookieBanner.astro";
 import AdSenseHead from "../site/AdSenseHead.astro";
+import AdSlot from "../site/AdSlot.astro";
+import ConsentMode from "../site/ConsentMode.astro";
 import ContentInfoLink from "../tools/ContentInfoLink.astro";
 import ExpandedFaq from "../apps/ExpandedFaq.astro";
 import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
+import { canonicalUrl as toCanonicalUrl } from "@/lib/urls";
 import { isIndexable } from "@/data/indexing";
-import type { AppContent, AppFaq } from "@smallwebapps/data";
+import type { AppContent, AppFaq, AppStatus } from "@smallwebapps/data";
 import "../../styles/global.css";
 
 interface Props {
   name: string;
   category: string;
-  status: "live";
+  status: AppStatus;
   slug: string;
   disclaimer?: string;
   fullWidth?: boolean;
@@ -61,8 +64,8 @@ const {
 
 const pageTitle    = seoTitle    ?? `${name} — ${siteConfig.name}`;
 const pageDesc     = seoDescription ?? `Free browser-based ${name.toLowerCase()} tool. No uploads, no accounts.`;
-const canonicalUrl = new URL(`/apps/${slug}/`, siteConfig.siteUrl).toString();
-const ogImageUrl   = new URL(`/og/${slug}.svg`, siteConfig.siteUrl).toString();
+const canonicalUrl = toCanonicalUrl(`/apps/${slug}`);
+const ogImageUrl   = new URL(`/og/${slug}.png`, siteConfig.siteUrl).toString();
 const isLive       = status === "live";
 const indexable    = isIndexable(slug);
 const displayFaq   = faqExpanded.length ? faqExpanded : faq;
@@ -101,7 +104,7 @@ const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.siteUrl },
-    { "@type": "ListItem", position: 2, name: "Tools", item: new URL("/apps", siteConfig.siteUrl).toString() },
+    { "@type": "ListItem", position: 2, name: "Tools", item: toCanonicalUrl("/apps") },
     { "@type": "ListItem", position: 3, name, item: canonicalUrl },
   ],
 };
@@ -127,12 +130,14 @@ const breadcrumbSchema = {
   <meta property="og:description" content={pageDesc} />
   <meta property="og:url"         content={canonicalUrl} />
   <meta property="og:image"       content={ogImageUrl} />
+  <meta property="og:image:type"  content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={pageTitle} />
   <meta name="twitter:description" content={pageDesc} />
   <meta name="twitter:image" content={ogImageUrl} />
+  <ConsentMode />
   <AdSenseHead />
   <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
   {faqSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
@@ -145,20 +150,6 @@ const breadcrumbSchema = {
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <!-- Google Consent Mode v2 -->
-  <script is:inline>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      ad_storage:'denied', analytics_storage:'denied',
-      ad_user_data:'denied', ad_personalization:'denied', wait_for_update:500
-    });
-    var saved = localStorage.getItem('swa_consent');
-    if (saved) {
-      var v = saved === 'granted' ? 'granted' : 'denied';
-      gtag('consent','update',{ad_storage:v,analytics_storage:v,ad_user_data:v,ad_personalization:v});
-    }
-  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet" />
@@ -170,13 +161,13 @@ const breadcrumbSchema = {
     <!-- ── Breadcrumb strip ── -->
     <div class="tl-strip">
       <div class="tl-strip-inner">
-        <a href="/apps" class="tl-back">
+        <a href="/apps/" class="tl-back">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
           All tools
         </a>
         <span class="tl-sep">›</span>
         <span class="tl-name">{name}</span>
-        <span class="tl-badge live">● Live</span>
+        <span class={`tl-badge ${isLive ? "live" : "soon"}`}>● {isLive ? "Live" : "Coming soon"}</span>
         <span class="tl-cat">{category}</span>
         {disclaimer && (
           <span class="tl-disclaimer">
@@ -222,6 +213,9 @@ const breadcrumbSchema = {
         privacy={content?.privacy}
         deepDive={content?.deepDive}
       />
+      <!-- Below the tool, the related links and the long-form content, and
+           above the FAQ. Never inside the tool's working area. -->
+      <AdSlot placement="tool-content" />
       <ExpandedFaq items={displayFaq} />
     </div>
   </div>
