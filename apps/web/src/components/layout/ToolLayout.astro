@@ -18,6 +18,7 @@ import Header from "../site/Header.astro";
 import Footer from "../site/Footer.astro";
 import CookieBanner from "../site/CookieBanner.astro";
 import AdSenseHead from "../site/AdSenseHead.astro";
+import AdSlot from "../site/AdSlot.astro";
 import ConsentMode from "../site/ConsentMode.astro";
 import ContentInfoLink from "../tools/ContentInfoLink.astro";
 import ExpandedFaq from "../apps/ExpandedFaq.astro";
@@ -212,6 +213,9 @@ const breadcrumbSchema = {
         privacy={content?.privacy}
         deepDive={content?.deepDive}
       />
+      <!-- Below the tool, the related links and the long-form content, and
+           above the FAQ. Never inside the tool's working area. -->
+      <AdSlot placement="tool-content" />
       <ExpandedFaq items={displayFaq} />
     </div>
   </div>

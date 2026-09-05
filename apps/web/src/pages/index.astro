@@ -1,5 +1,6 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
+import AdSlot from "@/components/site/AdSlot.astro";
 import ToolCard from "@/components/apps/ToolCard.astro";
 import FeaturedCard from "@/components/apps/FeaturedCard.astro";
 import { apps } from "@/data/apps";
@@ -262,6 +263,9 @@ const featured = [
     </div>
   </div>
 </section>
+
+<!-- Between two listing sections, outside any tool workflow. -->
+<AdSlot placement="home-listing" />
 
 <!-- ═══════════════ FEATURED TOOLS ═══════════════ -->
 <section class="featured">

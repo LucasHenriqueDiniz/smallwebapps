@@ -1,0 +1,6 @@
+# The root .gitignore excludes `.env.*` so no real environment file is ever
+# committed. `.env.example` holds no values, only the names and where they come
+# from, and it is the only place those names are written down — so it has to be
+# in the repo. A deeper .gitignore wins, which is why this exception lives here
+# rather than loosening the root rule for the whole tree.
+!.env.example

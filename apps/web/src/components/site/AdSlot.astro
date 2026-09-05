@@ -1,0 +1,80 @@
+---
+import { shouldLoadAds } from "@/lib/ads";
+
+/**
+ * One responsive AdSense unit.
+ *
+ * The repository has never contained an ad unit — no <ins class="adsbygoogle">,
+ * no data-ad-slot, no push({}) — so the loader was on every page serving
+ * nothing. This is the unit.
+ *
+ * It is inert until the owner pastes real slot IDs from the AdSense console
+ * into the environment. No ID is invented here: with the variable unset the
+ * component renders absolutely nothing, so this ships without changing a single
+ * byte of the live pages.
+ *
+ * It also renders nothing wherever src/lib/ads.ts says ads may not run — dev,
+ * previews, the 404 page, and every noindex page.
+ */
+interface Props {
+  /** Which configured slot to render. */
+  placement: "tool-content" | "home-listing";
+  /** Screen-reader label, so the block is not an unexplained gap. */
+  label?: string;
+}
+
+const { placement, label = "Advertisement" } = Astro.props;
+
+const slotIdByPlacement: Record<Props["placement"], string | undefined> = {
+  "tool-content": import.meta.env.PUBLIC_ADSENSE_SLOT_TOOL_CONTENT,
+  "home-listing": import.meta.env.PUBLIC_ADSENSE_SLOT_HOME_LISTING,
+};
+
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? "ca-pub-2600827684802809";
+const slotId = slotIdByPlacement[placement];
+const enabled = Boolean(slotId) && shouldLoadAds(Astro.url.pathname);
+---
+
+{enabled && (
+  <aside class="ad-slot" aria-label={label}>
+    <span class="ad-slot-label">{label}</span>
+    <ins
+      class="adsbygoogle"
+      style="display:block"
+      data-ad-client={adsenseClient}
+      data-ad-slot={slotId}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+    <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </aside>
+)}
+
+<style>
+/* The height is reserved whether or not a unit fills, so nothing below it
+   moves once the ad arrives. */
+.ad-slot {
+  display: block;
+  width: 100%;
+  max-width: 1280px;
+  margin: 40px auto;
+  padding: 0 24px;
+  min-height: 300px;
+}
+.ad-slot-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .55;
+}
+.ad-slot .adsbygoogle { min-height: 280px; }
+
+@media (max-width: 640px) {
+  .ad-slot { margin: 28px auto; padding: 0 16px; min-height: 270px; }
+  .ad-slot .adsbygoogle { min-height: 250px; }
+}
+</style>
