@@ -32,3 +32,19 @@ jobs:
       - name: Typecheck apps/tubetrace
         run: pnpm run typecheck:tubetrace
 
+  # Only apps/web has a suite. apps/tubetrace has no test script, so calling one
+  # here would fail on a workspace that never had tests rather than on a break.
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Test apps/web
+        run: pnpm --dir apps/web test --run
+

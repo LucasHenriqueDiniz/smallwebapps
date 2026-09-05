@@ -1,32 +1,12 @@
 import { useMemo, useState } from "react";
-
-function toTitleCase(str: string) {
-  return str.replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
-}
-function toSentenceCase(str: string) {
-  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s+\w)/g, (c) => c.toUpperCase());
-}
-function toCamelCase(str: string) {
-  return str
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
-}
-function toPascalCase(str: string) {
-  const c = toCamelCase(str);
-  return c.charAt(0).toUpperCase() + c.slice(1);
-}
-function toSnakeCase(str: string) {
-  return str
-    .replace(/\s+/g, "_")
-    .replace(/[^a-zA-Z0-9_]/g, "")
-    .toLowerCase();
-}
-function toKebabCase(str: string) {
-  return str
-    .replace(/\s+/g, "-")
-    .replace(/[^a-zA-Z0-9-]/g, "")
-    .toLowerCase();
-}
+import {
+  toCamelCase,
+  toKebabCase,
+  toPascalCase,
+  toSentenceCase,
+  toSnakeCase,
+  toTitleCase,
+} from "@/tools/case-converter/case";
 
 export default function CaseConverterApp() {
   const [input, setInput] = useState("The quick brown fox jumps over the lazy dog");
