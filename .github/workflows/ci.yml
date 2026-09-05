@@ -9,9 +9,9 @@ on:
 # The pnpm action gets no 'version' — it reads the packageManager field from
 # package.json, which is what keeps CI and local machines on the same version.
 
-# No build job: Cloudflare Pages builds BOTH apps (smallwebapps and tubetrace)
-# on every push and reports each one as a check. A build here covered only
-# apps/web — a subset of what the host already does.
+# No build job: Cloudflare Pages builds the smallwebapps project on every push
+# and reports it as a check. A build here would repeat exactly what the host
+# already does.
 
 jobs:
   typecheck:
@@ -25,15 +25,12 @@ jobs:
           node-version-file: .nvmrc
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      # apps/web uses astro check; apps/tubetrace uses tsc. There is no script
-      # common to both, so each is called by the name it actually has.
+      # apps/web is the only workspace with a typecheck, and it is astro check.
       - name: Check apps/web
         run: pnpm run check
-      - name: Typecheck apps/tubetrace
-        run: pnpm run typecheck:tubetrace
 
-  # Only apps/web has a suite. apps/tubetrace has no test script, so calling one
-  # here would fail on a workspace that never had tests rather than on a break.
+  # apps/web is the only workspace, so the suite is called by its own path
+  # rather than through a root script that would only ever forward to it.
   test:
     name: Unit Tests
     runs-on: ubuntu-latest

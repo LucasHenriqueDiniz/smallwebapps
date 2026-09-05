@@ -12,6 +12,3 @@
 /.well-known/agent-index.json
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
-
-/tubetrace-app/*
-  X-Robots-Tag: noindex, follow

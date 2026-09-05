@@ -30,14 +30,10 @@
   "packageManager": "pnpm@11.24.0",
   "scripts": {
     "dev": "pnpm --dir apps/web dev",
-    "build": "pnpm sync:tubetrace && pnpm --dir apps/web build",
+    "build": "pnpm --dir apps/web build",
     "preview": "pnpm --dir apps/web preview",
     "check": "pnpm --dir apps/web astro check",
     "deploy:cloudflare": "pnpm build && pnpm dlx wrangler pages deploy ./apps/web/dist --project-name=smallwebapps --commit-dirty=true",
-    "dev:tubetrace": "pnpm --dir apps/tubetrace dev",
-    "build:tubetrace": "pnpm --dir apps/tubetrace build",
-    "typecheck:tubetrace": "pnpm --dir apps/tubetrace typecheck",
-    "sync:tubetrace": "node scripts/prepare-tubetrace-embed.mjs",
     "prepare": "git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "devDependencies": {
