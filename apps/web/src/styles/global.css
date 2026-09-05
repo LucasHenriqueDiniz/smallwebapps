@@ -111,6 +111,13 @@ a { color: inherit; }
   @apply text-orange-600 underline decoration-orange-300 underline-offset-4 transition hover:text-orange-700;
 }
 
+/* Same look as .prose-link, for a control that acts on the page rather than
+   navigating — reopening the cookie banner is a button, not a link. */
+.prose-link-btn {
+  @apply cursor-pointer border-0 bg-transparent p-0;
+  font: inherit;
+}
+
 /* ── Dark mode overrides for Tailwind utility classes used in tool components ── */
 /* Applied globally so every React tool gets dark mode for free */
 [data-theme="dark"] .bg-white            { background-color: var(--card-bg) !important; }
