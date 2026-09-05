@@ -87,15 +87,25 @@ wc -l apps/web/src/data/apps.ts
 git ls-files apps/web/src/data/catalog apps/web/src/data/seo-clusters | wc -l
 git ls-files -- 'apps/web/src/data' | xargs wc -l | sort -rn | sed -n '2,4p'
 git diff --stat d8508be -- apps/web/src/components/site/Footer.astro apps/web/src/components/site/Header.astro 'apps/web/src/pages/.well-known/agent-index.json.ts' apps/web/src/pages/about.astro 'apps/web/src/pages/apps/[slug].astro' apps/web/src/pages/apps/index.astro apps/web/src/pages/index.astro 'apps/web/src/pages/og/[slug].svg.ts'
-git grep -c "data/apps\.ts" CLAUDE.md README.md .claude
+git grep -n "apps\.ts" CLAUDE.md README.md .claude | grep -icE "add|define|edit|centraliz|metadata|single source"
 ```
 
 In order: `apps.ts` is under 100 lines; the two new directories hold 144 tracked files (129 + 13
 entries + 2 index files); the largest file under `apps/web/src/data/` is under 500 lines; the diff
 against `d8508be` over the eight importers is **empty**, which is the load-bearing one; and the last
-command reports every remaining mention of the old path so each can be checked by eye rather than
-counted — `README.md` and `.claude/` are allowed to mention `apps.ts`, they are not allowed to call
-it the place tool metadata is added.
+command reports **`0`**.
+
+That last one needs its scope stated, because the obvious narrower grep gets it wrong.
+`git grep -c "data/apps\.ts"` over the same paths finds 14 occurrences; `git grep -n "apps\.ts"`
+finds 21. The seven it misses are the bare-filename mentions in `.claude/INSTRUCTIONS.md:21,72`,
+`.claude/AGENT_REFERENCE.md:69,86,152,153` and `.claude/README.md:98` — and those are exactly the
+lines the table above says to rewrite, so a check that cannot see them would report clean over the
+work it is meant to verify. Of the 21, **18** pair the path with an instruction to add, edit or
+centralize metadata there; that count is what has to reach zero. The other 3 are
+`CLAUDE.md:23` (history, which stays true), and `.claude/AGENT_REFERENCE.md:10` and `:153`, which
+tell an agent to read or grep the file — those get repointed at the new directory rather than
+deleted. `README.md` and `.claude/` may still mention `apps.ts`; none of them may still call it the
+place tool metadata is added.
 
 ## If stuck
 

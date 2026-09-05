@@ -105,12 +105,15 @@ Two facts that shape the answer:
   The only catalog data that reaches a browser is the hand-projected `searchApps` subset that
   `Header.astro` serializes into the page, and no layout below changes it. A split cannot make the
   site lighter, and a barrel cannot make it heavier.
-- **Array order is visible in two places and nowhere else.** `Footer.astro`, `Header.astro` and
+- **Array order is visible in three places and nowhere else.** `Footer.astro`, `Header.astro` and
   `pages/apps/index.astro` all re-sort with
   `.sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || a.name.localeCompare(b.name))`,
-  and the two `getStaticPaths` callers do not care. Source order survives only in the search-overlay
-  results in `Header.astro` and in the key order of `agent-index.json`. Cosmetic, but real: a layout
-  that reorders the catalog changes shipped output.
+  and the two `getStaticPaths` callers do not care. Source order survives in the search-overlay
+  results in `Header.astro`, in the key order of `agent-index.json`, and — the one that is not
+  cosmetic — in `pages/apps/index.astro:45`, where
+  `apps.map((app, index) => ({ position: index + 1 }))` emits the **unsorted** array as a JSON-LD
+  `ItemList`. The `.sort()` on line 27 of that file builds `byCategory` and never reaches the
+  schema, so a layout that reorders the catalog reorders structured data Google reads.
 
 ## The four candidates
 
@@ -228,10 +231,19 @@ file-size problem that (a) solves without touching a single consumer.
 ## The choice
 
 **One module per tool behind a barrel, `seoClusterApps` lifted into its own directory as part of the
-same move.** It is the only candidate that both satisfies the hard limit for every resulting file and
-leaves all eight import statements byte-identical. (b) fails the limit outright, (c) is a step of (a)
-rather than a rival, and (d) buys a capability the catalog does not need at the price of rewriting
-twelve files and duplicating the shared type.
+same move.** Of the four candidates above it is the only one that both satisfies the hard limit for
+every resulting file and leaves all eight import statements byte-identical. (b) fails the limit
+outright, (c) is a step of (a) rather than a rival, and (d) buys a capability the catalog does not
+need at the price of rewriting twelve files and duplicating the shared type.
+
+A fifth shape is absent from the pitch's list and deserves naming rather than silence: **partition
+the 129 entries into ~20 files of roughly 7 each**, about 450 lines apiece — under the soft limit,
+never mind the hard one — with the same eight imports untouched and no 129-line barrel to maintain.
+It is the cheapest of the five to produce. It loses on the test that decides the rest:
+`catalog-part-07.ts` is a filename that does not say what is inside it, so finding one tool means
+grepping rather than knowing, and a diff touching two tools in different partitions reads as a change
+to two unrelated files. A fixed-size partition optimizes for the line count; one module per tool
+optimizes for the reader, which is what the limit is asking for.
 
 It also satisfies the reason the limit exists, which is the test slice 1 set: every entry stays
 reviewable in a diff, and after the move a one-tool change is a diff of one 60-line file instead of
@@ -280,6 +292,12 @@ The verification for the move is therefore blunt: `git diff` over the eight file
   split, so merging the arrays would not break the sitemap filter — it would quietly delete the one
   place in the data that says these entries are a different kind of thing. Reconciling the two
   lists is a separate question this document does not open.
+- **`seo-clusters/` does not mean noindex, and the directory name must not be read that way.** All
+  13 cluster entries are noindexed today, but so are roughly 100 entries that stay in `catalog/` —
+  every slug in `indexing.ts`'s `COMMODITY` list. The split is by *why the entry exists*, not by
+  whether Google is allowed to index it. A future reader who infers the second from the first will
+  be wrong about the larger half of the catalog, so `seo-clusters/index.ts` carries that sentence as
+  a header comment.
 
 ## Does `CLAUDE.md` change again?
 
