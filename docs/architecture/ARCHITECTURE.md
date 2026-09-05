@@ -14,8 +14,8 @@ much as knowing why the winner won.
 
 **Context.** The record below it, dated two days earlier, read the owner as ruling that
 `tubetrace.pages.dev` stays a shipping product and is the source of the embedded copy. The owner has
-since said — and says it was said before — that *"o tubetrace não deveria ser algo separado, ele é
-apenas uma ferramenta"*. So the option that record listed under **What this rules out** —
+since said — and says it was said before — that TubeTrace should not be something separate: it is
+just a tool. So the option that record listed under **What this rules out** —
 *"Deleting `apps/tubetrace` and the `tubetrace` Cloudflare project"* — is the actual decision, and
 everything the 2026-09-03 record built on top of the other reading falls with it.
 
@@ -23,11 +23,13 @@ everything the 2026-09-03 record built on top of the other reading falls with it
 has one slug, `tubetrace`; one route, `/apps/tubetrace`; one implementation directory,
 `apps/web/src/tools/tubetrace/`. Therefore:
 
-- **`apps/web/src/tools/tubetrace/` is the only copy, and it is hand-maintained source.** Measured
-  at `d6ee4bb`: 79 tracked files, 9229 lines. It is reviewed as ordinary code, under the same
-  `clean-code` limits as everything else — which it meets: the largest file is 728 lines
-  (`native/components/ui/sidebar.tsx`) against a 1500-line hard limit, and 3 of the 79 pass the
-  500-line soft limit.
+- **`apps/web/src/tools/tubetrace/` is the only copy of TubeTrace in this repo, and it is
+  hand-maintained source.** Measured at `d6ee4bb`: 79 tracked files, 9229 lines. It is reviewed as
+  ordinary code, under the same `clean-code` limits as everything else — which it meets: the largest
+  file is 728 lines (`native/components/ui/sidebar.tsx`) against a 1500-line hard limit, and 3 of the
+  79 pass the 500-line soft limit. **Read that with the last section of this record**, which is the
+  part worth reading twice: 78 of those 79 files sit under `native/` and are not what the site
+  serves. "Hand-maintained source" describes their status, not their usefulness.
 - **Of those 79 files, only one ships.** `ToolMount.astro:175` mounts
   `YouTubeWatchHistoryAnalyzerApp.tsx` — 544 lines, importing `react` and `fflate` and nothing else.
   The other 78 files, the whole 8685-line `native/` tree, are imported by nothing outside themselves:
@@ -62,7 +64,10 @@ whatever it last deployed, and this repo no longer contains the code behind it.
   gets reviewed as such.
 - Reading the rebrand as a patch set. The Small Web Apps wordmark, footer links, favicon, share-card
   strings and the `useState` → effect move for the locale guess in `native/components/UploadSection.tsx`
-  are simply what this tool's code says. There is no upstream to reconcile them with.
+  stop being a diff against an upstream, because there is no upstream left to reconcile them with.
+  They are not "what the tool says" either — all five of those files are under `native/`, which the
+  last section of this record shows the site never loads. They are what a dead copy says, and the
+  open question there decides whether they mean anything at all.
 
 **What is lost, and where to find it.** `apps/tubetrace` was 98 tracked files and 14882 lines. It is
 not gone, it is in git: **`d8508be`** is the last commit that carries it, and

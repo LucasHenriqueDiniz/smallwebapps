@@ -1,10 +1,16 @@
 ---
-status: cancelled
+status: done
 kanban: 872312c8-f4b1-497a-a384-fccbef41e581
 ---
 
 # Slice 3 — Generate the second copy instead of maintaining it
 
+> **Cancelled 2026-09-05** — recorded as `status: done`, because that is the only closed
+> state the `board` skill has. Its vocabulary is `todo | doing | blocked | done`; a
+> `cancelled` there is read as `todo` by `sync.py`, which would move the card back into the
+> TODO column and can rewrite this frontmatter to say `todo` on its next run. The slice did
+> not ship — it stopped having an object, and that is what the paragraph below records.
+>
 > **Cancelled 2026-09-05.** There is no second copy to generate. The owner ruled that TubeTrace is a
 > tool of this site rather than a separate product, so `apps/tubetrace` — the input this generator
 > was to read — was deleted at `516d019`, and `apps/web/src/tools/tubetrace/` is the only copy and

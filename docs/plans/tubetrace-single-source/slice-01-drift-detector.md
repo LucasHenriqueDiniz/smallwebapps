@@ -1,10 +1,16 @@
 ---
-status: cancelled
+status: done
 kanban: 4477d788-4774-446e-a30e-725a642ffa5e
 ---
 
 # Slice 1 — A command that reports TubeTrace drift
 
+> **Cancelled 2026-09-05** — recorded as `status: done`, because that is the only closed
+> state the `board` skill has. Its vocabulary is `todo | doing | blocked | done`; a
+> `cancelled` there is read as `todo` by `sync.py`, which would move the card back into the
+> TODO column and can rewrite this frontmatter to say `todo` on its next run. The slice did
+> not ship — it stopped having an object, and that is what the paragraph below records.
+>
 > **Cancelled 2026-09-05.** A drift detector compares two copies, and there is only one copy now:
 > the owner ruled that TubeTrace is a tool of this site, `apps/tubetrace` was deleted at `516d019`,
 > and `apps/web/src/tools/tubetrace/` is hand-maintained source with nothing upstream to drift from.

@@ -5,6 +5,9 @@ epic: tubetrace
 
 # TubeTrace has two live copies and no generator
 
+> **The title is false, and that is the point.** Neither copy was live. See
+> `docs/postmortem/tubetrace-single-source.md`.
+
 > **Resolved 2026-09-05, and not the way this pitch or its plan expected.** The problem it describes
 > was real and the measurements below are correct; the fix was not a generator. The owner ruled that
 > TubeTrace is a tool of this site and never was a separate product, so `apps/tubetrace` was deleted
