@@ -33,7 +33,7 @@ Executable shell scripts for validation:
 #### `build-validator.sh`
 Runs the build and validates:
 - `apps/web/dist` directory exists
-- 144 pages generated
+- 162 pages generated
 - Critical files present (robots.txt, sitemap, agent-index.json)
 
 Usage:

@@ -6,7 +6,7 @@ This file defines the automated behaviors and standards for Claude when working 
 
 1. **Always read** `../../CLAUDE.md` first — it's the canonical source for product definition and architecture
 2. **Validate with skills** before committing:
-   - `.claude/skills/build-validator.sh` — ensures build completes (144 pages, critical files)
+   - `.claude/skills/build-validator.sh` — ensures build completes (162 pages, critical files)
    - `.claude/skills/seo-adsense-validator.sh` — validates SEO + AdSense (consent, headers, metadata, structured data)
 3. **Use any Claude model** (no default configured; choose what fits your task)
 
@@ -20,7 +20,7 @@ apps/web/                    # Astro site (main product)
 │   ├── tools/               # React tool implementations
 │   ├── data/                # Centralized metadata (apps.ts, guides.ts)
 │   └── content/             # Markdown guides
-├── dist/                    # Build output (144 pages, 1.3 MB min)
+├── dist/                    # Build output (162 pages, 1.3 MB min)
 └── package.json
 
 packages/data/src/          # Shared types (not actively used yet)

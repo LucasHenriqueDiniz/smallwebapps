@@ -23,7 +23,7 @@
 
 ## Validation Checklist
 
-- [ ] `pnpm --dir apps/web run build` passes (144 pages expected)
+- [ ] `pnpm --dir apps/web run build` passes (162 pages expected)
 - [ ] `./.claude/skills/seo-adsense-validator.sh` passes (if relevant)
 - [ ] No botschannel references introduced
 - [ ] Tool metadata in `apps/web/src/data/apps.ts` is aligned with implementation
