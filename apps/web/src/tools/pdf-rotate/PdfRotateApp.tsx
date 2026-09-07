@@ -62,7 +62,7 @@ export default function PdfRotateApp() {
   }
 
   return (
-    <div className="mx-auto max-w-lg grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-3 text-base font-semibold text-slate-950">Upload PDF</h3>
         <input ref={fileRef} type="file" accept="application/pdf" onChange={handleFile} className="hidden" />
@@ -122,6 +122,6 @@ export default function PdfRotateApp() {
           </button>
         </section>
       )}
-    </div>
+    </>
   );
 }

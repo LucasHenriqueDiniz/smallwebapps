@@ -55,7 +55,7 @@ export default function SvgToPngApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <canvas ref={canvasRef} className="hidden" />
 
       <section
@@ -117,6 +117,6 @@ export default function SvgToPngApp() {
           )}
         </section>
       </div>
-    </div>
+    </>
   );
 }

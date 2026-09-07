@@ -78,7 +78,7 @@ export default function ImageCropApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       {!original ? (
         <div
           {...getRootProps()}
@@ -140,6 +140,6 @@ export default function ImageCropApp() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

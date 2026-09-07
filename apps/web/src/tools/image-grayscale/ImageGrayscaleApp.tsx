@@ -47,7 +47,7 @@ export default function ImageGrayscaleApp() {
   const filterCss = FILTERS.find((f) => f.key === activeFilter)?.css ?? "none";
 
   return (
-    <div className="grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
         <button onClick={() => fileRef.current?.click()} className="w-full rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 px-6 py-5 text-sm text-slate-500 hover:bg-slate-100 transition">
@@ -87,6 +87,6 @@ export default function ImageGrayscaleApp() {
       )}
 
       <canvas ref={canvasRef} className="hidden" />
-    </div>
+    </>
   );
 }

@@ -97,7 +97,7 @@ export default function PdfSplitApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       {!file ? (
         <div
           {...getRootProps()}
@@ -180,6 +180,6 @@ export default function PdfSplitApp() {
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 }

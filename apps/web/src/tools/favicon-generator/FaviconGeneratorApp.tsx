@@ -112,7 +112,7 @@ export default function FaviconGeneratorApp() {
   const hasContent = tab === "image" ? !!imageSrc : !!chars;
 
   return (
-    <div className="grid gap-5">
+    <>
       <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1 max-w-xs">
         {(["image", "text"] as const).map((t) => (
           <button
@@ -188,6 +188,6 @@ export default function FaviconGeneratorApp() {
         </div>
         <pre className="rounded-xl bg-slate-950 px-4 py-3 font-mono text-xs text-emerald-400 overflow-x-auto whitespace-pre-wrap">{htmlSnippet}</pre>
       </section>
-    </div>
+    </>
   );
 }

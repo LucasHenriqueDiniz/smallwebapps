@@ -55,7 +55,7 @@ export default function QrCodeReaderApp() {
   const isUrl = result && (result.startsWith("http://") || result.startsWith("https://"));
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <canvas ref={canvasRef} className="hidden" />
 
       <section
@@ -113,6 +113,6 @@ export default function QrCodeReaderApp() {
           </button>
         </section>
       )}
-    </div>
+    </>
   );
 }

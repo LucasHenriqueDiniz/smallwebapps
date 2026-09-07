@@ -158,7 +158,7 @@ export default function SearchablePdfApp() {
   const outName = (fileName.replace(/\.pdf$/i, "") || "document") + "-searchable.pdf";
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <section className="flex flex-wrap items-center gap-3">
         <label className="text-sm font-medium text-slate-700" htmlFor="searchable-pdf-language">
           Text language
@@ -263,6 +263,6 @@ export default function SearchablePdfApp() {
           </p>
         </section>
       )}
-    </div>
+    </>
   );
 }

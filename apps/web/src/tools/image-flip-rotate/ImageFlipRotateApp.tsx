@@ -69,40 +69,40 @@ export default function ImageFlipRotateApp() {
   }
 
   return (
-    <div className="grid gap-5">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
-        <button onClick={() => fileRef.current?.click()} className="w-full rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 px-6 py-5 text-sm text-slate-500 hover:bg-slate-100 transition">
-          Click to upload image
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
+      <button onClick={() => fileRef.current?.click()} className="w-full rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 px-6 py-5 text-sm text-slate-500 hover:bg-slate-100 transition">
+        Click to upload image
+      </button>
+    </section>
+
+    {imageSrc && (
+      <>
+        <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="mb-4 flex flex-wrap gap-2">
+            {[
+              { label: "Flip Horizontal", fn: applyFlipH },
+              { label: "Flip Vertical", fn: applyFlipV },
+              { label: "Rotate 90° CW", fn: () => applyRotate(90) },
+              { label: "Rotate 90° CCW", fn: () => applyRotate(-90) },
+              { label: "Rotate 180°", fn: () => applyRotate(180) },
+            ].map(({ label, fn }) => (
+              <button key={label} onClick={fn} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
+                {label}
+              </button>
+            ))}
+          </div>
+          {previewSrc && <img src={previewSrc} alt="preview" className="max-h-80 rounded-xl object-contain w-full border border-slate-100" />}
+        </section>
+
+        <button onClick={handleDownload} disabled={!previewSrc} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition self-start disabled:opacity-40">
+          Download PNG
         </button>
-      </section>
+      </>
+    )}
 
-      {imageSrc && (
-        <>
-          <section className="rounded-2xl border border-slate-200 bg-white p-5">
-            <div className="mb-4 flex flex-wrap gap-2">
-              {[
-                { label: "Flip Horizontal", fn: applyFlipH },
-                { label: "Flip Vertical", fn: applyFlipV },
-                { label: "Rotate 90° CW", fn: () => applyRotate(90) },
-                { label: "Rotate 90° CCW", fn: () => applyRotate(-90) },
-                { label: "Rotate 180°", fn: () => applyRotate(180) },
-              ].map(({ label, fn }) => (
-                <button key={label} onClick={fn} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
-                  {label}
-                </button>
-              ))}
-            </div>
-            {previewSrc && <img src={previewSrc} alt="preview" className="max-h-80 rounded-xl object-contain w-full border border-slate-100" />}
-          </section>
-
-          <button onClick={handleDownload} disabled={!previewSrc} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition self-start disabled:opacity-40">
-            Download PNG
-          </button>
-        </>
-      )}
-
-      <canvas ref={canvasRef} className="hidden" />
-    </div>
+    <canvas ref={canvasRef} className="hidden" />
+    </>
   );
 }

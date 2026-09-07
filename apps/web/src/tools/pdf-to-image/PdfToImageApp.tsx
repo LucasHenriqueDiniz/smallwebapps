@@ -61,7 +61,7 @@ export default function PdfToImageApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <div className="flex flex-wrap items-center gap-3">
         <label className="text-xs font-medium text-slate-600">Scale</label>
         {[1, 1.5, 2, 3].map((s) => (
@@ -143,6 +143,6 @@ export default function PdfToImageApp() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

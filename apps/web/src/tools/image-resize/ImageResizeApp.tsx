@@ -74,7 +74,7 @@ export default function ImageResizeApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       {!original ? (
         <div
           {...getRootProps()}
@@ -148,6 +148,6 @@ export default function ImageResizeApp() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

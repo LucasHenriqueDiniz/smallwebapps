@@ -436,10 +436,30 @@ body {
       keeps its own root wrapper and nothing here applies to it — that is what
       makes the migration safe to do in batches. */
 .tl-stage { min-width: 0; }
-.tl-stage[data-layout="stack"] {
+
+/* `intake` arranges itself exactly like `stack` — a vertical run of sections.
+   It keeps its own name because what it declares is what the tool DOES (a file
+   goes in), not how wide its columns are, and that is what the intake-specific
+   copy and affordances hang off later. */
+.tl-stage[data-layout="stack"],
+.tl-stage[data-layout="intake"],
+.tl-stage[data-layout="intake-split"] {
   display: grid;
   gap: 20px;
   align-content: start;
+}
+
+/* `intake-split` puts the intake and its controls beside the result, and the
+   result side gets the extra room. One ratio, not one per tool: the three that
+   split at the root had drifted to 0.95fr/1.05fr, 0.85fr/1.15fr and a fixed
+   280px rail, which is drift, not design. Below md it collapses to the same
+   vertical run as `intake` — a dropzone next to a result pane at phone width
+   gives you two things too narrow to use. */
+@media (min-width: 768px) {
+  .tl-stage[data-layout="intake-split"] {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
 }
 /* Same rem values as the Tailwind caps they replace. */
 .tl-stage[data-layout-width="md"] { max-width: 28rem; margin-inline: auto; }

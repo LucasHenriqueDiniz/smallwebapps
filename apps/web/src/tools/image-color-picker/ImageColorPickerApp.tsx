@@ -84,58 +84,58 @@ export default function ImageColorPickerApp() {
   const hoverHex = hoverColor ? rgbToHex(hoverColor.r, hoverColor.g, hoverColor.b) : null;
 
   return (
-    <div className="grid gap-5">
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
+      <button onClick={() => fileRef.current?.click()} className="w-full rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 px-6 py-5 text-sm text-slate-500 hover:bg-slate-100 transition">
+        Click to upload image
+      </button>
+    </section>
+
+    {imageSrc && (
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
-        <button onClick={() => fileRef.current?.click()} className="w-full rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 px-6 py-5 text-sm text-slate-500 hover:bg-slate-100 transition">
-          Click to upload image
-        </button>
+        <p className="mb-2 text-xs text-slate-500">Move over the image to pick a color. Click to pin it to the palette (up to 10).</p>
+        <div className="relative">
+          <canvas
+            ref={canvasRef}
+            onMouseMove={handleMouseMove}
+            onClick={handleClick}
+            className="max-h-80 w-full rounded-xl object-contain border border-slate-100 cursor-crosshair"
+            style={{ imageRendering: "pixelated" }}
+          />
+          {hoverColor && (
+            <div className="absolute top-2 left-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 shadow-sm pointer-events-none">
+              <div className="h-5 w-5 rounded-md border border-slate-200" style={{ background: hoverHex ?? "" }} />
+              <span className="font-mono text-xs font-semibold text-slate-800">{hoverHex}</span>
+              <span className="text-xs text-slate-500">{rgbToHsl(hoverColor.r, hoverColor.g, hoverColor.b)}</span>
+            </div>
+          )}
+        </div>
       </section>
+    )}
 
-      {imageSrc && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <p className="mb-2 text-xs text-slate-500">Move over the image to pick a color. Click to pin it to the palette (up to 10).</p>
-          <div className="relative">
-            <canvas
-              ref={canvasRef}
-              onMouseMove={handleMouseMove}
-              onClick={handleClick}
-              className="max-h-80 w-full rounded-xl object-contain border border-slate-100 cursor-crosshair"
-              style={{ imageRendering: "pixelated" }}
-            />
-            {hoverColor && (
-              <div className="absolute top-2 left-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 shadow-sm pointer-events-none">
-                <div className="h-5 w-5 rounded-md border border-slate-200" style={{ background: hoverHex ?? "" }} />
-                <span className="font-mono text-xs font-semibold text-slate-800">{hoverHex}</span>
-                <span className="text-xs text-slate-500">{rgbToHsl(hoverColor.r, hoverColor.g, hoverColor.b)}</span>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {pinnedColors.length > 0 && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-base font-semibold text-slate-950">Pinned palette</h3>
-            <button onClick={() => setPinnedColors([])} className="text-xs text-slate-400 hover:text-red-500">Clear</button>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {pinnedColors.map((c, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <div className="h-12 w-12 rounded-xl border border-slate-200" style={{ background: c.hex }} />
-                <span className="font-mono text-xs text-slate-700">{c.hex}</span>
-                <button
-                  onClick={() => copyHex(i)}
-                  className="text-xs text-blue-600 hover:text-blue-700"
-                >
-                  {copiedIdx === i ? "✓" : "Copy"}
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
+    {pinnedColors.length > 0 && (
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-base font-semibold text-slate-950">Pinned palette</h3>
+          <button onClick={() => setPinnedColors([])} className="text-xs text-slate-400 hover:text-red-500">Clear</button>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          {pinnedColors.map((c, i) => (
+            <div key={i} className="flex flex-col items-center gap-1">
+              <div className="h-12 w-12 rounded-xl border border-slate-200" style={{ background: c.hex }} />
+              <span className="font-mono text-xs text-slate-700">{c.hex}</span>
+              <button
+                onClick={() => copyHex(i)}
+                className="text-xs text-blue-600 hover:text-blue-700"
+              >
+                {copiedIdx === i ? "✓" : "Copy"}
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    </>
   );
 }
