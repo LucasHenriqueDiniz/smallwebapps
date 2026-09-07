@@ -27,7 +27,7 @@ export default function UrlEncoderApp() {
   }
 
   return (
-    <div className="grid gap-5">
+    <>
       <div className="flex flex-wrap gap-3">
         <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1">
           {(["encode", "decode"] as const).map((t) => (
@@ -85,6 +85,6 @@ export default function UrlEncoderApp() {
           />
         </section>
       </div>
-    </div>
+    </>
   );
 }

@@ -75,7 +75,7 @@ export default function MarkdownPreviewApp() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-xs font-medium text-slate-500 mr-1">Insert:</span>
@@ -126,6 +126,6 @@ export default function MarkdownPreviewApp() {
           />
         </section>
       </div>
-    </div>
+    </>
   );
 }

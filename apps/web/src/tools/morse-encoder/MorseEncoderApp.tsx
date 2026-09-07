@@ -91,7 +91,7 @@ export default function MorseEncoderApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={() => setDirection("encode")}
@@ -139,6 +139,6 @@ export default function MorseEncoderApp() {
           <p className="mt-2 text-xs text-slate-400">Use space between letters, slash (/) for word separator</p>
         </section>
       </div>
-    </div>
+    </>
   );
 }

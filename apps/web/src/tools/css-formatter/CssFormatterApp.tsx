@@ -39,7 +39,7 @@ export default function CssFormatterApp() {
   }
 
   return (
-    <div className="grid gap-5 md:grid-cols-2">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-base font-semibold text-slate-950">Input CSS</h3>
@@ -90,6 +90,6 @@ export default function CssFormatterApp() {
           </pre>
         </div>
       </section>
-    </div>
+    </>
   );
 }

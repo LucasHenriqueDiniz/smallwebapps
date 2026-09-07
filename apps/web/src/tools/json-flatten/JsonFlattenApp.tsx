@@ -91,7 +91,7 @@ export default function JsonFlattenApp() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <div className="flex flex-wrap items-end gap-3">
         <div className="flex gap-2">
           {(["flatten", "unflatten"] as const).map(m => (
@@ -127,6 +127,6 @@ export default function JsonFlattenApp() {
           <textarea readOnly value={output} className="min-h-80 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none" placeholder="Output appears here…" />
         </section>
       </div>
-    </div>
+    </>
   );
 }

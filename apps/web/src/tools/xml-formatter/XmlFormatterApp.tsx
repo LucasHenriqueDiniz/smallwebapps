@@ -91,7 +91,7 @@ export default function XmlFormatterApp() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <div className="flex flex-wrap items-center gap-2">
         <button onClick={() => handle("format")} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
           Format XML
@@ -133,6 +133,6 @@ export default function XmlFormatterApp() {
           />
         </section>
       </div>
-    </div>
+    </>
   );
 }

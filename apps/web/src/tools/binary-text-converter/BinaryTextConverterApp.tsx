@@ -76,7 +76,7 @@ export default function BinaryTextConverterApp() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
       {error && <p className="text-xs font-medium text-red-600">✗ {error}</p>}
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -125,6 +125,6 @@ export default function BinaryTextConverterApp() {
           </div>
         </section>
       )}
-    </div>
+    </>
   );
 }

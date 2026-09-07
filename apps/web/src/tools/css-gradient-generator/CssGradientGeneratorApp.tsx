@@ -46,7 +46,7 @@ export default function CssGradientGeneratorApp() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-4 text-base font-semibold text-slate-950">Settings</h3>
 
@@ -114,6 +114,6 @@ export default function CssGradientGeneratorApp() {
           </div>
         </section>
       </div>
-    </div>
+    </>
   );
 }

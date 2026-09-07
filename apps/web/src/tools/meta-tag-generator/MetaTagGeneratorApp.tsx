@@ -31,7 +31,7 @@ export default function MetaTagGeneratorApp() {
   const descLen = description.length;
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <div className="grid gap-4 md:grid-cols-2">
         <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h3 className="mb-4 text-base font-semibold text-slate-950">Page Info</h3>
@@ -97,6 +97,6 @@ export default function MetaTagGeneratorApp() {
           </section>
         </div>
       </div>
-    </div>
+    </>
   );
 }

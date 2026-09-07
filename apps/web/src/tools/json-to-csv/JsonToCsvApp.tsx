@@ -62,67 +62,67 @@ export default function JsonToCsvApp() {
   ];
 
   return (
-    <div className="grid gap-5">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-3 text-base font-semibold text-slate-950">Options</h3>
-        <div className="flex flex-wrap gap-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Delimiter</label>
-            <select
-              value={delimiter}
-              onChange={(e) => setDelimiter(e.target.value as Delimiter)}
-              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none"
-            >
-              {delimiterOptions.map((o) => <option key={o.label} value={o.value}>{o.label}</option>)}
-            </select>
-          </div>
-          <label className="flex cursor-pointer items-center gap-2 pb-1 text-sm text-slate-700 self-end">
-            <input type="checkbox" checked={includeHeaders} onChange={(e) => setIncludeHeaders(e.target.checked)} />
-            Include headers
-          </label>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 className="mb-3 text-base font-semibold text-slate-950">Options</h3>
+      <div className="flex flex-wrap gap-4">
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Delimiter</label>
+          <select
+            value={delimiter}
+            onChange={(e) => setDelimiter(e.target.value as Delimiter)}
+            className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none"
+          >
+            {delimiterOptions.map((o) => <option key={o.label} value={o.value}>{o.label}</option>)}
+          </select>
         </div>
+        <label className="flex cursor-pointer items-center gap-2 pb-1 text-sm text-slate-700 self-end">
+          <input type="checkbox" checked={includeHeaders} onChange={(e) => setIncludeHeaders(e.target.checked)} />
+          Include headers
+        </label>
+      </div>
+    </section>
+
+    <div className="grid gap-5 lg:grid-cols-2">
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h3 className="mb-3 text-base font-semibold text-slate-950">JSON input</h3>
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="min-h-48 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+          spellCheck={false}
+        />
       </section>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="mb-3 text-base font-semibold text-slate-950">JSON input</h3>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="min-h-48 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-            spellCheck={false}
-          />
-        </section>
-
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-base font-semibold text-slate-950">
-              CSV output {result.rows > 0 && <span className="text-sm font-normal text-slate-500">({result.rows} rows)</span>}
-            </h3>
-            <div className="flex gap-2">
-              {result.csv && (
-                <>
-                  <button onClick={handleCopy} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
-                    {copied ? "✓ Copied" : "Copy"}
-                  </button>
-                  <button onClick={handleDownload} className="rounded-xl bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition">
-                    Download .csv
-                  </button>
-                </>
-              )}
-            </div>
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-base font-semibold text-slate-950">
+            CSV output {result.rows > 0 && <span className="text-sm font-normal text-slate-500">({result.rows} rows)</span>}
+          </h3>
+          <div className="flex gap-2">
+            {result.csv && (
+              <>
+                <button onClick={handleCopy} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                  {copied ? "✓ Copied" : "Copy"}
+                </button>
+                <button onClick={handleDownload} className="rounded-xl bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition">
+                  Download .csv
+                </button>
+              </>
+            )}
           </div>
-          {result.error ? (
-            <p className="text-sm text-red-600">{result.error}</p>
-          ) : (
-            <textarea
-              readOnly
-              value={result.csv}
-              className="min-h-48 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-700 outline-none"
-            />
-          )}
-        </section>
-      </div>
+        </div>
+        {result.error ? (
+          <p className="text-sm text-red-600">{result.error}</p>
+        ) : (
+          <textarea
+            readOnly
+            value={result.csv}
+            className="min-h-48 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-700 outline-none"
+          />
+        )}
+      </section>
     </div>
+    </>
   );
 }

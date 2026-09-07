@@ -66,58 +66,58 @@ export default function BarcodeGeneratorApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5 md:flex-row">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 md:w-72 shrink-0">
-        <h3 className="mb-4 text-base font-semibold text-slate-950">Settings</h3>
-        <div className="flex flex-col gap-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Text / Number</label>
-            <input
-              type="text"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Format</label>
-            <select value={format} onChange={(e) => setFormat(e.target.value)} className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
-              {FORMATS.map(f => <option key={f} value={f}>{f}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Bar Width: {lineWidth}px</label>
-            <input type="range" min={1} max={4} value={lineWidth} onChange={(e) => setLineWidth(Number(e.target.value))} className="w-full" />
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Height: {height}px</label>
-            <input type="range" min={40} max={200} value={height} onChange={(e) => setHeight(Number(e.target.value))} className="w-full" />
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Font Size: {fontSize}px</label>
-            <input type="range" min={8} max={32} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full" />
-          </div>
-
-          {error && <p className="text-xs font-medium text-red-600">✗ {error}</p>}
-
-          <div className="flex gap-2 pt-1">
-            <button onClick={downloadSvg} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
-              SVG
-            </button>
-            <button onClick={downloadPng} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
-              PNG
-            </button>
-          </div>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 md:w-72 shrink-0">
+      <h3 className="mb-4 text-base font-semibold text-slate-950">Settings</h3>
+      <div className="flex flex-col gap-4">
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Text / Number</label>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+          />
         </div>
-      </section>
 
-      <section className="flex flex-1 items-center justify-center rounded-2xl border border-slate-200 bg-white p-8">
-        <svg ref={svgRef} />
-      </section>
-    </div>
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Format</label>
+          <select value={format} onChange={(e) => setFormat(e.target.value)} className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
+            {FORMATS.map(f => <option key={f} value={f}>{f}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Bar Width: {lineWidth}px</label>
+          <input type="range" min={1} max={4} value={lineWidth} onChange={(e) => setLineWidth(Number(e.target.value))} className="w-full" />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Height: {height}px</label>
+          <input type="range" min={40} max={200} value={height} onChange={(e) => setHeight(Number(e.target.value))} className="w-full" />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Font Size: {fontSize}px</label>
+          <input type="range" min={8} max={32} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full" />
+        </div>
+
+        {error && <p className="text-xs font-medium text-red-600">✗ {error}</p>}
+
+        <div className="flex gap-2 pt-1">
+          <button onClick={downloadSvg} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
+            SVG
+          </button>
+          <button onClick={downloadPng} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            PNG
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section className="flex flex-1 items-center justify-center rounded-2xl border border-slate-200 bg-white p-8">
+      <svg ref={svgRef} />
+    </section>
+    </>
   );
 }

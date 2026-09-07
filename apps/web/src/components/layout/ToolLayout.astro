@@ -26,7 +26,7 @@ import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
 import { canonicalUrl as toCanonicalUrl } from "@/lib/urls";
 import { isIndexable } from "@/data/indexing";
-import type { AppContent, AppFaq, AppLayout, AppLayoutWidth, AppStatus } from "@smallwebapps/data";
+import type { AppContent, AppFaq, AppLayout, AppLayoutRail, AppLayoutWidth, AppStatus } from "@smallwebapps/data";
 import "../../styles/global.css";
 
 interface Props {
@@ -39,6 +39,8 @@ interface Props {
   /** Stage layout; omitted leaves the tool's own root wrapper in charge. */
   layout?: AppLayout;
   layoutWidth?: AppLayoutWidth;
+  layoutRail?: AppLayoutRail;
+  layoutRailFirst?: boolean;
   seoTitle?: string;
   seoDescription?: string;
   /** Visible intro paragraph under the H1 (usually the app's longDescription). */
@@ -58,6 +60,8 @@ const {
   fullWidth = false,
   layout,
   layoutWidth,
+  layoutRail,
+  layoutRailFirst = false,
   seoTitle,
   seoDescription,
   description,
@@ -203,7 +207,13 @@ const breadcrumbSchema = {
             </span>
           </div>
           <div class="tl-tool-body">
-            <div class="tl-stage" data-layout={layout} data-layout-width={layoutWidth}>
+            <div
+              class="tl-stage"
+              data-layout={layout}
+              data-layout-width={layoutWidth}
+              data-rail-first={layoutRailFirst ? "" : undefined}
+              style={layoutRail ? `--tl-stage-rail: ${layoutRail}px` : undefined}
+            >
               <slot />
             </div>
           </div>
@@ -449,6 +459,13 @@ body {
   align-content: start;
 }
 
+.tl-stage[data-layout="split"],
+.tl-stage[data-layout="split-rail"] {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
 /* `intake-split` puts the intake and its controls beside the result, and the
    result side gets the extra room. One ratio, not one per tool: the three that
    split at the root had drifted to 0.95fr/1.05fr, 0.85fr/1.15fr and a fixed
@@ -460,11 +477,36 @@ body {
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     align-items: start;
   }
+  /* `split` is the genuinely proportional pair — input beside result. The
+     roots said grid-cols-2, [1fr_0.9fr] and a bare flex-row, which are all
+     "about half each"; this is that, said once. */
+  .tl-stage[data-layout="split"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* `split-rail` is the other shape the roots revealed: one workspace beside a
+   narrow fixed rail of controls or a summary. The rail width is the tool's to
+   declare (--tl-rail-px, set from layoutRail) because a swatch column and an
+   SEO report are not the same object; what the shell fixes is the breakpoint,
+   the gap and the alignment. It waits for lg — a 320px rail beside a workspace
+   needs more room than a proportional pair does. */
+.tl-stage[data-layout="split-rail"] { --tl-stage-rail: 320px; }
+@media (min-width: 1024px) {
+  .tl-stage[data-layout="split-rail"] {
+    grid-template-columns: minmax(0, 1fr) var(--tl-stage-rail);
+    align-items: start;
+  }
+  .tl-stage[data-layout="split-rail"][data-rail-first] {
+    grid-template-columns: var(--tl-stage-rail) minmax(0, 1fr);
+  }
 }
 /* Same rem values as the Tailwind caps they replace. */
 .tl-stage[data-layout-width="md"] { max-width: 28rem; margin-inline: auto; }
 .tl-stage[data-layout-width="lg"] { max-width: 32rem; margin-inline: auto; }
 .tl-stage[data-layout-width="xl"] { max-width: 36rem; margin-inline: auto; }
+.tl-stage[data-layout-width="5xl"] { max-width: 64rem; margin-inline: auto; }
 
 .tl-head { position: relative; margin-bottom: 20px; }
 .tl-title {

@@ -62,7 +62,7 @@ export default function PdfWatermarkApp() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
+    <>
       <div className="space-y-4">
         <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h3 className="mb-3 text-base font-semibold text-slate-950">PDF file</h3>
@@ -138,6 +138,6 @@ export default function PdfWatermarkApp() {
           {processing ? "Applying…" : "Apply & Download"}
         </button>
       </section>
-    </div>
+    </>
   );
 }

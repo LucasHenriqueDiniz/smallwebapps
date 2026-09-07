@@ -77,7 +77,7 @@ export default function MetaTagsAnalyzerApp() {
   }, [html]);
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_440px]">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <p className="text-xs font-bold uppercase tracking-widest text-blue-600">Technical SEO</p>
         <h3 className="mt-1 text-lg font-extrabold text-slate-950">Analyze pasted HTML</h3>
@@ -109,6 +109,6 @@ export default function MetaTagsAnalyzerApp() {
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }
