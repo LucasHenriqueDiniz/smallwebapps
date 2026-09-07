@@ -96,7 +96,7 @@ apps/web/
 ├── public/
 │   ├── _headers             ← Security headers (HSTS, CSP, etc.)
 │   └── favicon/*            ← Favicons & manifest
-└── dist/                    ← Build output (144 pages, ~1.3 MB)
+└── dist/                    ← Build output (162 pages, ~1.3 MB)
 
 .claude/
 ├── INSTRUCTIONS.md      ← Detailed agent guidance (READ THIS)

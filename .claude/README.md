@@ -31,10 +31,13 @@ Read this before reading CLAUDE.md for agent onboarding.
 Executable shell scripts for validation:
 
 #### `build-validator.sh`
-Runs the build and validates:
-- `apps/web/dist` directory exists
-- 144 pages generated
-- Critical files present (robots.txt, sitemap, agent-index.json)
+Runs the build, then exits non-zero if any of these is missing:
+- the `apps/web` or `apps/web/dist` directory
+- `index.html`, `robots.txt`, `sitemap-index.xml`, `.well-known/agent-index.json`
+
+It also prints the page count, currently 162, but does **not** assert it — a build
+that quietly stops emitting routes still passes. Read that number rather than
+trusting the green tick.
 
 Usage:
 ```bash
