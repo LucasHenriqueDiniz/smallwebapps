@@ -43,12 +43,38 @@ export interface AppContent {
   deepDive?: AppDeepDive[];
 }
 
+/**
+ * How a tool arranges its own working area inside the tool card.
+ *
+ * These four are not a taste call: they are what the 96 existing tool
+ * components already do, counted from their render roots.
+ *
+ *  stack        vertical run of sections, one column      (24)
+ *  split        two panes side by side, stacked on small  (42)
+ *  intake       file in, result out, one column           (19)
+ *  intake-split file in beside its options, result below  (11)
+ *
+ * `custom` is the escape hatch and should stay embarrassing to reach for: a
+ * tool earns it by demonstrably not fitting, with the reason written down.
+ */
+export type AppLayout = "stack" | "split" | "intake" | "intake-split" | "custom";
+
+/** Optional reading-width cap for a layout, matching Tailwind's scale. */
+export type AppLayoutWidth = "md" | "lg" | "xl";
+
 export interface AppDefinition {
   slug: string;
   name: string;
   category: string;
   status: AppStatus;
   mode: AppMode;
+  /**
+   * Stage layout. Omitted means the tool has not been migrated yet and owns
+   * its own arrangement — the layout shell leaves it alone.
+   */
+  layout?: AppLayout;
+  /** Only meaningful with a layout: caps and centres the stage. */
+  layoutWidth?: AppLayoutWidth;
   implemented: boolean;
   shortDescription: string;
   longDescription: string;

@@ -64,7 +64,7 @@ export default function AgeCalculatorApp() {
   }, [dob]);
 
   return (
-    <div className="mx-auto max-w-md grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-3 text-base font-semibold text-slate-950">Date of birth</h3>
         <input
@@ -98,6 +98,6 @@ export default function AgeCalculatorApp() {
           </div>
         </section>
       )}
-    </div>
+    </>
   );
 }

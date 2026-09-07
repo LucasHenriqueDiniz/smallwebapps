@@ -31,35 +31,35 @@ export default function CaseConverterApp() {
   }
 
   return (
-    <div className="grid gap-5">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-3 text-base font-semibold text-slate-950">Input text</h3>
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="min-h-24 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-          placeholder="Type or paste your text here…"
-          spellCheck={false}
-        />
-      </section>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 className="mb-3 text-base font-semibold text-slate-950">Input text</h3>
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        className="min-h-24 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+        placeholder="Type or paste your text here…"
+        spellCheck={false}
+      />
+    </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-4 text-base font-semibold text-slate-950">Converted cases</h3>
-        <div className="space-y-3">
-          {cases.map(({ label, value }) => (
-            <div key={label} className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
-              <span className="w-28 shrink-0 text-xs font-semibold text-slate-500">{label}</span>
-              <span className="flex-1 break-all text-sm text-slate-800 font-mono">{value || <span className="text-slate-400">—</span>}</span>
-              <button
-                onClick={() => handleCopy(label, value)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition shrink-0"
-              >
-                {copiedCase === label ? "✓" : "Copy"}
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 className="mb-4 text-base font-semibold text-slate-950">Converted cases</h3>
+      <div className="space-y-3">
+        {cases.map(({ label, value }) => (
+          <div key={label} className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+            <span className="w-28 shrink-0 text-xs font-semibold text-slate-500">{label}</span>
+            <span className="flex-1 break-all text-sm text-slate-800 font-mono">{value || <span className="text-slate-400">—</span>}</span>
+            <button
+              onClick={() => handleCopy(label, value)}
+              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition shrink-0"
+            >
+              {copiedCase === label ? "✓" : "Copy"}
+            </button>
+          </div>
+        ))}
+      </div>
+    </section>
+    </>
   );
 }

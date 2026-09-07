@@ -60,7 +60,7 @@ export default function PasswordGeneratorApp() {
   }
 
   return (
-    <div className="mx-auto max-w-xl grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-4 text-base font-semibold text-slate-950">Settings</h3>
 
@@ -139,6 +139,6 @@ export default function PasswordGeneratorApp() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

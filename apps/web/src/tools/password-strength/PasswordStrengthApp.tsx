@@ -54,7 +54,7 @@ export default function PasswordStrengthApp() {
   }, [password]);
 
   return (
-    <div className="mx-auto max-w-xl grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-3 text-base font-semibold text-slate-950">Enter a password</h3>
         <div className="relative">
@@ -119,6 +119,6 @@ export default function PasswordStrengthApp() {
           </section>
         </>
       )}
-    </div>
+    </>
   );
 }

@@ -81,7 +81,7 @@ export default function TimezoneConverterApp() {
   const userTz = localTz();
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <div className="flex flex-wrap items-end gap-4">
           <div>
@@ -131,6 +131,6 @@ export default function TimezoneConverterApp() {
           ))}
         </div>
       </section>
-    </div>
+    </>
   );
 }

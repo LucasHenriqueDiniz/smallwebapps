@@ -23,7 +23,7 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
     {howToUse.length > 0 && (
       <section class="content-section">
         <div class="cs-head">
-          <span class="cs-eyebrow">Guide</span>
+          <span class="cs-eyebrow">Step by step</span>
           <h2>How to use</h2>
         </div>
         <ol class="steps">
@@ -40,7 +40,7 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
     {useCases.length > 0 && (
       <section class="content-section">
         <div class="cs-head">
-          <span class="cs-eyebrow">Scenarios</span>
+          <span class="cs-eyebrow">When to use it</span>
           <h2>Use cases</h2>
         </div>
         <ul class="cases">
@@ -57,7 +57,7 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
     {(limitations.length > 0 || privacy) && (
       <section class="content-section">
         <div class="cs-head">
-          <span class="cs-eyebrow">Good to know</span>
+          <span class="cs-eyebrow">Limits &amp; privacy</span>
           <h2>Limitations &amp; Privacy</h2>
         </div>
         {privacy && (
@@ -87,7 +87,7 @@ const hasContent = howToUse.length > 0 || useCases.length > 0 || limitations.len
     {deepDive.map((section) => (
       <section class="content-section">
         <div class="cs-head">
-          <span class="cs-eyebrow">Reference</span>
+          <span class="cs-eyebrow">Background</span>
           <h2>{section.heading}</h2>
         </div>
         <div class="deep-body">

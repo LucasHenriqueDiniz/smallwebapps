@@ -43,7 +43,7 @@ export default function PercentageCalculatorApp() {
   ];
 
   return (
-    <div className="mx-auto max-w-md grid gap-5">
+    <>
       <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1">
         {tabs.map(({ label }, i) => (
           <button
@@ -95,6 +95,6 @@ export default function PercentageCalculatorApp() {
           </div>
         </section>
       )}
-    </div>
+    </>
   );
 }
