@@ -79,7 +79,16 @@ Do not ship thin pages containing only a widget. Keep claims truthful, especiall
 ## Design and performance
 
 - Use existing CSS variables and global styles before adding one-off visual systems.
-- Keep dark mode compatible with `[data-theme="dark"]`.
+- Keep dark mode compatible with `[data-theme="dark"]`. The React tools are written against
+  Tailwind's light palette, so a light-surface class needs a matching rule in the dark block of
+  `apps/web/src/styles/global.css` — without one it renders its light value on a near-black page and
+  says nothing. `./.claude/skills/dark-mode-validator.sh` fails on any that are missing; adding the
+  class to a tool and adding its rule are one change.
+- A tool arranges its working area by naming a `layout` in `apps/web/src/data/apps.ts`
+  (`stack`, `split`, `intake`, `intake-split`), not by inventing a wrapper in JSX. The shell owns
+  the stage. A tool with no `layout` keeps its own root and is simply unmigrated — that is expected
+  while the archetypes move over in batches. `custom` is the escape hatch and should stay
+  embarrassing to reach for: write down why the four did not fit.
 - Prefer static HTML and CSS for page structure; hydrate only the interactive tool surface.
 - Avoid importing heavy libraries at page load when a user action can dynamically import them.
 - Review large tool chunks. PDF, image, QR, barcode, chart, and compression libraries should be deferred when practical.
@@ -119,6 +128,9 @@ Use the Claude Code validation skills before committing:
 
 # Validate SEO essentials
 ./.claude/skills/seo-adsense-validator.sh
+
+# Validate that every light-surface Tailwind class a tool uses has a dark rule
+./.claude/skills/dark-mode-validator.sh
 ```
 
 Before committing:
@@ -134,7 +146,7 @@ The `.claude/` directory contains automated behaviors, skills, and templates:
 
 - **`.claude/settings.json`**: Permissions and build/preview commands. It sets no model, so whatever the CLI is running with applies
 - **`.claude/INSTRUCTIONS.md`**: Detailed guidance for Claude agents working in this repo
-- **`.claude/skills/`**: Executable validation scripts (build-validator, seo-adsense-validator)
+- **`.claude/skills/`**: Executable validation scripts (build-validator, seo-adsense-validator, dark-mode-validator)
 - **`.claude/hooks.json`**: Pre-commit and pre-push hooks (disabled by default; enable via `/config`)
 - **`.claude/templates/`**: PR and issue templates following Small Web Apps conventions
 
