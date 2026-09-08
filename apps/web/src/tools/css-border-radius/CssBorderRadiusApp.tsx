@@ -45,7 +45,7 @@ export default function CssBorderRadiusApp() {
   ];
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_260px]">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1">
@@ -105,6 +105,6 @@ export default function CssBorderRadiusApp() {
           </div>
         </section>
       </div>
-    </div>
+    </>
   );
 }

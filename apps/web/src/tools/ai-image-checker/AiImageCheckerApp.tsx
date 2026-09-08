@@ -72,60 +72,60 @@ export default function AiImageCheckerApp() {
   }
 
   return (
-    <div className="grid gap-5 md:grid-cols-[0.95fr_1.05fr]">
-      <section className="rounded-[1.75rem] border border-slate-200 bg-white p-5">
-        <h3 className="text-lg font-semibold text-slate-950">Inspect an image locally</h3>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          Upload a file to inspect basic metadata and a few lightweight heuristic signals. This does not provide proof.
-        </p>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => void onFileChange(event.target.files?.[0] ?? null)}
-          className="mt-4 block w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700"
-        />
-        <p className="mt-3 text-sm text-orange-700">
-          Heuristic review only. Provenance, context, and visual inspection still matter.
-        </p>
-      </section>
+    <>
+    <section className="rounded-[1.75rem] border border-slate-200 bg-white p-5">
+      <h3 className="text-lg font-semibold text-slate-950">Inspect an image locally</h3>
+      <p className="mt-3 text-sm leading-6 text-slate-600">
+        Upload a file to inspect basic metadata and a few lightweight heuristic signals. This does not provide proof.
+      </p>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(event) => void onFileChange(event.target.files?.[0] ?? null)}
+        className="mt-4 block w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700"
+      />
+      <p className="mt-3 text-sm text-orange-700">
+        Heuristic review only. Provenance, context, and visual inspection still matter.
+      </p>
+    </section>
 
-      <section className="space-y-5">
-        <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5">
-          <h3 className="text-lg font-semibold text-slate-950">Review summary</h3>
-          {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
-          {!summary && !error && <p className="mt-3 text-sm text-slate-600">Upload an image to see dimensions, file size, and heuristic notes.</p>}
-          {summary && (
-            <dl className="mt-3 grid gap-3 text-sm text-slate-600">
-              <div>
-                <dt className="font-semibold text-slate-900">File</dt>
-                <dd>{summary.name}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-900">Dimensions</dt>
-                <dd>{summary.width} x {summary.height}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-900">Aspect ratio</dt>
-                <dd>{summary.ratio}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-900">File size</dt>
-                <dd>{Math.round(summary.bytes / 1024)} KB</dd>
-              </div>
-            </dl>
-          )}
-        </div>
+    <section className="space-y-5">
+      <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5">
+        <h3 className="text-lg font-semibold text-slate-950">Review summary</h3>
+        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+        {!summary && !error && <p className="mt-3 text-sm text-slate-600">Upload an image to see dimensions, file size, and heuristic notes.</p>}
+        {summary && (
+          <dl className="mt-3 grid gap-3 text-sm text-slate-600">
+            <div>
+              <dt className="font-semibold text-slate-900">File</dt>
+              <dd>{summary.name}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-slate-900">Dimensions</dt>
+              <dd>{summary.width} x {summary.height}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-slate-900">Aspect ratio</dt>
+              <dd>{summary.ratio}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-slate-900">File size</dt>
+              <dd>{Math.round(summary.bytes / 1024)} KB</dd>
+            </div>
+          </dl>
+        )}
+      </div>
 
-        <div className="rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white">
-          <h3 className="text-lg font-semibold">Signals to review</h3>
-          <ul className="mt-3 space-y-3 text-sm leading-6 text-slate-200">
-            {(summary?.notes ?? ["No notes yet."]).map((note) => (
-              <li key={note}>{note}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    </div>
+      <div className="rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white">
+        <h3 className="text-lg font-semibold">Signals to review</h3>
+        <ul className="mt-3 space-y-3 text-sm leading-6 text-slate-200">
+          {(summary?.notes ?? ["No notes yet."]).map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+    </>
   );
 }
 

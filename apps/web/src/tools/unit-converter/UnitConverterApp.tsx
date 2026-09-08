@@ -85,7 +85,7 @@ export default function UnitConverterApp() {
   })();
 
   return (
-    <div className="mx-auto max-w-xl grid gap-5">
+    <>
       <div className="flex flex-wrap gap-2">
         {categories.map((c, i) => (
           <button
@@ -146,6 +146,6 @@ export default function UnitConverterApp() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

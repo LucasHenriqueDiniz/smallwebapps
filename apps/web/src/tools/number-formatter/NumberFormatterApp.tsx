@@ -56,67 +56,67 @@ export default function NumberFormatterApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-4 text-base font-semibold text-slate-950">Settings</h3>
-        <div className="flex flex-wrap gap-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Number</label>
-            <input type="text" value={input} onChange={(e) => setInput(e.target.value)} className="w-48 rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" />
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Locale</label>
-            <select value={locale} onChange={(e) => setLocale(e.target.value)} className="rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
-              {LOCALES.map(l => <option key={l.code} value={l.code}>{l.label}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Style</label>
-            <select value={style} onChange={(e) => setStyle(e.target.value as "decimal" | "currency" | "percent")} className="rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
-              <option value="decimal">Decimal</option>
-              <option value="currency">Currency</option>
-              <option value="percent">Percent</option>
-            </select>
-          </div>
-          {style === "currency" && (
-            <div>
-              <label className="mb-1.5 block text-xs font-medium text-slate-500">Currency</label>
-              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
-                {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-          )}
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Min decimals</label>
-            <input type="number" min={0} max={20} value={minDec} onChange={(e) => setMinDec(Number(e.target.value))} className="w-20 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" />
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Max decimals</label>
-            <input type="number" min={0} max={20} value={maxDec} onChange={(e) => setMaxDec(Number(e.target.value))} className="w-20 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" />
-          </div>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 className="mb-4 text-base font-semibold text-slate-950">Settings</h3>
+      <div className="flex flex-wrap gap-4">
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Number</label>
+          <input type="text" value={input} onChange={(e) => setInput(e.target.value)} className="w-48 rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" />
         </div>
-      </section>
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Locale</label>
+          <select value={locale} onChange={(e) => setLocale(e.target.value)} className="rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
+            {LOCALES.map(l => <option key={l.code} value={l.code}>{l.label}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Style</label>
+          <select value={style} onChange={(e) => setStyle(e.target.value as "decimal" | "currency" | "percent")} className="rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
+            <option value="decimal">Decimal</option>
+            <option value="currency">Currency</option>
+            <option value="percent">Percent</option>
+          </select>
+        </div>
+        {style === "currency" && (
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-slate-500">Currency</label>
+            <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
+              {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+        )}
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Min decimals</label>
+          <input type="number" min={0} max={20} value={minDec} onChange={(e) => setMinDec(Number(e.target.value))} className="w-20 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Max decimals</label>
+          <input type="number" min={0} max={20} value={maxDec} onChange={(e) => setMaxDec(Number(e.target.value))} className="w-20 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" />
+        </div>
+      </div>
+    </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-3 text-base font-semibold text-slate-950">Results</h3>
-        <div className="divide-y divide-slate-100">
-          {[
-            { label: "Formatted", value: formatted },
-            { label: "Scientific notation", value: scientific },
-            { label: "Engineering notation", value: engineering },
-          ].map(({ label, value }) => (
-            <div key={label} className="flex items-center justify-between py-3">
-              <span className="text-sm font-medium text-slate-500">{label}</span>
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-base font-semibold text-slate-800">{value}</span>
-                <button onClick={() => copy(value)} className="text-xs text-slate-400 hover:text-slate-700">
-                  {copied === value ? "✓" : "Copy"}
-                </button>
-              </div>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 className="mb-3 text-base font-semibold text-slate-950">Results</h3>
+      <div className="divide-y divide-slate-100">
+        {[
+          { label: "Formatted", value: formatted },
+          { label: "Scientific notation", value: scientific },
+          { label: "Engineering notation", value: engineering },
+        ].map(({ label, value }) => (
+          <div key={label} className="flex items-center justify-between py-3">
+            <span className="text-sm font-medium text-slate-500">{label}</span>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-base font-semibold text-slate-800">{value}</span>
+              <button onClick={() => copy(value)} className="text-xs text-slate-400 hover:text-slate-700">
+                {copied === value ? "✓" : "Copy"}
+              </button>
             </div>
-          ))}
-        </div>
-      </section>
-    </div>
+          </div>
+        ))}
+      </div>
+    </section>
+    </>
   );
 }

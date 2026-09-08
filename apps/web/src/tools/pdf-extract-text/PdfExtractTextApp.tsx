@@ -59,7 +59,7 @@ export default function PdfExtractTextApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <div
         {...getRootProps()}
         className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-10 text-center cursor-pointer transition ${
@@ -111,6 +111,6 @@ export default function PdfExtractTextApp() {
           />
         </div>
       )}
-    </div>
+    </>
   );
 }

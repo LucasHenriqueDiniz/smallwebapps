@@ -105,7 +105,7 @@ export default function DummyDataGeneratorApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-4 text-base font-semibold text-slate-950">Settings</h3>
         <div className="flex flex-wrap items-end gap-4">
@@ -157,6 +157,6 @@ export default function DummyDataGeneratorApp() {
           </pre>
         </section>
       )}
-    </div>
+    </>
   );
 }

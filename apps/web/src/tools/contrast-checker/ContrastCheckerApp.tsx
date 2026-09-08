@@ -60,53 +60,53 @@ export default function ContrastCheckerApp() {
   );
 
   return (
-    <div className="mx-auto max-w-lg grid gap-5">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Foreground</label>
-            <div className="flex items-center gap-2">
-              <input type="color" value={fg} onChange={(e) => { setFg(e.target.value); setFgInput(e.target.value); }} className="h-10 w-10 rounded-lg border border-slate-200 cursor-pointer" />
-              <input type="text" value={fgInput} onChange={(e) => handleFgInput(e.target.value)} className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm outline-none ring-2 ring-transparent focus:ring-blue-200" />
-            </div>
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Background</label>
-            <div className="flex items-center gap-2">
-              <input type="color" value={bg} onChange={(e) => { setBg(e.target.value); setBgInput(e.target.value); }} className="h-10 w-10 rounded-lg border border-slate-200 cursor-pointer" />
-              <input type="text" value={bgInput} onChange={(e) => handleBgInput(e.target.value)} className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm outline-none ring-2 ring-transparent focus:ring-blue-200" />
-            </div>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Foreground</label>
+          <div className="flex items-center gap-2">
+            <input type="color" value={fg} onChange={(e) => { setFg(e.target.value); setFgInput(e.target.value); }} className="h-10 w-10 rounded-lg border border-slate-200 cursor-pointer" />
+            <input type="text" value={fgInput} onChange={(e) => handleFgInput(e.target.value)} className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm outline-none ring-2 ring-transparent focus:ring-blue-200" />
           </div>
         </div>
-      </section>
-
-      <section className="rounded-2xl border border-slate-200 bg-white p-5" style={{ background: bg }}>
-        <p className="text-4xl font-bold" style={{ color: fg }}>Aa</p>
-        <p className="mt-2 text-base" style={{ color: fg }}>The quick brown fox jumps over the lazy dog.</p>
-        <p className="mt-1 text-sm" style={{ color: fg }}>Small text sample at 14px.</p>
-      </section>
-
-      {result && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <div className="mb-4 text-center">
-            <div className="text-4xl font-bold text-slate-950">{result.ratio}:1</div>
-            <div className="text-sm text-slate-500">Contrast ratio</div>
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Background</label>
+          <div className="flex items-center gap-2">
+            <input type="color" value={bg} onChange={(e) => { setBg(e.target.value); setBgInput(e.target.value); }} className="h-10 w-10 rounded-lg border border-slate-200 cursor-pointer" />
+            <input type="text" value={bgInput} onChange={(e) => handleBgInput(e.target.value)} className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm outline-none ring-2 ring-transparent focus:ring-blue-200" />
           </div>
-          <div className="space-y-2">
-            {[
-              { label: "WCAG AA — Normal text (≥4.5:1)", pass: result.aaNormal },
-              { label: "WCAG AA — Large text (≥3:1)", pass: result.aaLarge },
-              { label: "WCAG AAA — Normal text (≥7:1)", pass: result.aaaNormal },
-              { label: "WCAG AAA — Large text (≥4.5:1)", pass: result.aaaLarge },
-            ].map(({ label, pass }) => (
-              <div key={label} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-2.5">
-                <span className="text-sm text-slate-700">{label}</span>
-                {check(pass)}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
+        </div>
+      </div>
+    </section>
+
+    <section className="rounded-2xl border border-slate-200 bg-white p-5" style={{ background: bg }}>
+      <p className="text-4xl font-bold" style={{ color: fg }}>Aa</p>
+      <p className="mt-2 text-base" style={{ color: fg }}>The quick brown fox jumps over the lazy dog.</p>
+      <p className="mt-1 text-sm" style={{ color: fg }}>Small text sample at 14px.</p>
+    </section>
+
+    {result && (
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="mb-4 text-center">
+          <div className="text-4xl font-bold text-slate-950">{result.ratio}:1</div>
+          <div className="text-sm text-slate-500">Contrast ratio</div>
+        </div>
+        <div className="space-y-2">
+          {[
+            { label: "WCAG AA — Normal text (≥4.5:1)", pass: result.aaNormal },
+            { label: "WCAG AA — Large text (≥3:1)", pass: result.aaLarge },
+            { label: "WCAG AAA — Normal text (≥7:1)", pass: result.aaaNormal },
+            { label: "WCAG AAA — Large text (≥4.5:1)", pass: result.aaaLarge },
+          ].map(({ label, pass }) => (
+            <div key={label} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-2.5">
+              <span className="text-sm text-slate-700">{label}</span>
+              {check(pass)}
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    </>
   );
 }

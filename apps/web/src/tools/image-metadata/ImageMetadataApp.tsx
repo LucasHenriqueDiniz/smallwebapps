@@ -120,7 +120,7 @@ export default function ImageMetadataApp() {
   ] : [];
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <section
         className={`rounded-2xl border-2 border-dashed p-10 text-center transition cursor-pointer ${isDragging ? "border-blue-400 bg-blue-50" : "border-slate-200 bg-white hover:border-slate-300"}`}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -150,6 +150,6 @@ export default function ImageMetadataApp() {
           </dl>
         </section>
       )}
-    </div>
+    </>
   );
 }

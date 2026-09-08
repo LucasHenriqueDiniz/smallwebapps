@@ -44,7 +44,7 @@ export default function AspectRatioCalculatorApp() {
   const previewH = ratio ? Math.round(previewW / ratio.decimal) : 113;
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_280px]">
+    <>
       <div className="grid gap-5">
         <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h3 className="mb-4 text-base font-semibold text-slate-950">Dimensions</h3>
@@ -135,6 +135,6 @@ export default function AspectRatioCalculatorApp() {
         </div>
         <p className="text-xs text-slate-400">{width} × {height}px</p>
       </section>
-    </div>
+    </>
   );
 }

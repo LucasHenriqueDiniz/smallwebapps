@@ -47,7 +47,7 @@ export default function DiffViewerApp() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <div className="flex flex-wrap items-center gap-3">
         <button onClick={compute} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
           Compare
@@ -110,6 +110,6 @@ export default function DiffViewerApp() {
           </div>
         </section>
       )}
-    </div>
+    </>
   );
 }

@@ -45,62 +45,62 @@ export default function DateDiffApp() {
   }
 
   return (
-    <div className="mx-auto max-w-lg grid gap-5">
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 className="mb-4 text-base font-semibold text-slate-950">Select dates</h3>
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="flex-1">
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Start date</label>
+          <input
+            type="date"
+            value={start}
+            onChange={(e) => setStart(e.target.value)}
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+          />
+        </div>
+        <button
+          onClick={handleSwap}
+          className="rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 transition mb-0.5"
+          title="Swap dates"
+        >
+          ⇄
+        </button>
+        <div className="flex-1">
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">End date</label>
+          <input
+            type="date"
+            value={end}
+            onChange={(e) => setEnd(e.target.value)}
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+          />
+        </div>
+      </div>
+    </section>
+
+    {diff && (
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-4 text-base font-semibold text-slate-950">Select dates</h3>
-        <div className="flex flex-wrap items-end gap-3">
-          <div className="flex-1">
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Start date</label>
-            <input
-              type="date"
-              value={start}
-              onChange={(e) => setStart(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-            />
-          </div>
-          <button
-            onClick={handleSwap}
-            className="rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 transition mb-0.5"
-            title="Swap dates"
-          >
-            ⇄
-          </button>
-          <div className="flex-1">
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">End date</label>
-            <input
-              type="date"
-              value={end}
-              onChange={(e) => setEnd(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-            />
-          </div>
+        <h3 className="mb-4 text-base font-semibold text-slate-950">Difference</h3>
+        <div className="mb-4 rounded-xl bg-blue-50 px-4 py-3 text-center">
+          <span className="text-xl font-bold text-blue-700">
+            {diff.years} years, {diff.months} months, {diff.days} days
+          </span>
+          <div className="mt-1 text-xs text-blue-500">{diff.isPast ? "In the past" : "In the future"}</div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: "Total days", value: diff.totalDays.toLocaleString() },
+            { label: "Total weeks", value: diff.totalWeeks.toLocaleString() },
+            { label: "Total hours", value: diff.totalHours.toLocaleString() },
+            { label: "Total minutes", value: diff.totalMinutes.toLocaleString() },
+          ].map(({ label, value }) => (
+            <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+              <div className="text-xs text-slate-500">{label}</div>
+              <div className="mt-0.5 text-sm font-bold text-slate-950">{value}</div>
+            </div>
+          ))}
         </div>
       </section>
-
-      {diff && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="mb-4 text-base font-semibold text-slate-950">Difference</h3>
-          <div className="mb-4 rounded-xl bg-blue-50 px-4 py-3 text-center">
-            <span className="text-xl font-bold text-blue-700">
-              {diff.years} years, {diff.months} months, {diff.days} days
-            </span>
-            <div className="mt-1 text-xs text-blue-500">{diff.isPast ? "In the past" : "In the future"}</div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: "Total days", value: diff.totalDays.toLocaleString() },
-              { label: "Total weeks", value: diff.totalWeeks.toLocaleString() },
-              { label: "Total hours", value: diff.totalHours.toLocaleString() },
-              { label: "Total minutes", value: diff.totalMinutes.toLocaleString() },
-            ].map(({ label, value }) => (
-              <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-                <div className="text-xs text-slate-500">{label}</div>
-                <div className="mt-0.5 text-sm font-bold text-slate-950">{value}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
+    )}
+    </>
   );
 }

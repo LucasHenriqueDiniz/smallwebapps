@@ -78,46 +78,46 @@ export default function HttpStatusCodesApp() {
   const isSearching = search.trim() !== "";
 
   return (
-    <div className="flex flex-col gap-5">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by code, name, or description…"
-          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-        />
-      </section>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search by code, name, or description…"
+        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+      />
+    </section>
 
-      {isSearching ? (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          {filtered.length === 0 ? (
-            <p className="text-sm text-slate-400">No results found.</p>
-          ) : (
+    {isSearching ? (
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        {filtered.length === 0 ? (
+          <p className="text-sm text-slate-400">No results found.</p>
+        ) : (
+          <div className="divide-y divide-slate-100">
+            {filtered.map(code => (
+              <CodeRow key={code.code} code={code} expanded={expanded} setExpanded={setExpanded} />
+            ))}
+          </div>
+        )}
+      </section>
+    ) : (
+      GROUPS.map(group => {
+        const codes = CODES.filter(c => c.code >= group.min && c.code <= group.max);
+        if (codes.length === 0) return null;
+        return (
+          <section key={group.label} className="rounded-2xl border border-slate-200 bg-white p-5">
+            <h3 className="mb-3 text-base font-semibold text-slate-950">{group.label}</h3>
             <div className="divide-y divide-slate-100">
-              {filtered.map(code => (
+              {codes.map(code => (
                 <CodeRow key={code.code} code={code} expanded={expanded} setExpanded={setExpanded} />
               ))}
             </div>
-          )}
-        </section>
-      ) : (
-        GROUPS.map(group => {
-          const codes = CODES.filter(c => c.code >= group.min && c.code <= group.max);
-          if (codes.length === 0) return null;
-          return (
-            <section key={group.label} className="rounded-2xl border border-slate-200 bg-white p-5">
-              <h3 className="mb-3 text-base font-semibold text-slate-950">{group.label}</h3>
-              <div className="divide-y divide-slate-100">
-                {codes.map(code => (
-                  <CodeRow key={code.code} code={code} expanded={expanded} setExpanded={setExpanded} />
-                ))}
-              </div>
-            </section>
-          );
-        })
-      )}
-    </div>
+          </section>
+        );
+      })
+    )}
+    </>
   );
 }
 

@@ -47,7 +47,7 @@ export default function LoanCalculatorApp() {
   }, [result, principal, rate, tableMonths]);
 
   return (
-    <div className="grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-4 text-base font-semibold text-slate-950">Loan details</h3>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -120,6 +120,6 @@ export default function LoanCalculatorApp() {
           )}
         </>
       )}
-    </div>
+    </>
   );
 }

@@ -53,7 +53,7 @@ export default function ImageFormatConverterApp() {
   const formatLabel = format === "image/png" ? "PNG" : format === "image/jpeg" ? "JPG" : "WebP";
 
   return (
-    <div className="grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-3 text-base font-semibold text-slate-950">Upload image</h3>
         <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
@@ -118,6 +118,6 @@ export default function ImageFormatConverterApp() {
       </section>
 
       <canvas ref={canvasRef} className="hidden" />
-    </div>
+    </>
   );
 }

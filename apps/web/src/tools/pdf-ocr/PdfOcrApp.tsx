@@ -130,7 +130,7 @@ export default function PdfOcrApp() {
   const wordCount = text ? text.split(/\s+/).filter(Boolean).length : 0;
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-4">
         <label className="mb-1 block text-sm font-semibold text-slate-800" htmlFor="pdf-ocr-language">
           Step 1 — Choose the document language
@@ -240,6 +240,6 @@ export default function PdfOcrApp() {
           )}
         </section>
       )}
-    </div>
+    </>
   );
 }

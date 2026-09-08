@@ -53,7 +53,7 @@ export default function HtmlEntitiesApp() {
   }
 
   return (
-    <div className="grid gap-5">
+    <>
       <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1 max-w-xs">
         {(["encode", "decode"] as const).map((t) => (
           <button
@@ -123,6 +123,6 @@ export default function HtmlEntitiesApp() {
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }

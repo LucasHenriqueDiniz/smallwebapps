@@ -81,55 +81,55 @@ export default function ColorShadesApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <div className="flex flex-wrap items-end gap-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-500">Base Color</label>
-            <div className="flex items-center gap-3">
-              <input type="color" value={base} onChange={(e) => { setBase(e.target.value); setHexInput(e.target.value.toUpperCase()); }} className="h-10 w-14 cursor-pointer rounded-lg border border-slate-200 p-1" />
-              <input type="text" value={hexInput} onChange={(e) => handleHexInput(e.target.value)} maxLength={7} className="w-28 rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" placeholder="#3b82f6" />
-            </div>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <div className="flex flex-wrap items-end gap-4">
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-500">Base Color</label>
+          <div className="flex items-center gap-3">
+            <input type="color" value={base} onChange={(e) => { setBase(e.target.value); setHexInput(e.target.value.toUpperCase()); }} className="h-10 w-14 cursor-pointer rounded-lg border border-slate-200 p-1" />
+            <input type="text" value={hexInput} onChange={(e) => handleHexInput(e.target.value)} maxLength={7} className="w-28 rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200" placeholder="#3b82f6" />
           </div>
-          <button onClick={copyCssVars} className="rounded-lg border border-slate-200 bg-white px-3 py-3 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
-            {copiedCss ? "✓ Copied CSS vars" : "Copy as CSS variables"}
-          </button>
         </div>
-      </section>
+        <button onClick={copyCssVars} className="rounded-lg border border-slate-200 bg-white px-3 py-3 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+          {copiedCss ? "✓ Copied CSS vars" : "Copy as CSS variables"}
+        </button>
+      </div>
+    </section>
 
-      {palette.length > 0 && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="mb-4 text-base font-semibold text-slate-950">Palette</h3>
-          <div className="grid gap-2">
-            <div className="flex gap-1">
-              {palette.map(p => (
-                <div key={p.num} className="flex-1 flex flex-col gap-1">
-                  <button
-                    onClick={() => copy(p.hex)}
-                    style={{ backgroundColor: p.hex }}
-                    className="h-12 rounded-lg w-full border border-slate-200/50 transition hover:scale-105 hover:shadow-md"
-                    title={p.hex}
-                  />
-                  <p className="text-center text-xs font-medium text-slate-600">{p.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4 grid gap-2 md:grid-cols-2">
+    {palette.length > 0 && (
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h3 className="mb-4 text-base font-semibold text-slate-950">Palette</h3>
+        <div className="grid gap-2">
+          <div className="flex gap-1">
             {palette.map(p => (
-              <div key={p.num} className="flex items-center gap-3">
-                <div className="h-6 w-6 shrink-0 rounded border border-slate-200" style={{ backgroundColor: p.hex }} />
-                <span className="w-10 text-xs text-slate-500">{p.label}</span>
-                <button onClick={() => copy(p.hex)} className="font-mono text-xs text-slate-700 hover:text-blue-600">
-                  {copied === p.hex ? "✓ Copied" : p.hex}
-                </button>
-                <span className="text-xs text-slate-400">{hexToRgb(p.hex)}</span>
+              <div key={p.num} className="flex-1 flex flex-col gap-1">
+                <button
+                  onClick={() => copy(p.hex)}
+                  style={{ backgroundColor: p.hex }}
+                  className="h-12 rounded-lg w-full border border-slate-200/50 transition hover:scale-105 hover:shadow-md"
+                  title={p.hex}
+                />
+                <p className="text-center text-xs font-medium text-slate-600">{p.label}</p>
               </div>
             ))}
           </div>
-        </section>
-      )}
-    </div>
+        </div>
+
+        <div className="mt-4 grid gap-2 md:grid-cols-2">
+          {palette.map(p => (
+            <div key={p.num} className="flex items-center gap-3">
+              <div className="h-6 w-6 shrink-0 rounded border border-slate-200" style={{ backgroundColor: p.hex }} />
+              <span className="w-10 text-xs text-slate-500">{p.label}</span>
+              <button onClick={() => copy(p.hex)} className="font-mono text-xs text-slate-700 hover:text-blue-600">
+                {copied === p.hex ? "✓ Copied" : p.hex}
+              </button>
+              <span className="text-xs text-slate-400">{hexToRgb(p.hex)}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    </>
   );
 }

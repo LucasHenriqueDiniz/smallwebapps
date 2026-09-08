@@ -46,7 +46,7 @@ export default function BmiCalculatorApp() {
   const barPct = Math.min(100, Math.max(0, ((bmiVal - 10) / 40) * 100));
 
   return (
-    <div className="mx-auto max-w-md grid gap-5">
+    <>
       <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1">
         {["metric", "imperial"].map((u) => (
           <button
@@ -122,6 +122,6 @@ export default function BmiCalculatorApp() {
           </div>
         </section>
       )}
-    </div>
+    </>
   );
 }

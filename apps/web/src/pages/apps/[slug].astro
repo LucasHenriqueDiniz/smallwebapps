@@ -62,6 +62,14 @@ const relatedApps = apps
   .map(({ item }) => item);
 
 const categoryHref = categoryPath(app.category);
+
+/**
+ * Category labels are a mix: some already end in "Tools" ("Data Tools"), some
+ * do not ("Image / Inspection"). Interpolating the raw label into
+ * `More ${category} tools` produced "More Data Tools tools" on the 110 pages
+ * whose category carries the suffix. Drop it and name the category instead.
+ */
+const categoryShortLabel = app.category.replace(/\s+Tools$/i, "");
 ---
 
 <ToolLayout
@@ -70,6 +78,10 @@ const categoryHref = categoryPath(app.category);
   status={app.status}
   slug={app.slug}
   disclaimer={app.disclaimer}
+  layout={app.layout}
+  layoutWidth={app.layoutWidth}
+  layoutRail={app.layoutRail}
+  layoutRailFirst={app.layoutRailFirst}
   seoTitle={app.seo.title}
   seoDescription={app.seo.description}
   description={app.longDescription}
@@ -82,8 +94,8 @@ const categoryHref = categoryPath(app.category);
   <RelatedApps
     slot="related"
     items={relatedApps}
-    title={`More ${app.category} tools`}
-    eyebrow="Similar tools"
+    title={`More tools in ${categoryShortLabel}`}
+    eyebrow="Related tools"
     viewAllHref={categoryHref}
   />
 </ToolLayout>

@@ -118,13 +118,44 @@ a { color: inherit; }
   font: inherit;
 }
 
-/* ── Dark mode overrides for Tailwind utility classes used in tool components ── */
-/* Applied globally so every React tool gets dark mode for free */
+/* ── Dark mode for the Tailwind utilities the React tools use ───────────────
+ *
+ * The tools are written against Tailwind's light palette, so every class that
+ * encodes a light SURFACE, a light BORDER, or dark-on-light TEXT needs a dark
+ * counterpart here. A class used in a tool with no rule below keeps its light
+ * value on a near-black page — and does it silently, which is the whole
+ * problem: `bg-blue-50` rendered rgb(239,246,255) on rgb(15,17,23) for as long
+ * as it has existed, and nothing complained.
+ *
+ * So this list is now enforced. `.claude/skills/dark-mode-validator.sh` reads
+ * the tool sources, collects the light-surface classes they actually use, and
+ * fails if any of them is missing from this block. Adding a class to a tool
+ * and adding its rule here are one change, not two.
+ *
+ * Remapping the Tailwind palette to CSS variables instead would be tidier but
+ * cannot work: in dark mode `text-slate-950` has to become light while
+ * `bg-slate-950` has to stay dark, and both read the same palette slot.
+ *
+ * Saturated mid-tones are deliberately absent. `bg-blue-600` with `text-white`
+ * is a button, and it reads correctly in both themes — the validator knows
+ * not to ask for those.
+ */
+
+/* Surfaces — light greys become the card and inset tokens. */
 [data-theme="dark"] .bg-white            { background-color: var(--card-bg) !important; }
 [data-theme="dark"] .bg-slate-50         { background-color: var(--input-bg) !important; }
+[data-theme="dark"] .bg-slate-100        { background-color: var(--input-bg) !important; }
 [data-theme="dark"] .bg-slate-950        { background-color: #0a0d14 !important; }
+
+/* Borders and dividers — the ramp collapses onto one token, as it already did
+   for 200 and 300. The tools use the shade for emphasis, not for hue. */
+[data-theme="dark"] .border-slate-50     { border-color: var(--border) !important; }
+[data-theme="dark"] .border-slate-100    { border-color: var(--border) !important; }
 [data-theme="dark"] .border-slate-200    { border-color: var(--border) !important; }
 [data-theme="dark"] .border-slate-300    { border-color: var(--border) !important; }
+[data-theme="dark"] .divide-slate-100    > * + * { border-color: var(--border) !important; }
+
+/* Neutral text ramp — inverted: the darkest light-mode text is the lightest here. */
 [data-theme="dark"] .text-slate-950      { color: var(--text) !important; }
 [data-theme="dark"] .text-slate-900      { color: var(--text) !important; }
 [data-theme="dark"] .text-slate-800      { color: var(--text) !important; }
@@ -132,8 +163,59 @@ a { color: inherit; }
 [data-theme="dark"] .text-slate-600      { color: var(--muted) !important; }
 [data-theme="dark"] .text-slate-500      { color: var(--muted) !important; opacity: .7; }
 [data-theme="dark"] .text-slate-400      { color: var(--muted) !important; opacity: .55; }
-[data-theme="dark"] .divide-slate-200    > * + * { border-color: var(--border) !important; }
-[data-theme="dark"] .ring-orange-200:focus { --tw-ring-color: rgba(249,115,22,.3) !important; }
+
+/* Tinted panels — info, success, danger, warning. A light tint block cannot
+   survive theme inversion, so the fill becomes a low-alpha wash of the same
+   hue over the dark page, matching the "Runs locally" badge in ToolLayout.
+   Their foreground inverts with them: a 600/700 accent is dark by design and
+   would be unreadable on the wash. */
+[data-theme="dark"] .bg-blue-50          { background-color: rgba(26,115,232,.12) !important; }
+[data-theme="dark"] .bg-blue-100         { background-color: rgba(26,115,232,.18) !important; }
+[data-theme="dark"] .bg-blue-200         { background-color: rgba(26,115,232,.24) !important; }
+[data-theme="dark"] .border-blue-200     { border-color: rgba(26,115,232,.35) !important; }
+[data-theme="dark"] .border-blue-300     { border-color: rgba(26,115,232,.45) !important; }
+[data-theme="dark"] .text-blue-600,
+[data-theme="dark"] .text-blue-700,
+[data-theme="dark"] .text-blue-800       { color: #7ab0f5 !important; }
+
+[data-theme="dark"] .bg-emerald-50       { background-color: rgba(34,197,94,.10) !important; }
+[data-theme="dark"] .bg-emerald-100      { background-color: rgba(34,197,94,.16) !important; }
+[data-theme="dark"] .border-emerald-200  { border-color: rgba(34,197,94,.30) !important; }
+[data-theme="dark"] .border-emerald-300  { border-color: rgba(34,197,94,.40) !important; }
+[data-theme="dark"] .text-emerald-600,
+[data-theme="dark"] .text-emerald-700,
+[data-theme="dark"] .text-emerald-800    { color: #86efac !important; }
+
+[data-theme="dark"] .bg-red-50           { background-color: rgba(239,68,68,.10) !important; }
+[data-theme="dark"] .bg-red-100          { background-color: rgba(239,68,68,.16) !important; }
+[data-theme="dark"] .border-red-200      { border-color: rgba(239,68,68,.30) !important; }
+[data-theme="dark"] .border-red-300      { border-color: rgba(239,68,68,.40) !important; }
+[data-theme="dark"] .text-red-600,
+[data-theme="dark"] .text-red-700,
+[data-theme="dark"] .text-red-800        { color: #fca5a5 !important; }
+
+[data-theme="dark"] .bg-amber-50         { background-color: rgba(245,158,11,.10) !important; }
+[data-theme="dark"] .bg-amber-100        { background-color: rgba(245,158,11,.16) !important; }
+[data-theme="dark"] .border-amber-200    { border-color: rgba(245,158,11,.30) !important; }
+[data-theme="dark"] .text-amber-700,
+[data-theme="dark"] .text-amber-800,
+[data-theme="dark"] .text-amber-900      { color: #fcd34d !important; }
+[data-theme="dark"] .text-orange-700     { color: #fdba74 !important; }
+
+/* Purple carries the 1xx band in http-status-codes and the variant badges on
+   the compressor pages. */
+[data-theme="dark"] .bg-purple-100       { background-color: rgba(168,85,247,.16) !important; }
+[data-theme="dark"] .text-purple-600,
+[data-theme="dark"] .text-purple-800     { color: #d8b4fe !important; }
+
+/* Regex match highlight. It has to stay legible under text that is now light,
+   so it becomes a warm wash rather than a solid fill. */
+[data-theme="dark"] .bg-yellow-200       { background-color: rgba(234,179,8,.30) !important; }
+
+/* Focus ring. The rule this replaces named ring-orange-200, which no tool has
+   ever used; the tools ring on blue, 95 times, and had no dark rule at all. */
+[data-theme="dark"] .focus\:ring-blue-200:focus { --tw-ring-color: rgba(26,115,232,.45) !important; }
+[data-theme="dark"] .ring-blue-200       { --tw-ring-color: rgba(26,115,232,.45) !important; }
 /* card-surface used in old pages */
 [data-theme="dark"] .card-surface {
   background: var(--surface) !important;

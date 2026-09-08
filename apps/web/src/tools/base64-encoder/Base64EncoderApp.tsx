@@ -54,7 +54,7 @@ export default function Base64EncoderApp() {
   }
 
   return (
-    <div className="grid gap-5">
+    <>
       <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1 max-w-xs">
         {(["encode", "decode"] as const).map((t) => (
           <button
@@ -127,6 +127,6 @@ export default function Base64EncoderApp() {
           )}
         </section>
       )}
-    </div>
+    </>
   );
 }

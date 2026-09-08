@@ -43,7 +43,7 @@ export default function KeywordDensityCheckerApp() {
   }, [ignoreStopwords, phraseSize, text]);
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px]">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -118,6 +118,6 @@ export default function KeywordDensityCheckerApp() {
           ))}
         </div>
       </section>
-    </div>
+    </>
   );
 }

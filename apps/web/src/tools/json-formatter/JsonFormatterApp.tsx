@@ -41,7 +41,7 @@ export default function JsonFormatterApp() {
   }
 
   return (
-    <div className="grid gap-5 md:grid-cols-[1fr_0.9fr]">
+    <>
       {/* Input */}
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
@@ -116,6 +116,6 @@ export default function JsonFormatterApp() {
           </pre>
         </div>
       </section>
-    </div>
+    </>
   );
 }

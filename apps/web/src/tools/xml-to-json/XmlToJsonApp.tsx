@@ -59,55 +59,55 @@ export default function XmlToJsonApp() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-4">
-        <label className="flex items-center gap-2 text-sm text-slate-700">
-          <input type="checkbox" checked={ignoreAttrs} onChange={(e) => setIgnoreAttrs(e.target.checked)} className="rounded" />
-          Ignore attributes
-        </label>
-        <label className="flex items-center gap-2 text-sm text-slate-700">
-          <input type="checkbox" checked={parseNums} onChange={(e) => setParseNums(e.target.checked)} className="rounded" />
-          Parse numbers
-        </label>
-        <button onClick={convert} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
-          Convert
-        </button>
-        {json && (
-          <>
-            <button onClick={copyJson} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
-              {copied ? "✓ Copied" : "Copy JSON"}
-            </button>
-            <button onClick={downloadJson} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
-              Download .json
-            </button>
-          </>
-        )}
-      </div>
-
-      {error && <p className="text-xs font-medium text-red-600">✗ {error}</p>}
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="mb-3 text-base font-semibold text-slate-950">XML Input</h3>
-          <textarea
-            value={xml}
-            onChange={(e) => setXml(e.target.value)}
-            className="min-h-80 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-            spellCheck={false}
-            placeholder="Paste XML here…"
-          />
-        </section>
-
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="mb-3 text-base font-semibold text-slate-950">JSON Output</h3>
-          <textarea
-            readOnly
-            value={json}
-            className="min-h-80 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none"
-            placeholder="JSON output appears here…"
-          />
-        </section>
-      </div>
+    <>
+    <div className="flex flex-wrap items-center gap-4">
+      <label className="flex items-center gap-2 text-sm text-slate-700">
+        <input type="checkbox" checked={ignoreAttrs} onChange={(e) => setIgnoreAttrs(e.target.checked)} className="rounded" />
+        Ignore attributes
+      </label>
+      <label className="flex items-center gap-2 text-sm text-slate-700">
+        <input type="checkbox" checked={parseNums} onChange={(e) => setParseNums(e.target.checked)} className="rounded" />
+        Parse numbers
+      </label>
+      <button onClick={convert} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
+        Convert
+      </button>
+      {json && (
+        <>
+          <button onClick={copyJson} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            {copied ? "✓ Copied" : "Copy JSON"}
+          </button>
+          <button onClick={downloadJson} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            Download .json
+          </button>
+        </>
+      )}
     </div>
+
+    {error && <p className="text-xs font-medium text-red-600">✗ {error}</p>}
+
+    <div className="grid gap-4 md:grid-cols-2">
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h3 className="mb-3 text-base font-semibold text-slate-950">XML Input</h3>
+        <textarea
+          value={xml}
+          onChange={(e) => setXml(e.target.value)}
+          className="min-h-80 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+          spellCheck={false}
+          placeholder="Paste XML here…"
+        />
+      </section>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h3 className="mb-3 text-base font-semibold text-slate-950">JSON Output</h3>
+        <textarea
+          readOnly
+          value={json}
+          className="min-h-80 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-800 outline-none"
+          placeholder="JSON output appears here…"
+        />
+      </section>
+    </div>
+    </>
   );
 }

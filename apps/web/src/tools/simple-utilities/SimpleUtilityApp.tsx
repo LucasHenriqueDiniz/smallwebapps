@@ -555,74 +555,76 @@ export default function SimpleUtilityApp({ tool }: Props) {
   const copy = async () => navigator.clipboard?.writeText(output);
 
   return (
-    <div className="mx-auto max-w-5xl rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="mb-5">
-        {/* The page H1 is ToolLayout's `.tl-title`, which already prints this exact
-            string. This island is a section inside that page, so it takes an h2.
-            The classes are unchanged and Tailwind's preflight zeroes heading
-            margins and sizes, so nothing moves. */}
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{meta.title}</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-600">{meta.helper} Everything runs locally in this tab.</p>
-      </div>
+    <>
+      <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="mb-5">
+          {/* The page H1 is ToolLayout's `.tl-title`, which already prints this exact
+              string. This island is a section inside that page, so it takes an h2.
+              The classes are unchanged and Tailwind's preflight zeroes heading
+              margins and sizes, so nothing moves. */}
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{meta.title}</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600">{meta.helper} Everything runs locally in this tab.</p>
+        </div>
 
-      {tool === "gitignore-generator" || tool === "dockerignore-generator" ? (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {templateNames.map((name) => (
-            <label key={name} className="flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">
-              <input
-                type="checkbox"
-                checked={selected.includes(name)}
-                onChange={(event) =>
-                  setSelected((current) => event.target.checked ? [...current, name] : current.filter((item) => item !== name))
-                }
+        {tool === "gitignore-generator" || tool === "dockerignore-generator" ? (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {templateNames.map((name) => (
+              <label key={name} className="flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={selected.includes(name)}
+                  onChange={(event) =>
+                    setSelected((current) => event.target.checked ? [...current, name] : current.filter((item) => item !== name))
+                  }
+                />
+                {name}
+              </label>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-4 lg:grid-cols-3">
+            <label className="block lg:col-span-3">
+              <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {tool.includes("csv") || tool.includes("sql") || tool.includes("word") || tool.includes("json") || tool.includes("youtube") || tool.includes("instagram") || tool === "sitemap-generator" ? "Input" : "Primary value"}
+              </span>
+              <textarea
+                className="min-h-32 w-full rounded-md border border-slate-300 bg-slate-50 p-3 font-mono text-sm text-slate-900 outline-none focus:border-blue-500"
+                value={primary}
+                onChange={(event) => setPrimary(event.target.value)}
+                placeholder={tool === "sitemap-generator" ? "https://example.com/\nhttps://example.com/apps" : tool === "json-path-extractor" ? "{\"user\":{\"name\":\"Ada\"}}" : "Paste or type here"}
               />
-              {name}
             </label>
-          ))}
-        </div>
-      ) : (
-        <div className="grid gap-4 lg:grid-cols-3">
-          <label className="block lg:col-span-3">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">
-              {tool.includes("csv") || tool.includes("sql") || tool.includes("word") || tool.includes("json") || tool.includes("youtube") || tool.includes("instagram") || tool === "sitemap-generator" ? "Input" : "Primary value"}
-            </span>
-            <textarea
-              className="min-h-32 w-full rounded-md border border-slate-300 bg-slate-50 p-3 font-mono text-sm text-slate-900 outline-none focus:border-blue-500"
-              value={primary}
-              onChange={(event) => setPrimary(event.target.value)}
-              placeholder={tool === "sitemap-generator" ? "https://example.com/\nhttps://example.com/apps" : tool === "json-path-extractor" ? "{\"user\":{\"name\":\"Ada\"}}" : "Paste or type here"}
-            />
-          </label>
-          <label className="block">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Option A</span>
-            <input
-              className="w-full rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 outline-none focus:border-blue-500"
-              value={secondary}
-              onChange={(event) => setSecondary(event.target.value)}
-              placeholder={tool === "csv-column-extractor" ? "email or 1" : tool === "json-path-extractor" ? "user.name" : tool === "csv-to-sql" ? "users" : tool === "robots-txt-generator" ? "/admin" : "Optional"}
-            />
-          </label>
-          <label className="block lg:col-span-2">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Option B</span>
-            <input
-              className="w-full rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 outline-none focus:border-blue-500"
-              value={tertiary}
-              onChange={(event) => setTertiary(event.target.value)}
-              placeholder={tool === "robots-txt-generator" ? "https://example.com/sitemap.xml" : "Optional"}
-            />
-          </label>
-        </div>
-      )}
+            <label className="block">
+              <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Option A</span>
+              <input
+                className="w-full rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 outline-none focus:border-blue-500"
+                value={secondary}
+                onChange={(event) => setSecondary(event.target.value)}
+                placeholder={tool === "csv-column-extractor" ? "email or 1" : tool === "json-path-extractor" ? "user.name" : tool === "csv-to-sql" ? "users" : tool === "robots-txt-generator" ? "/admin" : "Optional"}
+              />
+            </label>
+            <label className="block lg:col-span-2">
+              <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Option B</span>
+              <input
+                className="w-full rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 outline-none focus:border-blue-500"
+                value={tertiary}
+                onChange={(event) => setTertiary(event.target.value)}
+                placeholder={tool === "robots-txt-generator" ? "https://example.com/sitemap.xml" : "Optional"}
+              />
+            </label>
+          </div>
+        )}
 
-      <div className="mt-5">
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Output</span>
-          <button type="button" onClick={copy} className="rounded-md bg-blue-600 px-3 py-2 text-xs font-bold text-white hover:bg-blue-700">
-            Copy
-          </button>
+        <div className="mt-5">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Output</span>
+            <button type="button" onClick={copy} className="rounded-md bg-blue-600 px-3 py-2 text-xs font-bold text-white hover:bg-blue-700">
+              Copy
+            </button>
+          </div>
+          <pre className="max-h-96 overflow-auto rounded-md border border-slate-200 bg-slate-950 p-4 text-sm leading-6 text-slate-50">{output}</pre>
         </div>
-        <pre className="max-h-96 overflow-auto rounded-md border border-slate-200 bg-slate-950 p-4 text-sm leading-6 text-slate-50">{output}</pre>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }

@@ -45,37 +45,37 @@ export default function WordCounterApp() {
   ];
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="mb-3 text-base font-semibold text-slate-950">Your text</h3>
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="min-h-96 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
-          placeholder="Paste or type your text here…"
-          spellCheck={false}
-        />
-      </section>
+    <>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 className="mb-3 text-base font-semibold text-slate-950">Your text</h3>
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        className="min-h-96 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800 outline-none ring-2 ring-transparent transition focus:ring-blue-200"
+        placeholder="Paste or type your text here…"
+        spellCheck={false}
+      />
+    </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-slate-950">Statistics</h3>
-          <button
-            onClick={handleCopyStats}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
-          >
-            {copied ? "✓ Copied" : "Copy stats"}
-          </button>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {statItems.map((item) => (
-            <div key={item.label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <div className="text-2xl font-bold text-slate-950">{item.value}</div>
-              <div className="mt-0.5 text-xs text-slate-500">{item.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-base font-semibold text-slate-950">Statistics</h3>
+        <button
+          onClick={handleCopyStats}
+          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
+        >
+          {copied ? "✓ Copied" : "Copy stats"}
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {statItems.map((item) => (
+          <div key={item.label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+            <div className="text-2xl font-bold text-slate-950">{item.value}</div>
+            <div className="mt-0.5 text-xs text-slate-500">{item.label}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+    </>
   );
 }

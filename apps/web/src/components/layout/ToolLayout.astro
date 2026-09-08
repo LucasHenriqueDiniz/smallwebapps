@@ -26,7 +26,7 @@ import ExpandedContent from "../apps/ExpandedContent.astro";
 import { siteConfig } from "@/lib/site";
 import { canonicalUrl as toCanonicalUrl } from "@/lib/urls";
 import { isIndexable } from "@/data/indexing";
-import type { AppContent, AppFaq, AppStatus } from "@smallwebapps/data";
+import type { AppContent, AppFaq, AppLayout, AppLayoutRail, AppLayoutWidth, AppStatus } from "@smallwebapps/data";
 import "../../styles/global.css";
 
 interface Props {
@@ -36,6 +36,11 @@ interface Props {
   slug: string;
   disclaimer?: string;
   fullWidth?: boolean;
+  /** Stage layout; omitted leaves the tool's own root wrapper in charge. */
+  layout?: AppLayout;
+  layoutWidth?: AppLayoutWidth;
+  layoutRail?: AppLayoutRail;
+  layoutRailFirst?: boolean;
   seoTitle?: string;
   seoDescription?: string;
   /** Visible intro paragraph under the H1 (usually the app's longDescription). */
@@ -53,6 +58,10 @@ const {
   slug,
   disclaimer,
   fullWidth = false,
+  layout,
+  layoutWidth,
+  layoutRail,
+  layoutRailFirst = false,
   seoTitle,
   seoDescription,
   description,
@@ -191,9 +200,6 @@ const breadcrumbSchema = {
         </div>
         <div class="tl-tool">
           <div class="tl-tool-chrome">
-            <span class="tl-dot tl-dot-r" aria-hidden="true"></span>
-            <span class="tl-dot tl-dot-y" aria-hidden="true"></span>
-            <span class="tl-dot tl-dot-g" aria-hidden="true"></span>
             <span class="tl-chrome-title">{name}</span>
             <span class="tl-chrome-badge">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -201,22 +207,46 @@ const breadcrumbSchema = {
             </span>
           </div>
           <div class="tl-tool-body">
-            <slot />
+            <div
+              class="tl-stage"
+              data-layout={layout}
+              data-layout-width={layoutWidth}
+              data-rail-first={layoutRailFirst ? "" : undefined}
+              style={layoutRail ? `--tl-stage-rail: ${layoutRail}px` : undefined}
+            >
+              <slot />
+            </div>
           </div>
         </div>
       </section>
-      <slot name="related" />
-      <ExpandedContent
-        howToUse={content?.howToUse}
-        useCases={content?.useCases}
-        limitations={content?.limitations}
-        privacy={content?.privacy}
-        deepDive={content?.deepDive}
-      />
-      <!-- Below the tool, the related links and the long-form content, and
-           above the FAQ. Never inside the tool's working area. -->
-      <AdSlot placement="tool-content" />
-      <ExpandedFaq items={displayFaq} />
+      <!--
+        Everything below the tool. One ad unit, two positions, no second
+        <ins>: at >= 1440px this is a two-column grid and the rail is a
+        sticky right column spanning both content rows; below that the grid
+        becomes block flow and the rail lands where source order puts it —
+        between the long-form content and the FAQ, exactly where the single
+        slot used to sit. Rendering two units and hiding one by breakpoint
+        would push into a display:none container, which never fills.
+
+        Related links come after the FAQ so every piece of original content
+        sits between the tool and the first link off the page.
+      -->
+      <div class="tl-lower">
+        <div class="tl-lower-main">
+          <ExpandedContent
+            howToUse={content?.howToUse}
+            useCases={content?.useCases}
+            limitations={content?.limitations}
+            privacy={content?.privacy}
+            deepDive={content?.deepDive}
+          />
+        </div>
+        <aside class="tl-rail"><AdSlot placement="tool-content" /></aside>
+        <div class="tl-lower-tail">
+          <ExpandedFaq items={displayFaq} />
+          <slot name="related" />
+        </div>
+      </div>
     </div>
   </div>
 
@@ -277,9 +307,47 @@ body {
 .tl-body {
   --tl-gutter: 24px;
   --tl-pad-top: 32px;
+  --tl-rail-w: 300px;
   flex: 1;
   max-width: 1280px; width: 100%; margin: 0 auto;
   padding: var(--tl-pad-top) var(--tl-gutter) 64px;
+}
+
+/* ── Below the tool: content column, and on wide screens a sticky ad rail ──
+      Under 1440px this is plain block flow, so the rail renders in source
+      order (after the long-form content, before the FAQ) — the position the
+      single slot already had. The grid only turns on where there is room for
+      it, and the container grows by exactly as much as the rail costs, so no
+      column gets narrower than it is today. */
+@media (min-width: 1440px) {
+  .tl-body { max-width: 1560px; }
+  .tl-lower {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--tl-rail-w);
+    column-gap: 32px;
+    align-items: start;
+  }
+  .tl-lower-main { grid-column: 1; grid-row: 1; min-width: 0; }
+  .tl-lower-tail { grid-column: 1; grid-row: 2; min-width: 0; }
+  .tl-rail {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: sticky;
+    /* the site header is sticky at 62px; this clears it with air to spare */
+    top: 80px;
+    /* line the rail up with the first section's top rule */
+    margin-top: 48px;
+  }
+  /* AdSlot ships its own inline (unscoped) CSS sized for a full-width block.
+     In the rail it is a 300px column, so those three values are overridden
+     here rather than branched inside the component. */
+  .tl-rail :global(.ad-slot) {
+    max-width: var(--tl-rail-w);
+    margin: 0;
+    padding: 0;
+    min-height: 600px;
+  }
+  .tl-rail :global(.ad-slot .adsbygoogle) { min-height: 600px; }
 }
 .tl-body-full {
   --tl-gutter: 0px;
@@ -335,20 +403,16 @@ body {
   border-bottom: 1px solid var(--card-border);
   flex-shrink: 0;
 }
-.tl-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-.tl-dot-r { background: #ff5f57; }
-.tl-dot-y { background: #febc2e; }
-.tl-dot-g { background: #28c840; }
 .tl-chrome-title {
   flex: 1;
-  text-align: center;
+  text-align: left;
   font-size: .74rem;
   font-weight: 600;
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 8px;
+  padding: 0;
 }
 .tl-chrome-badge {
   display: inline-flex;
@@ -373,6 +437,76 @@ body {
     radial-gradient(100% 90% at 50% 0%, color-mix(in srgb, var(--blue) 5%, transparent), transparent 65%),
     var(--bg);
 }
+
+/* ── Stage layouts ──
+      A tool names one in apps.ts and the shell owns the arrangement, so the
+      component renders its sections and nothing else. Two spellings of the
+      same vertical run (`grid gap-5` and `flex flex-col gap-5`) lived side by
+      side across the tools; this is the single one. A tool with no layout
+      keeps its own root wrapper and nothing here applies to it — that is what
+      makes the migration safe to do in batches. */
+.tl-stage { min-width: 0; }
+
+/* `intake` arranges itself exactly like `stack` — a vertical run of sections.
+   It keeps its own name because what it declares is what the tool DOES (a file
+   goes in), not how wide its columns are, and that is what the intake-specific
+   copy and affordances hang off later. */
+.tl-stage[data-layout="stack"],
+.tl-stage[data-layout="intake"],
+.tl-stage[data-layout="intake-split"] {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.tl-stage[data-layout="split"],
+.tl-stage[data-layout="split-rail"] {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+/* `intake-split` puts the intake and its controls beside the result, and the
+   result side gets the extra room. One ratio, not one per tool: the three that
+   split at the root had drifted to 0.95fr/1.05fr, 0.85fr/1.15fr and a fixed
+   280px rail, which is drift, not design. Below md it collapses to the same
+   vertical run as `intake` — a dropzone next to a result pane at phone width
+   gives you two things too narrow to use. */
+@media (min-width: 768px) {
+  .tl-stage[data-layout="intake-split"] {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+  /* `split` is the genuinely proportional pair — input beside result. The
+     roots said grid-cols-2, [1fr_0.9fr] and a bare flex-row, which are all
+     "about half each"; this is that, said once. */
+  .tl-stage[data-layout="split"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* `split-rail` is the other shape the roots revealed: one workspace beside a
+   narrow fixed rail of controls or a summary. The rail width is the tool's to
+   declare (--tl-rail-px, set from layoutRail) because a swatch column and an
+   SEO report are not the same object; what the shell fixes is the breakpoint,
+   the gap and the alignment. It waits for lg — a 320px rail beside a workspace
+   needs more room than a proportional pair does. */
+.tl-stage[data-layout="split-rail"] { --tl-stage-rail: 320px; }
+@media (min-width: 1024px) {
+  .tl-stage[data-layout="split-rail"] {
+    grid-template-columns: minmax(0, 1fr) var(--tl-stage-rail);
+    align-items: start;
+  }
+  .tl-stage[data-layout="split-rail"][data-rail-first] {
+    grid-template-columns: var(--tl-stage-rail) minmax(0, 1fr);
+  }
+}
+/* Same rem values as the Tailwind caps they replace. */
+.tl-stage[data-layout-width="md"] { max-width: 28rem; margin-inline: auto; }
+.tl-stage[data-layout-width="lg"] { max-width: 32rem; margin-inline: auto; }
+.tl-stage[data-layout-width="xl"] { max-width: 36rem; margin-inline: auto; }
+.tl-stage[data-layout-width="5xl"] { max-width: 64rem; margin-inline: auto; }
 
 .tl-head { position: relative; margin-bottom: 20px; }
 .tl-title {
@@ -403,7 +537,9 @@ body {
   .tl-body-full .tl-head { padding: 0 16px; }
   .tl-tool { border-radius: 16px; }
   .tl-tool-chrome { padding: 9px 12px; }
-  .tl-chrome-title { display: none; }
+  /* The title used to be hidden here because the traffic lights already
+     filled the bar. With those gone it is the only thing naming the tool,
+     so it stays and the badge keeps its place at the right. */
   .tl-chrome-badge { margin-left: auto; }
   .tl-tool-body { padding: 12px; }
 }

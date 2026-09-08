@@ -85,7 +85,7 @@ export default function ScreenColorPickerApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
         <button
           onClick={pick}
@@ -141,6 +141,6 @@ export default function ScreenColorPickerApp() {
           </div>
         </section>
       )}
-    </div>
+    </>
   );
 }

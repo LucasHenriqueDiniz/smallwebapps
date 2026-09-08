@@ -10,6 +10,18 @@ import { categoryPath } from "@/lib/urls";
 const POPULAR_TOOL_LIMIT = 12;
 const appCount = (category: string) => apps.filter((app) => app.category === category).length;
 
+/**
+ * The word the hero types. It used to live only in the client script, which
+ * left the span empty in the served HTML — so the H1 of the site's most
+ * important page read "Free Tools to Make Simple" to anything that did not run
+ * the script, crawlers included.
+ *
+ * The list lives here now and rides to the client on data-words, so the first
+ * entry can be rendered server-side and the script rotates on from it. One
+ * source, and the headline is a sentence before any JavaScript runs.
+ */
+const heroWords = ["Your Life", "Your Work", "Every Day", "Your Tasks"];
+
 const categories = [
   {
     label: "PDF Tools",
@@ -157,7 +169,7 @@ const featured = [
     <h1 class="hero-title">
       Free Tools to Make
       <span class="hero-highlight" id="hero-hl">
-        <span class="hero-word" id="hero-word"></span><span class="hero-cursor" id="hero-cursor"></span>
+        <span class="hero-word" id="hero-word" data-words={JSON.stringify(heroWords)}>{heroWords[0]}</span><span class="hero-cursor" id="hero-cursor"></span>
       </span>
       Simple
     </h1>
@@ -265,7 +277,7 @@ const featured = [
 </section>
 
 <!-- Between two listing sections, outside any tool workflow. -->
-<AdSlot placement="home-listing" />
+<AdSlot placement="listing" />
 
 <!-- ═══════════════ FEATURED TOOLS ═══════════════ -->
 <section class="featured">
@@ -367,9 +379,11 @@ const featured = [
 
 <script>
   // ── Typewriter hero — box always = text size (CSS fit-content) ──
-  const WORDS    = ['Your Life', 'Your Work', 'Every Day', 'Your Tasks'];
+  // The words come from the markup (data-words) so the first one can be
+  // rendered server-side; the H1 is a complete sentence before this runs.
   const wordEl   = document.getElementById('hero-word')!;
   const cursor   = document.getElementById('hero-cursor')!;
+  const WORDS: string[] = JSON.parse(wordEl.dataset.words || '[]');
 
   const PAUSE_MS = 1800;
   const TYPE_MS  = 75;
@@ -396,7 +410,10 @@ const featured = [
   }
 
   async function run() {
-    await typeIn(WORDS[0]);
+    // The first word is already on screen from the server, so the loop starts
+    // by holding it rather than blanking and retyping what the reader can see.
+    // With nothing to rotate to, the served word simply stands.
+    if (WORDS.length < 2) return;
     let idx = 0;
     while (true) {
       await sleep(PAUSE_MS);

@@ -67,7 +67,7 @@ export default function ImageOptimizeApp({ initialMaxSizeMB = 1 }: Props) {
   const saving = original && result ? Math.round((1 - result.size / original.size) * 100) : null;
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       {!original ? (
         <div
           {...getRootProps()}
@@ -141,6 +141,6 @@ export default function ImageOptimizeApp({ initialMaxSizeMB = 1 }: Props) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

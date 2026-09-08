@@ -51,7 +51,7 @@ export default function FileHashApp() {
   }
 
   return (
-    <div className="mx-auto max-w-lg grid gap-5">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-3 text-base font-semibold text-slate-950">Drop a file to hash</h3>
         <input ref={fileRef} type="file" onChange={handleFile} className="hidden" />
@@ -96,6 +96,6 @@ export default function FileHashApp() {
           </div>
         </section>
       )}
-    </div>
+    </>
   );
 }

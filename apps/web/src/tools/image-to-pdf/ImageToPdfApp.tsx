@@ -69,7 +69,7 @@ export default function ImageToPdfApp() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <>
       <div
         {...getRootProps()}
         className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-8 text-center cursor-pointer transition ${
@@ -112,6 +112,6 @@ export default function ImageToPdfApp() {
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 }

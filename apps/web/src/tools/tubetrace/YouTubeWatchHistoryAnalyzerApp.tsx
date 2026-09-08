@@ -334,7 +334,7 @@ export default function YouTubeWatchHistoryAnalyzerApp() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
+    <>
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <div className="mb-5">
           <p className="text-xs font-bold uppercase tracking-widest text-red-600">YouTube / Data</p>
@@ -539,6 +539,6 @@ export default function YouTubeWatchHistoryAnalyzerApp() {
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }
