@@ -21,7 +21,7 @@ import { shouldLoadAds } from "@/lib/ads";
  */
 interface Props {
   /** Which configured slot to render. */
-  placement: "tool-content" | "home-listing";
+  placement: "tool-content" | "listing";
   /** Screen-reader label, so the block is not an unexplained gap. */
   label?: string;
 }
@@ -30,7 +30,7 @@ const { placement, label = "Advertisement" } = Astro.props;
 
 const slotIdByPlacement: Record<Props["placement"], string | undefined> = {
   "tool-content": import.meta.env.PUBLIC_ADSENSE_SLOT_TOOL_CONTENT,
-  "home-listing": import.meta.env.PUBLIC_ADSENSE_SLOT_HOME_LISTING,
+  listing: import.meta.env.PUBLIC_ADSENSE_SLOT_LISTING,
 };
 
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? "ca-pub-2600827684802809";
