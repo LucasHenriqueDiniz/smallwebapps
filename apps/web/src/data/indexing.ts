@@ -20,9 +20,16 @@
 /**
  * Rule 1 — size and format variants.
  *
- * Several URLs for one underlying tool, differing only by a number in the
- * slug. This is the shape Google's guidance calls a doorway page, and it is the
- * least defensible thing on the site.
+ * Several URLs for one underlying tool, differing only by a number or a file
+ * format in the slug. This is the shape Google's guidance calls a doorway page,
+ * and it is the least defensible thing on the site.
+ *
+ * The format half of the rule is newer than the size half. `jpg-to-text` and
+ * `png-to-text` mount the very same component as `image-to-text`
+ * (ToolMount.astro passes only a different `accept` and `sourceLabel`), and the
+ * served copy is ~60% identical between the three. `image-to-text` keeps the
+ * umbrella intent and `screenshot-to-text` keeps its own — a screenshot is a
+ * distinct thing to search for, and its page is the least similar of the four.
  */
 const SIZE_VARIANTS = [
   "compress-pdf-to-100kb",
@@ -35,6 +42,8 @@ const SIZE_VARIANTS = [
   "compress-jpg-to-100kb",
   "compress-png-to-100kb",
   "compress-webp-to-100kb",
+  "jpg-to-text",
+  "png-to-text",
 ];
 
 /**
