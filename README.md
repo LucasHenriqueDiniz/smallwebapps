@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Website](https://img.shields.io/badge/website-smallwebapps.com-green.svg)](https://smallwebapps.com)
-[![Tools](https://img.shields.io/badge/tools-136%2B-brightgreen.svg)](https://smallwebapps.com/apps)
+[![Tools](https://img.shields.io/badge/tools-142-brightgreen.svg)](https://smallwebapps.com/apps)
 
 **Website:** [smallwebapps.com](https://smallwebapps.com)  
 **All Tools:** [smallwebapps.com/apps](https://smallwebapps.com/apps)
@@ -47,7 +47,7 @@ Watch History Analyzer · Chapter Generator · Tag Extractor · Title Counter
 **Text & More**  
 Case Converter · Line Sorter · Password Generator · Unit Converter · Timestamp Converter · Age Calculator
 
-[→ Browse all 136+ tools](https://smallwebapps.com/apps)
+[→ Browse all 142 tools](https://smallwebapps.com/apps)
 
 ---
 

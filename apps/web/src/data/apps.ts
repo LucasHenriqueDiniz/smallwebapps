@@ -133,9 +133,9 @@ export const apps: AppDefinition[] = [
         "Your watch-history.json file is read and parsed entirely in your browser using JavaScript. It is never uploaded, transmitted, or stored on Small Web Apps servers — closing the tab clears everything from memory.",
     },
     seo: {
-      title: "YouTube Watch History Analyzer — Local Google Takeout Tool",
+      title: "YouTube Watch History Analyzer — Read Your Takeout",
       description:
-        "Free YouTube watch history analyzer. Open your Google Takeout watch-history.json and see totals, top channels and viewing patterns in your browser.",
+        "Open the watch-history.json from your Google Takeout export and see totals, top channels and peak viewing hours. The file is read in the tab, never uploaded.",
     },
   },
 
@@ -346,9 +346,9 @@ export const apps: AppDefinition[] = [
     },
     disclaimer: "This tool provides heuristic inspection only. It cannot prove whether an image is AI-generated or human-made.",
     seo: {
-      title: "AI Image Checker — Inspect Image Signals Locally",
+      title: "AI Image Checker — Metadata and Heuristic Signals",
       description:
-        "Inspect images for AI-generation signals, metadata clues and dimension patterns, locally in your browser. An assistant, not a definitive detector.",
+        "Inspect an image for metadata clues, dimension patterns and file-size anomalies that sometimes accompany AI generation. These are weak signals, never proof.",
     },
   },
 
@@ -521,8 +521,9 @@ export const apps: AppDefinition[] = [
         "Your PDF is read locally using PDF.js running in your browser tab. The file is never uploaded or transmitted to any server — everything happens on your device.",
     },
     seo: {
-      title: "PDF Text Extractor — Extract Text from PDF Online Free",
-      description: "Free PDF text extractor. Pull selectable text from any PDF directly in your browser — choose page ranges, copy results. No upload, no account.",
+      title: "PDF Text Extractor — Copy Text from a PDF, No Upload",
+      description:
+        "Pull the selectable text out of a PDF without uploading it: choose all pages or a range, then copy the result. Scanned pages need the OCR tool instead.",
     },
   },
   {
@@ -590,8 +591,9 @@ export const apps: AppDefinition[] = [
         "Each page is rendered locally on a canvas element using PDF.js. Your PDF file is never uploaded or sent to a server — the conversion happens entirely on your device.",
     },
     seo: {
-      title: "PDF to Image Converter — PDF to PNG Online Free",
-      description: "Convert PDF pages to PNG images in your browser. Choose resolution, download individual pages or all as a ZIP. No upload, free.",
+      title: "PDF to PNG Converter — Export PDF Pages as Images",
+      description:
+        "Render each page of a PDF as a PNG at your chosen resolution, from 72 to 300 DPI, then save one page or every page as a ZIP. Rendering happens in the tab.",
     },
   },
   {
@@ -660,8 +662,9 @@ export const apps: AppDefinition[] = [
         "Splitting happens entirely in your browser using pdf-lib. Your PDF is never uploaded — the original file stays on your device throughout.",
     },
     seo: {
-      title: "PDF Page Splitter — Split or Extract PDF Pages Online Free",
-      description: "Split a PDF into individual pages or extract a custom page range, entirely in your browser. No upload, no account, free.",
+      title: "PDF Splitter — Extract Pages or a Range Online Free",
+      description:
+        "Split a PDF into single pages, or lift out one custom range, without uploading the document anywhere. Each result downloads as a standalone file.",
     },
   },
   {
@@ -730,8 +733,9 @@ export const apps: AppDefinition[] = [
         "Images are combined into a PDF locally using jsPDF in your browser. Nothing is uploaded — your photos never leave your device.",
     },
     seo: {
-      title: "Image to PDF Converter — JPG, PNG, WebP to PDF Online Free",
-      description: "Convert JPG, PNG, or WebP images into a single PDF in your browser. Reorder pages, then download. No upload, no account, free.",
+      title: "Image to PDF — Combine JPG, PNG and WebP Files",
+      description:
+        "Bundle JPG, PNG and WebP pictures into one PDF without uploading them, reordering the list first. Each image becomes a full page sized to fit.",
     },
   },
   {
@@ -800,8 +804,9 @@ export const apps: AppDefinition[] = [
         "Resizing happens locally using the HTML canvas API in your browser. Your image is never uploaded — nothing leaves your device.",
     },
     seo: {
-      title: "Image Resizer — Resize Images Online Free, No Upload",
-      description: "Resize JPG, PNG, WebP, or GIF images to exact dimensions or by percentage in your browser. Lock aspect ratio, download as PNG/JPG. Free.",
+      title: "Image Resizer — Resize by Pixels or Percentage",
+      description:
+        "Scale a JPG, PNG or WebP to exact pixel dimensions or by percentage, with an aspect-ratio lock, and save the result as PNG or JPG. Free, no sign up required.",
     },
   },
   {
@@ -870,8 +875,9 @@ export const apps: AppDefinition[] = [
         "Cropping is performed locally on a canvas element in your browser. Your image is never uploaded to any server.",
     },
     seo: {
-      title: "Image Crop Tool — Crop Images Online Free, No Upload",
-      description: "Crop images by entering exact coordinates or choosing an aspect ratio preset, with live preview. Download as PNG. Free, local, no server.",
+      title: "Image Crop — Crop by Coordinates or Aspect Ratio",
+      description:
+        "Crop a picture to exact pixel coordinates or a 1:1, 16:9, 4:3 or 3:2 preset, check the preview, then download the PNG. Free, with no account and no watermark.",
     },
   },
   {
@@ -941,8 +947,9 @@ export const apps: AppDefinition[] = [
     },
     disclaimer: "Compression results vary by image content, format, dimensions, and quality settings. Exact target sizes are not guaranteed.",
     seo: {
-      title: "Image Optimizer — Compress JPG & PNG Online Free, No Upload",
-      description: "Compress and optimize JPG and PNG images in your browser with a quality slider and before/after file size comparison. No upload, free.",
+      title: "Image Optimizer — Compress JPG and PNG Online Free",
+      description:
+        "Shrink JPG and PNG files without uploading them: pick a quality level or a target size, then compare the before and after weight side by side.",
     },
   },
   {
@@ -3120,8 +3127,9 @@ export const apps: AppDefinition[] = [
         "Conversion happens locally using the HTML canvas API. Your images are never uploaded to a server.",
     },
     seo: {
-      title: "Image Format Converter — PNG, JPG, WebP Online Free",
-      description: "Convert images between PNG, JPG, and WebP with a quality slider and file size comparison. Runs in your browser, no upload, free.",
+      title: "Image Converter — PNG, JPG and WebP, No Upload",
+      description:
+        "Re-encode a picture as PNG, JPG or WebP without uploading it, with a 60 to 100 percent quality slider for the lossy formats and an estimated output size.",
     },
   },
   {
@@ -3191,8 +3199,9 @@ export const apps: AppDefinition[] = [
         "Transformations are applied locally using the canvas API. Your image is never uploaded to a server.",
     },
     seo: {
-      title: "Image Flip & Rotate — Free Online Tool, No Upload",
-      description: "Flip images horizontally or vertically, and rotate 90°/180° with live preview. Download as PNG. Browser-based, free, no upload.",
+      title: "Image Flip & Rotate — Mirror and Turn Images 90°",
+      description:
+        "Mirror a picture horizontally or vertically and rotate it 90° either way or 180°, stacking the transforms with a live preview before you download the PNG.",
     },
   },
   {
@@ -3262,8 +3271,9 @@ export const apps: AppDefinition[] = [
         "Filters are applied locally using the canvas API. Your image is never uploaded to a server.",
     },
     seo: {
-      title: "Image Filters — Grayscale, Sepia, Invert Online Free",
-      description: "Apply grayscale, sepia, invert, or high contrast filters to images with live preview, then download as PNG. Free, browser-based, no upload.",
+      title: "Image Filters — Grayscale, Sepia, Invert, Contrast",
+      description:
+        "Put a picture through grayscale, sepia, invert or high contrast and watch the preview update. The canvas render keeps the effect in the PNG you save.",
     },
   },
   {
@@ -3455,8 +3465,9 @@ export const apps: AppDefinition[] = [
         "All merging happens locally in your browser using pdf-lib. Your PDF files are never uploaded to a server.",
     },
     seo: {
-      title: "PDF Merger — Combine PDF Files Online Free, No Upload",
-      description: "Merge multiple PDF files into one document, reorder them first, and download instantly. Runs in your browser with pdf-lib — free, no signup.",
+      title: "PDF Merger — Combine PDF Files Online Free",
+      description:
+        "Join several PDFs into one document without uploading them, reordering the files with up and down buttons first. Page counts show before you merge.",
     },
   },
   {
@@ -3526,8 +3537,9 @@ export const apps: AppDefinition[] = [
         "Rotation happens locally using pdf-lib. Your PDF is never uploaded to a server.",
     },
     seo: {
-      title: "PDF Page Rotator — Rotate PDF Pages Online Free",
-      description: "Rotate all or specific PDF pages by 90, 180, or 270 degrees using a simple page range syntax. Browser-based with pdf-lib, no upload, free.",
+      title: "PDF Rotator — Turn Pages 90, 180 or 270 Degrees",
+      description:
+        "Turn every page of a PDF clockwise, or only the ones you list like 1-3, 5, 7-9, by 90, 180 or 270 degrees. The rotated copy downloads from the tab.",
     },
   },
   {
@@ -3598,8 +3610,9 @@ export const apps: AppDefinition[] = [
         "Watermarking happens locally using pdf-lib. Your PDF is never uploaded to a server.",
     },
     seo: {
-      title: "PDF Watermark — Add Text Watermark Online Free",
-      description: "Add a custom text watermark to every PDF page with font size, opacity, rotation, and color control, plus live preview. Free, no upload.",
+      title: "PDF Watermark — Add Text to Every Page of a PDF",
+      description:
+        "Stamp a line of text across every page of a PDF, tuning size, opacity, angle and color against a live preview. No account is needed to download the result.",
     },
   },
   {
@@ -3668,8 +3681,9 @@ export const apps: AppDefinition[] = [
         "Metadata is read locally using pdfjs-dist. Your PDF is never uploaded to a server.",
     },
     seo: {
-      title: "PDF Metadata Viewer — Check PDF Info Online Free",
-      description: "View PDF metadata including title, author, creation date, page count, and PDF version. Read-only, browser-based, no upload, free.",
+      title: "PDF Metadata Viewer — Title, Author, Dates, Pages",
+      description:
+        "Read the document information a PDF carries: title, author, subject, creator, producer, version, dates and page count. The document never leaves your device.",
     },
   },
   {
@@ -3740,7 +3754,8 @@ export const apps: AppDefinition[] = [
     disclaimer: "This tool applies browser-side structural optimization. File size reduction varies by PDF, and exact target sizes are not guaranteed.",
     seo: {
       title: "PDF Compressor — Reduce PDF File Size Online Free",
-      description: "Compress PDF files by rebuilding them around object streams, with before/after size comparison. Browser-based with pdf-lib, no upload. Free.",
+      description:
+        "Rebuild a PDF around object streams to cut its size, without uploading the file. Files from older software can shed about half; image-heavy ones barely move.",
     },
   },
 
@@ -4544,8 +4559,9 @@ export const apps: AppDefinition[] = [
         "EXIF data is read and displayed entirely in your browser. The image file is never uploaded.",
     },
     seo: {
-      title: "EXIF Viewer — View Photo Metadata Online Free, No Upload",
-      description: "View camera, GPS, and timestamp metadata embedded in your photos. Free, runs locally in your browser, image never uploaded.",
+      title: "EXIF Viewer — Camera, GPS and Timestamp Metadata",
+      description:
+        "Read the camera model, exposure settings, GPS coordinates and timestamps a photo carries inside it. The image stays on your device the whole time.",
     },
   },
   {
@@ -4795,8 +4811,9 @@ export const apps: AppDefinition[] = [
         "The image file is read and inspected entirely in your browser. It is never uploaded to a server.",
     },
     seo: {
-      title: "Image Metadata Viewer - Free Browser Tool",
-      description: "Inspect image dimensions, format, size, and metadata locally. Free, local, no upload, no account required.",
+      title: "Image Metadata Viewer — Dimensions, Type, Date",
+      description:
+        "Check what an image file declares about itself: pixel dimensions, MIME type, file size and, for JPEGs, the capture date. Your file stays on your device.",
     },
   },
   {
@@ -5419,8 +5436,9 @@ export const apps: AppDefinition[] = [
         "The image is processed entirely on your device by an OCR engine running in your browser. It is never uploaded to a server. Only the OCR engine and language data files are downloaded, and they are cached for later runs.",
     },
     seo: {
-      title: "Image to Text - Free Browser OCR Tool",
-      description: "Extract text from images with OCR that runs entirely in your browser. 12 languages, no upload, no account required.",
+      title: "Image to Text — Free Browser OCR in 12 Languages",
+      description:
+        "Lift printed text out of a screenshot, scan or photo without uploading the image: Tesseract recognizes it in the tab. Proofread it: OCR makes mistakes.",
     },
   },
   {
@@ -5495,8 +5513,9 @@ export const apps: AppDefinition[] = [
         "The PDF is opened, rendered, and recognized entirely on your device. It is never uploaded to a server. Only the OCR engine and language data files are downloaded, and they are cached for later runs.",
     },
     seo: {
-      title: "PDF OCR - Scanned PDF to Text in Your Browser",
-      description: "Extract text from scanned PDFs with OCR that runs entirely in your browser. 12 languages, no upload, no account required.",
+      title: "PDF OCR — Scanned PDF to Editable Text, No Upload",
+      description:
+        "Recognize the words in a scanned, image-only PDF without uploading the file, up to 50 pages per run and in 12 languages. Copy the text or save it as a .txt.",
     },
   },
   {
@@ -5570,8 +5589,9 @@ export const apps: AppDefinition[] = [
         "The PDF is opened, recognized, and rewritten entirely on your device. It is never uploaded to a server. Only the OCR engine and language data files are downloaded, and they are cached for later runs.",
     },
     seo: {
-      title: "Searchable PDF Converter - OCR Text Layer in Your Browser",
-      description: "Make a scanned PDF selectable and searchable by adding an invisible OCR text layer. Runs locally, no upload, no account required.",
+      title: "Searchable PDF — Add an OCR Text Layer to a Scan",
+      description:
+        "Make a scanned PDF selectable and findable with Ctrl+F by writing an invisible OCR layer over each page. Latin alphabets, 50 pages a run, and no sign-in.",
     },
   },
   {
@@ -5786,8 +5806,9 @@ export const apps: AppDefinition[] = [
         "The screenshot is processed entirely on your device by an OCR engine running in your browser. It is never uploaded to a server — important, since screenshots often capture private information.",
     },
     seo: {
-      title: "Screenshot to Text - Copy Text from Any Screenshot",
-      description: "Copy the text out of any screenshot with OCR that runs entirely in your browser. Paste from clipboard, no upload, no account.",
+      title: "Screenshot to Text — Copy Words from a Screenshot",
+      description:
+        "Paste a screenshot straight from the clipboard and get its words back as editable text. Screen type is sharp, and the capture never reaches a server.",
     },
   },
   {
@@ -8007,8 +8028,9 @@ export const apps: AppDefinition[] = [
         "The URL you paste is parsed entirely in your browser using the built-in URL API — nothing is sent to YouTube or any other server.",
     },
     seo: {
-      title: "YouTube URL Parser - Free Browser Tool",
-      description: "Extract video IDs, playlist IDs, handles, and timestamps from YouTube URLs. Free, local, no upload, no account required.",
+      title: "YouTube URL Parser — Video, Playlist and Time IDs",
+      description:
+        "Break a YouTube link into its parts: video ID, playlist ID, channel handle and the t= timestamp. It reads only the URL and makes no network calls.",
     },
   },
   {
@@ -8095,8 +8117,9 @@ export const apps: AppDefinition[] = [
         "Your timestamp and title lines are reformatted entirely in your browser using local text parsing — nothing is uploaded or sent to YouTube.",
     },
     seo: {
-      title: "YouTube Chapter Generator - Free Browser Tool",
-      description: "Format timestamp lines into clean YouTube chapters. Free, local, no upload, no account required.",
+      title: "YouTube Chapter Generator — Format Timestamps",
+      description:
+        "Paste rough timestamp lines and get them back as the [HH:MM:SS] Chapter Name markup a description needs. Check 0:00 and the 10-second minimum yourself.",
     },
   },
   {
@@ -8183,8 +8206,9 @@ export const apps: AppDefinition[] = [
         "Text you paste is analyzed entirely in your browser using local pattern matching and counting — nothing is sent to YouTube or any server.",
     },
     seo: {
-      title: "YouTube Tag Extractor - Free Browser Tool",
-      description: "Extract hashtags and keyword candidates from YouTube text. Free, local, no upload, no account required.",
+      title: "YouTube Tag Extractor — Hashtags and Keyword Ideas",
+      description:
+        "Pull hashtags and repeated keyword candidates out of a title, description or outline you paste in. It reads your own text, not a video's hidden tag list.",
     },
   },
   {
@@ -8271,8 +8295,9 @@ export const apps: AppDefinition[] = [
         "The title text you type is measured entirely in your browser using local character and word counting — nothing is sent to YouTube or any server.",
     },
     seo: {
-      title: "YouTube Title Counter - Free Browser Tool",
-      description: "Count YouTube title length and estimate truncation risk. Free, local, no upload, no account required.",
+      title: "YouTube Title Counter — Length and Truncation Check",
+      description:
+        "Count the characters and words in a video title and see where it is likely to be cut off, at roughly 55 and 70 characters, before you publish it.",
     },
   },
   {
@@ -8359,8 +8384,9 @@ export const apps: AppDefinition[] = [
         "Your description text is cleaned entirely in your browser using local text processing — nothing is uploaded or sent to YouTube.",
     },
     seo: {
-      title: "YouTube Description Cleaner - Free Browser Tool",
-      description: "Clean spacing, links, and hashtags in YouTube descriptions. Free, local, no upload, no account required.",
+      title: "YouTube Description Cleaner — Tidy Spacing, Links",
+      description:
+        "Collapse repeated blank lines, strip stray spacing and move loose URLs into place in a video description. Hashtags and timestamps are left untouched.",
     },
   },
   {
