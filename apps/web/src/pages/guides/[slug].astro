@@ -1,7 +1,8 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
 import CTASection from "@/components/apps/CTASection.astro";
-import { guides } from "@/data/guides";
+import RelatedGuides from "@/components/guides/RelatedGuides.astro";
+import { guides, relatedGuides } from "@/data/guides";
 
 interface GuideSection {
   heading: string;
@@ -579,6 +580,7 @@ const howToSchema = points.length > 0 ? {
     text: point
   }))
 } : null;
+const siblingGuides = relatedGuides(guide.slug);
 const structuredData = [
   ...(howToSchema ? [howToSchema] : []),
   {
@@ -659,6 +661,10 @@ const structuredData = [
           </section>
         ))}
       </article>
+
+      {siblingGuides.length > 0 && (
+        <RelatedGuides items={siblingGuides} title="Related guides" eyebrow="Keep reading" />
+      )}
     </div>
   </section>
 

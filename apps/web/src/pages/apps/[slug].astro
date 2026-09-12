@@ -2,7 +2,9 @@
 import ToolLayout from "@/components/layout/ToolLayout.astro";
 import ToolMount from "@/components/tools/ToolMount.astro";
 import RelatedApps from "@/components/apps/RelatedApps.astro";
+import RelatedGuides from "@/components/guides/RelatedGuides.astro";
 import { apps, appMap } from "@/data/apps";
+import { guidesForTool } from "@/data/guides";
 import { isIndexable } from "@/data/indexing";
 import { categoryPath } from "@/lib/urls";
 
@@ -70,6 +72,8 @@ const categoryHref = categoryPath(app.category);
  * whose category carries the suffix. Drop it and name the category instead.
  */
 const categoryShortLabel = app.category.replace(/\s+Tools$/i, "");
+
+const toolGuides = guidesForTool(app.slug);
 ---
 
 <ToolLayout
@@ -91,6 +95,12 @@ const categoryShortLabel = app.category.replace(/\s+Tools$/i, "");
   content={app.content}
 >
   <ToolMount slug={app.slug} />
+  <RelatedGuides
+    slot="related"
+    items={toolGuides}
+    title="Guides for this tool"
+    eyebrow="Read next"
+  />
   <RelatedApps
     slot="related"
     items={relatedApps}

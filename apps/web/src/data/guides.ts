@@ -11,6 +11,8 @@ export interface GuideDefinition {
   relatedToolLabel: string;
 }
 
+const RELATED_GUIDE_LIMIT = 3;
+
 export const guides: GuideDefinition[] = [
   {
     slug: "how-to-export-youtube-watch-history",
@@ -169,3 +171,72 @@ export const guides: GuideDefinition[] = [
     relatedToolLabel: "Open the watch history analyzer"
   }
 ];
+
+const guideBySlug = new Map(guides.map((guide) => [guide.slug, guide]));
+
+/**
+ * Slugs whose category holds one or two guides, so the category alone cannot
+ * name three siblings. The pairing is topical instead: a format guide next to
+ * the data guides, a local-processing guide next to the file tools.
+ */
+const curatedRelatedSlugs: Record<string, string[]> = {
+  "json-formatting-and-validation": [
+    "csv-cleaning-before-import",
+    "youtube-watch-history-json-format",
+    "privacy-first-file-tools-local-processing"
+  ],
+  "csv-cleaning-before-import": [
+    "json-formatting-and-validation",
+    "privacy-first-file-tools-local-processing",
+    "browser-based-pdf-tools-safe-and-fast"
+  ],
+  "browser-based-pdf-tools-safe-and-fast": [
+    "privacy-first-file-tools-local-processing",
+    "resize-compress-images-locally",
+    "csv-cleaning-before-import"
+  ],
+  "resize-compress-images-locally": [
+    "browser-based-pdf-tools-safe-and-fast",
+    "privacy-first-file-tools-local-processing",
+    "json-formatting-and-validation"
+  ],
+  "privacy-first-file-tools-local-processing": [
+    "what-your-youtube-history-reveals",
+    "browser-based-pdf-tools-safe-and-fast",
+    "resize-compress-images-locally"
+  ]
+};
+
+const resolveSlugs = (slugs: string[]): GuideDefinition[] =>
+  slugs.flatMap((slug) => {
+    const guide = guideBySlug.get(slug);
+    return guide ? [guide] : [];
+  });
+
+/**
+ * Siblings taken from the category as a ring rather than as a top-N list: the
+ * guide at position i points at i+1, i+2 and i+3, wrapping. Every member of a
+ * category therefore receives exactly as many inlinks as it gives, which is
+ * what keeps the seven YouTube guides one cluster instead of two hubs and five
+ * pages nothing points at.
+ */
+function categoryRing(guide: GuideDefinition): GuideDefinition[] {
+  const family = guides.filter((item) => item.category === guide.category);
+  const start = family.findIndex((item) => item.slug === guide.slug);
+  const take = Math.min(RELATED_GUIDE_LIMIT, family.length - 1);
+  return Array.from({ length: take }, (_, offset) => family[(start + 1 + offset) % family.length]);
+}
+
+export function relatedGuides(slug: string): GuideDefinition[] {
+  const curated = curatedRelatedSlugs[slug];
+  if (curated) return resolveSlugs(curated).slice(0, RELATED_GUIDE_LIMIT);
+
+  const guide = guideBySlug.get(slug);
+  return guide ? categoryRing(guide) : [];
+}
+
+/** The reverse of `relatedToolSlug`: the guides that point at one tool. */
+export function guidesForTool(toolSlug: string): GuideDefinition[] {
+  if (!toolSlug) return [];
+  return guides.filter((guide) => guide.relatedToolSlug === toolSlug);
+}
