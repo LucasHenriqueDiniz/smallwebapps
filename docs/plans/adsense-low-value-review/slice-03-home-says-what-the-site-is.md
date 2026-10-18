@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 kanban:
 ---
 
@@ -57,3 +57,20 @@ home page are not copy and are not checked.
 If the owner has not approved the copy, merge the structural part — lists drawn from the indexable
 set, the false "Most Popular" heading neutralised — and leave the headline as-is. The review gate in
 slice 5 waits for the headline.
+
+## Closed 2026-10-18
+
+Committed in `63d7bb5`. Copy as shipped, against the proposal:
+
+| | proposed | shipped |
+|---|---|---|
+| title | Private PDF, Image and YouTube Tools That Never Upload Your Files | Private PDF, Image and YouTube Tools That Never Upload Files (60 chars, `SERP_TITLE_LIMIT`) |
+| H1 | File tools that never upload your files | same, with "never upload" in the existing highlight |
+| popular heading | Start here | Browse the tools ("Start here" sat next to "Four tools to start with") |
+| featured heading | What runs in your browser, and why it matters | Four tools to start with (the section is four cards) |
+
+The "Built for developers" card, which listed JSON, CSV and YAML, became "Open source". The
+repository is public, as checked with `gh repo view`. The typewriter and its script are gone.
+
+`scan:links` home copy check: **4** stale headings in production, **0** in the build. All three
+validators exit 0.

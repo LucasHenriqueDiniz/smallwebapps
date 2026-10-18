@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 kanban:
 ---
 
@@ -66,3 +66,24 @@ After deploy, the same scan against production also prints 0.
 If the header search needs the full catalog to stay useful, it searches the linked set only. A
 visitor can still type the URL of an unlisted tool. The search is navigation, and the decision covers
 navigation.
+
+## Closed 2026-10-18
+
+Committed in `763c9db`. A follow-up fix to the related heading landed in `a4937cf`.
+
+`scan:links` against production before the change: 47 sitemap pages, **142** distinct tools linked,
+**502** links to `noindex` tools. Against the build after: 47 pages, **28** tools linked, **0**.
+Restoring one guide's call to action brings it back to 2. Vitest: the three mutations — related
+without the listed filter, `json-formatter` back in the hero, `listedApps` as the whole catalog —
+each turn a test red.
+
+The plan said "header search: all 142". The search JSON is not an href, so `scan:links` does not
+see it. It was changed anyway and is covered by `listedApps` only.
+
+A regression shipped in this slice and was caught in slice 4. The related heading fell back to
+"Other tools on this site" whenever one of the six neighbours came from another category, which
+hit the six YouTube tools and `pdf-ocr`. `scan:links` now flags any listed tool page without a
+"More tools in" block, and reverting the fix flags those 7 pages.
+
+`.well-known/agent-index.json` still lists all 130 tools. It is a machine catalog, not navigation,
+and the decision covers navigation.

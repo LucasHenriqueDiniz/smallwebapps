@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 kanban:
 ---
 
@@ -39,3 +39,13 @@ measurement (median 733).
 
 If wrapping in `<main>` breaks the stage grid layout, put `<main>` on the existing content wrapper
 element instead of adding a new one, using `display: contents` only as a last resort.
+
+## Closed 2026-10-18
+
+Committed in `a4937cf`. The landmark went on the existing `.tool-page` wrapper, as the "If stuck"
+route allows, so it spans breadcrumb to related links, the way `MainLayout`'s does. Six sentences
+were rewritten across the five pages; the two FAQ copies per entry were both changed.
+
+`scan:links` in production: **33** problems across the 28 pages (28 with no `<main>`, 5 with
+"planned" wording). In the build: **0**. H1-to-related word counts on the 28: median 733 before
+and 733 after, minimum 584 and maximum 1529 both times.

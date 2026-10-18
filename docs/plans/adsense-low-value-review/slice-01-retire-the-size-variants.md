@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 kanban:
 ---
 
@@ -68,3 +68,13 @@ target answers `200` with no further redirect: 24 of 24.
 If deleting the variant components breaks a type elsewhere, leave the files and delete only their
 `ToolMount` branches. Dead components are a follow-up. A live doorway page is the thing this slice
 removes.
+
+## Closed 2026-10-18
+
+Committed in `b3b608c`. Build-side checks: `0` variant directories in `dist/apps`, `0` hrefs to them,
+`24` rules in `_redirects`, 130 tool pages built, and a sitemap identical to production at 47 URLs.
+`redirects.test.ts` adds 50 tests. Each of the four ways of breaking the file was tried and turned
+it red: a missing slash form, a target that is not indexable, a rule that shadows a live page, and
+a rule left at the default 302.
+
+The 24-of-24 production check runs in slice 5, after deploy.

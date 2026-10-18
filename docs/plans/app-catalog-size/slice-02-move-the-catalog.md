@@ -5,6 +5,12 @@ kanban: 5e3243d9-2147-4fa3-aa98-3f463284311e
 
 # Slice 2 — Move the catalog into per-tool modules
 
+> **Counts changed 2026-10-18, before this slice ran.** The adsense-low-value-review work retired 12
+> catalog entries behind 301s: 10 of the 13 in `seoClusterApps`, plus `jpg-to-text` and `png-to-text`
+> from `apps`. `seoClusterApps` now holds 3 entries and `apps` 127, for 130 in total. Every 129, 13
+> and 144 below predates that and has to be re-measured before this slice's "done when" is used.
+> See `docs/plans/adsense-low-value-review/slice-01-retire-the-size-variants.md`.
+
 Execute the layout decided in `docs/decisions/app-catalog-layout.md` and recorded in the
 `## Decisions` section of `docs/architecture/ARCHITECTURE.md`. Nothing here is a fresh choice: the
 target layout, the disposition of `seoClusterApps`, and the wording the docs get are all written
