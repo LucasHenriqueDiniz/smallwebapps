@@ -15,7 +15,6 @@ import ImageToPdfApp           from "@/tools/image-to-pdf/ImageToPdfApp";
 import ImageResizeApp          from "@/tools/image-resize/ImageResizeApp";
 import ImageCropApp            from "@/tools/image-crop/ImageCropApp";
 import ImageOptimizeApp        from "@/tools/image-optimize/ImageOptimizeApp";
-import ImageCompressVariantApp from "@/tools/image-optimize/ImageCompressVariantApp";
 import CssFormatterApp         from "@/tools/css-formatter/CssFormatterApp";
 
 // Text Tools
@@ -73,7 +72,6 @@ import PdfRotateApp            from "@/tools/pdf-rotate/PdfRotateApp";
 import PdfWatermarkApp         from "@/tools/pdf-watermark/PdfWatermarkApp";
 import PdfMetadataApp          from "@/tools/pdf-metadata/PdfMetadataApp";
 import PdfCompressApp          from "@/tools/pdf-compress/PdfCompressApp";
-import PdfCompressVariantApp   from "@/tools/pdf-compress/PdfCompressVariantApp";
 
 // Data Tools (new)
 import JsonToCsvApp            from "@/tools/json-to-csv/JsonToCsvApp";
@@ -129,8 +127,6 @@ const ALL_SLUGS = [
   "tubetrace", "json-formatter", "ai-image-checker", "csv-cleaner",
   "pdf-extract-text", "pdf-to-image", "pdf-split", "image-to-pdf",
   "image-resize", "image-crop", "image-optimize", "css-formatter",
-  "compress-image-to-50kb", "compress-image-to-100kb", "compress-image-to-200kb",
-  "compress-jpg-to-100kb", "compress-png-to-100kb", "compress-webp-to-100kb",
   "word-counter", "case-converter", "line-sorter", "duplicate-remover",
   "find-replace", "lorem-ipsum", "slug-generator", "reading-time",
   "text-reverse", "password-generator", "password-strength",
@@ -145,13 +141,12 @@ const ALL_SLUGS = [
   "image-format-converter", "image-flip-rotate", "image-grayscale",
   "image-color-picker", "favicon-generator",
   "pdf-merge", "pdf-rotate", "pdf-watermark", "pdf-metadata", "pdf-compress",
-  "compress-pdf-to-100kb", "compress-pdf-to-200kb", "compress-pdf-to-500kb", "compress-pdf-to-1mb",
   "json-to-csv", "csv-to-json", "file-hash",
   "barcode-generator", "binary-text-converter", "color-palette-extractor",
   "color-shades", "cron-parser", "css-unit-converter", "data-size-converter",
   "diff-viewer", "dummy-data-generator", "exif-viewer", "hex-dump",
   "html-formatter", "http-status-codes", "image-metadata", "image-to-text",
-  "jpg-to-text", "png-to-text", "screenshot-to-text", "pdf-ocr", "searchable-pdf", "json-flatten",
+  "screenshot-to-text", "pdf-ocr", "searchable-pdf", "json-flatten",
   "json-to-xml", "markdown-preview", "meta-tag-generator", "morse-encoder",
   "number-formatter", "og-tag-generator", "qr-code-generator", "qr-code-reader",
   "screen-color-picker", "svg-to-png", "timezone-converter", "url-parser",
@@ -183,12 +178,6 @@ const ALL_SLUGS = [
 {slug === "image-resize"           && <ImageResizeApp             client:visible />}
 {slug === "image-crop"             && <ImageCropApp               client:visible />}
 {slug === "image-optimize"         && <ImageOptimizeApp           client:visible />}
-{slug === "compress-image-to-50kb" && <ImageCompressVariantApp targetKB={50} formatLabel="image" client:visible />}
-{slug === "compress-image-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="image" client:visible />}
-{slug === "compress-image-to-200kb" && <ImageCompressVariantApp targetKB={200} formatLabel="image" client:visible />}
-{slug === "compress-jpg-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="JPG" client:visible />}
-{slug === "compress-png-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="PNG" client:visible />}
-{slug === "compress-webp-to-100kb" && <ImageCompressVariantApp targetKB={100} formatLabel="WebP" client:visible />}
 {slug === "css-formatter"          && <CssFormatterApp            client:load />}
 
 {slug === "word-counter"           && <WordCounterApp             client:load />}
@@ -240,10 +229,6 @@ const ALL_SLUGS = [
 {slug === "pdf-watermark"          && <PdfWatermarkApp            client:visible />}
 {slug === "pdf-metadata"           && <PdfMetadataApp             client:visible />}
 {slug === "pdf-compress"           && <PdfCompressApp             client:visible />}
-{slug === "compress-pdf-to-100kb"  && <PdfCompressVariantApp targetKB={100} label="100KB" client:visible />}
-{slug === "compress-pdf-to-200kb"  && <PdfCompressVariantApp targetKB={200} label="200KB" client:visible />}
-{slug === "compress-pdf-to-500kb"  && <PdfCompressVariantApp targetKB={500} label="500KB" client:visible />}
-{slug === "compress-pdf-to-1mb"    && <PdfCompressVariantApp targetKB={1024} label="1MB" client:visible />}
 
 {slug === "json-to-csv"            && <JsonToCsvApp               client:load />}
 {slug === "csv-to-json"            && <CsvToJsonApp               client:load />}
@@ -264,8 +249,6 @@ const ALL_SLUGS = [
 {slug === "http-status-codes"      && <HttpStatusCodesApp         client:load />}
 {slug === "image-metadata"         && <ImageMetadataApp           client:visible />}
 {slug === "image-to-text"          && <ImageToTextApp             client:visible />}
-{slug === "jpg-to-text"            && <ImageToTextApp accept="image/jpeg" sourceLabel="JPG image" client:visible />}
-{slug === "png-to-text"            && <ImageToTextApp accept="image/png" sourceLabel="PNG image" client:visible />}
 {slug === "screenshot-to-text"     && <ImageToTextApp sourceLabel="screenshot" client:visible />}
 {slug === "pdf-ocr"                && <PdfOcrApp                  client:visible />}
 {slug === "searchable-pdf"         && <SearchablePdfApp           client:visible />}

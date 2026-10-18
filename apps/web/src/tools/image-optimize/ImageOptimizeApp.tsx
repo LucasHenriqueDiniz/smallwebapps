@@ -8,14 +8,10 @@ function formatBytes(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-interface Props {
-  initialMaxSizeMB?: number;
-}
-
-export default function ImageOptimizeApp({ initialMaxSizeMB = 1 }: Props) {
+export default function ImageOptimizeApp() {
   const [original, setOriginal] = useState<{ url: string; size: number; name: string } | null>(null);
   const [quality, setQuality] = useState(80);
-  const [maxSizeMB, setMaxSizeMB] = useState(initialMaxSizeMB);
+  const [maxSizeMB, setMaxSizeMB] = useState(1);
   const [result, setResult] = useState<{ url: string; size: number; blob: Blob } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

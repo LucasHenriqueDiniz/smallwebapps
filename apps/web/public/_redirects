@@ -15,3 +15,36 @@
 /tubetrace-app/terms          /terms/             301
 /tubetrace-app/terms.html     /terms/             301
 /tubetrace-app/sitemap.xml    /sitemap-index.xml  301
+
+# The size and format variants, retired 2026-10-18. Each wrapped one tool and
+# added nothing to it: the PDF four never aimed at the size in their name, the
+# image six only preset the base tool's max-size slider, and the two OCR pages
+# only narrowed its file picker. See the 2026-10-18 decision in
+# docs/architecture/ARCHITECTURE.md.
+#
+# Sources match exactly, so each slug needs a line with and a line without the
+# trailing slash: /tubetrace-app without one answers 404 in production.
+/apps/compress-pdf-to-100kb/     /apps/pdf-compress/     301
+/apps/compress-pdf-to-100kb      /apps/pdf-compress/     301
+/apps/compress-pdf-to-200kb/     /apps/pdf-compress/     301
+/apps/compress-pdf-to-200kb      /apps/pdf-compress/     301
+/apps/compress-pdf-to-500kb/     /apps/pdf-compress/     301
+/apps/compress-pdf-to-500kb      /apps/pdf-compress/     301
+/apps/compress-pdf-to-1mb/       /apps/pdf-compress/     301
+/apps/compress-pdf-to-1mb        /apps/pdf-compress/     301
+/apps/compress-image-to-50kb/    /apps/image-optimize/   301
+/apps/compress-image-to-50kb     /apps/image-optimize/   301
+/apps/compress-image-to-100kb/   /apps/image-optimize/   301
+/apps/compress-image-to-100kb    /apps/image-optimize/   301
+/apps/compress-image-to-200kb/   /apps/image-optimize/   301
+/apps/compress-image-to-200kb    /apps/image-optimize/   301
+/apps/compress-jpg-to-100kb/     /apps/image-optimize/   301
+/apps/compress-jpg-to-100kb      /apps/image-optimize/   301
+/apps/compress-png-to-100kb/     /apps/image-optimize/   301
+/apps/compress-png-to-100kb      /apps/image-optimize/   301
+/apps/compress-webp-to-100kb/    /apps/image-optimize/   301
+/apps/compress-webp-to-100kb     /apps/image-optimize/   301
+/apps/jpg-to-text/               /apps/image-to-text/    301
+/apps/jpg-to-text                /apps/image-to-text/    301
+/apps/png-to-text/               /apps/image-to-text/    301
+/apps/png-to-text                /apps/image-to-text/    301

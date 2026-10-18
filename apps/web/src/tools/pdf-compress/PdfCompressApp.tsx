@@ -1,10 +1,6 @@
 import { useRef, useState } from "react";
 
-interface Props {
-  targetKB?: number;
-}
-
-export default function PdfCompressApp({ targetKB }: Props) {
+export default function PdfCompressApp() {
   const [pdfData, setPdfData] = useState<ArrayBuffer | null>(null);
   const [fileName, setFileName] = useState("");
   const [originalSize, setOriginalSize] = useState(0);
@@ -74,14 +70,13 @@ export default function PdfCompressApp({ targetKB }: Props) {
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="mb-2 text-base font-semibold text-slate-950">
-          {targetKB ? `Try to compress toward ${targetKB}KB` : "About this tool"}
+          About this tool
         </h3>
         <p className="mb-4 text-sm text-slate-600">
           This tool rebuilds the PDF using object streams and a cross-reference stream, which pack the document's internal
           objects more tightly than a classic cross-reference table. PDFs written by older software gain the most; a file already
           using these structures is returned unchanged rather than rebuilt.
           It does not re-encode or discard images. For significant file size reduction, image re-encoding is required — which cannot be done safely in the browser without potentially altering image quality.
-          {targetKB ? ` Exact ${targetKB}KB output is not guaranteed for every PDF.` : ""}
         </p>
         <button
           onClick={handleCompress}

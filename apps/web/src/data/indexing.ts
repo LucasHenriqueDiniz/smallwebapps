@@ -18,36 +18,16 @@
  */
 
 /**
- * Rule 1 — size and format variants.
- *
- * Several URLs for one underlying tool, differing only by a number or a file
- * format in the slug. This is the shape Google's guidance calls a doorway page,
- * and it is the least defensible thing on the site.
- *
- * The format half of the rule is newer than the size half. `jpg-to-text` and
- * `png-to-text` mount the very same component as `image-to-text`
- * (ToolMount.astro passes only a different `accept` and `sourceLabel`), and the
- * served copy is ~60% identical between the three. `image-to-text` keeps the
- * umbrella intent and `screenshot-to-text` keeps its own — a screenshot is a
- * distinct thing to search for, and its page is the least similar of the four.
+ * The size and format variants (`compress-pdf-to-100kb`, `jpg-to-text`, …) that
+ * used to be listed here are gone. They were doorway pages wrapping
+ * `pdf-compress`, `image-optimize` and `image-to-text`, and the PDF four
+ * promised a target size the code never aimed at. Each URL now answers 301 to
+ * the tool it wrapped — see `public/_redirects` and the 2026-10-18 decision in
+ * `docs/architecture/ARCHITECTURE.md`.
  */
-const SIZE_VARIANTS = [
-  "compress-pdf-to-100kb",
-  "compress-pdf-to-200kb",
-  "compress-pdf-to-500kb",
-  "compress-pdf-to-1mb",
-  "compress-image-to-50kb",
-  "compress-image-to-100kb",
-  "compress-image-to-200kb",
-  "compress-jpg-to-100kb",
-  "compress-png-to-100kb",
-  "compress-webp-to-100kb",
-  "jpg-to-text",
-  "png-to-text",
-];
 
 /**
- * Rule 2 — commodity utilities.
+ * Commodity utilities.
  *
  * Tools whose entire behaviour is a short, well-known transformation available
  * identically on hundreds of sites. They are genuinely useful and stay live;
@@ -91,7 +71,7 @@ const COMMODITY = [
 ];
 
 /** Slugs served with `noindex, follow` and kept out of the sitemap. */
-export const noindexSlugs = new Set<string>([...SIZE_VARIANTS, ...COMMODITY]);
+export const noindexSlugs = new Set<string>(COMMODITY);
 
 export function isIndexable(slug: string): boolean {
   return !noindexSlugs.has(slug);

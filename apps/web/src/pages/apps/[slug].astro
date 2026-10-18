@@ -17,11 +17,6 @@ if (!app) throw new Error(`Unknown app slug: ${Astro.params.slug}`);
 
 const appTags = new Set(app.tags.map((tag) => tag.toLowerCase()));
 const curatedRelatedSlugs: Record<string, string[]> = {
-  "pdf-compress": ["compress-pdf-to-100kb", "compress-pdf-to-200kb", "compress-pdf-to-500kb", "compress-pdf-to-1mb"],
-  "compress-pdf-to-100kb": ["pdf-compress", "compress-pdf-to-200kb", "compress-pdf-to-500kb", "compress-pdf-to-1mb"],
-  "compress-pdf-to-1mb": ["pdf-compress", "compress-pdf-to-100kb", "compress-pdf-to-200kb", "compress-pdf-to-500kb"],
-  "image-optimize": ["compress-image-to-50kb", "compress-image-to-100kb", "compress-image-to-200kb", "compress-jpg-to-100kb", "compress-png-to-100kb", "compress-webp-to-100kb"],
-  "compress-image-to-100kb": ["image-optimize", "compress-image-to-50kb", "compress-image-to-200kb", "compress-jpg-to-100kb", "compress-png-to-100kb", "compress-webp-to-100kb"],
   "keyword-density-checker": ["meta-tags-analyzer", "open-graph-checker", "word-counter", "meta-tag-generator", "og-tag-generator"],
   "meta-tags-analyzer": ["open-graph-checker", "keyword-density-checker", "meta-tag-generator", "og-tag-generator"],
   "open-graph-checker": ["meta-tags-analyzer", "keyword-density-checker", "og-tag-generator", "meta-tag-generator"],
@@ -42,7 +37,7 @@ const curatedRelated = new Set(curatedRelatedSlugs[app.slug] ?? []);
  * indexability decides the order within it.
  *
  * Curated pairs keep their 25 and stay on top. Those links are the owner's
- * editorial call (a compressor pointing at its own size variants) and they are
+ * editorial call (the SEO checkers pointing at one another) and they are
  * accurate; demoting them would trade a true relationship for a crawl signal.
  */
 const relatedApps = apps
