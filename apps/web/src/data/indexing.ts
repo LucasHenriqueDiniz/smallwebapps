@@ -12,9 +12,10 @@
  * looks like. Narrowing the indexed set to pages that can plausibly earn a
  * ranking is the point of this file.
  *
- * These pages are NOT deleted. They stay live, linked from /apps, and reachable
- * through search — `noindex, follow` keeps the links crawlable while removing
- * the page from the index. Reversing any decision means deleting one line here.
+ * These pages are NOT deleted. They stay live at their URLs with `noindex,
+ * follow`. Since 2026-10-18 nothing links to them either: `listed.ts` makes
+ * navigation link only indexable tools, so this list decides both at once.
+ * Reversing any decision means deleting one line here.
  */
 
 /**

@@ -3,6 +3,7 @@ import MainLayout from "@/components/layout/MainLayout.astro";
 import CTASection from "@/components/apps/CTASection.astro";
 import RelatedGuides from "@/components/guides/RelatedGuides.astro";
 import { guides, relatedGuides } from "@/data/guides";
+import { isIndexable } from "@/data/indexing";
 
 interface GuideSection {
   heading: string;
@@ -21,6 +22,10 @@ const guide = guides.find((item) => item.slug === Astro.params.slug);
 if (!guide) {
   throw new Error(`Unknown guide slug: ${Astro.params.slug}`);
 }
+
+// The JSON and CSV guides point at tools that are no longer listed. Their text
+// stands on its own; the call to action into an unlisted tool goes.
+const toolIsListed = isIndexable(guide.relatedToolSlug);
 
 const contentMap = {
   "youtube-watch-history-json-format": {
@@ -668,14 +673,16 @@ const structuredData = [
     </div>
   </section>
 
-  <CTASection
-    title="Continue into the actual tool"
-    copy="Use the guide to understand the workflow, then move into the app page for local interaction."
-    primaryHref={guide.relatedToolSlug ? `/apps/${guide.relatedToolSlug}/` : "/apps/"}
-    primaryLabel={guide.relatedToolLabel}
-    secondaryHref="/guides/"
-    secondaryLabel="Back to guides"
-  />
+  {toolIsListed && (
+    <CTASection
+      title="Continue into the actual tool"
+      copy="Use the guide to understand the workflow, then move into the app page for local interaction."
+      primaryHref={`/apps/${guide.relatedToolSlug}/`}
+      primaryLabel={guide.relatedToolLabel}
+      secondaryHref="/guides/"
+      secondaryLabel="Back to guides"
+    />
+  )}
 </MainLayout>
 
 <style>

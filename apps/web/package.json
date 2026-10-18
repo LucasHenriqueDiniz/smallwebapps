@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "test": "vitest"
+    "test": "vitest",
+    "scan:links": "node scripts/scan-links.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.0.0",

@@ -1,17 +1,12 @@
 ---
 import MainLayout from "@/components/layout/MainLayout.astro";
 import AdSlot from "@/components/site/AdSlot.astro";
-import { apps } from "@/data/apps";
+import { listedApps, listedCategories } from "@/data/listed";
 import { siteConfig } from "@/lib/site";
 import { canonicalUrl, categoryPath } from "@/lib/urls";
 
-const categoryOrder = [
-  "PDF Tools",
-  "Image / Inspection",
-  "Developer Tools",
-  "Data Tools",
-  "YouTube / Data",
-];
+// The index lists only listed tools; see data/listed.ts.
+const categoryOrder = listedCategories;
 
 const palette: Record<string, { bg: string; color: string; tint: string; icon: string }> = {
   "YouTube / Data": { bg: "#fee2e2", color: "#dc2626", tint: "rgba(220,38,38,.08)", icon: "M23 7l-7 5 7 5V7z M1 5h15a2 2 0 012 2v10a2 2 0 01-2 2H1V5z" },
@@ -24,13 +19,13 @@ const palette: Record<string, { bg: string; color: string; tint: string; icon: s
 const byCategory = categoryOrder
   .map((category) => ({
     category,
-    apps: apps
+    apps: listedApps
       .filter((app) => app.category === category)
       .sort((a, b) => a.name.localeCompare(b.name)),
   }))
   .filter((group) => group.apps.length > 0);
 
-const liveApps = apps.filter((app) => app.status === "live");
+const liveApps = listedApps.filter((app) => app.status === "live");
 const categoryDisplay: Record<string, string> = {
   "YouTube / Data": "YouTube Analysis",
 };
@@ -40,11 +35,11 @@ const collectionSchema = {
   "@type": "CollectionPage",
   name: "Browse Free Browser Tools",
   url: appsUrl,
-  description: "Browse free browser-based tools for PDF, image, developer, data, and YouTube tasks.",
+  description: "Browse free browser-based tools for PDF, image and YouTube watch-history tasks.",
   mainEntity: {
     "@type": "ItemList",
-    numberOfItems: apps.length,
-    itemListElement: apps.map((app, index) => ({
+    numberOfItems: listedApps.length,
+    itemListElement: listedApps.map((app, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: app.name,
@@ -56,14 +51,14 @@ const collectionSchema = {
 
 <MainLayout
   title="Browse Free Browser Tools"
-  description="Browse free browser-based tools for PDF, image, developer, data, and YouTube tasks. No uploads, no accounts, client-side only."
+  description="Browse free browser-based tools for PDF, image and YouTube watch-history tasks. No uploads, no accounts, client-side only."
   canonicalPath="/apps"
   structuredData={collectionSchema}
 >
   <main class="directory">
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow-line">{apps.length} local browser tools</p>
+        <p class="eyebrow-line">{listedApps.length} local browser tools</p>
         <h1>Useful tools, organized for fast work.</h1>
         <p>Search across every utility, filter by category, and open the exact tool you need. Files and pasted data stay in your browser.</p>
       </div>
@@ -85,7 +80,7 @@ const collectionSchema = {
       <aside class="sidebar" aria-label="Categories">
         <button class="cat-btn active" data-cat="all">
           <span>All tools</span>
-          <strong>{apps.length}</strong>
+          <strong>{listedApps.length}</strong>
         </button>
         {byCategory.map(({ category, apps: groupApps }) => {
           const p = palette[category];

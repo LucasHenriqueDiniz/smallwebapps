@@ -1,14 +1,8 @@
 ---
-import { apps } from "@/data/apps";
-import { isIndexable } from "@/data/indexing";
+import { listedApps, listedCategories } from "@/data/listed";
 
-const categoryOrder = [
-  "PDF Tools",
-  "Image / Inspection",
-  "Developer Tools",
-  "Data Tools",
-  "YouTube / Data",
-];
+// The menu and the search link only listed tools; see data/listed.ts.
+const categoryOrder = listedCategories;
 
 const categoryMeta: Record<string, { label: string; color: string; bg: string; href: string }> = {
   "PDF Tools": { label: "PDF", color: "#7c3aed", bg: "#ede9fe", href: "/apps/?cat=PDF+Tools" },
@@ -21,13 +15,13 @@ const categoryMeta: Record<string, { label: string; color: string; bg: string; h
 const appsByCategory = Object.fromEntries(
   categoryOrder.map((category) => [
     category,
-    apps
+    listedApps
       .filter((app) => app.category === category)
       .sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || a.name.localeCompare(b.name)),
   ]),
 );
 
-const searchApps = apps.map((app) => ({
+const searchApps = listedApps.map((app) => ({
   name: app.name,
   shortDescription: app.shortDescription,
   category: app.category,
@@ -50,10 +44,7 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
       {categoryOrder.map((category) => {
         const meta = categoryMeta[category];
         const categoryApps = appsByCategory[category] ?? [];
-        // Surface the pages worth ranking. Alphabetical order otherwise puts the
-        // noindexed size variants ("Compress PDF to 100KB", ...) in every menu.
-        const live = categoryApps.filter((app) => app.status === "live");
-        const featured = [...live.filter((app) => isIndexable(app.slug)), ...live].slice(0, 4);
+        const featured = categoryApps.filter((app) => app.status === "live").slice(0, 4);
         return (
           <div class="nav-item dropdown">
             <a href={meta.href} class="nav-btn">
@@ -147,7 +138,7 @@ const searchAppsJson = JSON.stringify(searchApps).replace(/</g, "\\u003c");
   <div class="search-modal">
     <div class="search-modal-input">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-      <input type="text" id="overlay-search" placeholder={`Search ${apps.length} tools...`} autocomplete="off" spellcheck="false" />
+      <input type="text" id="overlay-search" placeholder={`Search ${listedApps.length} tools...`} autocomplete="off" spellcheck="false" />
       <button class="search-close" id="search-close" aria-label="Close">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
       </button>

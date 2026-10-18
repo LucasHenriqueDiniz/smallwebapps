@@ -3,12 +3,13 @@ import MainLayout from "@/components/layout/MainLayout.astro";
 import AdSlot from "@/components/site/AdSlot.astro";
 import ToolCard from "@/components/apps/ToolCard.astro";
 import FeaturedCard from "@/components/apps/FeaturedCard.astro";
-import { apps } from "@/data/apps";
+import { appMap } from "@/data/apps";
+import { featuredSlugs, heroQuickSlugs, popularSlugs } from "@/data/home";
+import { listedApps, listedCategories, listedInCategory } from "@/data/listed";
 import { siteConfig } from "@/lib/site";
 import { categoryPath } from "@/lib/urls";
 
 const POPULAR_TOOL_LIMIT = 12;
-const appCount = (category: string) => apps.filter((app) => app.category === category).length;
 
 /**
  * The word the hero types. It used to live only in the client script, which
@@ -22,56 +23,46 @@ const appCount = (category: string) => apps.filter((app) => app.category === cat
  */
 const heroWords = ["Your Life", "Your Work", "Every Day", "Your Tasks"];
 
-const categories = [
-  {
+/**
+ * One card per listed category, so a category with nothing listed has no card.
+ * Developer Tools and Data Tools went that way on 2026-10-18; see data/listed.ts.
+ */
+const categoryCardMeta: Record<string, { label: string; description: string; color: string; featured: string; icon: string }> = {
+  "PDF Tools": {
     label: "PDF Tools",
     description: "Solve Your PDF Problems",
-    count: `${appCount("PDF Tools")} tools`,
     color: "cat-purple",
-    href: categoryPath("PDF Tools"),
-    featuredTool: "PDF Merger",
+    featured: "pdf-compress",
     icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>`,
   },
-  {
+  "Image / Inspection": {
     label: "Image Tools",
     description: "Solve Your Image Problems",
-    count: `${appCount("Image / Inspection")} tools`,
     color: "cat-orange",
-    href: categoryPath("Image / Inspection"),
-    featuredTool: "Image Resizer",
+    featured: "image-resize",
     icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>`,
   },
-  {
-    label: "Developer Tools",
-    description: "Format & Validate Code",
-    count: `${appCount("Developer Tools")} tools`,
+  "YouTube / Data": {
+    label: "YouTube History",
+    description: "Read Your Takeout Export",
     color: "cat-red",
-    href: categoryPath("Developer Tools"),
-    featuredTool: "JSON Formatter",
-    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+    featured: "tubetrace",
+    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="23,7 16,12 23,17"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
   },
-  {
-    label: "AI Detectors",
-    description: "Check AI-Generated Content",
-    count: "AI tools",
-    color: "cat-blue",
-    href: "/apps/?q=ai",
-    featuredTool: "AI Image Checker",
-    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`,
-  },
-  {
-    label: "Data Tools",
-    description: "Convert & Clean Files",
-    count: `${appCount("Data Tools")} tools`,
-    color: "cat-teal",
-    href: categoryPath("Data Tools"),
-    featuredTool: "CSV Cleaner",
-    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>`,
-  },
-];
+};
+
+const categories = listedCategories.map((category) => {
+  const meta = categoryCardMeta[category];
+  return {
+    ...meta,
+    count: `${listedInCategory(category).length} tools`,
+    href: categoryPath(category),
+    featuredTool: appMap[meta.featured].name,
+  };
+});
 
 const stats = [
-  { value: `${apps.length}`, label: "Online Tools" },
+  { value: `${listedApps.length}`, label: "Online Tools" },
   { value: "100%", label: "Browser-Based" },
   { value: "Local", label: "Client-Side" },
   { value: "Free", label: "No Accounts" },
@@ -79,75 +70,39 @@ const stats = [
 
 const toolColors: Record<string, string> = {
   "YouTube / Data":    "#dc2626",
-  "Developer Tools":   "#2563eb",
   "Image / Inspection":"#9333ea",
-  "Data Tools":        "#0d9488",
   "PDF Tools":         "#7c3aed",
 };
 
 const toolIcons: Record<string, string> = {
   "YouTube / Data": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><polygon points="23,7 16,12 23,17"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
-  "Developer Tools": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>`,
   "Image / Inspection": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>`,
-  "Data Tools": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>`,
   "PDF Tools": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>`,
 };
 
-const popularSlugs = [
-  "json-formatter",
-  "pdf-merge",
-  "image-resize",
-  "csv-cleaner",
-  "ai-image-checker",
-  "youtube-title-counter",
-  "pdf-compress",
-  "password-generator",
-  "image-to-pdf",
-  "csv-to-json",
-  "regex-tester",
-  "file-hash",
-];
-const popularTools = popularSlugs
-  .flatMap((slug) => {
-    const app = apps.find((item) => item.slug === slug);
-    return app ? [app] : [];
-  })
-  .slice(0, POPULAR_TOOL_LIMIT);
+const bySlug = (slugs: string[]) => slugs.map((slug) => appMap[slug]);
 
-const featured = [
-  {
-    title: "JSON Formatter",
-    desc: "Format, validate, and pretty-print JSON instantly — no server, no account.",
-    href: "/apps/json-formatter/",
-    accent: "#2563eb",
-    badge: "Dev Tool",
-    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>`,
-  },
-  {
-    title: "AI Image Checker",
-    desc: "Inspect images for AI-generation signals, metadata clues, and visual artifacts.",
-    href: "/apps/ai-image-checker/",
-    accent: "#7c3aed",
-    badge: "AI",
-    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>`,
-  },
-  {
-    title: "YouTube Watch History Analyzer",
-    desc: "Analyze your YouTube watch history from a Google Takeout export, fully local.",
-    href: "/apps/tubetrace/",
-    accent: "#16a34a",
-    badge: "YouTube",
-    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="23,7 16,12 23,17"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
-  },
-  {
-    title: "CSV Cleaner",
-    desc: "Preview, trim whitespace, and normalize CSV files — stays in the browser.",
-    href: "/apps/csv-cleaner/",
-    accent: "#be185d",
-    badge: "Data",
-    icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
-  },
-];
+const popularTools = bySlug(popularSlugs).slice(0, POPULAR_TOOL_LIMIT);
+const heroQuickTools = bySlug(heroQuickSlugs);
+
+const featuredLook: Record<string, { accent: string; badge: string; icon: string }> = {
+  "PDF Tools": { accent: "#7c3aed", badge: "PDF", icon: categoryCardMeta["PDF Tools"].icon },
+  "Image / Inspection": { accent: "#ea580c", badge: "Image", icon: categoryCardMeta["Image / Inspection"].icon },
+  "YouTube / Data": { accent: "#16a34a", badge: "YouTube", icon: categoryCardMeta["YouTube / Data"].icon },
+};
+
+const featured = bySlug(featuredSlugs).map((app) => ({
+  title: app.name,
+  desc: app.shortDescription,
+  href: app.appUrl,
+  ...featuredLook[app.category],
+}));
+
+const tabLabel: Record<string, string> = {
+  "PDF Tools": "PDF",
+  "Image / Inspection": "Image",
+  "YouTube / Data": "YouTube Analysis",
+};
 ---
 
 <MainLayout title={siteConfig.title} description={siteConfig.description} canonicalPath="/">
@@ -186,9 +141,9 @@ const featured = [
       <!-- Quick links -->
       <div class="hero-quick">
         <span class="hero-quick-label">Popular:</span>
-        <a href="/apps/json-formatter/"   class="hero-quick-link">JSON Formatter</a>
-        <a href="/apps/ai-image-checker/" class="hero-quick-link">AI Image Checker</a>
-        <a href="/apps/youtube-title-counter/" class="hero-quick-link">YouTube Title Counter</a>
+        {heroQuickTools.map((tool) => (
+          <a href={tool.appUrl} class="hero-quick-link">{tool.name}</a>
+        ))}
       </div>
     </div>
   </div>
@@ -250,11 +205,9 @@ const featured = [
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
         Top {POPULAR_TOOL_LIMIT}
       </button>
-      <button class="tab-btn" data-tab="PDF Tools">PDF</button>
-      <button class="tab-btn" data-tab="Developer Tools">Developer</button>
-      <button class="tab-btn" data-tab="YouTube / Data">YouTube Analysis</button>
-      <button class="tab-btn" data-tab="Image / Inspection">Image</button>
-      <button class="tab-btn" data-tab="Data Tools">Data</button>
+      {listedCategories.map((category) => (
+        <button class="tab-btn" data-tab={category}>{tabLabel[category] ?? category}</button>
+      ))}
     </div>
 
     <div class="tools-grid" id="tools-grid" data-reveal data-reveal-stagger>
