@@ -654,7 +654,7 @@ export const apps: AppDefinition[] = [
         "Separate a multi-page form into individual page files for archiving.",
       ],
       limitations: [
-        "Comma-separated, non-contiguous page selection (e.g. 1,4,9 in a single output file) is not yet supported — use 'Split all pages' and pick the files you need instead.",
+        "Comma-separated, non-contiguous page selection (e.g. 1,4,9 in a single output file) is not supported — use 'Split all pages' and pick the files you need instead.",
         "Password-protected PDFs that require a password to open generally cannot be processed.",
         "Very large PDFs (hundreds of pages) may take longer since the whole file loads into memory first.",
       ],
@@ -727,7 +727,7 @@ export const apps: AppDefinition[] = [
       limitations: [
         "GIF and SVG images are not supported — convert them to JPG or PNG first.",
         "Very large or high-resolution images may slow down PDF generation depending on your device's memory.",
-        "Each image becomes a full page; there's no option yet to place multiple images on one page.",
+        "Each image becomes a full page; several images cannot share one page.",
       ],
       privacy:
         "Images are combined into a PDF locally using jsPDF in your browser. Nothing is uploaded — your photos never leave your device.",
@@ -829,11 +829,11 @@ export const apps: AppDefinition[] = [
       "Runs entirely in the browser — your image never leaves your device",
     ],
     faq: [
-      { question: "Can I crop by dragging on the image?", answer: "The current version uses coordinate input and aspect ratio presets. Drag-to-crop is planned for a future update." },
+      { question: "Can I crop by dragging on the image?", answer: "No. The crop region is set with coordinate input and aspect ratio presets, not by dragging on the image." },
       { question: "Will the crop degrade image quality?", answer: "No — cropping just selects a region; it does not re-encode or resample the image content inside the crop." },
     ],
     faqExpanded: [
-      { question: "Can I crop by dragging on the image?", answer: "The current version uses coordinate input fields and aspect ratio presets rather than mouse dragging. Drag-to-crop is planned for a future update." },
+      { question: "Can I crop by dragging on the image?", answer: "No. The crop region is set with coordinate input fields and aspect ratio presets rather than mouse dragging." },
       { question: "Will the crop degrade image quality?", answer: "No — cropping just selects a region of the original pixels; it does not re-encode, blur, or resample the image content inside the crop." },
       { question: "How do aspect ratio presets work?", answer: "Selecting a preset like 1:1 or 16:9 constrains the crop region to that ratio, so you only need to position and size it — useful for profile pictures (1:1) or video thumbnails (16:9)." },
       { question: "What coordinates do I enter?", answer: "Enter the X and Y position of the crop's top-left corner, plus a width and height, all in pixels relative to the original image's dimensions." },
@@ -868,7 +868,7 @@ export const apps: AppDefinition[] = [
       ],
       limitations: [
         "Cropping uses numeric coordinate input rather than interactive drag-to-select.",
-        "Output is always PNG — there's no option yet to export cropped results as JPG.",
+        "Output is always PNG; cropped results cannot be exported as JPG.",
         "Coordinates must be entered manually, so you may need to check the source image's dimensions first.",
       ],
       privacy:
@@ -905,7 +905,7 @@ export const apps: AppDefinition[] = [
     ],
     faqExpanded: [
       { question: "How much compression is typical?", answer: "It depends on the original image, but 40-70% size reduction is common for JPEGs at quality 80. PNG compression is lossless and typically achieves a smaller 10-30% reduction since no detail is discarded." },
-      { question: "Does it support WebP output?", answer: "Not in the current version — output is always in the same format as the input (JPG or PNG). WebP support is being considered for a future update." },
+      { question: "Does it support WebP output?", answer: "No. Output is always in the same format as the input (JPG or PNG)." },
       { question: "Will compression noticeably reduce image quality?", answer: "At the default quality settings, most compression is visually lossless or close to it. Lowering the quality slider further trades visible sharpness for smaller files." },
       { question: "Is there a maximum file size?", answer: "Very large images (tens of megabytes) may take longer to process since everything runs in your browser, but there's no hard upload limit imposed by the tool." },
       { question: "Can I optimize multiple images at once?", answer: "The current version processes one image at a time so you can review the before/after comparison for each file individually." },
@@ -3564,11 +3564,11 @@ export const apps: AppDefinition[] = [
       "Uses pdf-lib in the browser — your file never leaves your device",
     ],
     faq: [
-      { question: "Can I add an image watermark?", answer: "The current version supports text watermarks only. Image watermark support is planned for a future update." },
+      { question: "Can I add an image watermark?", answer: "No. Watermarks are text only; images and logos are not supported." },
       { question: "Does it work on password-protected PDFs?", answer: "The tool attempts to load PDFs with ignoreEncryption enabled. Some encrypted PDFs may not load correctly depending on the encryption type." },
     ],
     faqExpanded: [
-      { question: "Can I add an image watermark?", answer: "The current version supports text watermarks only — image or logo watermark support is planned for a future update." },
+      { question: "Can I add an image watermark?", answer: "No. Watermarks are text only; images and logos are not supported." },
       { question: "Does it work on password-protected PDFs?", answer: "The tool attempts to load PDFs with ignoreEncryption enabled, but some encrypted PDFs may not load correctly depending on the encryption type used." },
       { question: "Can I control where the watermark appears on the page?", answer: "The watermark is drawn across each page based on the rotation angle and font size you set, typically diagonally across the page — there isn't a separate position picker for placing it in a specific corner." },
       { question: "Will the watermark be applied to every page?", answer: "Yes, the current version applies the same watermark text and styling to every page of the PDF." },

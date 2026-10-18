@@ -21,7 +21,9 @@ const relatedApps = relatedTools(app, apps);
 // A tool outside the listed categories (Developer, Data) is reachable only by
 // URL. Its related block can only offer tools from elsewhere, so it says so,
 // and "view all" goes to the index rather than to a category nothing lists.
-const relatedInCategory = relatedApps.every((item) => item.category === app.category);
+// A listed tool keeps "More tools in …" even when a strong tag match from
+// another category takes one of the six places.
+const relatedInCategory = relatedApps.some((item) => item.category === app.category);
 const categoryHref = listedCategories.includes(app.category) ? categoryPath(app.category) : "/apps/";
 
 /**

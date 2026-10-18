@@ -47,7 +47,18 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
+// On each indexable tool page: exactly one <main>, and no sentence announcing a
+// feature that does not exist yet.
+const UNBUILT = /\b(planned|future update|not yet|no option yet)\b/i;
+const visibleText = (html) =>
+  html
+    .replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<[^>]+>/g, " ");
+
 const linksByPage = new Map();
+const toolPageProblems = [];
+let toolPages = 0;
 for (const path of pages) {
   const { status, html } = await load(path);
   if (status !== 200) {
@@ -56,6 +67,16 @@ for (const path of pages) {
     continue;
   }
   linksByPage.set(path, toolLinks(html));
+  if (!/^\/apps\/[a-z0-9-]+\/$/.test(path)) continue;
+  toolPages += 1;
+  const mains = (html.replace(/<!--[\s\S]*?-->/g, " ").match(/<main[\s>]/g) ?? []).length;
+  if (mains !== 1) toolPageProblems.push(`${path} has ${mains} <main>`);
+  const unbuilt = visibleText(html).match(UNBUILT);
+  if (unbuilt) toolPageProblems.push(`${path} says "${unbuilt[0]}"`);
+  // A listed tool always has listed neighbours in its own category, so its
+  // related block is "More tools in …". The other heading is for unlisted
+  // tools only; seeing it here means the heading rule regressed.
+  if (!/More tools in /.test(html)) toolPageProblems.push(`${path} has no "More tools in" block`);
 }
 
 const linkedSlugs = new Set([...linksByPage.values()].flat());
@@ -87,9 +108,13 @@ const homeCopy = [
 for (const text of homeCopy) console.log(`  / copy → "${text}"`);
 if (homeCopy.length > 0) process.exitCode = 1;
 
+for (const problem of toolPageProblems) console.log(`  ${problem}`);
+if (toolPageProblems.length > 0) process.exitCode = 1;
+
 const source = target ?? "dist";
 console.log(
   `scan:links ${source}: ${linksByPage.size} sitemap pages, ${linkedSlugs.size} distinct tools linked, ` +
-    `${offending} link(s) to unlisted or missing tools, ${homeCopy.length} stale home-page heading(s)`,
+    `${offending} link(s) to unlisted or missing tools, ${homeCopy.length} stale home-page heading(s), ` +
+    `${toolPages} tool pages with ${toolPageProblems.length} <main>, "planned" or related-heading problem(s)`,
 );
 if (offending > 0) process.exitCode = 1;
