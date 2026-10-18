@@ -74,9 +74,22 @@ for (const [page, slugs] of linksByPage) {
   console.log(`  ${page} → ${bad.map((slug) => `${slug} (${unlisted.get(slug)})`).join(", ")}`);
 }
 
+// The home page's own copy must not sell what navigation no longer links.
+// Title, H1, hero subline and section headings only: guide titles linked from
+// the page are not the page's claim about itself.
+const STALE_COPY = /developer|json|csv|most popular|usually pay/i;
+const home = (await load("/")).html;
+const homeCopy = [
+  ...home.matchAll(/<title>([\s\S]*?)<\/title>|<h[12][^>]*>([\s\S]*?)<\/h[12]>|<p class="hero-sub"[^>]*>([\s\S]*?)<\/p>/g),
+]
+  .map((m) => (m[1] ?? m[2] ?? m[3]).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim())
+  .filter((text) => STALE_COPY.test(text));
+for (const text of homeCopy) console.log(`  / copy → "${text}"`);
+if (homeCopy.length > 0) process.exitCode = 1;
+
 const source = target ?? "dist";
 console.log(
   `scan:links ${source}: ${linksByPage.size} sitemap pages, ${linkedSlugs.size} distinct tools linked, ` +
-    `${offending} link(s) to unlisted or missing tools`,
+    `${offending} link(s) to unlisted or missing tools, ${homeCopy.length} stale home-page heading(s)`,
 );
 if (offending > 0) process.exitCode = 1;

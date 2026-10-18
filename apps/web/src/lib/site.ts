@@ -1,10 +1,10 @@
 export const siteConfig = {
   name: "Small Web Apps",
   siteUrl: "https://smallwebapps.com",
-  title: "Free Browser Tools for Data and Developers",
+  title: "Private PDF, Image and YouTube Tools That Never Upload Files",
   tagline: "Small, useful web apps that run in your browser.",
   description:
-    "Use free browser-based tools for PDF, image, developer, data, and AI inspection workflows. No accounts, no server uploads."
+    "Free browser-based tools for PDFs, images and YouTube watch history. Files are processed on your device and never uploaded. No accounts."
 };
 
 export const navItems = [

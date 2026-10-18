@@ -12,18 +12,6 @@ import { categoryPath } from "@/lib/urls";
 const POPULAR_TOOL_LIMIT = 12;
 
 /**
- * The word the hero types. It used to live only in the client script, which
- * left the span empty in the served HTML — so the H1 of the site's most
- * important page read "Free Tools to Make Simple" to anything that did not run
- * the script, crawlers included.
- *
- * The list lives here now and rides to the client on data-words, so the first
- * entry can be rendered server-side and the script rotates on from it. One
- * source, and the headline is a sentence before any JavaScript runs.
- */
-const heroWords = ["Your Life", "Your Work", "Every Day", "Your Tasks"];
-
-/**
  * One card per listed category, so a category with nothing listed has no card.
  * Developer Tools and Data Tools went that way on 2026-10-18; see data/listed.ts.
  */
@@ -122,20 +110,16 @@ const tabLabel: Record<string, string> = {
     </div>
 
     <h1 class="hero-title">
-      Free Tools to Make
-      <span class="hero-highlight" id="hero-hl">
-        <span class="hero-word" id="hero-word" data-words={JSON.stringify(heroWords)}>{heroWords[0]}</span><span class="hero-cursor" id="hero-cursor"></span>
-      </span>
-      Simple
+      File tools that <span class="hero-highlight">never upload</span> your files
     </h1>
 
-    <p class="hero-sub">PDF, image, developer &amp; AI tools. No uploads. No accounts. No limits.</p>
+    <p class="hero-sub">PDF, image and YouTube-history tools that run entirely in your browser. No uploads, no accounts.</p>
 
     <!-- Search bar -->
     <div class="hero-search-wrap">
       <div class="hero-search" onclick="document.getElementById('hero-search-input').focus()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hero-search-icon"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" placeholder="Search tools — try &quot;json&quot;, &quot;image&quot;, &quot;csv&quot;…" id="hero-search-input" />
+        <input type="text" placeholder="Search tools — try &quot;pdf&quot;, &quot;image&quot;, &quot;youtube&quot;…" id="hero-search-input" />
         <button class="search-btn" id="hero-search-btn">Search</button>
       </div>
       <!-- Quick links -->
@@ -196,14 +180,14 @@ const tabLabel: Record<string, string> = {
   <div class="popular-inner">
     <div data-reveal>
       <span class="section-eyebrow">Toolbox</span>
-      <h2 class="section-title-clone">Our Most Popular Tools</h2>
+      <h2 class="section-title-clone">Browse the tools</h2>
       <p class="section-sub-clone">All free, browser-based, no sign-up required</p>
     </div>
 
     <div class="tabs" data-reveal>
       <button class="tab-btn active" data-tab="All">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
-        Top {POPULAR_TOOL_LIMIT}
+        All
       </button>
       {listedCategories.map((category) => (
         <button class="tab-btn" data-tab={category}>{tabLabel[category] ?? category}</button>
@@ -238,8 +222,8 @@ const tabLabel: Record<string, string> = {
     <div class="featured-header" data-reveal>
       <div>
         <span class="section-eyebrow" style="text-align:left">Featured</span>
-        <h2 class="section-title-clone" style="text-align:left">Free Tools You'd Usually Pay For</h2>
-        <p class="section-sub-sm">No limits. No sign-up. Open the tool and start immediately.</p>
+        <h2 class="section-title-clone" style="text-align:left">Four tools to start with</h2>
+        <p class="section-sub-sm">No sign-up. Open the tool and start immediately.</p>
       </div>
       <a href="/apps/" class="see-all-btn">See all tools →</a>
     </div>
@@ -320,8 +304,8 @@ const tabLabel: Record<string, string> = {
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
         </div>
         <div>
-          <strong>Built for developers</strong>
-          <p>JSON, CSV, YAML and more. Format, validate, clean right in the browser.</p>
+          <strong>Open source</strong>
+          <p>Every tool's code is public on GitHub, so the no-upload claim can be checked rather than trusted.</p>
         </div>
       </div>
     </div>
@@ -331,53 +315,6 @@ const tabLabel: Record<string, string> = {
 </MainLayout>
 
 <script>
-  // ── Typewriter hero — box always = text size (CSS fit-content) ──
-  // The words come from the markup (data-words) so the first one can be
-  // rendered server-side; the H1 is a complete sentence before this runs.
-  const wordEl   = document.getElementById('hero-word')!;
-  const cursor   = document.getElementById('hero-cursor')!;
-  const WORDS: string[] = JSON.parse(wordEl.dataset.words || '[]');
-
-  const PAUSE_MS = 1800;
-  const TYPE_MS  = 75;
-  const ERASE_MS = 40;
-
-  const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
-
-  async function typeIn(word: string) {
-    cursor.style.animation = 'none'; cursor.style.opacity = '1';
-    for (let i = 0; i <= word.length; i++) {
-      wordEl.textContent = word.slice(0, i);
-      await sleep(TYPE_MS);
-    }
-    cursor.style.animation = '';
-  }
-
-  async function eraseOut() {
-    cursor.style.animation = 'none'; cursor.style.opacity = '1';
-    const text = wordEl.textContent ?? '';
-    for (let i = text.length; i >= 0; i--) {
-      wordEl.textContent = text.slice(0, i);
-      await sleep(ERASE_MS);
-    }
-  }
-
-  async function run() {
-    // The first word is already on screen from the server, so the loop starts
-    // by holding it rather than blanking and retyping what the reader can see.
-    // With nothing to rotate to, the served word simply stands.
-    if (WORDS.length < 2) return;
-    let idx = 0;
-    while (true) {
-      await sleep(PAUSE_MS);
-      await eraseOut();
-      idx = (idx + 1) % WORDS.length;
-      await typeIn(WORDS[idx]);
-    }
-  }
-
-  run();
-
   // Hero search
   const heroInput = document.getElementById('hero-search-input') as HTMLInputElement | null;
   const heroBtn   = document.getElementById('hero-search-btn');
@@ -513,7 +450,7 @@ html.js-reveal [data-reveal-stagger].revealed > * {
   letter-spacing: -0.02em;
 }
 
-/* ─ Typewriter highlight ─ */
+/* ─ Headline highlight ─ */
 .hero-highlight {
   display: inline-block;
   background: linear-gradient(135deg, #ff7a3d 0%, #f97316 100%);
@@ -526,26 +463,6 @@ html.js-reveal [data-reveal-stagger].revealed > * {
   white-space: nowrap;
   transform: rotate(-1.5deg);
 }
-.hero-word {
-  font-weight: 800;
-  font-size: inherit;
-  line-height: inherit;
-}
-.hero-cursor {
-  display: inline-block;
-  width: 2px;
-  height: 0.75em;
-  background: rgba(255,255,255,0.9);
-  border-radius: 1px;
-  margin-left: 1px;
-  vertical-align: -0.05em;
-  animation: blink .7s ease infinite;
-}
-@keyframes blink {
-  0%,100% { opacity: 1; }
-  50%      { opacity: 0; }
-}
-
 .hero-sub { color: var(--muted); font-size: 1rem; margin: 0; }
 
 /* Search wrap */
