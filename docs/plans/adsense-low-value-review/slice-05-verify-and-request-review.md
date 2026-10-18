@@ -1,5 +1,5 @@
 ---
-status: todo
+status: doing
 kanban:
 ---
 
@@ -25,8 +25,9 @@ Owner, in this order:
    `docs/research/2026-10-18-adsense-low-value-review/url-inspection-2026-10-18.json`.
 2. Cloudflare: delete the orphaned `tubetrace` Pages project, which also ends the failing check on
    every PR, or point `tubetrace.pages.dev` at `/apps/tubetrace/`.
-3. AdSense → Sites → smallwebapps.com → **Request review**. Do not remove and re-add the site; Google
-   says that delays the review.
+3. AdSense → Sites → smallwebapps.com → **Request review**, *once Search Console shows real clicks*
+   (amended 2026-10-18; see below). Do not remove and re-add the site; Google says that delays the
+   review.
 4. After approval, not before: Privacy & messaging → European regulations message, and the ad slot
    IDs.
 
@@ -50,3 +51,35 @@ either one is a postmortem.
 
 If Request review is not offered — for example because the site is already in review — record the
 status shown and wait. Do not remove the site.
+
+## Progress 2026-10-18
+
+**Production, measured after merge `4cca16b` deployed. It took about 180 s from merge to the new
+title being served:**
+
+| check | result |
+|---|---|
+| `scan:links https://smallwebapps.com` | 47 sitemap pages, 28 tools linked, **0** links to unlisted tools, 0 stale headings, 0 tool-page problems; exit 0 |
+| retired variant URLs | **24/24** answer one 301 to a target that answers 200 |
+| sitemap | 47 URLs, all 200 |
+| an unlisted tool, `/apps/json-formatter/` | 200, `noindex, follow`, still live |
+
+The same scan against the branch preview (`4c1da088.smallwebapps.pages.dev`) gave the same numbers
+before merge.
+
+**Search Console:** indexing requested and confirmed ("Indexação solicitada") for 10 URLs: the 7
+unindexed guides, About, Contact and Privacy. The 23 unindexed tool pages are still to do, a few a
+day. Their list is in `url-inspection-2026-10-18.json`.
+
+**AdSense: review not requested, by owner ruling.** The verdict panel, read just before clicking,
+requires "interesse genuíno do usuário" (`fetches/adsense-site-detail-panel.md`), and the site had
+0 clicks in 90 days. Request the review when Search Console shows real clicks. The panel gives no
+number, so the owner judges from:
+
+```bash
+~/.claude/skills/site-stats/bin/sitestats summary --site smallwebapps --days 28
+```
+
+Still open: the Cloudflare `tubetrace` project, which is the owner's to delete. AdSense also lists
+`tubetrace.pages.dev` as a separate site at "Conteúdo de baixo valor", with ads.txt "Não
+encontrado".
