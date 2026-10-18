@@ -166,7 +166,9 @@ const breadcrumbSchema = {
 <body>
   <Header />
 
-  <div class="tool-page">
+  <!-- The page's one main landmark, as in MainLayout: everything between
+       header and footer. Tool pages were the only template without one. -->
+  <main class="tool-page">
     <!-- ── Breadcrumb strip ── -->
     <div class="tl-strip">
       <div class="tl-strip-inner">
@@ -248,7 +250,7 @@ const breadcrumbSchema = {
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <Footer />
   <CookieBanner />

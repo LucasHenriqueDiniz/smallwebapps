@@ -10,6 +10,42 @@ explains.
 Newest first. A superseded decision stays, marked — knowing why an alternative lost is worth as
 much as knowing why the winner won.
 
+### 2026-10-18 — The site links only the tools it indexes, and the size variants are retired
+
+**Context.** AdSense has held smallwebapps.com at *Needs attention: Low value content* since its
+2026-08-27 review. The response to that review, `indexing.ts`, took 114 of 142 tools out of Google
+Search with `noindex, follow` and kept them linked everywhere. On 2026-10-18 the home page linked 13
+of them, the header menu 8 on every page, `/apps/` all 114, and related-tool blocks and one guide
+the rest. AdSense says it "may review all pages of your site", and `noindex` is documented only as a
+Search rule. So a reviewer still walks through the tools the site itself judged not worth indexing.
+Measured: of the five categories, Developer Tools (54 tools) and Data Tools (41) have **no**
+indexable tool at all. Evidence: `docs/research/2026-10-18-adsense-low-value-review/`.
+
+**Decision.** Owner's ruling, 2026-10-18:
+
+- **A tool is linked from navigation if and only if it is indexable.** That covers the header menu,
+  header search, the home page, `/apps/`, related-tool blocks and guide calls to action. The 114
+  stay live at their URLs, `noindex, follow`, reachable by anyone who already has the link. Developer
+  Tools and Data Tools disappear from navigation as a consequence; the site presents 28 tools in
+  three categories.
+- **The 12 size and format variants are retired.** Each URL answers 301 to the tool it wraps:
+  `pdf-compress`, `image-optimize` or `image-to-text`. The four PDF variants promised a target size
+  that the code never aimed at.
+- **The home page is positioned on local processing**, "nothing is uploaded", not on "tools for
+  data and developers".
+- **The AdSense review is requested as soon as these are live in production**, without waiting for
+  an indexing threshold. No source ties Search indexing to approval, and none documents a penalty
+  for asking again.
+
+**What this rules out.** Deleting the 114: Google calls deletion "a last resort", and unlisting does
+the same work for a reviewer while staying reversible one line at a time in `indexing.ts`. Keeping
+them listed behind `noindex`, the state that was rejected. Keeping the variants as `noindex` pages,
+which leaves pages Google's own doorway definition describes. Waiting for most of the 47 sitemap
+URLs to be indexed before asking — 14 were on 2026-10-18 — with no evidence that it changes the
+outcome. Reversing the unlisting means moving a slug out of `COMMODITY` in `indexing.ts`, which
+re-indexes and re-links it together; the two cannot drift apart. Pitch:
+`docs/pitches/adsense-low-value-review.md`. Plan: `docs/plans/adsense-low-value-review/`.
+
 ### 2026-09-05 — The app catalog becomes one module per tool behind a barrel
 
 **Context.** The 2026-09-03 ruling below bound `apps/web/src/data/apps.ts` to `clean-code`'s
