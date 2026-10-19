@@ -37,6 +37,14 @@ indexable tool at all. Evidence: `docs/research/2026-10-18-adsense-low-value-rev
   an indexing threshold. No source ties Search indexing to approval, and none documents a penalty
   for asking again.
 
+**Amended the same day: the review waits for user interest.** The fourth point above is
+superseded. Just before the review was requested, the AdSense verdict panel for the site was read
+for the first time. It requires "um nível de interesse do usuário que apoie uma parceria de
+publicidade comercial" and asks whether the site "gera e mantém o interesse genuíno do usuário".
+The site had 0 clicks in 90 days. The owner ruled to request the review once Search Console shows
+real clicks, not straight after the deploy. Evidence:
+`docs/research/2026-10-18-adsense-low-value-review/fetches/adsense-site-detail-panel.md`.
+
 **What this rules out.** Deleting the 114: Google calls deletion "a last resort", and unlisting does
 the same work for a reviewer while staying reversible one line at a time in `indexing.ts`. Keeping
 them listed behind `noindex`, the state that was rejected. Keeping the variants as `noindex` pages,

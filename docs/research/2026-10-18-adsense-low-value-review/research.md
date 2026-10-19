@@ -8,7 +8,9 @@ decided: 2026-10-18
 
 > Pages a reviewer can reach count, `noindex` or not. All 12 variant pages can be redirected without
 > losing anything, and the PDF ones promise a target they never act on. Google has indexed 14 of the
-> 47 sitemap URLs. No source sets a waiting period, a penalty, or a traffic bar for asking again.
+> 47 sitemap URLs. No public page sets a waiting period, a penalty or a traffic bar for asking
+> again, **but the account's own verdict panel requires "interesse genuíno do usuário"** — see
+> "Correction 2026-10-18".
 
 ## What was blocking
 
@@ -126,6 +128,23 @@ in `url-inspection-2026-10-18.json`.
 4. **Leave the CMP until after approval.** It decides which ads serve, not whether the site is
    approved.
 
+## Correction 2026-10-18: verdict 3 is wrong
+
+**Verdict 3 is superseded.** It said no source ties approval to audience, so the review should be
+requested as soon as the fixes were live. The one source this note had not read says otherwise:
+AdSense's own verdict panel for this site, behind the account login
+(`fetches/adsense-site-detail-panel.md`). It requires sites to "mostrar um nível de interesse do
+usuário que apoie uma parceria de publicidade comercial", and the resubmission checklist asks
+whether the site "gera e mantém o interesse genuíno do usuário". Over 2026-07-19 to 2026-10-16 the
+site had **0 clicks**. The content fixes do not change that.
+
+The strongest case against verdict 3, written below before this was found, turned out to be the
+right one. Every public help page was read, and the deciding text was on none of them. It was on
+the page the rejection itself links to. **Read the account's own verdict before the public docs.**
+
+The owner ruled on 2026-10-18 to wait for user interest before requesting the review. No number
+is given anywhere, so when to ask is a judgement made from Search Console clicks.
+
 ## The strongest case against this verdict
 
 - **Against point 3:** Search crawled 21 of these URLs and declined 7, including 2 of the guides.
@@ -157,6 +176,7 @@ in `url-inspection-2026-10-18.json`.
 
 ## Sources
 
+- AdSense → Sites → smallwebapps.com, the verdict panel (owner's account, behind login) — `fetches/adsense-site-detail-panel.md` — the "interesse do usuário" requirement that supersedes verdict 3
 - [Your AdSense account wasn't approved](https://support.google.com/adsense/answer/81904?hl=en) — `fetches/adsense-account-not-approved.md` — review covers "all pages"; low value content wording
 - [Check the status of your AdSense sites](https://support.google.com/adsense/answer/12170222?hl=en) — `fetches/adsense-site-status.md` — status meanings; 2-4 weeks; do not remove and re-add
 - [Add a new site to your AdSense sites list](https://support.google.com/adsense/answer/12169212?hl=en) — `fetches/adsense-add-new-site.md` — what the site check verifies
