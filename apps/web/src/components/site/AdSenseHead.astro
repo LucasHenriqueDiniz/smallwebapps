@@ -8,16 +8,33 @@ const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? "ca-pub-260082768
 
 // src/lib/ads.ts decides; see the comment there for the three exclusions.
 const enabled = shouldLoadAds(Astro.url.pathname);
+
+// The fourth exclusion has to happen in the browser. One production build is
+// served on smallwebapps.com, on smallwebapps.pages.dev and on every
+// <hash>.smallwebapps.pages.dev deployment URL, and `astro preview` serves a
+// local build on localhost. Nothing at build time can tell those apart, and a
+// loader request from any of them reaches AdSense as a page view on a domain
+// that is not the site — which is how tubetrace.pages.dev ended up listed in
+// the account as a site of its own. So the loader is created only when the
+// page is open on the host in astro.config's `site`.
+//
+// The verification meta tag stays static on every host: it sends nothing, and
+// it is the ownership method Google documents that does not need the loader.
+const productionHost = Astro.site?.hostname;
+const loaderSrc = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`;
 ---
 
-{enabled && (
+{enabled && productionHost && (
   <>
     <meta name="google-adsense-account" content={adsenseClient} />
-    <script
-      is:inline
-      async
-      crossorigin="anonymous"
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-    />
+    <script is:inline define:vars={{ productionHost, loaderSrc }}>
+      if (location.hostname === productionHost) {
+        const loader = document.createElement("script");
+        loader.async = true;
+        loader.crossOrigin = "anonymous";
+        loader.src = loaderSrc;
+        document.head.appendChild(loader);
+      }
+    </script>
   </>
 )}
