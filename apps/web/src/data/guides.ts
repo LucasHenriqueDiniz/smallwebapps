@@ -14,6 +14,8 @@ export interface GuideDefinition {
    * and link, as `indexing.ts` does for tools. Absent means indexable.
    */
   indexable?: false;
+  /** Further tool pages that list this guide, for a guide about several tools. */
+  alsoForTools?: string[];
 }
 
 const RELATED_GUIDE_LIMIT = 3;
@@ -103,7 +105,9 @@ export const guides: GuideDefinition[] = [
     modifiedDate: "2026-06-26",
     image: "/og/site.png",
     relatedToolSlug: "",
-    relatedToolLabel: "Browse all tools"
+    relatedToolLabel: "Browse all tools",
+    // The four privacy tools kept on 2026-11-15 all rest on this argument.
+    alsoForTools: ["image-to-text", "pdf-ocr", "searchable-pdf", "exif-viewer"]
   },
   {
     slug: "youtube-watch-history-json-format",
@@ -242,8 +246,10 @@ export function relatedGuides(slug: string): GuideDefinition[] {
   return guide ? categoryRing(guide) : [];
 }
 
-/** The reverse of `relatedToolSlug`: the guides that point at one tool. */
+/** The reverse of `relatedToolSlug` and `alsoForTools`: the guides one tool page lists. */
 export function guidesForTool(toolSlug: string): GuideDefinition[] {
   if (!toolSlug) return [];
-  return listedGuides.filter((guide) => guide.relatedToolSlug === toolSlug);
+  return listedGuides.filter(
+    (guide) => guide.relatedToolSlug === toolSlug || guide.alsoForTools?.includes(toolSlug),
+  );
 }

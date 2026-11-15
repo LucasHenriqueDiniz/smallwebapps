@@ -1,8 +1,9 @@
 import { describe, expect, test } from "vitest";
 import { appMap } from "./apps";
-import { featuredSlugs, heroQuickSlugs, popularSlugs } from "./home";
+import { listedGuides } from "./guides";
+import { featuredSlugs, heroGuideSlug, heroQuickSlugs, popularSlugs } from "./home";
 import { isIndexable } from "./indexing";
-import { listedApps, listedCategories, listedInCategory } from "./listed";
+import { TOOL_NAV_ORDER, listedApps, listedCategories, listedInCategory, navGuideSlugs, navGuides } from "./listed";
 
 describe("listed tools", () => {
   test("are exactly the indexable tools: 28 on 2026-10-18, 5 since 2026-11-15", () => {
@@ -32,5 +33,25 @@ describe("home page picks", () => {
       expect(appMap[slug], `${slug} is not in the catalog`).toBeDefined();
       expect(isIndexable(slug), `${slug} is not listed`).toBe(true);
     }
+  });
+});
+
+describe("navigation order", () => {
+  test("places every listed tool, and names no unlisted one", () => {
+    expect([...TOOL_NAV_ORDER].sort()).toEqual(listedApps.map((app) => app.slug).sort());
+  });
+
+  test("puts TubeTrace first in its category", () => {
+    expect(listedInCategory("YouTube / Data")[0]?.slug).toBe("tubetrace");
+  });
+
+  test("footer guides are exactly the listed guides, the recap guide first", () => {
+    expect([...navGuideSlugs].sort()).toEqual(listedGuides.map((guide) => guide.slug).sort());
+    expect(navGuides).toHaveLength(listedGuides.length);
+    expect(navGuides[0].slug).toBe("youtube-recap-past-years");
+  });
+
+  test("the hero guide is a listed guide", () => {
+    expect(listedGuides.map((guide) => guide.slug)).toContain(heroGuideSlug);
   });
 });
