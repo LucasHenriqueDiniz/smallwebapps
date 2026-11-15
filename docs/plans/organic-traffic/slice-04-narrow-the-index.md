@@ -1,5 +1,5 @@
 ---
-status: doing
+status: done
 kanban:
 ---
 
@@ -140,6 +140,16 @@ Redirect targets: the twelve size variants of 2026-10-18 still land on `pdf-comp
 `image-optimize`, which are now unlisted but live. `redirects.test.ts` now requires a live target for
 every rule and an indexable one for the two merges.
 
-Still open:
-- [ ] Production: the "Done when" block after the merge.
-- [ ] ⚠️ Owner: point `smallwebapps-pedir-indexacao` at the kept set and the guides.
+**Production, 2026-11-15** (PR #25, merged as `507c942` at 16:52 UTC, live about 170 s later), the
+"Done when" block above:
+
+| check | before | after |
+|---|---|---|
+| sitemap URLs | 48 | **20** |
+| cut paths answering `200` with `noindex` | 0/25 | **25/25** |
+| merges, with and without the slash | 0/3 (`200` and `308`) | **6/6** single `301` to the target, with its trailing slash |
+| `scan-links.mjs https://smallwebapps.com` | 1 broken link (`/apps//`) | exit 0 |
+
+- [x] Owner, 2026-11-15: `smallwebapps-pedir-indexacao` now queues any of the 20 sitemap URLs outside the
+      index, the recap guide first, then `/apps/`, then the other guides. Its first run with that
+      prompt is 2026-11-16.

@@ -1,5 +1,5 @@
 ---
-import { listedApps, listedCategories, listedInCategory } from "@/data/listed";
+import { listedApps, listedCategories, listedInCategory, navGuides } from "@/data/listed";
 import { categoryPath } from "@/lib/urls";
 
 const categoryLabel: Record<string, string> = {
@@ -44,6 +44,11 @@ const grouped = listedCategories
           <a href={categoryPath(category)} class="see-all">Browse all {groupApps.length}</a>
         </div>
       ))}
+
+      <div class="footer-col footer-nav">
+        <h4><a href="/guides/">Guides</a></h4>
+        {navGuides.map((guide) => <a href={`/guides/${guide.slug}/`}>{guide.navLabel}</a>)}
+      </div>
 
       <div class="footer-col footer-nav">
         <h4>Site</h4>

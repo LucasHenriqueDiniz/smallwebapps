@@ -8,6 +8,13 @@
  */
 export const heroQuickSlugs = ["tubetrace", "image-to-text", "pdf-ocr"];
 
+/**
+ * The guide the hero links under the tools: the one the plan is built around
+ * (docs/plans/organic-traffic/, slice 3). `listed.test.ts` fails when it is not
+ * a listed guide.
+ */
+export const heroGuideSlug = "youtube-recap-past-years";
+
 export const featuredSlugs = ["tubetrace", "image-to-text", "pdf-ocr", "exif-viewer"];
 
 export const popularSlugs = ["tubetrace", "image-to-text", "pdf-ocr", "searchable-pdf", "exif-viewer"];

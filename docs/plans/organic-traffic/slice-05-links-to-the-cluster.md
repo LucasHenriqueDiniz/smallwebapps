@@ -1,5 +1,5 @@
 ---
-status: todo
+status: doing
 kanban:
 ---
 
@@ -54,3 +54,45 @@ node apps/web/scripts/link-graph.mjs https://smallwebapps.com
 
 If putting every YouTube guide in the footer makes it unreadable, link them from a `/guides/` section
 that the footer links, and accept depth 2 for the guides. The TubeTrace rule stays.
+
+## Progress
+
+**2026-11-15: built and checked on `dist`. Waiting on merge and the same run against production.**
+
+Baseline moved before this slice started. After slice 4 the header menu lists all five tools, so
+`/apps/tubetrace/` was already linked from 19/19 pages in production. The YouTube guides were not:
+5–6 inbound links each, two clicks from `/`. The `/apps//` link was fixed in slice 4.
+
+What changed:
+- `apps/web/scripts/link-graph.mjs` (new, `pnpm --dir apps/web run link:graph [base URL]`): inbound
+  links and depth from `/` for every sitemap page, and the three rules of "Done when". It exits 1 when
+  one fails. CI gains a "Built Site" job that builds and runs `scan-links` and `link-graph` on
+  `dist/`. Cloudflare Pages builds but runs neither, and the workflow comment says so.
+- Footer: a "Guides" column on every page with the eight listed guides, recap guide first, short
+  labels. Order and labels live in `data/listed.ts` (`GUIDE_NAV`). `listed.test.ts` fails when a
+  listed guide is missing or an unlisted one is named.
+- `TOOL_NAV_ORDER` in `data/listed.ts`: navigation orders tools by an explicit list, TubeTrace first,
+  instead of catalog order.
+- Home: under the hero's tool links, a "Guide:" line to the recap guide (`heroGuideSlug` in
+  `data/home.ts`, tested to be a listed guide).
+- `privacy-first-file-tools-local-processing` gains `alsoForTools`: the four privacy tools list it in
+  their own guide block. They already linked each other through related tools.
+
+Measured:
+
+| check | production before (2026-11-15, after slice 4) | `dist` after |
+|---|---|---|
+| `/apps/tubetrace/` inbound | 19/19 | 19/19 |
+| YouTube guides with ≥ 10 inbound and depth ≤ 1 | **0/7** (5–6 inbound, depth 2) | **7/7** (19 inbound, depth 1) |
+| `privacy-first-file-tools-local-processing` inbound | 1 | 19 |
+| orphans / unreachable | 0 | 0 |
+| `link-graph.mjs` exit | 1 | **0** |
+| `scan-links.mjs` exit | 0 | 0 |
+| privacy tools: guide in their own guide block / link the other three | 0/4 / 4/4 | **4/4** / 4/4 (TubeTrace as control: guide absent) |
+| vitest / `astro check` / validators | 153 | 157 (4 navigation-order tests) / 0 errors / 3 × exit 0 |
+
+Revert check: production today *is* the revert state, since it lacks the footer column and the
+hero line. The same script on it prints the guide rule `FAIL 0/7` and exits 1.
+
+Still open:
+- [ ] `link-graph.mjs https://smallwebapps.com` after the merge: same table as `dist`, exit 0.

@@ -4,7 +4,8 @@ import AdSlot from "@/components/site/AdSlot.astro";
 import ToolCard from "@/components/apps/ToolCard.astro";
 import FeaturedCard from "@/components/apps/FeaturedCard.astro";
 import { appMap } from "@/data/apps";
-import { featuredSlugs, heroQuickSlugs, popularSlugs } from "@/data/home";
+import { listedGuides } from "@/data/guides";
+import { featuredSlugs, heroGuideSlug, heroQuickSlugs, popularSlugs } from "@/data/home";
 import { listedApps, listedCategories, listedInCategory } from "@/data/listed";
 import { siteConfig } from "@/lib/site";
 import { categoryPath } from "@/lib/urls";
@@ -72,6 +73,7 @@ const bySlug = (slugs: string[]) => slugs.map((slug) => appMap[slug]);
 
 const popularTools = bySlug(popularSlugs).slice(0, POPULAR_TOOL_LIMIT);
 const heroQuickTools = bySlug(heroQuickSlugs);
+const heroGuide = listedGuides.find((guide) => guide.slug === heroGuideSlug);
 
 const featuredLook: Record<string, { accent: string; badge: string; icon: string }> = {
   "PDF Tools": { accent: "#7c3aed", badge: "PDF", icon: categoryCardMeta["PDF Tools"].icon },
@@ -129,6 +131,12 @@ const tabLabel: Record<string, string> = {
           <a href={tool.appUrl} class="hero-quick-link">{tool.name}</a>
         ))}
       </div>
+      {heroGuide && (
+        <div class="hero-quick">
+          <span class="hero-quick-label">Guide:</span>
+          <a href={`/guides/${heroGuide.slug}/`} class="hero-quick-link">{heroGuide.title}</a>
+        </div>
+      )}
     </div>
   </div>
 

@@ -9,9 +9,11 @@ on:
 # The pnpm action gets no 'version' — it reads the packageManager field from
 # package.json, which is what keeps CI and local machines on the same version.
 
-# No build job: Cloudflare Pages builds the smallwebapps project on every push
-# and reports it as a check. A build here would repeat exactly what the host
-# already does.
+# Cloudflare Pages builds the smallwebapps project on every push and reports it
+# as a check, but it only builds. The "Built Site" job builds again because two
+# checks need the output, not the source: scan-links (no link to an unlisted or
+# broken page) and link-graph (the link rules of docs/plans/organic-traffic/,
+# slice 5). Both read dist/ the way a crawler reads the site.
 
 jobs:
   typecheck:
@@ -45,3 +47,20 @@ jobs:
       - name: Test apps/web
         run: pnpm --dir apps/web test --run
 
+  built-site:
+    name: Built Site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Build apps/web
+        run: pnpm --dir apps/web run build
+      - name: Links to unlisted or broken pages
+        run: node apps/web/scripts/scan-links.mjs
+      - name: Link graph rules
+        run: node apps/web/scripts/link-graph.mjs
