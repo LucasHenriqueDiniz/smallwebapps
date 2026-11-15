@@ -5,16 +5,18 @@ import { isIndexable } from "./indexing";
 import { listedApps, listedCategories, listedInCategory } from "./listed";
 
 describe("listed tools", () => {
-  test("are exactly the indexable tools: 28 on 2026-10-18", () => {
+  test("are exactly the indexable tools: 28 on 2026-10-18, 5 since 2026-11-15", () => {
     expect(listedApps.every((app) => isIndexable(app.slug))).toBe(true);
-    expect(listedApps).toHaveLength(28);
+    expect(listedApps.map((app) => app.slug).sort()).toEqual([
+      "exif-viewer", "image-to-text", "pdf-ocr", "searchable-pdf", "tubetrace",
+    ]);
   });
 
   test("leave out every category that has nothing indexable", () => {
     expect(listedCategories).toEqual(["PDF Tools", "Image / Inspection", "YouTube / Data"]);
   });
 
-  test("group back into the same 28 by category", () => {
+  test("group back into the same set by category", () => {
     const grouped = listedCategories.flatMap((category) => listedInCategory(category));
     expect(grouped).toHaveLength(listedApps.length);
   });

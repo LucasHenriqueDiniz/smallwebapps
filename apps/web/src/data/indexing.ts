@@ -18,6 +18,8 @@
  * Reversing any decision means deleting one line here.
  */
 
+import { isGuideIndexable } from "./guides";
+
 /**
  * The size and format variants (`compress-pdf-to-100kb`, `jpg-to-text`, …) that
  * used to be listed here are gone. They were doorway pages wrapping
@@ -71,18 +73,48 @@ const COMMODITY = [
   "instagram-caption-formatter", "instagram-hashtag-extractor",
 ];
 
+/**
+ * The index narrowed to one cluster, 2026-11-15.
+ *
+ * These were the indexable PDF, image and YouTube-creator tools. Between
+ * 2026-10-18 and 2026-11-15 the index grew from 14 to 33 of 47 sitemap URLs
+ * while 28-day impressions fell from 96 to 25. Google turned the PDF pages down
+ * on its own: 8 of 10 out of the index, 5 of them back from "Discovered" to
+ * "unknown" after indexing was requested. Their head terms are six-figure,
+ * "Hard" and answered by brand navigation. The site indexes the YouTube Takeout
+ * cluster plus four privacy tools (image-to-text, pdf-ocr, searchable-pdf,
+ * exif-viewer). Same mechanism as COMMODITY: served, `noindex, follow`,
+ * unlinked. Evidence: docs/research/2026-11-15-organic-traffic/; decision of
+ * 2026-11-15 in docs/architecture/ARCHITECTURE.md.
+ */
+const NARROWED = [
+  // YouTube creator tools: no opening on the result pages, no measured demand
+  "youtube-tag-extractor", "youtube-chapter-generator", "youtube-title-counter",
+  "youtube-description-cleaner", "youtube-url-parser",
+  // PDF: head terms owned by iLovePDF, Smallpdf and 11zon
+  "pdf-compress", "pdf-merge", "pdf-split", "pdf-rotate", "pdf-to-image",
+  "pdf-watermark", "pdf-metadata", "pdf-extract-text",
+  // image editing, and a heuristic AI checker next to Google's own SynthID
+  "ai-image-checker", "image-resize", "image-crop", "image-optimize",
+  "image-flip-rotate", "image-grayscale", "image-to-pdf", "image-format-converter",
+];
+
 /** Slugs served with `noindex, follow` and kept out of the sitemap. */
-export const noindexSlugs = new Set<string>(COMMODITY);
+export const noindexSlugs = new Set<string>([...COMMODITY, ...NARROWED]);
 
 export function isIndexable(slug: string): boolean {
   return !noindexSlugs.has(slug);
 }
 
 /**
- * True for a built page URL path, e.g. "/apps/json-formatter/".
- * Used by the sitemap filter, which only sees URLs.
+ * True for a built page URL path, e.g. "/apps/json-formatter/" or
+ * "/guides/csv-cleaning-before-import/". Used by the sitemap filter and the ad
+ * gate, which only see URLs.
  */
 export function isIndexableUrl(url: string): boolean {
-  const match = url.match(/\/apps\/([a-z0-9-]+)\/?$/);
-  return match ? isIndexable(match[1]) : true;
+  const tool = url.match(/\/apps\/([a-z0-9-]+)\/?$/);
+  if (tool) return isIndexable(tool[1]);
+  const guide = url.match(/\/guides\/([a-z0-9-]+)\/?$/);
+  if (guide) return isGuideIndexable(guide[1]);
+  return true;
 }

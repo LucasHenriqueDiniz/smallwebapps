@@ -9,6 +9,11 @@ export interface GuideDefinition {
   image: string;
   relatedToolSlug: string;
   relatedToolLabel: string;
+  /**
+   * False keeps the guide served but out of the index and out of every list
+   * and link, as `indexing.ts` does for tools. Absent means indexable.
+   */
+  indexable?: false;
 }
 
 const RELATED_GUIDE_LIMIT = 3;
@@ -28,19 +33,6 @@ export const guides: GuideDefinition[] = [
     relatedToolLabel: "Open YouTube Watch History Analyzer"
   },
   {
-    slug: "how-to-analyze-youtube-watch-history",
-    title: "Analyze YouTube Watch History Locally",
-    description:
-      "Analyze a YouTube watch-history export locally, understand useful viewing patterns, and avoid unnecessary uploads of personal Google Takeout data.",
-    category: "YouTube Analysis",
-    publishedLabel: "Privacy-first analysis guide",
-    publishedDate: "2026-06-02",
-    modifiedDate: "2026-06-25",
-    image: "/og/site.png",
-    relatedToolSlug: "tubetrace",
-    relatedToolLabel: "Open YouTube Watch History Analyzer"
-  },
-  {
     slug: "json-formatting-and-validation",
     title: "JSON Formatting & Validation in the Browser",
     description:
@@ -51,7 +43,9 @@ export const guides: GuideDefinition[] = [
     modifiedDate: "2026-06-26",
     image: "/og/site.png",
     relatedToolSlug: "json-formatter",
-    relatedToolLabel: "Open JSON Formatter"
+    relatedToolLabel: "Open JSON Formatter",
+    // Its tool is unlisted; the guide follows it (2026-11-15).
+    indexable: false
   },
   {
     slug: "csv-cleaning-before-import",
@@ -64,7 +58,9 @@ export const guides: GuideDefinition[] = [
     modifiedDate: "2026-06-26",
     image: "/og/site.png",
     relatedToolSlug: "csv-cleaner",
-    relatedToolLabel: "Open CSV Cleaner"
+    relatedToolLabel: "Open CSV Cleaner",
+    // Its tool is unlisted; the guide follows it (2026-11-15).
+    indexable: false
   },
   {
     slug: "browser-based-pdf-tools-safe-and-fast",
@@ -77,7 +73,9 @@ export const guides: GuideDefinition[] = [
     modifiedDate: "2026-06-26",
     image: "/og/site.png",
     relatedToolSlug: "pdf-compress",
-    relatedToolLabel: "Open PDF Compressor"
+    relatedToolLabel: "Open PDF Compressor",
+    // Its tool is unlisted; the guide follows it (2026-11-15).
+    indexable: false
   },
   {
     slug: "resize-compress-images-locally",
@@ -90,7 +88,9 @@ export const guides: GuideDefinition[] = [
     modifiedDate: "2026-06-26",
     image: "/og/site.png",
     relatedToolSlug: "image-resize",
-    relatedToolLabel: "Open Image Resizer"
+    relatedToolLabel: "Open Image Resizer",
+    // Its tool is unlisted; the guide follows it (2026-11-15).
+    indexable: false
   },
   {
     slug: "privacy-first-file-tools-local-processing",
@@ -187,43 +187,36 @@ export const guides: GuideDefinition[] = [
 
 const guideBySlug = new Map(guides.map((guide) => [guide.slug, guide]));
 
+export function isGuideIndexable(slug: string): boolean {
+  const guide = guideBySlug.get(slug);
+  return guide ? guide.indexable !== false : true;
+}
+
+/** The guides any list or link may show: exactly the indexable ones. */
+export const listedGuides: GuideDefinition[] = guides.filter((guide) => guide.indexable !== false);
+
 /**
  * Slugs whose category holds one or two guides, so the category alone cannot
  * name three siblings. The pairing is topical instead: a format guide next to
  * the data guides, a local-processing guide next to the file tools.
  */
 const curatedRelatedSlugs: Record<string, string[]> = {
-  "json-formatting-and-validation": [
-    "csv-cleaning-before-import",
-    "youtube-watch-history-json-format",
-    "privacy-first-file-tools-local-processing"
-  ],
-  "csv-cleaning-before-import": [
-    "json-formatting-and-validation",
-    "privacy-first-file-tools-local-processing",
-    "browser-based-pdf-tools-safe-and-fast"
-  ],
-  "browser-based-pdf-tools-safe-and-fast": [
-    "privacy-first-file-tools-local-processing",
-    "resize-compress-images-locally",
-    "csv-cleaning-before-import"
-  ],
-  "resize-compress-images-locally": [
-    "browser-based-pdf-tools-safe-and-fast",
-    "privacy-first-file-tools-local-processing",
-    "json-formatting-and-validation"
-  ],
+  "json-formatting-and-validation": ["youtube-watch-history-json-format", "privacy-first-file-tools-local-processing"],
+  "csv-cleaning-before-import": ["privacy-first-file-tools-local-processing"],
+  "browser-based-pdf-tools-safe-and-fast": ["privacy-first-file-tools-local-processing"],
+  "resize-compress-images-locally": ["privacy-first-file-tools-local-processing"],
   "privacy-first-file-tools-local-processing": [
     "what-your-youtube-history-reveals",
-    "browser-based-pdf-tools-safe-and-fast",
-    "resize-compress-images-locally"
+    "pause-delete-youtube-history",
+    "youtube-recap-past-years"
   ]
 };
 
+/** Curated slugs that resolve to a listed guide; an unlisted one is dropped. */
 const resolveSlugs = (slugs: string[]): GuideDefinition[] =>
   slugs.flatMap((slug) => {
     const guide = guideBySlug.get(slug);
-    return guide ? [guide] : [];
+    return guide && guide.indexable !== false ? [guide] : [];
   });
 
 /**
@@ -234,8 +227,9 @@ const resolveSlugs = (slugs: string[]): GuideDefinition[] =>
  * pages nothing points at.
  */
 function categoryRing(guide: GuideDefinition): GuideDefinition[] {
-  const family = guides.filter((item) => item.category === guide.category);
+  const family = listedGuides.filter((item) => item.category === guide.category);
   const start = family.findIndex((item) => item.slug === guide.slug);
+  if (start < 0) return [];
   const take = Math.min(RELATED_GUIDE_LIMIT, family.length - 1);
   return Array.from({ length: take }, (_, offset) => family[(start + 1 + offset) % family.length]);
 }
@@ -251,5 +245,5 @@ export function relatedGuides(slug: string): GuideDefinition[] {
 /** The reverse of `relatedToolSlug`: the guides that point at one tool. */
 export function guidesForTool(toolSlug: string): GuideDefinition[] {
   if (!toolSlug) return [];
-  return guides.filter((guide) => guide.relatedToolSlug === toolSlug);
+  return listedGuides.filter((guide) => guide.relatedToolSlug === toolSlug);
 }

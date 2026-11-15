@@ -3,14 +3,14 @@ import { apps, appMap } from "@/data/apps";
 import { isIndexable } from "@/data/indexing";
 import { relatedTools } from "./related";
 
-const pdfCompress = appMap["pdf-compress"];
+const pdfOcr = appMap["pdf-ocr"];
 
-// An unlisted tool dressed up to be the best possible match for pdf-compress:
+// An unlisted tool dressed up to be the best possible match for pdf-ocr:
 // same category, every tag shared, live. Score alone would put it first.
 const unlistedTwin = {
   ...appMap["json-formatter"],
-  category: pdfCompress.category,
-  tags: [...pdfCompress.tags],
+  category: pdfOcr.category,
+  tags: [...pdfOcr.tags],
   status: "live" as const,
   implemented: true,
 };
@@ -18,7 +18,7 @@ const unlistedTwin = {
 describe("relatedTools", () => {
   test("never returns an unlisted tool, even one that would win on score", () => {
     expect(isIndexable(unlistedTwin.slug)).toBe(false);
-    const related = relatedTools(pdfCompress, [unlistedTwin, ...apps]);
+    const related = relatedTools(pdfOcr, [unlistedTwin, ...apps]);
     expect(related.map((app) => app.slug)).not.toContain(unlistedTwin.slug);
   });
 
@@ -29,10 +29,12 @@ describe("relatedTools", () => {
   });
 
   test("puts the same category first and leaves the tool itself out", () => {
-    const related = relatedTools(pdfCompress, apps);
-    expect(related).toHaveLength(6);
-    expect(related.map((app) => app.slug)).not.toContain("pdf-compress");
-    expect(related.every((app) => app.category === pdfCompress.category)).toBe(true);
+    const related = relatedTools(pdfOcr, apps);
+    expect(related.map((app) => app.slug)).not.toContain("pdf-ocr");
+    const same = related.map((app) => app.category === pdfOcr.category);
+    expect(same[0]).toBe(true);
+    // once a tool from another category appears, none from the same one follows
+    expect(same.slice(same.indexOf(false) >= 0 ? same.indexOf(false) : same.length)).not.toContain(true);
   });
 
   test("gives a page in an unlisted category tools from elsewhere, not nothing", () => {
