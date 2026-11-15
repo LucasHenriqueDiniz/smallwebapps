@@ -12,7 +12,7 @@ much as knowing why the winner won.
 
 ### 2026-11-15 — Search work goes to the YouTube Takeout cluster, and the index narrows to it (proposed)
 
-**Status.** Proposed. It binds when the owner merges the plan, with option A or B below chosen.
+**Status.** Proposed. The owner chose **option A** on 2026-11-15. It binds when the plan merges.
 
 **Context.** The site has 1 click in its Search history and 0 in the last 90 days. AdSense waits for
 real clicks (2026-10-18, amended). Between 2026-10-18 and 2026-11-15 the index grew from 14 to 33 of
@@ -30,11 +30,13 @@ is a December peak for past years and "not showing". Evidence:
   guide for the recap intents, and the export and file-format guides made the most accurate answer.
   No page targets "youtube watch history analyzer" or "stats", where three exact-match domains hold
   1–3.
-- **Option A (recommended):** the index narrows to TubeTrace, four privacy tools (`image-to-text`,
+- **Option A (chosen):** the index narrows to TubeTrace, four privacy tools (`image-to-text`,
   `pdf-ocr`, `searchable-pdf`, `exif-viewer`) and seven guides. 21 tools and 4 guides move to
   `noindex, follow`, unlisted and still served, the same mechanism as the 114 of 2026-10-18.
   Sitemap 47 → 20.
-- **Option B:** the 28 stay indexed. Only the guides about already-unlisted tools are cut.
+- **Option B (not chosen):** the 28 stay indexed. Only the guides about already-unlisted tools are
+  cut. It was kept as the low-risk alternative. It lost because Google's own index verdict on the PDF
+  tools, and the 14 impressions the 12 image tools drew in 90 days, gave it nothing to protect.
 - Either way, three pages merge behind a 301 (`screenshot-to-text` → `image-to-text`,
   `image-metadata` → `exif-viewer`, the how-to-analyze guide → `/apps/tubetrace/`). A guide is
   listed if and only if it is indexable, as tools are.

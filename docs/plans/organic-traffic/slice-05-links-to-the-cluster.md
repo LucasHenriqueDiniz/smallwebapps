@@ -45,7 +45,7 @@ node apps/web/scripts/link-graph.mjs https://smallwebapps.com
 **Baseline, 2026-11-15:** `/apps/tubetrace/` 14 inbound of 46 possible; YouTube guides 5–6, depth 2;
 1 broken link (`/apps//`).
 
-- `/apps/tubetrace/` inbound from **every other indexable page** (19/19 with option A).
+- `/apps/tubetrace/` inbound from **every other indexable page** (19/19).
 - Every YouTube guide: **≥ 10** inbound, depth ≤ 1 from `/`.
 - 0 orphans, 0 broken links, `scan-links.mjs` exit 0.
 - The same output on `dist/` and on production. If the two differ, the deploy is not what was built.

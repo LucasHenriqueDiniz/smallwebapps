@@ -152,7 +152,8 @@ Static Astro on Cloudflare Pages; nothing runs on a server.
 - [x] Which queries can each tool rank for, and what to cut? Per-tool table, finding 7
 - [x] Volume: three vendor anchors and Trends ratios. Every derived number is marked ESTIMATE, finding 6
 - [x] How to 301 `www`: finding 8, the sibling sites' rule
-- [ ] ⚠️ **Owner**: which index option (decision of 2026-11-15 in `docs/architecture/ARCHITECTURE.md`)
+- [x] Owner, 2026-11-15: **option A**, the index narrows to 20 URLs (decision of 2026-11-15 in
+      `docs/architecture/ARCHITECTURE.md`)
 - [ ] ⚠️ **Owner**: request a Takeout export of YouTube watch history now. Slice 2's test needs a real
       file, and Takeout can take hours to days to deliver
 
@@ -172,7 +173,7 @@ Two clocks, kept apart.
 - [ ] `www`: 47/47 sitemap paths answer one 301 to the same path on the apex
 - [ ] Year view: for every year in the owner's real export, videos, channels and top-5 channels equal `jq` (N/N)
 - [ ] Sitemap lists 20 URLs; every cut URL serves `noindex` (N/N); 3/3 merges answer one 301
-- [ ] `/apps/tubetrace/` linked from every other indexable page (19/19 with option A)
+- [ ] `/apps/tubetrace/` linked from every other indexable page (19/19)
 - [ ] Day 28 after the recap guide ships: ≥ 7 of the 8 cluster URLs indexed (today 4 of 7)
 - [ ] Day 42: the cluster earns ≥ 150 impressions and ≥ 5 clicks over days 14–42. The best 28 days
       so far were about 90 impressions (TubeTrace, 2026-09-07..10-04), and the site's clicks ever

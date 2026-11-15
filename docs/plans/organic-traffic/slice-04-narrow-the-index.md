@@ -7,10 +7,10 @@ kanban:
 
 ## Delivers
 
-Whatever option the owner chose in the 2026-11-15 decision. The per-tool evidence is in
+Option A of the 2026-11-15 decision, chosen by the owner on 2026-11-15. The per-tool evidence is in
 `docs/research/2026-11-15-organic-traffic/research.md`, finding 7.
 
-### Option A (recommended): the cluster plus four privacy tools
+### Option A (chosen): the cluster plus four privacy tools
 
 **Stay indexed (5 tools, 7 guides).** `tubetrace`, `image-to-text`, `pdf-ocr`, `searchable-pdf` and
 `exif-viewer`. Guides: `how-to-export-youtube-watch-history`, `youtube-watch-history-json-format`,
@@ -38,7 +38,7 @@ makes it 8.
 
 Sitemap: 47 → **20** URLs with slice 3 shipped, 19 without.
 
-### Option B: keep the 28
+### Option B (not chosen): keep the 28
 
 Only the three merges, and the two guides whose tools have been `noindex` since 2026-10-18
 (`csv-cleaning-before-import`, `json-formatting-and-validation`). Sitemap 47 → 42 (43 with
@@ -60,8 +60,7 @@ slice 3).
 
 ## Needs
 
-The owner's option. Slice 2, if `image-metadata`'s fields are ported in the same release as
-TubeTrace changes (not required).
+Nothing from other slices.
 
 ## Tests
 
@@ -74,8 +73,8 @@ TubeTrace changes (not required).
 
 ```bash
 B=https://smallwebapps.com
-curl -s $B/sitemap-0.xml | grep -c '<loc>'                         # 20 (A) / 43 (B)
-for p in $(cat cut-paths.txt); do                                  # the 25 (A) or 2 (B) cut paths
+curl -s $B/sitemap-0.xml | grep -c '<loc>'                         # 20 (19 before slice 3)
+for p in $(cat cut-paths.txt); do                                  # the 25 cut paths
   h=$(curl -s "$B$p"); c=$(curl -s -o /dev/null -w '%{http_code}' "$B$p")
   echo "$c $(printf '%s' "$h" | grep -c 'name="robots" content="noindex') $p"
 done | awk '$1==200 && $2==1 {ok++} END {print "noindex: " ok "/" NR}'
@@ -85,10 +84,10 @@ done                                                               # 6 lines, ea
 node apps/web/scripts/scan-links.mjs $B; echo "exit $?"            # 0
 ```
 
-**Baseline, 2026-11-15:** sitemap 47; cut paths with `noindex` 0/25 (A) or 0/2 (B); merges 0/3: each slashed URL answers `200`, each unslashed one `308` to the slashed URL.
+**Baseline, 2026-11-15:** sitemap 47; cut paths with `noindex` 0/25; merges 0/3: each slashed URL answers `200`, each unslashed one `308` to the slashed URL.
 
-- Sitemap count as stated for the option.
-- `noindex: 25/25` (A) or `2/2` (B), all `200`.
+- Sitemap: **20** URLs (19 if slice 3 has not shipped).
+- `noindex: 25/25`, all `200`.
 - 6/6 lines `301`, each to the merge target, one hop.
 - `scan-links` exit 0: no link to an unlisted page, no broken link.
 - `image-metadata`'s fields: list them, and show each one on `exif-viewer` for the same test photo
