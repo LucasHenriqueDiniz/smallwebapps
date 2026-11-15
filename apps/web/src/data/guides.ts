@@ -169,6 +169,19 @@ export const guides: GuideDefinition[] = [
     image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
+  },
+  {
+    slug: "youtube-recap-past-years",
+    title: "How to See Your YouTube Recap for Past Years",
+    description:
+      "YouTube deletes each Recap when the year ends. Your Takeout export keeps every year. How to rebuild a recap for 2024 or any past year, and why yours may not show.",
+    category: "YouTube Analysis",
+    publishedLabel: "Year in review",
+    publishedDate: "2026-11-15",
+    modifiedDate: "2026-11-15",
+    image: "/og/site.png",
+    relatedToolSlug: "tubetrace",
+    relatedToolLabel: "Build a recap from your Takeout"
   }
 ];
 

@@ -5,10 +5,17 @@ import RelatedGuides from "@/components/guides/RelatedGuides.astro";
 import { guides, relatedGuides } from "@/data/guides";
 import { isIndexable } from "@/data/indexing";
 
+interface GuideSource {
+  label: string;
+  href: string;
+}
+
 interface GuideSection {
   heading: string;
   body: string[];
   list?: string[];
+  /** The pages a section's claims about someone else's product come from. */
+  sources?: GuideSource[];
 }
 
 export function getStaticPaths() {
@@ -555,7 +562,73 @@ const contentMap = {
       "Share this evaluation habit with less technical people in your life who handle sensitive files regularly — a parent scanning tax documents, a small-business owner processing customer PDFs. Most people have never been shown that this distinction is checkable, and a five-minute demonstration of the Network tab can change which tools they reach for by default going forward.",
       "Ultimately, local processing is not a guarantee that a tool is trustworthy in every other respect — a site can process files locally and still have poor security practices elsewhere, misleading claims about its other features, or intrusive advertising. Treat 'does it upload my file' as one specific, verifiable question worth answering clearly, not as a substitute for exercising normal judgment about a website as a whole."
     ]
-  }
+  },
+  "youtube-recap-past-years": {
+    intro:
+      "YouTube's Recap is a set of cards built from your watch history: your top channels, your interests, a viewer personality. It is also temporary. YouTube's own help page says Recaps are deleted for everyone after the end of the year, so there is no official Recap left to open for 2024, 2023 or any year before. The history behind them is a different matter. Google Takeout exports your whole watch history, one timestamped entry per video, back to the start of the account, unless you paused or deleted it. This guide covers what you can rebuild from that file for any year, what you cannot, and why YouTube may have shown you no Recap at all.",
+    sections: [
+      {
+        heading: "What YouTube's own Recap is, and how long it lasts",
+        body: [
+          "YouTube announced Recap on 2 December 2025, available that day in North America and rolling out to the rest of the world that week. It shows up to 12 cards on your top channels, your interests, how your viewing changed over the year, and the personality type YouTube assigns you, plus your top artists and songs.",
+          "It covers part of the year, not all of it. For 2025, YouTube's help page asked for enough eligible watch history from January through late October, so whatever you watched in November and December was not in it.",
+          "It is not kept. The same help page says a Recap cannot be refreshed or edited, that a deleted Recap cannot be seen again, and that Recaps are automatically deleted for everyone after the end of the year. YouTube's blog adds that the You tab shows it until the end of the year, and suggests downloading the cards you want to keep.",
+          "These are the rules YouTube published for the 2025 Recap. They may change for a later year, so check the help page before relying on any of them.",
+        ],
+        sources: [{ label: "YouTube Official Blog, Introducing YouTube Recap (2 Dec 2025)", href: "https://blog.youtube/news-and-events/youtube-recap-2025/" }, { label: "YouTube Help, Find & share your YouTube Recap", href: "https://support.google.com/youtube/answer/16723638?hl=en" }, { label: "YouTube Official Blog, How to find, share and save your YouTube Recap (3 Dec 2025)", href: "https://blog.youtube/news-and-events/how-to-find-share-and-save-your-youtube-recap/" }],
+      },
+      {
+        heading: "Why your Recap may not show",
+        body: [
+          "YouTube's help page and blog list the reasons an account gets no Recap:",
+        ],
+        list: [
+          "Not enough eligible watch history in the period it counts. History that was paused, or removed by auto-delete, does not count.",
+          "Age: under 13, or under the minimum age in your country.",
+          "Account type: supervised accounts and children's accounts are not eligible, and neither are delegate users on a Brand Account.",
+          "Not signed in, or signed in to an account other than the one that holds your personal watch history.",
+          "Location outside the regions where Recap is offered.",
+        ],
+        sources: [{ label: "YouTube Help, Find & share your YouTube Recap", href: "https://support.google.com/youtube/answer/16723638?hl=en" }, { label: "YouTube Official Blog, How to find, share and save your YouTube Recap (3 Dec 2025)", href: "https://blog.youtube/news-and-events/how-to-find-share-and-save-your-youtube-recap/" }],
+      },
+      {
+        heading: "Which of those a Takeout file can fix",
+        body: [
+          "Too little history in the January-to-October window, or most of your viewing late in the year: the export holds every recorded view, so a recap built from it covers the whole calendar year.",
+          "Wrong account: Takeout exports the history of the account you are signed in to, so sign in to the account you actually watch on before exporting.",
+          "Paused or auto-deleted history: nothing can rebuild it. A paused period was never recorded, and auto-delete removes entries from the account itself, so they are missing from the export too. The guide on pausing and deleting YouTube history shows how each case appears as a gap in the file.",
+          "Age, account type and region are rules about who YouTube shows a Recap to. Whether such an account can export its history is a separate question, and this guide does not answer it.",
+        ],
+      },
+      {
+        heading: "Rebuild a recap for any year",
+        body: [
+          "The steps below use the YouTube Watch History Analyzer on this site. It reads the export in your browser tab; the file is never uploaded.",
+        ],
+        list: [
+          "Go to takeout.google.com, choose Deselect all, then select only YouTube and YouTube Music. Under its options, set the history format to JSON if you can; the analyzer reads the HTML export too, but HTML writes dates in your account's language. The export how-to on this site walks through each screen.",
+          "When Google's email arrives, download the archive. You do not need to unpack it.",
+          "Open the analyzer and drop in the .zip, or the watch-history.json from inside it.",
+          "Pick a year. For each year in the file you get the number of videos watched, distinct channels, your top five channels, your most rewatched videos, your busiest month, weekday and hour, and the first video of that year.",
+        ],
+      },
+      {
+        heading: "What a Takeout recap can and cannot tell you",
+        body: [
+          "It can count. Views per year, which channels you returned to, which videos you replayed, and when in the day and week you watched, for every year the export covers.",
+          "It cannot tell you hours watched. Takeout records when each video was opened, not how long it played, so any hours figure built from it rests on an assumed average length. The analyzer shows counts and says so on the page.",
+          "It cannot reproduce YouTube's interest cards or personality types. YouTube does not publish how it assigns them, and the export carries no topic labels: each entry is a title, a channel, a link and a timestamp, plus a few bookkeeping fields.",
+          "The counts follow stated rules: ads are left out, YouTube and YouTube Music views are counted together, and removed videos still count, under an unknown channel. The guide on why watch counts differ between tools explains each rule.",
+        ],
+      },
+      {
+        heading: "All-time numbers",
+        body: [
+          "The same file answers the all-time question in views: the analyzer's totals cover every year in the export at once, from the first entry to the last. It cannot answer it in hours, for the reason above. A tool that shows a lifetime hours figure from a Takeout export is estimating, not measuring.",
+        ],
+      },
+    ],
+  },
 };
 
 const content = contentMap[guide.slug as keyof typeof contentMap];
@@ -663,6 +736,14 @@ const structuredData = [
                 {section.list.map((item) => <li>{item}</li>)}
               </ul>
             )}
+            {section.sources && section.sources.length > 0 && (
+              <p class="guide-sources">
+                Sources:{" "}
+                {section.sources.map((source, index) => (
+                  <Fragment>{index > 0 && "; "}<a href={source.href} rel="noopener noreferrer" target="_blank">{source.label}</a></Fragment>
+                ))}
+              </p>
+            )}
           </section>
         ))}
       </article>
@@ -702,6 +783,12 @@ const structuredData = [
   color: var(--muted);
 }
 .guide-section p:last-child { margin-bottom: 0; }
+.guide-section p.guide-sources {
+  margin-top: 14px;
+  font-size: .8rem;
+  line-height: 1.6;
+}
+.guide-sources a { color: inherit; text-decoration: underline; }
 .guide-list {
   margin: 14px 0 0;
   padding-left: 20px;

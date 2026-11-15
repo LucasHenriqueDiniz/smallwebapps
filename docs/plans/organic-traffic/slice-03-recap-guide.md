@@ -1,5 +1,5 @@
 ---
-status: todo
+status: doing
 kanban:
 ---
 
@@ -59,3 +59,39 @@ clock starts from it.
 
 If YouTube's help page on Recap eligibility cannot be fetched, drop the "not showing" section rather
 than restate it from a snippet.
+
+## Progress
+
+**2026-11-15: written and built. Waiting on merge, the production check and the owner's indexing request.**
+
+- **Slug and title**: `/guides/youtube-recap-past-years/`, "How to See Your YouTube Recap for Past
+  Years". It sits in the YouTube Analysis ring of `guides.ts`, last, so the ring links it from the three
+  guides before it, and `guidesForTool("tubetrace")` links it from the tool page.
+- **The fact the page is built on**: YouTube's help page says "Recaps will be automatically deleted for
+  everyone after the end of the year". So no past-year Recap exists on YouTube, and a Takeout file is
+  the only source for one. The same page puts the 2025 window at "January through late October", so
+  November and December views were never in it.
+- **Sources**, fetched today into `docs/research/2026-11-15-organic-traffic/fetches/`:
+  `youtube-blog-introducing-recap-2025.md`, `youtube-help-find-share-recap.md`,
+  `youtube-blog-find-share-save-recap.md`. Guide sections gained an optional `sources` list, rendered
+  as links under the section.
+- **"Not showing" section kept**: the eligibility page could be fetched (see "If stuck").
+- The page dates its claims to the 2025 Recap, says the rules may change, and states no fact about a
+  2026 Recap: none of the three sources has one.
+
+Measured on the build (`apps/web/dist`):
+
+| check | result |
+|---|---|
+| page | built, 1 `<main>`, 0 `noindex`, ~1,175 words in `<main>` |
+| sitemap | lists it; 48 URLs (47 + 1) |
+| inbound links | 4 cluster pages (`/apps/tubetrace/`, `what-your-youtube-history-reveals`, `pause-delete-youtube-history`, `youtube-takeout-json-vs-html`) + `/guides/`; the bar is ≥ 3 |
+| claims about the official Recap | 10 distinct claims (launch date and rollout; what the cards show; the January–October window; no refresh, no recovery, deleted at year end; You tab until year end and card download; five eligibility rules), each in a section whose sources list its page: **10/10**; 3/3 pages saved in `fetches/`. The intro repeats the year-end deletion and links nothing; section 1 links it |
+| structured data | Article + BreadcrumbList, as the other explainer guides |
+| `scan-links.mjs` on `dist` | exit 0 |
+| vitest / `astro check` / validators | 133/133 / 0 errors / 3 × exit 0 |
+
+Still open:
+- [ ] Production: the three `curl` lines above, after the merge deploys.
+- [ ] ⚠️ Owner: "Request indexing" for `https://smallwebapps.com/guides/youtube-recap-past-years/`, and
+      write the date here. Slice 7's clock starts from the ship date.
