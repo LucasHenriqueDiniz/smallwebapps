@@ -20,6 +20,7 @@ export const apps: AppDefinition[] = [
       "Spot your most-watched channels and peak viewing times",
       "Surface timestamps, watch links, and viewing patterns from your own export",
       "Runs entirely in the browser — your history never leaves your device",
+      "Pick any year in your export for its recap: top channels, most rewatched videos, busiest month, weekday and hour",
     ],
     faq: [
       {
@@ -36,6 +37,11 @@ export const apps: AppDefinition[] = [
         question: "How do I get my Google Takeout export?",
         answer:
           "Visit takeout.google.com, select YouTube data, and download the archive. We have a step-by-step guide linked from the tool page.",
+      },
+      {
+        question: "Can I see a YouTube recap for 2024 or an earlier year?",
+        answer:
+          "Yes, for any year your Takeout export covers. After the file loads, pick a year to see its views, channels, top five channels, most rewatched videos, busiest month, weekday and hour, and the first video of that year. It shows counts only: the export records when each video was opened, not how long it played, so there are no hours watched.",
       },
     ],
     faqExpanded: [
@@ -55,9 +61,14 @@ export const apps: AppDefinition[] = [
           "Visit takeout.google.com, deselect everything except 'YouTube and YouTube Music', choose JSON as the format, and request the export. Google will email you a download link, usually within minutes for history-only exports.",
       },
       {
+        question: "Can I see a YouTube recap for 2024 or an earlier year?",
+        answer:
+          "Yes, for any year your Takeout export covers. After the file loads, pick a year to see its views, channels, top five channels, most rewatched videos, busiest month, weekday and hour, and the first video of that year. It shows counts only: the export records when each video was opened, not how long it played, so there are no hours watched.",
+      },
+      {
         question: "Why does Takeout offer both JSON and HTML formats?",
         answer:
-          "HTML is meant for viewing in a browser as a static page; JSON is structured data meant for tools like this one. This analyzer only reads the JSON version — if you exported HTML, re-request the export and choose JSON.",
+          "HTML is meant for viewing in a browser as a static page; JSON is structured data meant for tools like this one. This analyzer reads either, but JSON is the safer choice: its timestamps are not written in your account's language, so they never have to be guessed at.",
       },
       {
         question: "Can I analyze search history or only watch history?",
@@ -86,7 +97,7 @@ export const apps: AppDefinition[] = [
           definitions: [
             { term: "title", definition: "The video title prefixed with the literal string 'Watched '. For videos that were later deleted or made private, the value reads 'Watched a video that has been removed' and no real title is recoverable." },
             { term: "titleUrl", definition: "The canonical watch URL, in the form https://www.youtube.com/watch?v=VIDEO_ID. Absent on removed videos." },
-            { term: "subtitles[0].name", definition: "The channel name. This analyzer falls back to 'Unknown Channel' when the field is missing, which is normal for removed or private videos." },
+            { term: "subtitles[0].name", definition: "The channel name. This analyzer falls back to 'Unknown channel' when the field is missing, which is normal for removed or private videos." },
             { term: "subtitles[0].url", definition: "The channel URL. Same caveat as the name field." },
             { term: "time", definition: "An ISO 8601 timestamp for the view. This is the field every chart on this page is built from." },
             { term: "activityControls", definition: "An array naming the Google setting that recorded the entry. Watch events list 'YouTube watch history'." },
@@ -95,9 +106,9 @@ export const apps: AppDefinition[] = [
         {
           heading: "How this analyzer decides what counts as a view",
           body: [
-            "Two filters run before anything is counted. An entry is included only if its activityControls array contains 'YouTube watch history', and only if its title begins with 'Watched '. Everything else in the file is discarded.",
-            "That second filter matters more than it looks. A combined MyActivity.json export mixes searches, comments, and subscriptions into the same array, and those entries begin with 'Searched for' or similar. Filtering on the 'Watched ' prefix keeps searches out of your view count. It also means this tool reports a lower number than any tool that simply counts array length — that difference is intentional, not a bug.",
-            "Ads are not separated out. If an entry was recorded as a watch event, it is counted as one.",
+            "An entry counts as a view when any of three signs says it is a watch event: its activityControls array contains 'YouTube watch history', its title begins with 'Watched ', or its link points at a YouTube video. Everything else in the file is discarded.",
+            "That matters more than it looks. A combined MyActivity.json export mixes searches, comments, and subscriptions into the same array. Searches carry none of the three signs — their title begins 'Searched for' and their link goes to a results page — so they stay out of your view count. The link is the sign that still works when your account is not in English. It also means this tool reports a lower number than any tool that simply counts array length — that difference is intentional, not a bug.",
+            "Ads are left out. An entry whose details read 'From Google Ads' is dropped before anything is counted, in the totals and in every yearly recap. YouTube and YouTube Music views are counted together.",
           ],
         },
         {
@@ -115,14 +126,14 @@ export const apps: AppDefinition[] = [
         "Request the export. Google will prepare a .zip file and email you a download link (usually within a few minutes for history-only exports).",
         "Unzip the archive and locate watch-history.json inside the 'YouTube and YouTube Music/history/' folder.",
         "Open this tool and drag watch-history.json into the upload area, or click to browse for the file.",
-        "Review your dashboard: total videos watched, top channels, activity over time, and a searchable list of individual entries with links back to YouTube.",
+        "Review the totals, top channels and activity charts, then pick a year to see that year's recap.",
       ],
       useCases: [
         "Find out how many videos you've watched from a specific channel over the past year before deciding whether to unsubscribe.",
         "Spot binge-watching patterns — late-night sessions or sudden spikes — as part of a digital wellbeing review.",
         "Recover links to videos you watched but lost track of, without scrolling through YouTube's slow built-in history page.",
         "Audit your own data before requesting Google to delete your account or clear your watch history.",
-        "Get a quick overview of your viewing habits for a year-in-review post or personal record.",
+        "See a recap of any year in your export, not only the current one, for a year-in-review post or a personal record.",
       ],
       limitations: [
         "Only reads the watch-history.json file from Google Takeout — it does not connect to your live YouTube account or the YouTube API.",
@@ -135,7 +146,7 @@ export const apps: AppDefinition[] = [
     seo: {
       title: "YouTube Watch History Analyzer — Read Your Takeout",
       description:
-        "Open the watch-history.json from your Google Takeout export and see totals, top channels and peak viewing hours. The file is read in the tab, never uploaded.",
+        "Open the watch-history.json from your Google Takeout export and see totals, top channels, peak hours and a recap for any year. Read in the tab, never uploaded.",
     },
   },
 

@@ -51,7 +51,7 @@ const contentMap = {
         body: [
           "This is the single biggest source of confusion. When a video is deleted, made private, or taken down after you watched it, YouTube can no longer supply its metadata, and Takeout writes a degraded entry instead of omitting it.",
           "Those entries read 'Watched a video that has been removed'. There is no real title to recover, no titleUrl, and typically no subtitles array, which means no channel name either. The timestamp survives.",
-          "The practical consequence is that removed videos still count toward your totals and still appear in your activity timeline, but they cannot appear in a top-channels ranking, because there is no channel attached. A tool that shows 4,000 views but only attributes 3,600 of them to channels is not losing data; it is being honest about a gap that Google created. Our analyzer labels these 'Unknown Channel' rather than dropping them, so the totals stay consistent.",
+          "The practical consequence is that removed videos still count toward your totals and still appear in your activity timeline, but they cannot appear in a top-channels ranking, because there is no channel attached. A tool that shows 4,000 views but only attributes 3,600 of them to channels is not losing data; it is being honest about a gap that Google created. Our analyzer labels these 'Unknown channel' rather than dropping them, so the totals stay consistent.",
         ],
       },
       {
@@ -120,7 +120,7 @@ const contentMap = {
         body: [
           "If you exported all YouTube data rather than just history, or if you took a combined Google activity export, you may be holding a MyActivity.json rather than a clean watch-history.json. Those files interleave several activity types in one array: videos watched, searches performed, and other recorded actions, all as sibling objects.",
           "Search entries look structurally similar to watch entries. They have a title, a time, and an activityControls array. The distinguishing detail is the title prefix: watch events begin with 'Watched ', searches begin with 'Searched for '.",
-          "Our analyzer applies two filters before counting anything. An entry is included only if its activityControls array contains 'YouTube watch history', and only if its title begins with 'Watched '. A tool that checks neither will report your searches as videos. This is the single largest source of inflated counts.",
+          "Our analyzer keeps an entry when any of three signs says it is a watch event: its activityControls array contains 'YouTube watch history', its title begins with 'Watched ', or its link points at a YouTube video. Searches carry none of them, since their link goes to a results page, so they never reach the count. The link is the sign that still works when the account is not in English. A tool that checks nothing will report your searches as videos. This is the single largest source of inflated counts.",
         ],
       },
       {
@@ -128,7 +128,7 @@ const contentMap = {
         body: [
           "Deleted and private videos remain in the export as entries reading 'Watched a video that has been removed', with no title, URL, or channel.",
           "Tools disagree about what to do with them. Some drop them entirely, which lowers the total. Some count them but exclude them from channel rankings, which keeps the total honest while leaving a visible gap between your view count and the sum of your per-channel counts. Some silently attribute them to a placeholder channel, which makes the numbers add up at the cost of inventing a channel that does not exist.",
-          "We count them and label them 'Unknown Channel'. If your top-channels list does not sum to your total, that difference is your removed-video count, and it is a genuinely interesting number — it is a measure of how much of your viewing history has rotted away.",
+          "We count them and label them 'Unknown channel'. If your top-channels list does not sum to your total, that difference is your removed-video count, and it is a genuinely interesting number — it is a measure of how much of your viewing history has rotted away.",
         ],
       },
       {
@@ -136,7 +136,7 @@ const contentMap = {
         body: [
           "Watching the same video three times produces three entries with three timestamps. That is correct behaviour for a log of events, but it means 'videos watched' and 'unique videos watched' are different questions with different answers, and tools do not always say which one they are showing you.",
           "Shorts are recorded as ordinary watch events. Because they are seconds long and easy to scroll through by the dozen, a heavy Shorts habit can dominate a view count in a way that badly misrepresents time spent. This is another reason 'hours watched' estimates derived from view counts fall apart.",
-          "Ads are not separated out. If an entry was recorded as a watch event, we count it as one; the export gives no reliable flag to do otherwise.",
+          "Ads are separated out. An entry whose details read 'From Google Ads' is dropped before anything is counted, in the totals and in every yearly recap. A tool that skips this check counts those ads as views. YouTube and YouTube Music views, on the other hand, are counted together.",
         ],
       },
       {

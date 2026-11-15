@@ -1,12 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { gunzipSync, unzipSync } from "fflate";
-
-type WatchEntry = {
-  title: string;
-  channel: string;
-  url?: string;
-  time: Date;
-};
+import { AD_MARKER, UNKNOWN_CHANNEL, parseJsonHistory, type WatchEntry } from "./history";
+import { recapForYear, stampEntries, yearsIn } from "./recap";
 
 type Analysis = {
   entries: WatchEntry[];
@@ -175,29 +170,6 @@ function parseDateText(value: string) {
   return null;
 }
 
-function parseJsonHistory(text: string) {
-  const data = JSON.parse(text);
-  const items = Array.isArray(data) ? data : data.BrowserHistory || [];
-
-  return items
-    .filter((item: any) => {
-      const title = String(item.title || "");
-      const controls = Array.isArray(item.activityControls) ? item.activityControls.join(" ") : "";
-      return title.startsWith("Watched ") || controls.includes("YouTube watch history");
-    })
-    .map((item: any) => {
-      const date = new Date(item.time || item.time_usec / 1000);
-      if (Number.isNaN(date.getTime())) return null;
-      return {
-        title: String(item.title || "Unknown video").replace(/^Watched\s+/, ""),
-        channel: item.subtitles?.[0]?.name || "Unknown channel",
-        url: item.titleUrl,
-        time: date,
-      };
-    })
-    .filter(Boolean) as WatchEntry[];
-}
-
 function parseHtmlHistory(text: string) {
   const doc = new DOMParser().parseFromString(text, "text/html");
   const entries: WatchEntry[] = [];
@@ -205,6 +177,9 @@ function parseHtmlHistory(text: string) {
   doc.querySelectorAll(".content-cell").forEach((cell) => {
     const cellText = cell.textContent?.trim() || "";
     if (!/^Watched\s/i.test(cellText)) return;
+    // The HTML export writes the ad marker in the entry's caption cell, a
+    // sibling of this one inside the same .outer-cell.
+    if (cell.closest(".outer-cell")?.textContent?.includes(AD_MARKER)) return;
 
     const links = Array.from(cell.querySelectorAll("a"));
     const videoLink = links.find((link) => link.href.includes("watch?v=")) || links[0];
@@ -223,7 +198,7 @@ function parseHtmlHistory(text: string) {
 
     entries.push({
       title: videoLink?.textContent?.trim() || cellText.replace(/^Watched\s+/, "").trim() || "Unknown video",
-      channel: channelLink?.textContent?.trim() || "Unknown channel",
+      channel: channelLink?.textContent?.trim() || UNKNOWN_CHANNEL,
       url: videoLink?.getAttribute("href") || undefined,
       time,
     });
@@ -299,6 +274,14 @@ export default function YouTubeWatchHistoryAnalyzerApp() {
   const dayMax = useMemo(() => Math.max(...(analysis?.byDay || [0])), [analysis]);
   const monthMax = useMemo(() => Math.max(...(analysis?.byMonth.map((item) => item.count) || [0])), [analysis]);
   const recentEntries = useMemo(() => analysis?.entries.slice(-5).reverse() || [], [analysis]);
+
+  // Years are cut in the browser's own zone, like the hour and month charts.
+  const timeZone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
+  const stamped = useMemo(() => (analysis ? stampEntries(analysis.entries, timeZone) : []), [analysis, timeZone]);
+  const years = useMemo(() => yearsIn(stamped), [stamped]);
+  const [year, setYear] = useState<number | null>(null);
+  useEffect(() => setYear(years[0] ?? null), [years]);
+  const recap = useMemo(() => (year === null ? null : recapForYear(stamped, year)), [stamped, year]);
 
   useEffect(() => {
     if (!analysis) {
@@ -408,6 +391,94 @@ export default function YouTubeWatchHistoryAnalyzerApp() {
               {peakHour ? `${String(peakHour.hour).padStart(2, "0")}:00` : "-"}
             </p>
           </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-base font-semibold text-slate-950">
+              {recap ? `Your ${recap.year} on YouTube` : "Year in review"}
+            </h3>
+            {years.length > 0 && (
+              <div className="flex flex-wrap gap-1" role="group" aria-label="Year">
+                {years.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    aria-pressed={option === year}
+                    onClick={() => setYear(option)}
+                    className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
+                      option === year ? "bg-red-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-red-50"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {recap ? (
+            <>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {[
+                  ["Videos", formatNumber(recap.videos)],
+                  ["Channels", formatNumber(recap.channels)],
+                  ["Busiest month", `${recap.busiestMonth.label} (${formatNumber(recap.busiestMonth.count)})`],
+                  ["Busiest weekday", `${recap.busiestWeekday.label} (${formatNumber(recap.busiestWeekday.count)})`],
+                  ["Peak hour", `${String(recap.peakHour.hour).padStart(2, "0")}:00 (${formatNumber(recap.peakHour.count)})`],
+                  ["First video", formatDate(recap.firstVideo.time)],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-xl bg-slate-50 p-4">
+                    <p className="text-xs font-semibold text-slate-500">{label}</p>
+                    <p className="mt-2 text-sm font-semibold text-slate-900">{value}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 truncate text-xs text-slate-500">
+                First video of {recap.year}: {recap.firstVideo.title} — {recap.firstVideo.channel}
+              </p>
+
+              <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Top channels</p>
+                  <ol className="mt-2 space-y-2">
+                    {recap.topChannels.map((item, index) => (
+                      <li key={item.label} className="flex items-center justify-between gap-3 text-sm">
+                        <span className="truncate font-medium text-slate-800">
+                          {index + 1}. {item.label}
+                        </span>
+                        <span className="shrink-0 text-xs font-semibold text-slate-500">{formatNumber(item.count)}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Most rewatched</p>
+                  {recap.rewatched.length > 0 ? (
+                    <ol className="mt-2 space-y-2">
+                      {recap.rewatched.map((item) => (
+                        <li key={item.url} className="flex items-center justify-between gap-3 text-sm">
+                          <span className="truncate font-medium text-slate-800">{item.label}</span>
+                          <span className="shrink-0 text-xs font-semibold text-slate-500">{formatNumber(item.count)}×</span>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <p className="mt-2 text-sm text-slate-600">No video was watched more than once in {recap.year}.</p>
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <p className="mt-3 text-sm text-slate-600">
+              Select a Takeout file to see a recap of any year it covers.
+            </p>
+          )}
+
+          <p className="mt-4 text-xs leading-5 text-slate-500">
+            Counts views of YouTube and YouTube Music together, and leaves ads out. There are no hours
+            watched: Takeout records when each video was opened, not how long it played.
+          </p>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-5">
