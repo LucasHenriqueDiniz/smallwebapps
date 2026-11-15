@@ -10,6 +10,45 @@ explains.
 Newest first. A superseded decision stays, marked — knowing why an alternative lost is worth as
 much as knowing why the winner won.
 
+### 2026-11-15 — Search work goes to the YouTube Takeout cluster, and the index narrows to it (proposed)
+
+**Status.** Proposed. It binds when the owner merges the plan, with option A or B below chosen.
+
+**Context.** The site has 1 click in its Search history and 0 in the last 90 days. AdSense waits for
+real clicks (2026-10-18, amended). Between 2026-10-18 and 2026-11-15 the index grew from 14 to 33 of
+47 sitemap URLs, while impressions over 28 days fell from 96 to 25. Of the 19 URLs newly indexed, 15
+drew none. Google is declining the PDF tools: 8 of 10 are out, and 5 went from "Discovered" back to
+"unknown" after indexing was requested. Their head terms carry six-figure volume, Hard difficulty and
+brand-navigation result pages. The one cluster Google has shown is YouTube Takeout: `/apps/tubetrace/`
+drew 154 of the site's 198 impressions in 90 days. It fell in the week of 2026-10-19, for reasons
+not established. Its result pages have openings, and since YouTube's own Recap (2025-12-02) there
+is a December peak for past years and "not showing". Evidence:
+`docs/research/2026-11-15-organic-traffic/`.
+
+**Decision.**
+- New Search work goes to the YouTube Takeout cluster only: a recap for any year in TubeTrace, a
+  guide for the recap intents, and the export and file-format guides made the most accurate answer.
+  No page targets "youtube watch history analyzer" or "stats", where three exact-match domains hold
+  1–3.
+- **Option A (recommended):** the index narrows to TubeTrace, four privacy tools (`image-to-text`,
+  `pdf-ocr`, `searchable-pdf`, `exif-viewer`) and seven guides. 21 tools and 4 guides move to
+  `noindex, follow`, unlisted and still served, the same mechanism as the 114 of 2026-10-18.
+  Sitemap 47 → 20.
+- **Option B:** the 28 stay indexed. Only the guides about already-unlisted tools are cut.
+- Either way, three pages merge behind a 301 (`screenshot-to-text` → `image-to-text`,
+  `image-metadata` → `exif-viewer`, the how-to-analyze guide → `/apps/tubetrace/`). A guide is
+  listed if and only if it is indexable, as tools are.
+- After the recap guide ships, the cluster's index state at day 28 and its impressions and clicks
+  over days 14–42 decide whether to build more, hold, or stop adding pages. The same gate proposes
+  the click count that triggers the AdSense review.
+
+**What this rules out.** Any new PDF, image or creator-tool page. Competing on head terms. Deleting
+the cut tools. Google calls deletion "a last resort", and `noindex` does the same job in Search
+while staying reversible one slug at a time. An "hours watched" figure, because Takeout records no
+durations. What would reopen the cut: Google indexing and showing a cut tool's page anyway (it stays
+served), or the gate's "stop" row, which would mean narrowing did not help and the judgement is
+site-level. Pitch: `docs/pitches/organic-traffic.md`. Plan: `docs/plans/organic-traffic/`.
+
 ### 2026-10-18 — The site links only the tools it indexes, and the size variants are retired
 
 **Context.** AdSense has held smallwebapps.com at *Needs attention: Low value content* since its
