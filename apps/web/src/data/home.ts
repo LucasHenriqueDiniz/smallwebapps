@@ -6,21 +6,8 @@
  * Formatter stayed the first featured card and the first hero link for weeks
  * after it was taken out of the index.
  */
-export const heroQuickSlugs = ["tubetrace", "pdf-compress", "ai-image-checker"];
+export const heroQuickSlugs = ["tubetrace", "image-to-text", "pdf-ocr"];
 
-export const featuredSlugs = ["tubetrace", "pdf-compress", "image-resize", "ai-image-checker"];
+export const featuredSlugs = ["tubetrace", "image-to-text", "pdf-ocr", "exif-viewer"];
 
-export const popularSlugs = [
-  "tubetrace",
-  "pdf-compress",
-  "pdf-merge",
-  "image-resize",
-  "image-to-pdf",
-  "ai-image-checker",
-  "image-optimize",
-  "pdf-split",
-  "image-to-text",
-  "pdf-to-image",
-  "youtube-tag-extractor",
-  "exif-viewer",
-];
+export const popularSlugs = ["tubetrace", "image-to-text", "pdf-ocr", "searchable-pdf", "exif-viewer"];

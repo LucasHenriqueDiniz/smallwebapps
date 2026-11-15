@@ -1,6 +1,6 @@
 # Small Web Apps
 
-> Free browser-based tools for PDF, image, developer, data, and YouTube workflows. Tools are designed to run locally in the browser with no account and no server upload for user files or pasted data.
+> Free browser-based tools that run locally, with no account and no upload: a YouTube watch-history analyzer for Google Takeout exports (with a recap for any year), OCR for images and scanned PDFs, and a photo metadata viewer.
 
 ## Important URLs
 
@@ -15,11 +15,9 @@
 
 ## Tool Categories
 
-- PDF tools
-- Image and inspection tools
-- Developer tools
-- Data tools
-- YouTube data tools
+- YouTube data tools (Google Takeout watch history)
+- PDF tools (OCR, searchable PDF)
+- Image and inspection tools (OCR, EXIF and file metadata)
 
 ## Usage Notes
 

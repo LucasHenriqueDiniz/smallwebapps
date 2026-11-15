@@ -1,4 +1,22 @@
 import { useState, useCallback } from "react";
+import { fileFacts } from "./file-facts";
+
+/** The decoded size, or null when the browser cannot decode the format. */
+function decodePixels(file: File): Promise<{ width: number; height: number } | null> {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      resolve({ width: img.naturalWidth, height: img.naturalHeight });
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => {
+      resolve(null);
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+}
 
 interface ExifSection {
   title: string;
@@ -21,16 +39,22 @@ export default function ExifViewerApp() {
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState("");
   const [copied, setCopied] = useState(false);
+  const [noExif, setNoExif] = useState(false);
 
   const processFile = useCallback(async (file: File) => {
     setError("");
     setSections([]);
+    setNoExif(false);
     setFileName(file.name);
+    // Every image has these, EXIF or not: a PNG screenshot still has a size,
+    // a type and dimensions.
+    const fileSection: ExifSection = { title: "File", fields: fileFacts(file, await decodePixels(file)) };
     try {
       const exifr = (await import("exifr")).default;
       const data = await exifr.parse(file, { tiff: true, exif: true, gps: true, iptc: false });
       if (!data || Object.keys(data).length === 0) {
-        setError("No EXIF data found in this file.");
+        setSections([fileSection]);
+        setNoExif(true);
         return;
       }
 
@@ -68,8 +92,9 @@ export default function ExifViewerApp() {
       }
       if (data.GPSAltitude) gps.fields.push({ label: "Altitude", value: `${data.GPSAltitude.toFixed(1)}m` });
 
-      setSections([camera, image, exposure, dates, gps].filter(s => s.fields.length > 0));
+      setSections([fileSection, camera, image, exposure, dates, gps].filter(s => s.fields.length > 0));
     } catch (e) {
+      setSections([fileSection]);
       setError(e instanceof Error ? e.message : "Could not read EXIF data.");
     }
   }, []);
@@ -101,6 +126,12 @@ export default function ExifViewerApp() {
       </section>
 
       {error && <p className="text-sm font-medium text-red-600 rounded-2xl border border-red-200 bg-red-50 p-4">✗ {error}</p>}
+      {noExif && (
+        <p className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+          No EXIF data in this file. Screenshots, PNG and WebP files, and photos that passed through an app
+          that strips metadata usually carry none; the file details below still apply.
+        </p>
+      )}
 
       {sections.length > 0 && (
         <>

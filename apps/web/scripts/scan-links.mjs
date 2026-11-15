@@ -40,6 +40,12 @@ const isNoindex = (html) =>
 const toolLinks = (html) =>
   [...html.matchAll(/href=["'](?:https:\/\/smallwebapps\.com)?\/apps\/([a-z0-9-]+)\/?["']/g)].map((m) => m[1]);
 
+/** Every same-site page link, without query or fragment: "/guides/x/", "/apps//". */
+const pageLinks = (html) =>
+  [...html.matchAll(/href=["'](?:https:\/\/smallwebapps\.com)?(\/(?!\/)[^"'#?]*)/g)]
+    .map((m) => m[1])
+    .filter((path) => !/\.[a-z0-9]+$/i.test(path.split("/").pop() ?? ""));
+
 const sitemapIndex = (await load("/sitemap-0.xml")).html;
 const pages = [...sitemapIndex.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
 if (pages.length === 0) {
@@ -57,7 +63,9 @@ const visibleText = (html) =>
     .replace(/<[^>]+>/g, " ");
 
 const linksByPage = new Map();
+const pageLinksByPage = new Map();
 const toolPageProblems = [];
+const toolCategory = new Map();
 let toolPages = 0;
 for (const path of pages) {
   const { status, html } = await load(path);
@@ -67,16 +75,29 @@ for (const path of pages) {
     continue;
   }
   linksByPage.set(path, toolLinks(html));
+  pageLinksByPage.set(path, pageLinks(html));
   if (!/^\/apps\/[a-z0-9-]+\/$/.test(path)) continue;
   toolPages += 1;
   const mains = (html.replace(/<!--[\s\S]*?-->/g, " ").match(/<main[\s>]/g) ?? []).length;
   if (mains !== 1) toolPageProblems.push(`${path} has ${mains} <main>`);
   const unbuilt = visibleText(html).match(UNBUILT);
   if (unbuilt) toolPageProblems.push(`${path} says "${unbuilt[0]}"`);
-  // A listed tool always has listed neighbours in its own category, so its
-  // related block is "More tools in …". The other heading is for unlisted
-  // tools only; seeing it here means the heading rule regressed.
-  if (!/More tools in /.test(html)) toolPageProblems.push(`${path} has no "More tools in" block`);
+  toolCategory.set(path, {
+    category: html.match(/<span class="tl-cat"[^>]*>([^<]+)<\/span>/)?.[1]?.trim() ?? "",
+    inCategory: /More tools in /.test(html),
+  });
+}
+
+// A listed tool with listed neighbours in its own category says "More tools
+// in …". Since 2026-11-15 a category can hold one listed tool (TubeTrace in
+// YouTube / Data), and that page alone says "Other tools on this site".
+const perCategory = new Map();
+for (const { category } of toolCategory.values()) perCategory.set(category, (perCategory.get(category) ?? 0) + 1);
+for (const [path, { category, inCategory }] of toolCategory) {
+  const hasNeighbours = (perCategory.get(category) ?? 0) > 1;
+  if (!category) toolPageProblems.push(`${path} shows no category`);
+  else if (hasNeighbours && !inCategory) toolPageProblems.push(`${path} has no "More tools in" block`);
+  else if (!hasNeighbours && inCategory) toolPageProblems.push(`${path} says "More tools in" with no neighbour listed`);
 }
 
 const linkedSlugs = new Set([...linksByPage.values()].flat());
@@ -94,6 +115,26 @@ for (const [page, slugs] of linksByPage) {
   offending += bad.length;
   console.log(`  ${page} → ${bad.map((slug) => `${slug} (${unlisted.get(slug)})`).join(", ")}`);
 }
+
+// Every other same-site link: it must answer 200 (a link to a redirect source
+// is a dead end in dist and a wasted hop in production), and a guide it points
+// at must be indexable, as tools must be. Guides follow tools since 2026-11-15.
+const badPages = new Map();
+for (const linked of new Set([...pageLinksByPage.values()].flat())) {
+  if (linked.startsWith("/apps/") && /^\/apps\/[a-z0-9-]+\/?$/.test(linked)) continue; // checked above
+  if (linked.includes("//")) { badPages.set(linked, "malformed"); continue; }
+  const { status, html } = await load(linked.endsWith("/") ? linked : `${linked}/`);
+  if (status !== 200) badPages.set(linked, `answers ${status}`);
+  else if (/^\/guides\/[a-z0-9-]+\/?$/.test(linked) && isNoindex(html)) badPages.set(linked, "noindex");
+}
+let badPageLinks = 0;
+for (const [page, links] of pageLinksByPage) {
+  const bad = [...new Set(links.filter((link) => badPages.has(link)))];
+  if (bad.length === 0) continue;
+  badPageLinks += bad.length;
+  console.log(`  ${page} → ${bad.map((link) => `${link} (${badPages.get(link)})`).join(", ")}`);
+}
+if (badPageLinks > 0) process.exitCode = 1;
 
 // The home page's own copy must not sell what navigation no longer links.
 // Title, H1, hero subline and section headings only: guide titles linked from
@@ -114,7 +155,8 @@ if (toolPageProblems.length > 0) process.exitCode = 1;
 const source = target ?? "dist";
 console.log(
   `scan:links ${source}: ${linksByPage.size} sitemap pages, ${linkedSlugs.size} distinct tools linked, ` +
-    `${offending} link(s) to unlisted or missing tools, ${homeCopy.length} stale home-page heading(s), ` +
+    `${offending} link(s) to unlisted or missing tools, ${badPageLinks} link(s) to unlisted guides or broken pages, ` +
+    `${homeCopy.length} stale home-page heading(s), ` +
     `${toolPages} tool pages with ${toolPageProblems.length} <main>, "planned" or related-heading problem(s)`,
 );
 if (offending > 0) process.exitCode = 1;

@@ -4511,9 +4511,9 @@ export const apps: AppDefinition[] = [
     tags: ["exif","image metadata","photo metadata","camera","local"],
     features: [
       "Runs entirely in your browser without uploading your data",
-      "Produces copyable output for real work and documentation",
-      "Designed for quick checks, cleanup, and repeat workflows",
-      "Free to use with no account or server-side processing",
+      "File details for any image, EXIF or not: size, type, dimensions, aspect ratio, megapixels",
+      "Camera, exposure, date and GPS fields when the photo carries EXIF",
+      "Copy everything as JSON for documentation or a provenance check",
     ],
     faq: [
       { question: "Is EXIF Viewer free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
@@ -4524,7 +4524,7 @@ export const apps: AppDefinition[] = [
       { question: "Is EXIF Viewer free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
       { question: "Does this tool upload my data?", answer: "No. Your photo is read and parsed locally in the browser tab — it is never uploaded to a server." },
       { question: "What metadata can I see?", answer: "Common EXIF fields include camera make and model, capture date/time, exposure settings (aperture, shutter speed, ISO), image dimensions, orientation, and GPS coordinates if present." },
-      { question: "Why does my image show no EXIF data?", answer: "Many platforms (social media, messaging apps, screenshots) strip EXIF metadata when saving or sharing images. Images straight from a camera or phone typically retain full metadata." },
+      { question: "Why does my image show no EXIF data?", answer: "Many platforms (social media, messaging apps, screenshots) strip EXIF metadata when saving or sharing images. Images straight from a camera or phone typically retain full metadata. The file details (size, type, dimensions, aspect ratio, megapixels) are shown either way." },
       { question: "Does this tool show GPS location data?", answer: "If the image contains embedded GPS coordinates, they are displayed. Be aware that sharing photos with GPS data can reveal where they were taken." },
       { question: "What image formats support EXIF?", answer: "EXIF metadata is most common in JPEG and TIFF files from cameras and phones. PNG and WebP files typically don't contain standard EXIF data." },
       { question: "Can I remove EXIF data with this tool?", answer: "This tool is for viewing metadata only. To strip EXIF data before sharing, use an image tool that re-saves or re-encodes the file without metadata." },
@@ -4754,77 +4754,6 @@ export const apps: AppDefinition[] = [
     seo: {
       title: "HTTP Status Codes - Free Browser Tool",
       description: "Look up HTTP status codes and what they mean. Free, local, no upload, no account required.",
-    },
-  },
-  {
-    slug: "image-metadata",
-    name: "Image Metadata Viewer",
-    category: "Image / Inspection",
-    status: "live",
-    mode: "embedded",
-    layout: "stack",
-    implemented: true,
-    shortDescription: "Extract comprehensive metadata from images (EXIF, IPTC, XMP). View file info, camera settings, location data, and timestamps locally.",
-    longDescription: "Image Metadata Viewer summarizes technical properties from image files, including dimensions, MIME type, file size, and embedded metadata where available. It is read-only and local.",
-    appUrl: "/apps/image-metadata/",
-    landingUrl: "/apps/image-metadata/",
-    tags: ["image metadata","dimensions","file size","exif","local"],
-    features: [
-      "Runs entirely in your browser without uploading your data",
-      "Produces copyable output for real work and documentation",
-      "Designed for quick checks, cleanup, and repeat workflows",
-      "Free to use with no account or server-side processing",
-    ],
-    faq: [
-      { question: "Is Image Metadata Viewer free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
-      { question: "Does this tool upload my data?", answer: "No. Processing happens locally in the browser tab. Your input is not sent to a server." },
-      { question: "What is this tool best for?", answer: "It is best for image metadata viewer tasks where you need a fast, practical browser utility." },
-    ],
-    faqExpanded: [
-      { question: "Is Image Metadata Viewer free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
-      { question: "Does this tool upload my data?", answer: "No. The image is read and inspected locally using the browser's Image and FileReader APIs — it is never uploaded to a server." },
-      { question: "What metadata does it show?", answer: "File name, file size, MIME type, pixel dimensions, aspect ratio, megapixels, and last-modified date for any image. For JPEG files, it also attempts to extract the capture date and camera info from embedded EXIF data." },
-      { question: "How is this different from the EXIF Viewer tool?", answer: "This tool focuses on general file and dimension properties (size, MIME type, aspect ratio, megapixels) with a best-effort JPEG date/camera lookup, while the dedicated EXIF Viewer parses the full EXIF tag set (exposure, GPS, orientation) in more detail." },
-      { question: "Why don't I see a capture date for my PNG or WebP file?", answer: "EXIF-style capture date extraction only runs on JPEG files here, since PNG and WebP don't typically embed EXIF metadata using the same structure." },
-      { question: "Can I copy the metadata results?", answer: "Yes — click 'Copy as JSON' to copy all extracted fields as a JSON object, useful for pasting into documentation, bug reports, or a spreadsheet." },
-      { question: "Does it read GPS location data?", answer: "This tool's EXIF extraction is a lightweight scan for date and camera fields specifically — it does not extract GPS coordinates. Use the EXIF Viewer tool if you need to check for embedded location data." },
-    ],
-    content: {
-      deepDive: [
-        {
-          heading: "Reading the file's own structure",
-          body: [
-            "This inspects the file at byte level rather than asking the browser to decode the picture. A JPEG begins with a two-byte start-of-image marker and is then a chain of segments, each declaring its own length, and metadata lives in specific segments within that chain.",
-            "Walking the chain directly means the extension is irrelevant. A file named .jpg that is really a PNG is immediately visible, which is a common source of confusion when an upload is rejected for the wrong format despite an apparently correct filename.",
-            "It also means what you see is what the file contains, not what a viewer chose to show you. Metadata is routinely present and invisible in normal image viewers, which is exactly why files get shared with more information attached than the sender intended.",
-          ],
-        },
-      ],
-      howToUse: [
-        "Drag and drop an image onto the drop zone, or click it to browse and select a file.",
-        "The tool reads the image and displays file name, size, MIME type, dimensions, aspect ratio, and megapixels.",
-        "For JPEG files, it also attempts to extract a capture date and camera info from embedded EXIF data.",
-        "Click 'Copy as JSON' to copy all the extracted fields to your clipboard.",
-      ],
-      useCases: [
-        "Quickly check an image's exact pixel dimensions and megapixel count before using it in a design or upload.",
-        "Verify a file's true MIME type when the file extension might be misleading.",
-        "Check the aspect ratio of an image against a required ratio (e.g. 16:9 or 1:1) before cropping.",
-        "Look up a JPEG's approximate capture date and camera info without a dedicated photo app.",
-        "Compare file size against dimensions to gauge compression quality before publishing an image.",
-      ],
-      limitations: [
-        "EXIF-based date and camera extraction only works on JPEG files, and uses a lightweight scan rather than a full EXIF parser.",
-        "Does not extract GPS coordinates or the broader EXIF tag set (exposure, ISO, orientation) — see the EXIF Viewer tool for that.",
-        "Read-only — it inspects metadata but does not edit, strip, or re-save the image file.",
-      ],
-      privacy:
-        "The image file is read and inspected entirely in your browser. It is never uploaded to a server.",
-    },
-    seo: {
-      title: "Image Metadata Viewer — Dimensions, Type, Date",
-      description:
-        "Check what an image file declares about itself: pixel dimensions, MIME type, file size and, for JPEGs, the capture date. Your file stays on your device.",
     },
   },
   {
@@ -5603,80 +5532,6 @@ export const apps: AppDefinition[] = [
       title: "Searchable PDF — Add an OCR Text Layer to a Scan",
       description:
         "Make a scanned PDF selectable and findable with Ctrl+F by writing an invisible OCR layer over each page. Latin alphabets, 50 pages a run, and no sign-in.",
-    },
-  },
-  {
-    slug: "screenshot-to-text",
-    name: "Screenshot to Text (OCR)",
-    category: "Image / Inspection",
-    status: "live",
-    mode: "embedded",
-    layout: "intake",
-    implemented: true,
-    shortDescription: "Copy the text out of any screenshot with in-browser OCR.",
-    longDescription:
-      "Screenshot to Text turns screenshots into selectable, copyable text. Paste a screenshot straight from your clipboard — or drop the file — and the Tesseract OCR engine recognizes the text entirely inside your browser. Screen text is sharp and high-contrast, so screenshots are among the most accurate OCR sources.",
-    appUrl: "/apps/screenshot-to-text/",
-    landingUrl: "/apps/screenshot-to-text/",
-    tags: ["screenshot to text", "copy text from screenshot", "ocr", "screen capture", "local", "privacy"],
-    features: [
-      "Paste a screenshot straight from your clipboard — no need to save a file first",
-      "Runs entirely in your browser — the screenshot is never uploaded to a server",
-      "Screen text recognizes very accurately thanks to sharp, high-contrast rendering",
-      "Editable result you can copy or download as .txt, in 12 recognition languages",
-    ],
-    faq: [
-      { question: "Is Screenshot to Text free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
-      { question: "Does this tool upload my screenshot?", answer: "No. OCR runs locally in the browser tab using WebAssembly. The screenshot is never sent to a server." },
-      { question: "Can I paste directly from the clipboard?", answer: "Yes. Take a screenshot, click the drop zone, and press Ctrl/Cmd+V — no need to save it as a file first." },
-    ],
-    faqExpanded: [
-      { question: "Is Screenshot to Text free to use?", answer: "Yes. The tool is free and runs directly in your browser with no account required." },
-      { question: "Does this tool upload my screenshot?", answer: "No. Recognition is done by the Tesseract OCR engine compiled to WebAssembly, running inside your browser tab. The screenshot never leaves your device — which matters, since screenshots often contain private information." },
-      { question: "Can I paste directly from the clipboard?", answer: "Yes. Capture with PrintScreen, Win+Shift+S, or Cmd+Shift+4, click the drop zone, and press Ctrl/Cmd+V. The image is recognized immediately without saving a file." },
-      { question: "Why do screenshots recognize so well?", answer: "Screen text is rendered pixel-sharp with strong contrast and no photographic noise, which is close to ideal input for an OCR engine. Expect noticeably better results than from photos of paper." },
-      { question: "Can I extract an error message from a screenshot?", answer: "Yes — that's one of the most common uses. Extract the exact error text so you can search for it or paste it into a bug report instead of retyping it." },
-      { question: "What if the text in my screenshot is tiny?", answer: "Small UI text can drop accuracy. Zoom the source window before capturing, or crop the screenshot tight around the text, so the letters are larger relative to the image." },
-      { question: "Which languages are supported?", answer: "English, Portuguese, Spanish, French, German, Italian, Dutch, Polish, Turkish, Russian, Japanese, and Simplified Chinese. Pick the language that matches the text on screen." },
-    ],
-    content: {
-      deepDive: [
-        {
-          heading: "Screenshots are the easy case, with one exception",
-          body: [
-            "Recognition runs on Tesseract compiled to WebAssembly, executing in a worker thread inside your browser. The first run downloads the trained data for the language you picked and caches it, so the initial recognition is noticeably slower than every one after it. No image is uploaded — the engine comes to the file rather than the file going to a server.",
-            "Screenshots are close to ideal input. The text was rendered by a computer rather than photographed, so it is perfectly sharp, perfectly aligned, and evenly lit — none of the problems that come with a phone photo of a page apply.",
-            "The exception is scale. A screenshot taken on a standard-density display captures interface text at roughly the pixel size it was drawn, which can be small enough to leave few pixels per character. Capturing on a high-density screen, or zooming the page in before capturing, gives the recogniser materially more to work with. Dark mode is fine; the engine handles light text on dark backgrounds.",
-            "The language setting matters more than people expect, because it is not a hint. Tesseract loads a different trained model per language, and each one encodes that language's character set and letter-sequence probabilities. Running Portuguese text through the English model does not degrade gracefully; accented characters have no good match and the engine's guesses about likely letter sequences are actively wrong.",
-          ],
-        },
-      ],
-      howToUse: [
-        "Take a screenshot (PrintScreen, Win+Shift+S, or Cmd+Shift+4).",
-        "Select the language of the text, click the drop zone, and paste with Ctrl/Cmd+V — or drop a saved screenshot file.",
-        "Wait while the OCR engine loads (first run only) and recognition runs.",
-        "Review the extracted text, fix any mistakes, then copy it or download it as a .txt file.",
-      ],
-      useCases: [
-        "Copy an error message out of a screenshot to search for it or file a bug report.",
-        "Extract a quote from a screenshot of an article, chat, or slide where text can't be selected.",
-        "Recover text from a video call screen share you captured.",
-        "Turn a screenshot of a table or list into text you can paste into a document.",
-        "Copy text from an app or dialog that blocks text selection.",
-      ],
-      limitations: [
-        "OCR is probabilistic: always proofread the output.",
-        "Very small UI text and low-contrast themes reduce accuracy — capture at a larger zoom when possible.",
-        "Layout is not preserved: multi-column screens and tables come out as plain text lines.",
-        "The engine and language data (a few megabytes) are downloaded on first use.",
-      ],
-      privacy:
-        "The screenshot is processed entirely on your device by an OCR engine running in your browser. It is never uploaded to a server — important, since screenshots often capture private information.",
-    },
-    seo: {
-      title: "Screenshot to Text — Copy Words from a Screenshot",
-      description:
-        "Paste a screenshot straight from the clipboard and get its words back as editable text. Screen type is sharp, and the capture never reaches a server.",
     },
   },
   {

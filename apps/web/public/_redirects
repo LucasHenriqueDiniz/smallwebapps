@@ -48,3 +48,16 @@
 /apps/jpg-to-text                /apps/image-to-text/    301
 /apps/png-to-text/               /apps/image-to-text/    301
 /apps/png-to-text                /apps/image-to-text/    301
+
+# Three pages merged into the page that already did their job, 2026-11-15.
+# screenshot-to-text mounted the same ImageToTextApp with a different label;
+# image-metadata's file details (size, type, dimensions, ratio, megapixels)
+# moved into exif-viewer; the how-to-analyze guide repeated what the TubeTrace
+# page covers and Google had declined it since 2026-09-04. See the 2026-11-15
+# decision in docs/architecture/ARCHITECTURE.md.
+/apps/screenshot-to-text/                        /apps/image-to-text/   301
+/apps/screenshot-to-text                         /apps/image-to-text/   301
+/apps/image-metadata/                            /apps/exif-viewer/     301
+/apps/image-metadata                             /apps/exif-viewer/     301
+/guides/how-to-analyze-youtube-watch-history/    /apps/tubetrace/       301
+/guides/how-to-analyze-youtube-watch-history     /apps/tubetrace/       301

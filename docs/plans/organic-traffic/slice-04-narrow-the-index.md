@@ -1,5 +1,5 @@
 ---
-status: todo
+status: doing
 kanban:
 ---
 
@@ -97,3 +97,49 @@ node apps/web/scripts/scan-links.mjs $B; echo "exit $?"            # 0
 
 If Cloudflare Pages serves a stale built page instead of the redirect, check that the page really
 left `dist/`. The size-variant slice of `adsense-low-value-review` hit the same ordering.
+
+## Progress
+
+**2026-11-15: built and checked on `dist`. Waiting on merge and the production run of "Done when".**
+
+What changed:
+- `indexing.ts`: a `NARROWED` list (the 21 tools of option A) joins `COMMODITY` in `noindexSlugs`.
+  `isIndexableUrl` now knows `/guides/<slug>/` too, so the sitemap filter and the ad gate follow guides.
+- `guides.ts`: `indexable?: false` on the four cut guides; `isGuideIndexable` and `listedGuides`.
+  Related guides, `guidesForTool` and `/guides/` read only listed guides; the curated lists no longer
+  name a cut guide. `guides/[slug].astro` serves a cut guide with `noindex`.
+- Merges: `screenshot-to-text` and `image-metadata` leave the catalog and `ToolMount`;
+  `src/tools/image-metadata/` is deleted; the how-to-analyze guide leaves `guides.ts` and the template.
+  Six lines in `_redirects`. `exif-viewer` gains a "File" section with image-metadata's figures, built
+  by a pure `file-facts.ts` with the same formulas, shown even when a file has no EXIF.
+- Home picks (`home.ts`, category cards), the about page sentence and `llms.txt` name only kept tools.
+- The `/apps//` link (slice 5's finding) was the guide template sending a tool-less guide to
+  `/apps/${""}/`; a guide with no tool now points at `/apps/`. Fixed here because `scan-links` now
+  checks every same-site link.
+- `scan-links.mjs`: every same-site link must answer 200, and a linked guide must be indexable. Run
+  against production before this change, it printed the `/apps//` link. The "More tools in" rule now
+  allows a category with one listed tool (TubeTrace).
+
+Measured on the build (`apps/web/dist`):
+
+| check | result |
+|---|---|
+| sitemap | **20** URLs: 7 static, 5 tools, 8 guides |
+| cut tools served with `noindex` | **21/21** |
+| cut guides served with `noindex` | **4/4** |
+| merged pages no longer built | 3/3 |
+| `scan-links.mjs` on `dist` | exit 0: 0 links to unlisted tools, 0 to unlisted guides or broken pages |
+| image-metadata → exif-viewer, same files, same Chrome | 400×300 JPEG with EXIF and 320×180 PNG: all **7** fields image-metadata shows in production (name, size, type, dimensions, aspect ratio, megapixels, last modified) appear identical in exif-viewer's File section, **14/14**. exif-viewer also shows the JPEG's Make, Model and Date Taken, which image-metadata's own scan missed |
+| unit tests | 153/153. New: `guides.test.ts` (4), `file-facts.test.ts` (3), `/guides/` redirects |
+| revert: one cut guide's flag removed | 2 tests red |
+| revert: `guidesForTool` ignores the flag | 1 test red |
+| revert: related-guide filters ignore the flag | **stays green**. With today's data no curated list or category ring puts a cut guide next to a listed one, so that filter is defensive and no test can see it |
+| `astro check` / validators | 0 errors / 3 × exit 0 |
+
+Redirect targets: the twelve size variants of 2026-10-18 still land on `pdf-compress` and
+`image-optimize`, which are now unlisted but live. `redirects.test.ts` now requires a live target for
+every rule and an indexable one for the two merges.
+
+Still open:
+- [ ] Production: the "Done when" block after the merge.
+- [ ] ⚠️ Owner: point `smallwebapps-pedir-indexacao` at the kept set and the guides.

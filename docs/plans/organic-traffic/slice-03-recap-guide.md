@@ -91,7 +91,9 @@ Measured on the build (`apps/web/dist`):
 | `scan-links.mjs` on `dist` | exit 0 |
 | vitest / `astro check` / validators | 133/133 / 0 errors / 3 × exit 0 |
 
+**Production, 2026-11-15** (PR #24, merged as `6f633bc` at 16:06 UTC, live about 270 s later): `200`,
+`0` (no `noindex`), `1` (in the sitemap); sitemap 48 URLs.
+
 Still open:
-- [ ] Production: the three `curl` lines above, after the merge deploys.
 - [ ] ⚠️ Owner: "Request indexing" for `https://smallwebapps.com/guides/youtube-recap-past-years/`, and
       write the date here. Slice 7's clock starts from the ship date.

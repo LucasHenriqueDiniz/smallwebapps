@@ -2,7 +2,7 @@
 import MainLayout from "@/components/layout/MainLayout.astro";
 import CTASection from "@/components/apps/CTASection.astro";
 import RelatedGuides from "@/components/guides/RelatedGuides.astro";
-import { guides, relatedGuides } from "@/data/guides";
+import { guides, isGuideIndexable, relatedGuides } from "@/data/guides";
 import { isIndexable } from "@/data/indexing";
 
 interface GuideSource {
@@ -33,6 +33,11 @@ if (!guide) {
 // The JSON and CSV guides point at tools that are no longer listed. Their text
 // stands on its own; the call to action into an unlisted tool goes.
 const toolIsListed = isIndexable(guide.relatedToolSlug);
+// A guide whose tool is unlisted is served for anyone holding its URL, but
+// kept out of the index like the tool (2026-11-15).
+const guideIsIndexable = isGuideIndexable(guide.slug);
+// A guide about no single tool sends its call to action to the tool index.
+const toolHref = guide.relatedToolSlug ? `/apps/${guide.relatedToolSlug}/` : "/apps/";
 
 const contentMap = {
   "youtube-watch-history-json-format": {
@@ -418,32 +423,6 @@ const contentMap = {
       "Finally, treat the export itself as a one-time snapshot rather than a live sync: nothing you do locally with the file changes your actual YouTube account or history, and re-watching or clearing history in YouTube afterward has no effect on the archive already sitting on your device — the two are completely disconnected once the download completes."
     ]
   },
-  "how-to-analyze-youtube-watch-history": {
-    intro:
-      "Once you have a watch-history export from Google Takeout, the natural next step is turning a raw JSON file into something you can actually read: which channels you watch most, when you watch, and how your habits have shifted over time. Most people reach for a spreadsheet or an online dashboard, but a multi-thousand-row JSON file is awkward to open directly in Excel, and uploading it to a random web service means trusting a stranger with a timestamped log of your viewing habits.\n\nA lightweight, local, browser-based workflow is usually enough to answer the questions people actually have — top channels, busiest viewing hours, how history has trended month over month — without needing a database, a script, or a cloud account. This guide covers what a watch-history file actually contains, what you can reliably extract from it, and where the natural limits of this kind of analysis are.",
-    points: [
-      "Start by validating the file structure before trying to draw conclusions from it. A valid Takeout watch-history.json is an array of entry objects, each with a title, a titleUrl pointing to the video, a time field (ISO 8601 timestamp), and often a subtitles array identifying the channel. If the analyzer reports zero valid entries, the export likely used the HTML format instead of JSON.",
-      "Look at the time field first. Every entry is timestamped in UTC, so if you want local-time patterns (e.g. \"I watch YouTube mostly after 10pm\"), the analyzer needs to convert to your timezone before bucketing by hour — otherwise a late-night viewer in one timezone can look like a lunch-break viewer in the raw UTC data.",
-      "Channel frequency is usually the most immediately useful metric: group entries by the channel name in subtitles and count occurrences. This surfaces which creators actually dominate your viewing time, which is often different from which channels you'd guess from memory.",
-      "Watch for removed or deleted videos in the export. When a video has been taken down, Takeout sometimes preserves the history entry but without a working titleUrl or with a generic \"Video unavailable\" title — these entries still count toward total watch volume but cannot be linked back to specific content.",
-      "Deduplicate before drawing conclusions about total unique videos watched. Rewatching the same video (a tutorial, a favorite music video) creates multiple identical entries with different timestamps — useful for detecting rewatch behavior, but it will inflate a naive \"videos watched\" count if you don't separate total plays from unique videos.",
-      "Compare trends over time by bucketing entries by month or week rather than looking at the full history as one flat list. A sudden spike in a particular month often correlates with a specific interest (a new show, a hobby, a research topic) and is more informative than an aggregate total.",
-      "Cross-check surprising results against what YouTube's own \"Your data in YouTube\" page shows, when available — it gives you a sanity check that the export and the analysis match reality, since Takeout exports are a snapshot and can occasionally lag behind very recent activity.",
-      "Remember this data is inherently personal — treat exported results (screenshots, downloaded charts) with the same discretion you'd apply to a browser history export before sharing them, since viewing patterns can reveal health interests, political leanings, or other sensitive signals.",
-      "Once you've answered the specific question you started with (most-watched channel, busiest month, total watch count), stop there rather than trying to force the dataset to answer questions it isn't suited for, like exact watch duration — Takeout logs when you started watching a video, not how long you watched it.",
-      "Look for gaps in the timeline as their own signal: a multi-month period with zero entries usually means watch-history tracking was paused (via Google Activity Controls) rather than that you genuinely stopped using YouTube — check your account's activity settings history if a gap looks suspiciously clean-edged.",
-      "Segment by content type when the titles allow it: music videos, tutorials, and long-form videos tend to have distinguishable title patterns (official audio, how to, full episode). A rough manual or keyword-based segmentation can reveal whether your viewing skews toward entertainment, learning, or background listening, even without formal video-category data.",
-      "Be skeptical of very high daily counts as a sign of binge-watching versus autoplay: YouTube's autoplay feature can queue and log videos you did not actively choose. A day with 80 entries in a single sitting is more likely autoplay running in the background than 80 deliberate video selections — cross-reference against typical viewing session length if this distinction matters to your analysis.",
-      "If you're comparing your own history against a household or shared-device pattern, remember a single Google account's watch history can include weekly and time-of-day distortions caused by other people using the same signed-in device — a shared living-room TV or a family tablet blends every viewer's habits into one dataset.",
-      "Keep the analysis proportionate to the question: identifying your top 10 channels from a 5,000-entry file takes a simple grouped count; trying to infer emotional state or life events from viewing patterns is over-interpreting data that was never designed to support that kind of inference.",
-      "When comparing two time periods (this year vs. last year, before vs. after a specific event), normalize for total entry count rather than comparing raw totals — if one period has more overall watch entries simply because you used YouTube more that month, a raw channel-count comparison will overstate how much your specific interests shifted.",
-      "If you plan to share findings publicly (a blog post, a social media summary), consider aggregating rather than publishing raw timestamped entries — a statement like \"I watched mostly music content this year\" reveals the interesting pattern without exposing the exact times and specific videos that make up a detailed personal activity log.",
-      "For a lighter-weight sanity check before committing to a full analysis, sample the first and last 50 entries of the file manually to get a rough feel for date range and typical entry format — this quick manual pass often surfaces obvious export issues (wrong format, unexpected gap, unfamiliar structure) faster than jumping straight into full statistical analysis of thousands of rows.",
-      "Keep expectations realistic about what \"analysis\" means for a personal dataset this size: a few thousand watch-history entries is enough for solid descriptive statistics (counts, trends, top items) but too small a sample for the kind of statistical significance testing used in large-scale research — treat patterns as suggestive of your habits, not as rigorously proven conclusions.",
-      "If the goal is genuinely just curiosity rather than a specific decision, resist the urge to build an elaborate recurring tracking pipeline for something as simple as \"what do I watch most.\" A one-off local analysis answers that question completely; ongoing automated tracking of your own viewing habits introduces more moving parts and more places for that sensitive data to sit than the question actually warrants.",
-      "As a closing gut-check, before drawing any firm conclusion from the analysis, ask whether the same pattern would still look meaningful if you described it out loud to a friend without any charts attached — \"I watched a lot of one specific channel during a two-week trip\" is a genuinely informative pattern; \"channel X appeared in 4% versus 3% of entries\" usually is not, and the local tool's job is to surface the former, not manufacture false precision out of the latter."
-    ]
-  },
   "json-formatting-and-validation": {
     intro:
       "JSON is the lingua franca of modern APIs and data interchange. Whether you're debugging an API response, preparing configuration files, or integrating third-party data sources, knowing how to format and validate JSON quickly can save hours of troubleshooting. The good news: you can do all of this in your browser without any tools, files, or server uploads. This guide covers the basics of JSON formatting, common syntax errors, when to minify vs. pretty-print, and how to inspect JSON structure efficiently.\n\nMost JSON errors are small and mechanical — a missing comma, an extra brace, a stray trailing comma copied from a JavaScript object literal (which allows trailing commas, unlike strict JSON). The challenge is rarely understanding the rule; it's finding exactly where in a 4,000-character API response the rule was broken. A formatter that pretty-prints the structure and points to the exact failing character turns a five-minute manual scan into a two-second fix.",
@@ -701,6 +680,7 @@ const structuredData = [
   title={guide.title}
   description={guide.description}
   canonicalPath={`/guides/${guide.slug}`}
+  noindex={!guideIsIndexable}
   image={guide.image}
   ogType="article"
   structuredData={structuredData}
@@ -758,7 +738,7 @@ const structuredData = [
     <CTASection
       title="Continue into the actual tool"
       copy="Use the guide to understand the workflow, then move into the app page for local interaction."
-      primaryHref={`/apps/${guide.relatedToolSlug}/`}
+      primaryHref={toolHref}
       primaryLabel={guide.relatedToolLabel}
       secondaryHref="/guides/"
       secondaryLabel="Back to guides"
