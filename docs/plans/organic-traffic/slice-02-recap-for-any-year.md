@@ -1,5 +1,5 @@
 ---
-status: todo
+status: doing
 kanban:
 ---
 
@@ -53,14 +53,12 @@ The oracle is `jq` over the owner's real file, in the same time zone as the brow
 ad was dropped):
 
 ```bash
-TZ=America/Sao_Paulo jq -r '
-  [ .[] | select(.title | startswith("Watched "))
-        | select(((.details // []) | map(.name) | index("From Google Ads")) | not)
-        | {y: (.time | sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601 | localtime | strftime("%Y")),
-           c: (.subtitles[0].name // "Unknown channel")} ]
-  | group_by(.y)[]
-  | "\(.[0].y) videos=\(length) channels=\([.[].c] | unique | length) top=\([.[].c] | group_by(.) | map({c: .[0], n: length}) | sort_by(-.n, .c) | .[0:5] | map("\(.c):\(.n)") | join(","))"' \
+TZ=America/Sao_Paulo jq -r -f apps/web/scripts/recap-oracle.jq \
   ~/Downloads/Takeout/YouTube*/history/watch-history.json
+jq -c '[.[] | .details[]?.name] | group_by(.) | map({(.[0]): length}) | add' \
+  ~/Downloads/Takeout/YouTube*/history/watch-history.json   # what `details` really holds
+jq -r '[.[] | .title // "" | split(" ")[0]] | group_by(.) | map("\(.[0]) \(length)") | .[]' \
+  ~/Downloads/Takeout/YouTube*/history/watch-history.json   # title prefixes: is the file in English?
 ```
 
 Then open the deployed preview of this PR, load the same file, and for each year copy the page's four
@@ -78,3 +76,41 @@ figures beside `jq`'s line.
 
 If the Takeout export has not arrived when the code is ready, ship behind the unit tests and run the
 N/N check the day it arrives. The slice stays `doing` until then.
+
+## Progress
+
+**2026-11-15: built, and checked against a synthetic export. The real-file check is still open.**
+
+What changed:
+- `apps/web/src/tools/tubetrace/history.ts` (pure): JSON parsing moved out of the component. An entry
+  counts when any of three signs says it is a watch event: title "Watched ", activityControls "YouTube
+  watch history", or a link to a YouTube video. The link is the sign that does not depend on the
+  account's language. Entries whose `details` read "From Google Ads" are dropped, in the totals too.
+  The HTML reader drops an entry whose `.outer-cell` contains the same marker. That HTML behaviour is
+  not tested: no real HTML export was available.
+- `apps/web/src/tools/tubetrace/recap.ts` (pure): years, months, weekdays and hours in a given IANA
+  zone (the browser's own on the page). A rewatched video is named by its most recent title.
+- The component: year buttons (newest first, only years with views), and for the chosen year: videos,
+  channels, busiest month, weekday and hour, first video, top 5 channels, top 5 rewatched. One visible
+  line states the rule (YouTube and YouTube Music together, ads left out) and why there are no hours.
+- The page text (`apps.ts`) and the guide `why-youtube-watch-counts-differ` stated the old rule
+  ("only if" both signs, "ads are not separated out"), so they now state this one. A recap FAQ was
+  added. The FAQ claiming the tool reads only JSON was corrected, since it reads HTML too.
+
+Measured:
+
+| check | data | result |
+|---|---|---|
+| unit tests | `history.test.ts` and `recap.test.ts`, 13 cases | 13/13; whole suite 133/133 |
+| revert: ad filter removed | unit | "drops an ad" goes red (1 failed) |
+| revert: zone ignored (UTC forced) | unit | "02:30 UTC on 1 January" goes red (1 failed) |
+| page vs `jq`, browser in America/Sao_Paulo, `astro dev` | `apps/web/scripts/synthetic-takeout.py`: 6,016 entries, 2022-11 to 2026-11, 176 ads, removed videos, searches, YouTube Music, 1% non-English titles, 16 views in the first hours of 1 January UTC | **5/5 years** match on videos, channels, top 5 channels (names and counts), top 5 rewatched, busiest month, weekday and hour, and first video |
+| revert in the browser: ad filter removed | same file | **0/5** years match on videos. Each year is off by exactly its ad count: +6, +50, +42, +41, +37 |
+| `astro check`, build, 3 validators | — | 0 errors; 150 pages; 3 × exit 0 |
+| layout | 375 px and desktop, light and dark | no horizontal scroll; year buttons and tiles readable in both themes |
+
+Still open:
+- **The real export.** The synthetic file is built from what the code expects, so it cannot show that
+  Takeout writes "From Google Ads" or English titles for this account. The two extra `jq` lines in
+  "Done when" answer exactly that. If the file is not in English and has removed videos, those
+  entries lack a link and are dropped: count them with the prefix line and decide.

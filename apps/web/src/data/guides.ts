@@ -126,7 +126,7 @@ export const guides: GuideDefinition[] = [
     category: "YouTube Analysis",
     publishedLabel: "Data accuracy",
     publishedDate: "2026-08-27",
-    modifiedDate: "2026-08-27",
+    modifiedDate: "2026-11-15",
     image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
