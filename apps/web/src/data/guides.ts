@@ -25,11 +25,11 @@ export const guides: GuideDefinition[] = [
     slug: "how-to-export-youtube-watch-history",
     title: "How to Export Your YouTube Watch History",
     description:
-      "Export YouTube watch history from Google Takeout, verify that the archive contains the right files, and prepare it for private browser-based analysis.",
+      "Export your YouTube watch history from Google Takeout, step by step as the screens read in November 2026: switch history to JSON, how long it takes, and what to do when it fails.",
     category: "YouTube Analysis",
     publishedLabel: "Google Takeout guide",
     publishedDate: "2026-06-02",
-    modifiedDate: "2026-06-25",
+    modifiedDate: "2026-11-15",
     image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open YouTube Watch History Analyzer"

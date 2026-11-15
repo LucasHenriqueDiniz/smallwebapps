@@ -1,5 +1,5 @@
 ---
-status: todo
+status: doing
 kanban:
 ---
 
@@ -57,3 +57,43 @@ Google's half, read in slice 7: both URLs indexed by day 28.
 
 If Takeout's screens differ by account or region, document the owner's and say which account type it
 is. Do not merge variants seen in other people's screenshots.
+
+## Progress
+
+**2026-11-15: the export how-to is rewritten and ships; the field reference waits for the owner's export.**
+
+Read on takeout.google.com in the owner's Chrome, `?hl=en`, before Claude in Chrome disconnected. The
+selection was changed on the page and nothing was submitted:
+
+| label quoted on the page | on screen 2026-11-15 |
+|---|---|
+| "Select data to include" (step 1) | yes |
+| "Deselect all" | yes |
+| "YouTube and YouTube Music" | yes, with "Watch and search history, videos, comments and other content you've created on YouTube and YouTube Music" |
+| counter "1 of 65 selected" after ticking it | yes; the page gives it as an example, since the total varies by account |
+| "Multiple formats" | yes |
+| "YouTube and YouTube Music options" (dialog) | yes |
+| "history", default "HTML", options HTML and JSON | yes, described as "Separate HTML files for your watch and search history" |
+| "All YouTube data included" | yes, the button. Its dialog was not read |
+| "Next step" | yes |
+| "Choose file type, frequency & destination" (step 2) | yes, the heading. The step's own controls were not read: the extension disconnected. The page names no step-2 label in quotes |
+
+**Finding that matters beyond the guide:** Takeout exports YouTube history as **HTML unless you change
+it**. The old guide told readers to pick JSON "when Takeout offers a format choice", but the choice is
+hidden behind "Multiple formats". The owner's export for slice 2 has to switch it too.
+
+Rewritten:
+- Eight steps, down from twenty points. Every label they quote is in the table above. The page dates the check (15 November 2026) and asks
+  readers to report a label that changed.
+- Sections: JSON or HTML; how long it takes and how long it lasts; when the export does not work (link
+  expired, work or school account, Advanced Protection, history turned off, wrong account); on a phone.
+  The claims come from Google's own pages, linked under each section and saved in `fetches/`
+  (`google-help-download-your-data.md`, `youtube-help-watch-history.md`).
+- Removed, because nothing verified them: the 2 GB / 50 GB part sizes, "each part covers a different
+  time range", secure deletion, and the other generic advice.
+
+Still open:
+- [ ] ⚠️ Owner: follow the deployed page on takeout.google.com and get a `watch-history.json`. Pass or
+      fail, with the date. Every quoted label must match: N/N. This also covers the step-2 controls.
+- [ ] The `watch-history.json` reference, against the owner's real export (blocked on the export).
+- [x] `smallwebapps-pedir-indexacao` covers guides (2026-11-15).

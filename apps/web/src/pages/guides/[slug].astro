@@ -399,29 +399,54 @@ const contentMap = {
   },
   "how-to-export-youtube-watch-history": {
     intro:
-      "Google does not let you download your YouTube watch history directly from youtube.com — the only official path is Google Takeout, Google's data export tool for every product tied to your account. Takeout works, but it is easy to get wrong: pick the wrong export format, forget to deselect the dozens of unrelated Google services bundled into a full account export, or wait hours for a multi-gigabyte archive when you only wanted a few megabytes of watch-history JSON. This guide walks through the export step by step so the first attempt produces a file you can actually use.\n\nThe watch-history export is also where most privacy mistakes happen. People often paste this data into random online \"YouTube history analyzer\" tools without checking what those tools do with the file once it is uploaded. Because the export contains a timestamped log of nearly everything you have watched, it is worth treating it with the same care as a browser history file — export it, inspect it locally first, and only use tools that are explicit about not uploading the file to a server.",
+      "There is no download button for your watch history on youtube.com. The official route is Google Takeout, Google's export tool for every product on your account. The steps below were checked against takeout.google.com in English on 15 November 2026. Google renames buttons from time to time; if a label differs on your screen, look for the closest match, and tell us so we can fix this page.",
     points: [
-      "Go to takeout.google.com while signed into the Google account linked to your YouTube activity, then click \"Deselect all\" before choosing what to export — a full Takeout can otherwise bundle Gmail, Photos, Drive, and a dozen other products into one archive.",
-      "Scroll to \"YouTube and YouTube Music\" and check only that box. Click \"All YouTube data included\" and, if you only need watch history, deselect everything except \"history\" to keep the export small and focused.",
-      "Choose JSON over HTML when Takeout offers a format choice for history data. JSON is structured and machine-readable, so a local analyzer can parse timestamps and video IDs reliably; the HTML export is meant for humans to skim in a browser and is harder to parse programmatically.",
-      "Pick \"Export once\" unless you specifically want a recurring export every couple of months — recurring exports are useful for tracking trends over time but create repeated multi-file archives you will need to manage.",
-      "Set the delivery method to \"Send download link via email\" and the file type to .zip. Takeout will notify you by email once the archive is ready; large accounts with years of watch history can take anywhere from a few minutes to a few hours to prepare.",
-      "When the email arrives, download the zip promptly — Takeout download links expire after about a week, after which you would need to request a new export from scratch.",
-      "Unzip the archive locally and look for the \"YouTube and YouTube Music/history\" folder. The relevant file is usually named watch-history.json (or watch-history.html if you exported that format) — confirm the file size looks reasonable for your account's history length before proceeding.",
-      "Do not upload the raw zip or JSON file to a third-party website unless you have verified it processes files locally in the browser. Open it first with a tool like the YouTube Watch History Analyzer on Small Web Apps, which reads the file with the browser's FileReader API and never sends it to a server.",
-      "If the export looks incomplete or empty, check that watch history was actually enabled on your account when the activity occurred — YouTube only logs history for the period during which \"Include YouTube watch history\" is switched on in your Google Activity Controls.",
-      "Understand what Takeout does and does not export: the watch-history file records what you watched and when, but it does not include watch duration, whether you finished a video, or your search history — that lives in a separate \"Search history\" section you would need to select independently if you want it. Treat watch history and search history as two related but distinct exports.",
-      "If your Google account uses Google Workspace (a work or school account), be aware that Takeout availability and the products included can be restricted by an administrator. In that case some sections may be greyed out or your export may need approval before it becomes downloadable.",
-      "For accounts with many years of history, expect the archive to be split into multiple zip files if it exceeds Takeout's per-file size limit (usually around 2 GB, configurable up to 50 GB per file in the export settings). Each part needs to be downloaded and unzipped separately, and the watch-history.json inside each part covers a different time range rather than being duplicated across parts.",
-      "If you manage multiple Google accounts (a personal account and a work account, for example), make sure you are exporting from the account you actually intend to analyze — Takeout always exports from whichever account is currently signed in in that browser tab, and it is easy to accidentally export the wrong one if you are signed into several simultaneously.",
-      "Re-export periodically rather than relying on a single old archive if you want to track how your viewing habits change over time. Because Takeout exports are a snapshot at the moment of export, comparing two exports taken months apart is the simplest way to see genuine before/after shifts without needing a always-on tracking tool.",
-      "If you use YouTube on multiple devices (phone, smart TV, browser, tablet), know that watch history is tied to your Google account, not the device — so a single Takeout export already aggregates activity across every device you were signed into, which is usually what people want but is worth knowing if you expected device-specific breakdowns.",
-      "Double-check the export's date range assumptions before drawing long-term conclusions: Takeout exports everything currently stored in your account's history, but if you ever paused or cleared your watch history in the past, the export will simply have a gap or a shorter total range than your actual YouTube usage — the file reflects what's stored today, not a permanent unbroken record.",
-      "If you plan to delete your Takeout archive after analyzing it (recommended, since it's a sensitive file), do a secure delete rather than just moving it to the trash/recycle bin on shared or work computers — an emptied recycle bin still leaves recoverable data on the disk until it's overwritten, which matters more for a personal activity log than for an average downloaded file.",
-      "Before requesting a fresh export, check whether you actually need one: if your last export is only a few weeks old and you're mainly interested in long-term patterns rather than very recent activity, reusing the existing archive avoids the wait time and repeated download/unzip steps that come with generating a brand-new Takeout request.",
-      "If you're exporting on behalf of someone else — helping a family member or a less technical colleague retrieve their own data — always do it on their signed-in session rather than asking for their password, and walk them through downloading and reviewing the archive themselves before it's analyzed by any tool, local or otherwise, so they retain full control of a genuinely personal dataset.",
-      "Finally, treat the export itself as a one-time snapshot rather than a live sync: nothing you do locally with the file changes your actual YouTube account or history, and re-watching or clearing history in YouTube afterward has no effect on the archive already sitting on your device — the two are completely disconnected once the download completes."
-    ]
+      "Open takeout.google.com while signed in to the Google account you watch YouTube with. Takeout exports the account that is signed in, so check the avatar in the corner first. The page opens on step 1, \"Select data to include\", with every product ticked.",
+      "Click \"Deselect all\", then scroll to the end of the list and tick \"YouTube and YouTube Music\". The counter at the top should now read 1 of the total, for example \"1 of 65 selected\".",
+      "Under YouTube and YouTube Music, click \"Multiple formats\". In the \"YouTube and YouTube Music options\" dialog, scroll down to \"history\" and change it from HTML, which is the default, to JSON. Click OK.",
+      "If you only want your history, click \"All YouTube data included\" and untick everything else. A smaller export is ready sooner, since Google says the time depends on how much data the account holds.",
+      "Click \"Next step\". Step 2, \"Choose file type, frequency & destination\", decides how the archive reaches you. Keep a download link by email, a single export and the .zip file type, then create the export.",
+      "Wait for Google's email. Most people get it the same day, and Google says it can take anything from a few minutes to a few days.",
+      "Download the archive from the link in the email within about 7 days; Google allows 5 downloads per archive. You do not need to unpack it.",
+      "Open the YouTube Watch History Analyzer on this site and drop the .zip in, or the watch-history.json inside it, under YouTube and YouTube Music/history/. The file is read in your browser tab and never uploaded. Pick a year to see its recap.",
+    ],
+    sections: [
+      {
+        heading: "JSON or HTML",
+        body: [
+          "Takeout sets the history format to HTML unless you change it, and describes that option as separate HTML files for your watch and search history. HTML is meant to be read in a browser. JSON is structured data, with a timestamp that carries its own time zone, which is what an analyzer needs. The analyzer on this site reads both, but HTML dates are written in your account's language and have to be guessed at. The guide on Takeout JSON versus HTML goes through the difference field by field.",
+        ],
+      },
+      {
+        heading: "How long it takes, and how long it lasts",
+        body: [
+          "Google says an export can take from a few minutes to a few days, depending on how much data is in the account, and that most people get the link the same day.",
+          "The archive expires in about 7 days, and each archive can be downloaded 5 times. After that, request a new one. If the data is larger than the archive size you chose in step 2, Google splits it into several files.",
+        ],
+        sources: [{ label: "Google Account Help, How to download your Google data", href: "https://support.google.com/accounts/answer/3024190?hl=en" }],
+      },
+      {
+        heading: "When the export does not work",
+        body: [
+          "These are the cases that come up most, each with what to do:",
+        ],
+        list: [
+          "The link stopped working: the archive is past its 7 days or its 5 downloads. Request a new export.",
+          "A work or school account: Google Workspace administrators decide which products their users can export, so YouTube may be missing or blocked. Ask the administrator, or export from a personal account.",
+          "Advanced Protection Program: Google schedules the archive for two days after the request, on purpose.",
+          "The history is shorter than you expected: videos watched while watch history was turned off are not in your history, so they are not in the export either. Nothing can recover them.",
+          "The wrong history: you exported a different account. Sign in to the one you watch with and start again.",
+        ],
+        sources: [{ label: "Google Account Help, How to download your Google data", href: "https://support.google.com/accounts/answer/3024190?hl=en" }, { label: "YouTube Help, View, delete, or turn on or off watch history", href: "https://support.google.com/youtube/answer/95725?hl=en" }],
+      },
+      {
+        heading: "On a phone",
+        body: [
+          "You can request the export from any browser, but Google recommends downloading and viewing Takeout exports on a desktop computer rather than a mobile device. Do the download and the analysis there.",
+        ],
+        sources: [{ label: "Google Account Help, How to download your Google data", href: "https://support.google.com/accounts/answer/3024190?hl=en" }],
+      },
+    ],
   },
   "json-formatting-and-validation": {
     intro:

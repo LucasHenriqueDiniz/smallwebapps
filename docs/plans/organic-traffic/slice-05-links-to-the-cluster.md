@@ -1,5 +1,5 @@
 ---
-status: doing
+status: done
 kanban:
 ---
 
@@ -94,5 +94,8 @@ Measured:
 Revert check: production today *is* the revert state, since it lacks the footer column and the
 hero line. The same script on it prints the guide rule `FAIL 0/7` and exits 1.
 
-Still open:
-- [ ] `link-graph.mjs https://smallwebapps.com` after the merge: same table as `dist`, exit 0.
+**Production, 2026-11-15** (PR #26, merged as `0ca5d48` at 17:38 UTC, live about 90 s later):
+`link-graph.mjs https://smallwebapps.com` prints the same table as `dist`. Every one of the 20 pages has 19
+inbound links, `/` is at depth 0 and the rest at depth 1, and the three rules pass (TubeTrace 19/19,
+YouTube guides 7/7, 0 orphans). Exit 0. `scan-links.mjs` on production: exit 0. The CI "Built Site"
+job on the PR built 148 pages in 13.6 s and ran both scripts green.
