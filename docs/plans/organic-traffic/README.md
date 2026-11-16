@@ -12,7 +12,7 @@ Slice 7 is a wait on Google's clock.
 
 | slice | delivers | done when, in one line |
 |---|---|---|
-| 1 — hosts | `www` answers 301 to the apex | 47/47 sitemap paths on `www` → one `301` to the same path and query on the apex |
+| 1 — hosts | `www` answers 301 to the apex | done 2026-11-16: 20/20 sitemap paths (47 before slice 4) on `www` → one `301` to the same path and query on the apex |
 | 2 — recap for any year | year picker and recap view in TubeTrace | for every year in the owner's real export, 4 figures equal `jq`: N/N years |
 | 3 — recap guide | one guide for "past years", "not showing", "all-time" | live, indexable, in the sitemap, linked from ≥ 3 cluster pages, every claim about YouTube's Recap linked to YouTube's own page |
 | 4 — narrow the index | option A: 21 tools and 4 guides cut, 3 merges | sitemap = 20 URLs; cut URLs `noindex` N/N; merges one `301` 3/3; `scan-links` exit 0 |
