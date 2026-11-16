@@ -68,3 +68,30 @@ done < /tmp/swa-paths.txt; echo "www: $ok/$n"
 If Redirect Rules are not offered on the plan, a Bulk Redirect list with one entry
 (`www.smallwebapps.com` → `https://smallwebapps.com`, subpath matching, preserve path suffix and
 query string) does the same.
+
+## Progress
+
+**2026-11-16: still not done. Measured again; the dashboard step stays with the owner.**
+
+Re-run of the loop above at 2026-11-16T03:47Z, against the 20-URL sitemap left by slice 4:
+
+| check | result |
+|---|---|
+| `https://www.` → one `301` to the same path and query on the apex | 0/20 (`curl` `000`: `www` has no DNS record) |
+| `http://www.` → one `301` straight to `https://smallwebapps.com…` | 0/20 |
+| apex answers `200` | 20/20 |
+| `https://smallwebapps.pages.dev/` | `200` |
+
+Zone `smallwebapps.com`, read in the Cloudflare dashboard the same night, nothing changed:
+- DNS: 3 records. `smallwebapps.com` CNAME → `smallwebapps.pages.dev` (proxied),
+  `_index._agents` SVCB, and the `google-site-verification` TXT. No `www`. The dashboard flags it
+  itself: "Visitors cannot reach www.smallwebapps.com".
+- Redirect Rules: 0 of 10.
+
+The record was not created. Claude in Chrome opened "Add record", but focusing the Name field let
+another Chrome extension inject a frame. From then on every click, key and screenshot failed with
+"Cannot access a chrome-extension:// URL of different extension", the same failure tglinks hit on
+2026-11-13. The page was reloaded to drop the half-filled dialog, and nothing was saved.
+
+- [ ] ⚠️ Owner: steps 1 and 2 above, in the dashboard.
+- [ ] Then run the loop: `www: 20/20`, the `http://www.` variant 20/20 in one hop, the apex 20/20.

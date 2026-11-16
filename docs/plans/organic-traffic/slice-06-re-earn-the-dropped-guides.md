@@ -92,6 +92,18 @@ Rewritten:
 - Removed, because nothing verified them: the 2 GB / 50 GB part sizes, "each part covers a different
   time range", secure deletion, and the other generic advice.
 
+**Production, after #27** (merged `69c617d` at 2026-11-15T23:56Z, live about 400 s later; re-read
+2026-11-16T03:50Z with `curl` against `smallwebapps.com`):
+
+| URL | status | `noindex` | in sitemap |
+|---|---|---|---|
+| `/guides/how-to-export-youtube-watch-history/` | 200 | 0 | yes |
+| `/guides/youtube-watch-history-json-format/` | 200 | 0 | yes |
+
+`link-graph.mjs` against production: exit 0. CI on `main` at `69c617d`: success. Indexing is not
+requested yet: both URLs are in the queue of `smallwebapps-pedir-indexacao`, behind the recap guide
+and the `/apps/` pages, from its 2026-11-16 15:32 UTC run.
+
 Still open:
 - [ ] ⚠️ Owner: follow the deployed page on takeout.google.com and get a `watch-history.json`. Pass or
       fail, with the date. Every quoted label must match: N/N. This also covers the step-2 controls.
