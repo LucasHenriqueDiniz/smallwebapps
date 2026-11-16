@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 kanban:
 ---
 
@@ -71,27 +71,53 @@ query string) does the same.
 
 ## Progress
 
-**2026-11-16: still not done. Measured again; the dashboard step stays with the owner.**
+**2026-11-16 10:42Z: done. `www` answers one `301` to the apex: 20/20 on `https`, 20/20 on `http`.**
 
-Re-run of the loop above at 2026-11-16T03:47Z, against the 20-URL sitemap left by slice 4:
+What is set in the Cloudflare dashboard, zone `smallwebapps.com`. It is not in the repo, so this is
+its record:
+
+| setting | value | set by, when |
+|---|---|---|
+| DNS | `A` `www` → `192.0.2.1`, **Proxied** (an address with no origin, as on tglinks; the slice asked for `AAAA` `100::`, which does the same) | Claude in Chrome, with the owner's go-ahead, 2026-11-16 ~10:36Z |
+| Redirect Rule "www to root (301)" | wildcard `http*://www.*` → `https://${2}`, `301`, preserve query string | filled by another Claude session; the owner clicked Deploy, 2026-11-16, before 10:35Z |
+
+On Deploy the dashboard warned "This rule may not apply to your traffic … confirm that http or a
+matching wildcard record is a proxied DNS record". That was expected: `www` had no record yet. The
+owner clicked "Ignore and deploy rule anyway", and the record went in a few minutes later.
+
+The loop above, at 10:38Z and again at 10:42Z, against the 20-URL sitemap. `curl --resolve` pins the
+Cloudflare edge address `104.21.59.237`, because this Mac's resolver still held the earlier
+NXDOMAIN (exit 6):
 
 | check | result |
 |---|---|
-| `https://www.` → one `301` to the same path and query on the apex | 0/20 (`curl` `000`: `www` has no DNS record) |
-| `http://www.` → one `301` straight to `https://smallwebapps.com…` | 0/20 |
-| apex answers `200` | 20/20 |
-| `https://smallwebapps.pages.dev/` | `200` |
+| `https://www.` + path + `?x=1` → one `301` to the same path and query on the apex | **20/20** |
+| `http://www.` + path + `?x=1` → one `301` straight to `https://smallwebapps.com…` | **20/20** |
+| apex answers `200` | **20/20** |
+| `https://www.smallwebapps.com/` | `301 https://smallwebapps.com/` |
+| Googlebot user agent, two query parameters | `301` to the same path with `?a=1&b=2` |
+| a merged URL on `www` (`/apps/screenshot-to-text/`) | `301` to the apex path, whose own `301` (slice 4) follows: two hops for an address that never had traffic |
 
-Zone `smallwebapps.com`, read in the Cloudflare dashboard the same night, nothing changed:
-- DNS: 3 records. `smallwebapps.com` CNAME → `smallwebapps.pages.dev` (proxied),
-  `_index._agents` SVCB, and the `google-site-verification` TXT. No `www`. The dashboard flags it
-  itself: "Visitors cannot reach www.smallwebapps.com".
-- Redirect Rules: 0 of 10.
+**Revert check**, at 10:41Z with the rule switched off for about two minutes, on 3 paths:
+- `https://www` gave `522` after 19 s (no origin);
+- `http://www` gave `301` to `https://www…`, from Always Use HTTPS, not to the apex;
+- 0/3 on both. Switched back on: 20/20 at 10:42Z.
 
-The record was not created. Claude in Chrome opened "Add record", but focusing the Name field let
-another Chrome extension inject a frame. From then on every click, key and screenshot failed with
-"Cannot access a chrome-extension:// URL of different extension", the same failure tglinks hit on
-2026-11-13. The page was reloaded to drop the half-filled dialog, and nothing was saved.
+Resolvers at 10:42Z: 1.1.1.1 and 9.9.9.9 return the Cloudflare addresses. 8.8.8.8 still returned
+nothing: it cached the earlier NXDOMAIN, and the zone's negative TTL is 1800 s (SOA minimum).
 
-- [ ] ⚠️ Owner: steps 1 and 2 above, in the dashboard.
-- [ ] Then run the loop: `www: 20/20`, the `http://www.` variant 20/20 in one hop, the apex 20/20.
+`pages.dev` (optional): not done. `https://smallwebapps.pages.dev/` still answers `200` and points its
+canonical at the apex. That is a second copy, not a competing one.
+
+**Earlier the same night, 03:47Z.** The loop gave 0/20 on both schemes. `www` had no record, and the
+zone had 0 Redirect Rules.
+
+The first try that night failed. Claude in Chrome opened "Add record", but clicking into the Name field
+let another Chrome extension inject a frame. From then on every click, key and screenshot failed
+with "Cannot access a chrome-extension:// URL of different extension", which is what happened on
+tglinks on 2026-11-13. The record that went in at 10:36Z was filled with `form_input`, which sets the
+fields without clicking into them, and the extension did not interfere.
+
+- [x] Steps 1 and 2 above, in the dashboard.
+- [x] The loop: `www` 20/20, the `http://www.` variant 20/20 in one hop, the apex 20/20.
+- [x] Revert check: rule off → 0/3; back on → 20/20.
