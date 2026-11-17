@@ -25,7 +25,7 @@ export const guides: GuideDefinition[] = [
     slug: "how-to-export-youtube-watch-history",
     title: "How to Export Your YouTube Watch History",
     description:
-      "Export your YouTube watch history from Google Takeout, step by step as the screens read in November 2026: switch history to JSON, how long it takes, and what to do when it fails.",
+      "Export your YouTube watch history from Google Takeout, step by step as the screens read in November 2026: what to tick, whether you need JSON, how long it takes, and what to do when it fails.",
     category: "YouTube Analysis",
     publishedLabel: "Google Takeout guide",
     publishedDate: "2026-06-02",
@@ -113,11 +113,11 @@ export const guides: GuideDefinition[] = [
     slug: "youtube-watch-history-json-format",
     title: "watch-history.json: A Field-by-Field Reference",
     description:
-      "Every field Google Takeout writes into watch-history.json, what each one means, which are missing on removed videos, and what the export does not record at all.",
+      "Every field Takeout writes for a YouTube history entry, JSON or HTML, counted in a real 22,812-entry export: missing channels, the ad marker, what is never recorded.",
     category: "YouTube Analysis",
     publishedLabel: "Format reference",
     publishedDate: "2026-08-27",
-    modifiedDate: "2026-08-27",
+    modifiedDate: "2026-11-17",
     image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
@@ -139,11 +139,11 @@ export const guides: GuideDefinition[] = [
     slug: "youtube-takeout-json-vs-html",
     title: "Takeout JSON or HTML: Which Watch History Export to Choose",
     description:
-      "Takeout offers watch history as JSON or HTML. They are not equivalent. One has unambiguous timestamps; the other has dates written in your account's language.",
+      "Takeout sends watch history as HTML unless you pick JSON. Both hold the same events; HTML writes dates in your account's language. When each one is enough.",
     category: "YouTube Analysis",
     publishedLabel: "Export formats",
     publishedDate: "2026-08-27",
-    modifiedDate: "2026-08-27",
+    modifiedDate: "2026-11-17",
     image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
