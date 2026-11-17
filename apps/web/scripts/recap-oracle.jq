@@ -1,9 +1,9 @@
 # Independent oracle for the TubeTrace year recap. Run with TZ set to the browser's zone:
 #   TZ=America/Sao_Paulo jq -r -f apps/web/scripts/recap-oracle.jq watch-history.json
-# Rule: a watch event (title "Watched ", or activityControls "YouTube watch history",
-# or a link to a YouTube video), minus ads (details "From Google Ads").
-def watch: ((.title // "") | startswith("Watched "))
-  or ((.activityControls // []) | index("YouTube watch history") != null)
+# Rule: a view (title starting "Watched", or a link to a YouTube video), minus ads (details
+# "From Google Ads"). "YouTube watch history" in activityControls is not a sign: community
+# posts carry it too.
+def watch: ((.title // "") | test("^Watched\\s"))
   or ((.titleUrl // "") | test("^https://(www\\.|music\\.)?youtube\\.com/watch\\?"));
 def ad: ((.details // []) | map(.name) | index("From Google Ads")) != null;
 def top5: group_by(.) | map({k: .[0], n: length}) | sort_by(-.n, .k) | .[0:5] | map("\(.k):\(.n)") | join(" | ");

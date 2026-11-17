@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { gunzipSync, unzipSync } from "fflate";
-import { AD_MARKER, UNKNOWN_CHANNEL, parseJsonHistory, type WatchEntry } from "./history";
+import { AD_MARKER, UNKNOWN_CHANNEL, countsAsView, parseJsonHistory, type WatchEntry } from "./history";
 import { recapForYear, stampEntries, yearsIn } from "./recap";
 
 type Analysis = {
@@ -176,12 +176,12 @@ function parseHtmlHistory(text: string) {
 
   doc.querySelectorAll(".content-cell").forEach((cell) => {
     const cellText = cell.textContent?.trim() || "";
-    if (!/^Watched\s/i.test(cellText)) return;
+    const links = Array.from(cell.querySelectorAll("a"));
+    if (!countsAsView(cellText, links[0]?.getAttribute("href") || "")) return;
     // The HTML export writes the ad marker in the entry's caption cell, a
     // sibling of this one inside the same .outer-cell.
     if (cell.closest(".outer-cell")?.textContent?.includes(AD_MARKER)) return;
 
-    const links = Array.from(cell.querySelectorAll("a"));
     const videoLink = links.find((link) => link.href.includes("watch?v=")) || links[0];
     const channelLink =
       links.find((link) => /\/(channel|user|@)/.test(link.getAttribute("href") || "")) ||

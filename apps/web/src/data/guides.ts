@@ -29,7 +29,7 @@ export const guides: GuideDefinition[] = [
     category: "YouTube Analysis",
     publishedLabel: "Google Takeout guide",
     publishedDate: "2026-06-02",
-    modifiedDate: "2026-11-15",
+    modifiedDate: "2026-11-17",
     image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open YouTube Watch History Analyzer"
@@ -130,7 +130,7 @@ export const guides: GuideDefinition[] = [
     category: "YouTube Analysis",
     publishedLabel: "Data accuracy",
     publishedDate: "2026-08-27",
-    modifiedDate: "2026-11-15",
+    modifiedDate: "2026-11-17",
     image: "/og/site.png",
     relatedToolSlug: "tubetrace",
     relatedToolLabel: "Open the watch history analyzer"
