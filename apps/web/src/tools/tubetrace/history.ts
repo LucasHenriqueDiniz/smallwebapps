@@ -21,6 +21,8 @@ export const UNKNOWN_CHANNEL = "Unknown channel";
 export const AD_MARKER = "From Google Ads";
 
 const WATCH_URL = /^https:\/\/(www\.|music\.)?youtube\.com\/watch\?/;
+// `\s`, not a plain space: the HTML export puts a no-break space after the word.
+const WATCHED_PREFIX = /^Watched\s/;
 
 type TakeoutItem = {
   title?: unknown;
@@ -28,21 +30,26 @@ type TakeoutItem = {
   subtitles?: { name?: unknown }[];
   time?: unknown;
   time_usec?: unknown;
-  activityControls?: unknown;
   details?: { name?: unknown }[];
 };
 
 /**
- * A watch event, by any of three signs: the English title prefix, the
- * activity control that recorded it, or a link to a video. The link is the one
- * sign that does not depend on the account's language. Searches match none of
- * them: their title starts "Searched for" and their link goes to /results.
+ * The rule both readers share: an entry is a view when its text starts with
+ * "Watched" or its link goes to a video. A removed video keeps the prefix and
+ * loses the link. Searches have neither: "Searched for", and a /results link.
+ *
+ * The activity control is deliberately not a sign. Takeout files the community
+ * posts an account viewed ("Viewed …", a /post/ link) under "YouTube watch
+ * history" too, and a post is not a video.
  */
+export function countsAsView(text: string, url: string): boolean {
+  return WATCHED_PREFIX.test(text) || WATCH_URL.test(url);
+}
+
 export function isWatchEvent(item: TakeoutItem): boolean {
   const title = typeof item.title === "string" ? item.title : "";
-  const controls = Array.isArray(item.activityControls) ? item.activityControls : [];
   const url = typeof item.titleUrl === "string" ? item.titleUrl : "";
-  return title.startsWith("Watched ") || controls.includes("YouTube watch history") || WATCH_URL.test(url);
+  return countsAsView(title, url);
 }
 
 export function isAd(item: TakeoutItem): boolean {

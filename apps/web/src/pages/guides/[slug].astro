@@ -132,7 +132,8 @@ const contentMap = {
         body: [
           "If you exported all YouTube data rather than just history, or if you took a combined Google activity export, you may be holding a MyActivity.json rather than a clean watch-history.json. Those files interleave several activity types in one array: videos watched, searches performed, and other recorded actions, all as sibling objects.",
           "Search entries look structurally similar to watch entries. They have a title, a time, and an activityControls array. The distinguishing detail is the title prefix: watch events begin with 'Watched ', searches begin with 'Searched for '.",
-          "Our analyzer keeps an entry when any of three signs says it is a watch event: its activityControls array contains 'YouTube watch history', its title begins with 'Watched ', or its link points at a YouTube video. Searches carry none of them, since their link goes to a results page, so they never reach the count. The link is the sign that still works when the account is not in English. A tool that checks nothing will report your searches as videos. This is the single largest source of inflated counts.",
+          "Our analyzer keeps an entry when its title begins with 'Watched' or its link points at a YouTube video. Searches have neither, since their link goes to a results page, so they never reach the count. A tool that checks nothing will report your searches as videos. This is the single largest source of inflated counts.",
+          "Community posts are the quieter one. Takeout records every post you opened as 'Viewed' plus a link to the post, under the same 'YouTube watch history' setting as your videos. A tool that trusts that setting counts each post as a video watched. In one export we read in November 2026 they were 389 of 22,812 entries.",
         ],
       },
       {
@@ -408,7 +409,7 @@ const contentMap = {
       "Click \"Next step\". Step 2, \"Choose file type, frequency & destination\", decides how the archive reaches you. Keep a download link by email, a single export and the .zip file type, then create the export.",
       "Wait for Google's email. Most people get it the same day, and Google says it can take anything from a few minutes to a few days.",
       "Download the archive from the link in the email within about 7 days; Google allows 5 downloads per archive. You do not need to unpack it.",
-      "Open the YouTube Watch History Analyzer on this site and drop the .zip in, or the watch-history.json inside it, under YouTube and YouTube Music/history/. The file is read in your browser tab and never uploaded. Pick a year to see its recap.",
+      "Open the YouTube Watch History Analyzer on this site and drop the .zip in, or the watch-history.json inside it, under YouTube and YouTube Music/history/. Those names follow your account's language (in Portuguese: YouTube e YouTube Music/histórico/), and the analyzer finds the file inside the .zip whatever it is called. The file is read in your browser tab and never uploaded. Pick a year to see its recap.",
     ],
     sections: [
       {

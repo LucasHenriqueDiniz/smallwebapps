@@ -1,5 +1,5 @@
 ---
-status: doing
+status: done
 kanban:
 ---
 
@@ -109,8 +109,52 @@ Measured:
 | `astro check`, build, 3 validators | — | 0 errors; 150 pages; 3 × exit 0 |
 | layout | 375 px and desktop, light and dark | no horizontal scroll; year buttons and tiles readable in both themes |
 
-Still open:
-- **The real export.** The synthetic file is built from what the code expects, so it cannot show that
-  Takeout writes "From Google Ads" or English titles for this account. The two extra `jq` lines in
-  "Done when" answer exactly that. If the file is not in English and has removed videos, those
-  entries lack a link and are dropped: count them with the prefix line and decide.
+**2026-11-17: checked against the owner's real export. 2/2 years match; one rule fixed.**
+
+The export (`takeout-20261116T235720Z-1-001.zip`, 41 MB) holds the history as **HTML, not JSON**, and
+the account is set to Portuguese. That changed the check in two ways:
+- The `jq` oracle reads JSON only. A second oracle reads the HTML:
+  `apps/web/scripts/recap-oracle-html.py`. It is plain Python with regular expressions and shares no
+  code with the page. Run it with `python3 -I`.
+- The paths are translated: `Takeout/YouTube e YouTube Music/histórico/histórico-de-visualização.html`,
+  not `…/history/watch-history.json`. The `jq` commands above assume the English names.
+
+What the file holds, counted by the oracle (no titles or channel names are recorded here):
+
+| entries | 22,812 |
+|---|---|
+| "Watched" + a link to a video (YouTube 19,689, YouTube Music 2,733) | 22,422 |
+| of those, ads ("From Google Ads", in English even on this account) | 101 |
+| "Viewed" + a link to a community **post**, or a post no longer available | 389 |
+| "Used Shorts creation tools" | 1 |
+| watched without a link (removed videos) | 0 |
+| dates | all "16 de nov. de 2026, 20:55:06 BRT" (Portuguese months, `BRT`) |
+| what "Por que isso está aqui?" lists for **every** entry, posts included | "YouTube watch history" |
+
+**The rule had a hole.** The page said an entry counts when *any* of three signs holds, one being
+activityControls "YouTube watch history". On this export that sign is on all 22,812 entries. So a JSON
+export of the same account would have counted the 389 posts and the Shorts tool as videos. The HTML
+reader, which tested only the "Watched" prefix, would not. The rule now has two signs, a title
+starting "Watched" or a link to a video, and both readers use it (`countsAsView` in `history.ts`):
+- the prefix test is `^Watched\s`, because the HTML export puts a no-break space after the word;
+- the tool page, the guide `why-youtube-watch-counts-differ` and `recap-oracle.jq` state the new rule;
+- the tool page and the export guide say the folder and file names follow the account's language.
+
+Measured in Chrome (the app's browser pane, zone `America/Sao_Paulo`, same as the export's `BRT`).
+The page is the production build, served by `astro preview`. The real 41 MB zip is fed to the page's
+file input, the same path as choosing it by hand:
+
+| check | result |
+|---|---|
+| file found inside the zip under its Portuguese name | yes, in 1.1 s |
+| years offered | 2026, 2025: the oracle's 2 years |
+| per year: videos, channels, top 5 channels (names and counts, ties by name) | **2/2 years match**, on `main` and again on this branch |
+| total | 22,321 on the page = 22,321 in the oracle |
+| revert in the browser: HTML ad filter removed | **0/2** years match. 2026 is +57 and 2025 +44, exactly each year's ads (101 in all) |
+| unit: post and Shorts-tool entries dropped | red with the old "YouTube watch history" sign back in; green with the fix |
+| unit: "Watched" + no-break space read | red with a plain-space prefix; green with `\s` |
+| suite, `astro check`, build, 3 validators, `scan-links`, `link-graph` | 159/159; 0 errors; exit 0 on all |
+| page text with JavaScript off | states the rule, that ads are left out and why there are no hours |
+
+Not covered: the JSON reader against a real file. That needs a JSON export of this account, which
+slice 6 needs anyway. Run `recap-oracle.jq` then.

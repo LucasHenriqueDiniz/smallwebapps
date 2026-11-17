@@ -104,8 +104,19 @@ Rewritten:
 requested yet: both URLs are in the queue of `smallwebapps-pedir-indexacao`, behind the recap guide
 and the `/apps/` pages, from its 2026-11-16 15:32 UTC run.
 
+**2026-11-17: the owner's export arrived, but as HTML.**
+
+- `takeout-20261116T235720Z-1-001.zip`, created 2026-11-16 23:57Z. The YouTube history in it is
+  `histórico/histórico-de-visualização.html`. There is no JSON, so the field reference stays blocked.
+- The account is set to Portuguese, so the folder and file names are translated. The page and the tool
+  page now say so (slice 2's PR). TubeTrace found the file in the zip by its contents either way.
+- Whether the owner followed this page, and whether the history format was switched to JSON, is not
+  recorded yet. If it was switched and HTML still came out, the page is wrong. If it was not, the pass
+  or fail of the walkthrough is still open.
+
 Still open:
 - [ ] ⚠️ Owner: follow the deployed page on takeout.google.com and get a `watch-history.json`. Pass or
       fail, with the date. Every quoted label must match: N/N. This also covers the step-2 controls.
-- [ ] The `watch-history.json` reference, against the owner's real export (blocked on the export).
+      The 2026-11-16 export came out as HTML (above).
+- [ ] The `watch-history.json` reference, against the owner's real export (blocked: no JSON yet).
 - [x] `smallwebapps-pedir-indexacao` covers guides (2026-11-15).
