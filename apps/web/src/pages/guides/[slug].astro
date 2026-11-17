@@ -42,74 +42,75 @@ const toolHref = guide.relatedToolSlug ? `/apps/${guide.relatedToolSlug}/` : "/a
 const contentMap = {
   "youtube-watch-history-json-format": {
     intro:
-      "Google Takeout exports YouTube watch history as a single JSON array where every element is one viewing event. The structure is stable and small, which is good news: a decade of viewing is usually a few megabytes of text, not the multi-gigabyte archive people brace for. What trips people up is not the size but the assumptions. The file records far less than most viewers expect, and several fields quietly disappear on videos that no longer exist. This reference walks the format field by field so you know what any analysis of it can honestly claim.",
+      "Google Takeout writes your YouTube watch history as one record per event: a JSON array in watch-history.json if you switch the format, an HTML page if you keep the default. Both carry the same fields. The field names below are Google's own, from its published schema for My Activity records. What each field holds comes from a real export we counted in November 2026: 22,812 entries from an account set to Portuguese, read field by field. Where that export had no example of something, this page says so instead of guessing.",
     sections: [
       {
-        heading: "The shape of a single entry",
+        heading: "The fields of an entry",
         body: [
-          "Each element of the array is a flat object. There is no nesting beyond a single subtitles array, and no per-video metadata block. The same handful of keys repeat for every entry from your first watch to your most recent.",
-          "The fields that matter for analysis are the following.",
+          "Each entry is a flat object. Google's schema says the fields vary by service and action, so not every entry has every field. These are the ones a YouTube history entry carries, with what we found in each.",
         ],
         list: [
-          "title — the video title, prefixed with the literal string 'Watched '. The prefix is part of the value, not a separate field, so any parser has to strip it.",
-          "titleUrl — the canonical watch URL in the form https://www.youtube.com/watch?v=VIDEO_ID. This is where a video ID comes from; there is no separate id field.",
-          "subtitles — an array that in practice holds a single object with name and url, identifying the channel.",
-          "time — an ISO 8601 timestamp for the view. Every chart anyone builds from this file ultimately comes from this one field.",
-          "activityControls — an array naming which Google setting recorded the entry. Watch events list 'YouTube watch history'.",
+          "header — the product: 'YouTube', or 'YouTube Music' for what you played there (2,733 of the 22,812 entries).",
+          "title — a verb, then the title. 'Watched' and the video title for a view (22,422 entries), 'Viewed' for a community post you opened (389), and one 'Used Shorts creation tools'. The verb was in English although the account was set to Portuguese. The HTML export follows it with a no-break space, so a parser that strips 'Watched ' with an ordinary space misses it.",
+          "titleUrl — the link in the title: https://www.youtube.com/watch?v=VIDEO_ID, music.youtube.com for YouTube Music, or a /post/ link for a community post. There is no separate video ID field.",
+          "subtitles — the channel, as a name and a URL. It is not always there: 328 views of videos that are still online had no channel, and neither did any ad.",
+          "time — when it happened. In JSON this is an ISO 8601 timestamp; the example in Google's schema is 2023-08-23T03:49:28.734Z, in UTC. In HTML it is a date in the account's language with a time-zone abbreviation, such as '16 de nov. de 2026, 20:55:06 BRT'.",
+          "products — 'YouTube' on every entry we counted, the YouTube Music ones included.",
+          "details — only on ads, reading 'From Google Ads': 103 entries. That is the marker to drop ads by, and Google's schema gives the same text as its YouTube example.",
+          "activityControls — the account setting that saved the entry. It read 'YouTube watch history' on all 22,812, community posts included, with 'Web & App Activity' added on the ads. It tells you which setting recorded something, not that a video was watched.",
         ],
+        sources: [{ label: "Google for Developers, Data Portability API: My Activity schema reference", href: "https://developers.google.com/data-portability/schema-reference/my_activity" }],
       },
       {
-        heading: "What disappears on removed and private videos",
+        heading: "Entries without a channel, and removed videos",
         body: [
-          "This is the single biggest source of confusion. When a video is deleted, made private, or taken down after you watched it, YouTube can no longer supply its metadata, and Takeout writes a degraded entry instead of omitting it.",
-          "Those entries read 'Watched a video that has been removed'. There is no real title to recover, no titleUrl, and typically no subtitles array, which means no channel name either. The timestamp survives.",
-          "The practical consequence is that removed videos still count toward your totals and still appear in your activity timeline, but they cannot appear in a top-channels ranking, because there is no channel attached. A tool that shows 4,000 views but only attributes 3,600 of them to channels is not losing data; it is being honest about a gap that Google created. Our analyzer labels these 'Unknown channel' rather than dropping them, so the totals stay consistent.",
+          "A missing channel is more common than removed videos would explain. In the export we counted, 328 views kept a working video link and a title but had no channel attached, and every ad lacked one too.",
+          "A video taken down after you watched it can lose its link as well. The export we counted had no such entry, so we cannot show what one looks like. Our analyzer counts any entry that begins 'Watched', link or not, and files every view without a channel under 'Unknown channel'. The totals stay whole, and the top-channels list ranks only what is attributed.",
         ],
       },
       {
         heading: "What the export does not contain",
         body: [
-          "The omissions matter more than the fields. watch-history.json is a log of events, not of engagement, and it carries none of the following.",
-          "There is no watch duration. The file does not record whether you watched ten seconds or the whole video. There is also no video length, so duration cannot be derived either. Any tool that shows you 'total hours watched' from a Takeout export is multiplying your view count by an assumed average length. That is an estimate wearing the costume of a measurement, and it can be wrong by an order of magnitude if you watch a lot of Shorts or a lot of long-form video.",
-          "There is also no like, comment, or subscription data in this file, no view counts, no categories or tags, and no thumbnail. Those live in separate Takeout files or nowhere at all. And there is no device or location field, so the export cannot tell you whether a view happened on a phone or a TV.",
+          "The history is a log of events, not of engagement. Each entry is a verb, a title, a link, a channel, a time and the setting that saved it, and nothing more.",
+          "There is no watch duration and no video length, so how long you watched cannot be derived either. Any tool that shows 'total hours watched' from a Takeout export is multiplying your view count by an assumed average length. That is an estimate wearing the costume of a measurement, and it can be wrong by an order of magnitude if you watch a lot of Shorts or a lot of long-form video.",
+          "There is no device and no location on these entries. Comments, subscriptions and playlists come as separate CSV files in other folders of the same YouTube export, not in the history.",
         ],
       },
       {
         heading: "Reading timestamps correctly",
         body: [
-          "The time field is an ISO 8601 string, which makes it unambiguous — it carries its own offset, so there is no guessing about which timezone a view happened in.",
-          "That matters for the charts people care about most. A 'what hour do I watch?' histogram is only meaningful if every timestamp is normalised the same way, and it will shift if some entries are interpreted as local time and others as UTC. This is the main technical reason to prefer the JSON export over the HTML one, where dates are written in your account's display language and have to be parsed heuristically.",
-          "If you travel across timezones, remember that the histogram shows clock time at the moment of viewing, not time relative to your body. A month abroad will smear your evening peak.",
+          "The JSON time field carries its own zone, so there is one way to read it. The HTML date carries only an abbreviation such as BRT, in the account's language, so a parser has to know that language's month names and decide which zone the abbreviation means.",
+          "Our analyzer reads English and Portuguese HTML dates as your browser's local time. That is right when the abbreviation is your browser's zone, as it was in the export we counted: BRT dates, read in a browser set to São Paulo time. Dates in other languages may not be read at all, and an entry whose date cannot be read is left out. JSON avoids both problems.",
+          "The analyzer places every view in your browser's time zone as it is today, whichever format you load. Viewing done during a month abroad therefore lands at shifted hours.",
         ],
       },
       {
         heading: "Where the file sits in the archive",
         body: [
-          "Inside the Takeout archive, the file lives under the 'YouTube and YouTube Music' folder, in a 'history' subfolder, named watch-history.json.",
-          "You do not have to go looking for it manually. Our analyzer accepts the .zip or .tgz straight from Takeout and locates the history file inside, scoring candidates by filename and content so that a combined MyActivity.json export is also recognised. The tar reader runs in your browser alongside the rest of the analysis, so unpacking never requires uploading anything.",
+          "Inside the Takeout archive, the history is in the 'YouTube and YouTube Music' folder, in a 'history' subfolder, as watch-history.json if you chose JSON. The names follow the account's language: the Portuguese export we counted had 'YouTube e YouTube Music/histórico/histórico-de-visualização.html'.",
+          "You do not have to go looking for it. Our analyzer accepts the .zip or .tgz straight from Takeout and finds the history inside by its name and its contents. It found that Portuguese file inside a 41 MB archive, next to uploaded videos and CSV files. The archive is opened in your browser, so nothing is uploaded.",
         ],
       },
       {
         heading: "Getting a video ID out of titleUrl",
         body: [
-          "There is no id field. The video ID has to come out of titleUrl, and the obvious approach of splitting the string on 'v=' and taking what follows is the one that breaks.",
-          "It breaks because the watch URL can carry more than one parameter. A link copied out of a playlist arrives with a list= value attached, one copied from the mobile app arrives with a share-tracking si= parameter, and a link shared at a timestamp carries t=. Split naively and the ID silently absorbs whatever came after it, so the same video ends up counted as several different videos and your top-videos list fragments.",
-          "Parse the URL properly and read the v parameter as a parameter. In a browser that is one line: new URL(entry.titleUrl).searchParams.get('v'). The distinct-video count you get afterwards is the one worth trusting.",
+          "There is no id field, so the video ID comes out of titleUrl. In the export we counted, all 22,422 watch links carried a single parameter, v, so splitting on 'v=' would have worked there.",
+          "Parse it as a URL anyway: new URL(entry.titleUrl).searchParams.get('v'). It costs nothing and keeps working if a link ever arrives with a second parameter, as links copied out of a playlist or the mobile app do. A distinct count on that ID is the number of different videos you saw, lower than the view count by every rewatch.",
         ],
       },
       {
         heading: "Sanity checks before you trust any analysis",
         body: [
-          "Before reading conclusions off a chart, spend thirty seconds confirming the file is what you think it is. Three checks catch almost every problem.",
-          "Check the size. Watch history is text only, so even many years of heavy viewing usually lands in single-digit megabytes. A file of a few kilobytes means the export did not include history; a file of hundreds of megabytes means you exported far more than history.",
-          "Check the date range against your memory. If the earliest entry is far more recent than when you started using the account, something trimmed the tail — most often auto-delete.",
-          "Check the removed-video share. A large gap between total views and views with a known channel is normal for old histories, but if nearly everything is unattributed, you are probably looking at a parsing failure rather than a decade of deleted videos.",
+          "Before reading conclusions off a chart, spend thirty seconds confirming the file is what you think it is.",
+          "Check the size. Watch history is text only: the HTML history we counted took 24 MB for 22,812 entries, about 1 KB each. A file of a few kilobytes means the export did not include your history. An archive of hundreds of megabytes means you exported far more than history, such as your uploaded videos.",
+          "Check the date range against your memory. If the earliest entry is far more recent than when you started using the account, something trimmed the start, often an auto-delete setting on your watch history.",
+          "Check the share without a channel. Some is normal: about 1.5% of views in the export we counted. If nearly everything lands under 'Unknown channel', suspect the parsing before the data.",
         ],
       },
       {
         heading: "How a history file is recognised inside an archive",
         body: [
-          "You can hand our analyzer the whole Takeout archive rather than hunting for the right file, because it scores every candidate it finds and takes the best one rather than trusting a fixed path. Google has changed folder layouts before, and localised account exports do not always use English folder names.",
+          "You can hand our analyzer the whole Takeout archive rather than hunting for the right file, because it scores every candidate it finds and takes the best one rather than trusting a fixed path. An account set to another language gets translated folder and file names, as the Portuguese export we counted did.",
           "The scoring is weighted toward filename first: watch-history.json scores highest, watch-history.html slightly lower, and a combined MyActivity.json lower again but still eligible. Path hints add to the score when the route contains 'youtube', 'history', or 'takeout'.",
           "Content is then checked as a tiebreak. A file whose opening bytes mention 'youtube watch history' gains a large bonus, and one containing 'watched ' or the content-cell class used by the HTML export gains a smaller one. The result is that a correctly named file in an unexpected folder still wins, and a plausible-looking file with the wrong contents loses.",
         ],
@@ -187,7 +188,7 @@ const contentMap = {
   },
   "youtube-takeout-json-vs-html": {
     intro:
-      "When you export YouTube history, Takeout lets you pick JSON or HTML. The choice looks cosmetic and is not. The two formats carry the same viewing events but encode the timestamp very differently, and that single difference determines whether any time-based analysis of your history is trustworthy. If you only read one thing here: choose JSON.",
+      "When you export YouTube history, Takeout gives you HTML unless you switch it to JSON. Both carry the same viewing events, but they write the timestamp very differently, and that one difference decides how far a time-based analysis can be trusted. If you only read one thing here: for the analyzer on this site either works when your account is in English or Portuguese. Choose JSON if it is in another language, or if you will process the file yourself.",
     sections: [
       {
         heading: "What each format actually is",
@@ -201,7 +202,7 @@ const contentMap = {
         body: [
           "Here is the part that catches people. In the HTML export, the date is written the way your Google account displays dates — in your account's language, with localised month names and a local timezone abbreviation.",
           "So the same view might be written as 'Jan 5, 2026, 8:31:04 PM EST' for one account and '5 de jan. de 2026, 20:31:04 BRT' for another. A parser has to recognise the language before it can read the date, and there is no field telling it which language to expect.",
-          "Our HTML parser handles the English format and the Portuguese 'DD de MMM de YYYY' form, including the BRT and BRST offsets. Anything else falls through to the browser's own date parser, which will either produce a wrong date or refuse the string entirely. If your account displays dates in German, Japanese, or Hindi and you exported HTML, your activity timeline may be silently wrong.",
+          "Our HTML parser handles the English format and the Portuguese 'DD de MMM de YYYY' form, including the BRT and BRST abbreviations; we checked the Portuguese one on a real export of 22,812 entries in November 2026. Anything else falls through to the browser's own date parser, which will either produce a wrong date or refuse the string, and a refused date leaves that entry out of every count. If your account displays dates in German, Japanese, or Hindi and you exported HTML, export again as JSON.",
           "The JSON export has none of this ambiguity, because ISO 8601 is not localised.",
         ],
       },
@@ -209,46 +210,46 @@ const contentMap = {
         heading: "Fragility beyond dates",
         body: [
           "Positional parsing is brittle in other ways too. The HTML export's markup is a Google implementation detail, not a documented format, and it has changed before. A layout change that a human reader would not even notice — an extra link, a reordered element — can break a parser that depends on 'the second anchor is the channel'.",
-          "HTML is also far heavier. The same history carries markup, inline styles, and repeated wrapper elements around every entry, so the file is several times larger than the JSON for identical information.",
+          "HTML is also heavier. Every entry is wrapped in markup and repeated class attributes: the HTML history we counted took 24 MB for 22,812 entries, about 1 KB each, for what is a verb, a title, two links and a date.",
         ],
       },
       {
         heading: "If you already have an HTML export",
         body: [
           "You do not necessarily have to redo the export. Our analyzer reads watch-history.html as well as watch-history.json, and will accept either from inside a .zip or .tgz archive without unpacking.",
-          "Check the results before trusting them. Look at the activity timeline and ask whether the date range matches your memory. If views are bunched into a single implausible day, or the range starts years later than you expect, the dates did not parse and you should re-export.",
-          "Re-exporting is not expensive. A history-only export is small and usually ready in minutes rather than hours, because you are asking for a few megabytes of text rather than the media-heavy products that make Takeout slow.",
+          "Check the results before trusting them. Look at the total and the date range and ask whether they match your memory. Our analyzer leaves out an entry whose date it cannot read, so a total far below what you expect, or a range that starts years late, means the dates did not parse and you should export again as JSON.",
+          "Re-exporting is not expensive if you ask for history only, since that is text rather than the uploaded videos that make Takeout archives large. Google says an export can take from a few minutes to a few days, and that most people get the link the same day.",
         ],
       },
       {
         heading: "Choosing at export time",
         body: [
-          "In Takeout, deselect everything, choose 'YouTube and YouTube Music', open the data selector, and narrow it to history. That single step is the difference between a few-megabyte download and an archive that includes every video you ever uploaded.",
-          "Then set the format to JSON where Takeout offers the choice. It is a dropdown people skip past, and it is the most consequential setting on the page for anyone who intends to analyse the result rather than skim it.",
+          "In Takeout, click 'Deselect all', tick 'YouTube and YouTube Music', then click 'All YouTube data included' and keep only history. That single step is the difference between a download of text and an archive that includes every video you ever uploaded.",
+          "To get JSON, click 'Multiple formats' and change 'history' from HTML, the default, to JSON. Most people skip past it, and for the analyzer on this site that is fine in English or Portuguese. It matters when your account uses another language, or when you intend to process the file yourself.",
         ],
       },
       {
         heading: "Checking whether your HTML dates parsed at all",
         body: [
-          "If you already loaded an HTML export, the failure mode is quiet: you get charts, and the charts are wrong. There is no error, because an unparseable date usually falls back to something rather than nothing.",
-          "Three symptoms give it away. A large share of views landing on a single day, usually today, means the fallback produced the current date. An activity timeline that starts years later than you know you started watching means early entries failed and were discarded. An hour-of-day histogram that looks flat, with viewing spread evenly across 3am and 3pm alike, means the times are noise — real human viewing is never uniform across the clock.",
+          "If you already loaded an HTML export into a tool, the failure can be quiet. Our analyzer leaves out any entry whose date it cannot read. Other tools may fall back to some date instead, and then you get charts, and the charts are wrong.",
+          "Three symptoms give it away. A total far below what you expect means entries were dropped, which is what our analyzer does with a date it cannot read. A large share of views landing on a single day, usually today, means a tool fell back to the current date. An hour-of-day histogram that looks flat, with viewing spread evenly across 3am and 3pm alike, means the times are noise — real human viewing is never uniform across the clock.",
           "If you see any of those, do not try to interpret the result. Re-export as JSON.",
         ],
       },
       {
         heading: "Why the size difference is not just cosmetic",
         body: [
-          "The HTML export carries the same events wrapped in markup: a container per entry, inline styling, repeated class attributes, and link markup around every title and channel. The same history is several times larger than the equivalent JSON.",
+          "The HTML export carries the same events wrapped in markup: a container per entry, inline styling, repeated class attributes, and link markup around every title and channel. That is where the 24 MB for 22,812 entries goes.",
           "That matters because this analysis runs in your browser tab, on your device. A larger file means more memory to hold the parsed document and more work to walk it, and the gap is felt most on phones and older laptops — exactly the devices where a tab is most likely to be killed mid-analysis.",
-          "JSON parsing is also handled by the browser's native JSON reader, which is far faster than constructing a full DOM and querying it. On a large history the difference is the difference between a moment and a visible wait.",
+          "JSON is read by the browser's native JSON reader, which does less work than building a whole page and querying it. In our check the 24 MB HTML history, inside a 41 MB archive, still loaded in about a second on a laptop, so the difference shows on much larger histories and slower devices.",
         ],
       },
       {
         heading: "What to do if you cannot re-export",
         body: [
           "Occasionally re-exporting is not practical — you are working from an archive someone kept years ago, or from an account you no longer control.",
-          "In that case, load the HTML and treat the aggregate counts as usable while treating everything time-based as suspect. Total views, top channels, and the removed-video share do not depend on date parsing and will be correct. The activity timeline, the hour-of-day histogram, and anything described as a streak or a session do.",
-          "That split is worth knowing generally: in this dataset, counting is robust and timing is fragile. Every conclusion that depends on when something happened rests on one field being read correctly.",
+          "In that case, load the HTML and check the total first. With English or Portuguese dates nothing is lost. With dates in another language, our analyzer leaves out every entry whose date it cannot read, so the total, the top channels and every chart come out short by those entries.",
+          "That is worth knowing generally: in this dataset every conclusion about when something happened rests on one field being read correctly, and in our analyzer so does whether an entry is counted at all.",
         ],
       },
     ],
@@ -404,18 +405,18 @@ const contentMap = {
     points: [
       "Open takeout.google.com while signed in to the Google account you watch YouTube with. Takeout exports the account that is signed in, so check the avatar in the corner first. The page opens on step 1, \"Select data to include\", with every product ticked.",
       "Click \"Deselect all\", then scroll to the end of the list and tick \"YouTube and YouTube Music\". The counter at the top should now read 1 of the total, for example \"1 of 65 selected\".",
-      "Under YouTube and YouTube Music, click \"Multiple formats\". In the \"YouTube and YouTube Music options\" dialog, scroll down to \"history\" and change it from HTML, which is the default, to JSON. Click OK.",
+      "Optional: under YouTube and YouTube Music, click \"Multiple formats\". In the \"YouTube and YouTube Music options\" dialog, scroll down to \"history\" and change it from HTML, which is the default, to JSON. Click OK. Skip this if you only want the analyzer on this site: it reads the default HTML too.",
       "If you only want your history, click \"All YouTube data included\" and untick everything else. A smaller export is ready sooner, since Google says the time depends on how much data the account holds.",
       "Click \"Next step\". Step 2, \"Choose file type, frequency & destination\", decides how the archive reaches you. Keep a download link by email, a single export and the .zip file type, then create the export.",
       "Wait for Google's email. Most people get it the same day, and Google says it can take anything from a few minutes to a few days.",
       "Download the archive from the link in the email within about 7 days; Google allows 5 downloads per archive. You do not need to unpack it.",
-      "Open the YouTube Watch History Analyzer on this site and drop the .zip in, or the watch-history.json inside it, under YouTube and YouTube Music/history/. Those names follow your account's language (in Portuguese: YouTube e YouTube Music/histórico/), and the analyzer finds the file inside the .zip whatever it is called. The file is read in your browser tab and never uploaded. Pick a year to see its recap.",
+      "Open the YouTube Watch History Analyzer on this site and drop the .zip in as it came, or the history file inside it, under YouTube and YouTube Music/history/. Those names follow your account's language (in Portuguese: YouTube e YouTube Music/histórico/), and the analyzer finds the file inside the .zip whatever it is called. The file is read in your browser tab and never uploaded. Pick a year to see its recap.",
     ],
     sections: [
       {
         heading: "JSON or HTML",
         body: [
-          "Takeout sets the history format to HTML unless you change it, and describes that option as separate HTML files for your watch and search history. HTML is meant to be read in a browser. JSON is structured data, with a timestamp that carries its own time zone, which is what an analyzer needs. The analyzer on this site reads both, but HTML dates are written in your account's language and have to be guessed at. The guide on Takeout JSON versus HTML goes through the difference field by field.",
+          "Takeout sets the history format to HTML unless you change it, and describes that option as separate HTML files for your watch and search history. For the analyzer on this site either works. We checked it in November 2026 on a real HTML export from an account set to Portuguese: 22,812 entries, and its yearly counts matched an independent count. Choose JSON if your account is in a language other than English or Portuguese, or if you want to process the file yourself: it is structured data, and its timestamps carry their own time zone, while HTML dates are written in your account's language. The guide on Takeout JSON versus HTML goes through the difference.",
         ],
       },
       {

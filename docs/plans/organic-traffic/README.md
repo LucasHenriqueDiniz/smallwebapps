@@ -17,7 +17,7 @@ Slice 7 is a wait on Google's clock.
 | 3 — recap guide | one guide for "past years", "not showing", "all-time" | live, indexable, in the sitemap, linked from ≥ 3 cluster pages, every claim about YouTube's Recap linked to YouTube's own page |
 | 4 — narrow the index | option A: 21 tools and 4 guides cut, 3 merges | sitemap = 20 URLs; cut URLs `noindex` N/N; merges one `301` 3/3; `scan-links` exit 0 |
 | 5 — links to the cluster | header, footer, home and related links lead to TubeTrace and the guides | `/apps/tubetrace/` inbound from 19/19 other indexable pages; every YouTube guide ≥ 10; 0 broken |
-| 6 — re-earn the dropped guides | export how-to and `watch-history.json` reference checked against the live Takeout | owner follows the page and gets the file: pass; field table N/N against a real export; indexing requested |
+| 6 — re-earn the dropped guides | export how-to and `watch-history.json` reference checked against the live Takeout | done 2026-11-17: owner's .zip read as it came (both formats accepted); field table 8/8 against the real export; indexing requested |
 | 7 — gate | the next decision, from Google's numbers | decision written with day-28 index state and day-42 impressions and clicks for the 8 cluster URLs |
 
 **Baseline, 2026-11-15** (`docs/research/2026-11-15-organic-traffic/measurements/`): 33 of 47

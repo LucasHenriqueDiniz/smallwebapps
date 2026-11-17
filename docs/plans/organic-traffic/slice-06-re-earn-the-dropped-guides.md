@@ -1,5 +1,5 @@
 ---
-status: doing
+status: done
 kanban:
 ---
 
@@ -104,19 +104,46 @@ Rewritten:
 requested yet: both URLs are in the queue of `smallwebapps-pedir-indexacao`, behind the recap guide
 and the `/apps/` pages, from its 2026-11-16 15:32 UTC run.
 
-**2026-11-17: the owner's export arrived, but as HTML.**
+**2026-11-17: the owner's export arrived as HTML. The owner ruled that both formats are accepted, and
+the slice closes on that export.**
 
-- `takeout-20261116T235720Z-1-001.zip`, created 2026-11-16 23:57Z. The YouTube history in it is
-  `histórico/histórico-de-visualização.html`. There is no JSON, so the field reference stays blocked.
-- The account is set to Portuguese, so the folder and file names are translated. The page and the tool
-  page now say so (slice 2's PR). TubeTrace found the file in the zip by its contents either way.
-- Whether the owner followed this page, and whether the history format was switched to JSON, is not
-  recorded yet. If it was switched and HTML still came out, the page is wrong. If it was not, the pass
-  or fail of the walkthrough is still open.
+The export is `takeout-20261116T235720Z-1-001.zip`, created 2026-11-16 23:57Z. The history was left in
+the default HTML, and the account is set to Portuguese. The owner sent the .zip as Takeout made it,
+without switching to JSON, and said on 2026-11-17: *"aceita ambos"*, accept both. So the slice now
+asks for a file the analyzer reads, not for a `watch-history.json`. It no longer waits for a second,
+JSON export. Counts: `measurements/owner-export-2026-11-16.md`.
 
-Still open:
-- [ ] ⚠️ Owner: follow the deployed page on takeout.google.com and get a `watch-history.json`. Pass or
-      fail, with the date. Every quoted label must match: N/N. This also covers the step-2 controls.
-      The 2026-11-16 export came out as HTML (above).
-- [ ] The `watch-history.json` reference, against the owner's real export (blocked: no JSON yet).
-- [x] `smallwebapps-pedir-indexacao` covers guides (2026-11-15).
+How each "Done when" item stands under that ruling:
+
+| item | result |
+|---|---|
+| export how-to: the owner gets a file the analyzer reads | **pass**, 2026-11-16. The .zip loaded as it came: TubeTrace found the Portuguese-named HTML inside and matched an independent count 2/2 years (slice 2). Whether every step of the page was followed was not recorded |
+| quoted UI labels match the live screen | the labels the page quotes are those in the 2026-11-15 table above, read live. The page quotes no step-2 control |
+| the reference: each field checked against a real export | **8/8 fields**: `header`, `title`, `titleUrl`, `subtitles`, `time`, `products`, `details`, `activityControls`. The values and counts come from the owner's export, through the HTML that renders each field. The names come from Google's own schema (`fetches/google-data-portability-my-activity-schema.md`) |
+| a field the export does not contain is not documented | the page now says outright what that export had no example of: a removed video. The JSON timestamp shape is credited to Google's schema, not to the export |
+| both URLs `200`, in the sitemap, no `noindex` | measured after merge (below) |
+| indexing requested | `smallwebapps-pedir-indexacao`, run of 2026-11-16 15:32Z: its summary reports "Indexação solicitada" for the 6 sitemap URLs out of the index |
+
+What the export changed on the pages:
+- **`youtube-watch-history-json-format`**, rewritten. It covers all 8 fields with what each held, and
+  cites Google's schema for the names. It corrects 3 claims the export disproved:
+  - "subtitles is missing on removed videos": 328 views of live videos had no channel, and no ad had one.
+  - "titleUrl carries list=, si=, t=": all 22,422 watch links carried only `v`.
+  - "a decade is a few megabytes": the HTML history was 24 MB for 22,812 entries.
+
+  It no longer states the shape of a removed-video entry, since the export had none.
+- **`how-to-export-youtube-watch-history`**: switching to JSON is now an optional step. The "JSON or
+  HTML" section says the analyzer reads both and cites the real-export check.
+- **`youtube-takeout-json-vs-html`**: no longer says "choose JSON" for everyone. It corrects 2 claims
+  about our own analyzer:
+  - that totals survive an unreadable date (the entry is dropped);
+  - that HTML "several times larger" makes a visible wait (the 24 MB HTML in a 41 MB .zip loaded in
+    about a second).
+- **TubeTrace page** (`apps.ts`): the FAQ, how-to, field list and limits now accept the .zip as it
+  comes. The field list gained `details`.
+
+- [x] Export how-to: pass on a file the analyzer reads (owner's ruling, 2026-11-17).
+- [x] The field reference, 8/8 fields against the owner's real export and Google's schema.
+- [x] `smallwebapps-pedir-indexacao` covers guides (2026-11-15) and requested both on 2026-11-16.
+- [ ] Not covered: a real JSON file. If one ever turns up, run `scripts/recap-oracle.jq` on it and
+      check the JSON timestamp claim.

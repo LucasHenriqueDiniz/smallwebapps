@@ -58,7 +58,7 @@ export const apps: AppDefinition[] = [
       {
         question: "How do I get my Google Takeout export?",
         answer:
-          "Visit takeout.google.com, deselect everything except 'YouTube and YouTube Music', choose JSON as the format, and request the export. Google will email you a download link, usually within minutes for history-only exports.",
+          "Visit takeout.google.com, deselect everything except 'YouTube and YouTube Music', and request the export. The default format works; switching history to JSON is optional. Google emails a download link, and says most people get it the same day.",
       },
       {
         question: "Can I see a YouTube recap for 2024 or an earlier year?",
@@ -68,12 +68,12 @@ export const apps: AppDefinition[] = [
       {
         question: "Why does Takeout offer both JSON and HTML formats?",
         answer:
-          "HTML is meant for viewing in a browser as a static page; JSON is structured data meant for tools like this one. This analyzer reads either, but JSON is the safer choice: its timestamps are not written in your account's language, so they never have to be guessed at.",
+          "HTML is a page meant to be read in a browser, and it is what Takeout sends unless you change it. JSON is structured data. This analyzer reads either, and the .zip as Takeout sends it. We checked it in November 2026 on a real HTML export from an account set to Portuguese: 22,812 entries, and its yearly counts matched an independent count. The difference is the date: HTML writes it in your account's language, and dates in languages other than English and Portuguese may not be read, while JSON timestamps carry their own time zone.",
       },
       {
         question: "Can I analyze search history or only watch history?",
         answer:
-          "This version focuses on watch-history.json. Search history is stored in a separate file (search-history.json) and is not currently parsed, but the same privacy-first approach would apply if support is added.",
+          "This version reads watch history, in JSON or HTML. Search history is stored in a separate file and is not currently parsed, but the same privacy-first approach would apply if support is added.",
       },
       {
         question: "What happens to entries with missing titles or 'Watched a video that has been removed'?",
@@ -83,24 +83,25 @@ export const apps: AppDefinition[] = [
       {
         question: "Will this work with a multi-gigabyte Takeout export?",
         answer:
-          "The watch-history.json file itself is usually only a few MB even for years of history, since it contains text only (titles, links, timestamps). The tool can handle tens of thousands of entries without issues on a modern device.",
+          "Watch history is text only. The HTML history we checked held 22,812 entries in 24 MB, and the analyzer read the 41 MB .zip it came in, uploaded videos included, in about a second on a laptop. Archives over 300 MB are refused in the browser: export only YouTube, or only its history.",
       },
     ],
     content: {
       deepDive: [
         {
-          heading: "What watch-history.json actually contains",
+          heading: "What the watch history export contains",
           body: [
-            "Google Takeout exports your YouTube watch history as a flat JSON array. Every element is one viewing event, and the fields are the same whether the export covers a week or a decade. Knowing the shape matters because it explains what this analyzer can and cannot tell you.",
+            "Google Takeout writes your YouTube history as one record per event: a JSON array in watch-history.json, or an HTML page if you keep the default format. The field names are Google's own, from its published schema for My Activity records. Knowing them explains what this analyzer can and cannot tell you.",
             "The export is text only. It records that you watched something and when, but carries no watch duration, no percentage watched, and no video length. Any tool claiming to show your total hours watched from a Takeout export is estimating, not measuring.",
           ],
           definitions: [
-            { term: "title", definition: "The video title prefixed with the literal string 'Watched '. For videos that were later deleted or made private, the value reads 'Watched a video that has been removed' and no real title is recoverable." },
-            { term: "titleUrl", definition: "The canonical watch URL, in the form https://www.youtube.com/watch?v=VIDEO_ID. Absent on removed videos." },
-            { term: "subtitles[0].name", definition: "The channel name. This analyzer falls back to 'Unknown channel' when the field is missing, which is normal for removed or private videos." },
-            { term: "subtitles[0].url", definition: "The channel URL. Same caveat as the name field." },
-            { term: "time", definition: "An ISO 8601 timestamp for the view. This is the field every chart on this page is built from." },
+            { term: "title", definition: "A verb, then the title: 'Watched' and the video title for a view, 'Viewed' for a community post you opened. In the export we checked, the verb was English although the account was set to Portuguese." },
+            { term: "titleUrl", definition: "The link: https://www.youtube.com/watch?v=VIDEO_ID, or music.youtube.com for YouTube Music. In the export we checked, all 22,422 watch links carried only the v parameter." },
+            { term: "subtitles[0].name", definition: "The channel name. It can be missing: in the export we checked, on 328 views of videos still online and on every ad. This analyzer files those views under 'Unknown channel'." },
+            { term: "subtitles[0].url", definition: "The channel URL, missing on the same entries as the name." },
+            { term: "time", definition: "When it happened: an ISO 8601 timestamp in JSON, a date in your account's language in HTML. Every chart on this page is built from it." },
             { term: "activityControls", definition: "An array naming the Google setting that recorded the entry. Watch events list 'YouTube watch history', and so do the community posts you opened, so the setting alone does not mark a video." },
+            { term: "details", definition: "Present only on ads, reading 'From Google Ads': 103 of 22,812 entries in the export we checked. This analyzer drops those entries." },
           ],
         },
         {
@@ -112,20 +113,20 @@ export const apps: AppDefinition[] = [
           ],
         },
         {
-          heading: "JSON versus the HTML export, and why the format matters",
+          heading: "JSON or HTML: both work",
           body: [
-            "Takeout offers both JSON and HTML for watch history. This analyzer reads either, plus the .zip or .tgz archive straight from Takeout without you having to unpack it first — the tar reader runs in the browser alongside everything else.",
-            "Prefer JSON. The HTML export is a rendered page, not structured data: entries live in .content-cell blocks where 'Watched ' is a bare text node, the first link is the video, the second is the channel, and the timestamp is whichever text node happens to contain a four-digit year.",
-            "That timestamp is written in your Google account's display language, so parsing it is locale-dependent. This tool currently handles the English format and the Portuguese 'DD de MMM de YYYY' format including BRT and BRST offsets. Other locales fall back to the browser's own date parser and may produce wrong dates. If your charts look shifted, re-export as JSON — the ISO timestamps there are unambiguous.",
+            "Takeout sends watch history as HTML unless you switch it to JSON. This analyzer reads either, plus the .zip or .tgz archive straight from Takeout without you having to unpack it first; the archive is opened in the browser alongside everything else.",
+            "You do not need to switch. We checked it in November 2026 against a real HTML export from an account set to Portuguese, 22,812 entries: the analyzer found the file inside the .zip under its Portuguese name, and its yearly counts matched an independent count. In HTML each entry is a .content-cell block: the verb and the first link are the video, the second link is the channel, and the date is the last line.",
+            "The one real difference is the date. HTML writes it in your account's language with a time-zone abbreviation, and this analyzer reads it as your browser's local time. English and Portuguese dates are read; dates in another language may be misread or skipped, and a skipped date leaves that entry out. JSON timestamps carry their own time zone, so if your totals look short or your charts look shifted, export again with history set to JSON.",
           ],
         },
       ],
       howToUse: [
         "Go to takeout.google.com while signed into the Google account whose YouTube history you want to inspect.",
-        "Click 'Deselect all', then check only 'YouTube and YouTube Music', and set the export format to JSON.",
-        "Request the export. Google will prepare a .zip file and email you a download link (usually within a few minutes for history-only exports).",
-        "Unzip the archive and locate watch-history.json inside the 'YouTube and YouTube Music/history/' folder. The names follow your account's language: an account set to Portuguese gets 'YouTube e YouTube Music/histórico/histórico-de-visualização.html'. The analyzer finds the file inside the .zip by its contents, whatever it is called.",
-        "Open this tool and drag watch-history.json into the upload area, or click to browse for the file.",
+        "Click 'Deselect all', then check only 'YouTube and YouTube Music'. The default format works; switching history to JSON is optional.",
+        "Request the export. Google prepares a .zip file and emails you a download link; it says most people get it the same day.",
+        "You do not need to unzip it. If you do, the history is in the 'YouTube and YouTube Music/history/' folder. The names follow your account's language: an account set to Portuguese gets 'YouTube e YouTube Music/histórico/histórico-de-visualização.html'. The analyzer finds the file inside the .zip by its contents, whatever it is called.",
+        "Open this tool and drop the .zip, or the history file inside it, into the upload area, or click to browse for it.",
         "Review the totals, top channels and activity charts, then pick a year to see that year's recap.",
       ],
       useCases: [
@@ -136,17 +137,17 @@ export const apps: AppDefinition[] = [
         "See a recap of any year in your export, not only the current one, for a year-in-review post or a personal record.",
       ],
       limitations: [
-        "Only reads the watch-history.json file from Google Takeout — it does not connect to your live YouTube account or the YouTube API.",
+        "Only reads the watch history file from Google Takeout, JSON or HTML — it does not connect to your live YouTube account or the YouTube API.",
         "Only includes videos watched while signed in with watch history enabled; private or paused-history sessions are not recorded by Google in the first place.",
         "Removed or deleted videos appear in the list but without title, channel, or thumbnail information, since YouTube no longer serves that metadata.",
       ],
       privacy:
-        "Your watch-history.json file is read and parsed entirely in your browser using JavaScript. It is never uploaded, transmitted, or stored on Small Web Apps servers — closing the tab clears everything from memory.",
+        "Your Takeout file is read and parsed entirely in your browser using JavaScript. It is never uploaded, transmitted, or stored on Small Web Apps servers — closing the tab clears everything from memory.",
     },
     seo: {
       title: "YouTube Watch History Analyzer — Read Your Takeout",
       description:
-        "Open the watch-history.json from your Google Takeout export and see totals, top channels, peak hours and a recap for any year. Read in the tab, never uploaded.",
+        "Drop your Google Takeout .zip as it comes, or the watch-history.json inside, and see totals, top channels, peak hours and a recap for any year. Never uploaded.",
     },
   },
 
