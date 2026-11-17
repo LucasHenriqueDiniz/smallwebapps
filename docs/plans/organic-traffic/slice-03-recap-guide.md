@@ -1,5 +1,5 @@
 ---
-status: doing
+status: done
 kanban:
 ---
 
@@ -94,6 +94,11 @@ Measured on the build (`apps/web/dist`):
 **Production, 2026-11-15** (PR #24, merged as `6f633bc` at 16:06 UTC, live about 270 s later): `200`,
 `0` (no `noindex`), `1` (in the sitemap); sitemap 48 URLs.
 
-Still open:
-- [ ] ⚠️ Owner: "Request indexing" for `https://smallwebapps.com/guides/youtube-recap-past-years/`, and
-      write the date here. Slice 7's clock starts from the ship date.
+**Indexing, 2026-11-16.** The guide was requested by `smallwebapps-pedir-indexacao`. Its run of
+2026-11-16 15:32–15:42Z reports "Indexação solicitada" for the 6 sitemap URLs out of the index, this
+one included. URL Inspection on 2026-11-17 12:34Z: **Submitted and indexed**, last crawl
+2026-11-16T15:37Z, inside that run.
+
+**Ship date, slice 7's day 0: 2026-11-15.**
+
+- [x] Indexing requested (2026-11-16) and indexed (crawled 2026-11-16 15:37Z).

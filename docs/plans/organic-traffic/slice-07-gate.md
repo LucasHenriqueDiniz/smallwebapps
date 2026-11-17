@@ -39,7 +39,25 @@ Also in the decision:
 
 ## Needs
 
-Slices 3, 4 and 6 deployed and their dates written down.
+Slices 3, 4 and 6 deployed and their dates written down. All three are:
+- slice 3 shipped on 2026-11-15;
+- slice 4 shipped on 2026-11-15;
+- slice 6 shipped on 2026-11-15 and was reworked on 2026-11-17.
+
+**Calendar** (day 0 = 2026-11-15, the recap guide's ship date):
+
+| day | date | reading |
+|---|---|---|
+| 14 | 2026-11-29 | start of the impressions window |
+| 28 | 2026-12-13 | index state of the 8 URLs |
+| 42 | 2026-12-27 | end of the window; read on 2026-12-30 or later, for Search Console's lag |
+| 70 | 2027-01-24 | second reading, only if day 42 selects "hold" |
+
+**Reading of 2026-11-17** (day 2, URL Inspection at 12:34Z): **5 of 8** indexed. These are
+`tubetrace`, `youtube-recap-past-years` (new, crawled 2026-11-16), `json-vs-html`, `what-reveals` and
+`pause-delete`. The three out of the index:
+- `how-to-export` is "Crawled - currently not indexed", last crawl 2026-10-19, before both rewrites;
+- `json-format` and `counts-differ` are "Discovered - currently not indexed".
 
 ## Tests
 

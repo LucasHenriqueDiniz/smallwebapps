@@ -121,7 +121,7 @@ How each "Done when" item stands under that ruling:
 | quoted UI labels match the live screen | the labels the page quotes are those in the 2026-11-15 table above, read live. The page quotes no step-2 control |
 | the reference: each field checked against a real export | **8/8 fields**: `header`, `title`, `titleUrl`, `subtitles`, `time`, `products`, `details`, `activityControls`. The values and counts come from the owner's export, through the HTML that renders each field. The names come from Google's own schema (`fetches/google-data-portability-my-activity-schema.md`) |
 | a field the export does not contain is not documented | the page now says outright what that export had no example of: a removed video. The JSON timestamp shape is credited to Google's schema, not to the export |
-| both URLs `200`, in the sitemap, no `noindex` | measured after merge (below) |
+| both URLs `200`, in the sitemap, no `noindex` | yes, after #31 (below) |
 | indexing requested | `smallwebapps-pedir-indexacao`, run of 2026-11-16 15:32Z: its summary reports "Indexação solicitada" for the 6 sitemap URLs out of the index |
 
 What the export changed on the pages:
@@ -145,5 +145,19 @@ What the export changed on the pages:
 - [x] Export how-to: pass on a file the analyzer reads (owner's ruling, 2026-11-17).
 - [x] The field reference, 8/8 fields against the owner's real export and Google's schema.
 - [x] `smallwebapps-pedir-indexacao` covers guides (2026-11-15) and requested both on 2026-11-16.
+**Production, after #31** (merged `9bdbdd2` at 2026-11-17T12:20:56Z, live about 30 s later; CI on
+`main` green):
+
+| URL | status | `noindex` | in sitemap |
+|---|---|---|---|
+| `/guides/youtube-watch-history-json-format/` | 200 | 0 | yes |
+| `/guides/how-to-export-youtube-watch-history/` | 200 | 0 | yes |
+| `/guides/youtube-takeout-json-vs-html/` | 200 | 0 | yes |
+| `/apps/tubetrace/` | 200 | 0 | yes |
+
+`link-graph.mjs` against production: exit 0. URL Inspection the same day, 12:34Z, before Google had
+seen the rewrite: the export how-to is "Crawled - currently not indexed" (last crawl 2026-10-19), and
+the field reference is "Discovered - currently not indexed". Google's half is read in slice 7.
+
 - [ ] Not covered: a real JSON file. If one ever turns up, run `scripts/recap-oracle.jq` on it and
       check the JSON timestamp claim.

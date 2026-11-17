@@ -14,7 +14,7 @@ Slice 7 is a wait on Google's clock.
 |---|---|---|
 | 1 — hosts | `www` answers 301 to the apex | done 2026-11-16: 20/20 sitemap paths (47 before slice 4) on `www` → one `301` to the same path and query on the apex |
 | 2 — recap for any year | year picker and recap view in TubeTrace | done 2026-11-17: 2/2 years of the owner's real export (HTML) equal an independent oracle |
-| 3 — recap guide | one guide for "past years", "not showing", "all-time" | live, indexable, in the sitemap, linked from ≥ 3 cluster pages, every claim about YouTube's Recap linked to YouTube's own page |
+| 3 — recap guide | one guide for "past years", "not showing", "all-time" | done 2026-11-16: live 2026-11-15, linked from 4 cluster pages, 10/10 claims linked, indexed 2026-11-16 |
 | 4 — narrow the index | option A: 21 tools and 4 guides cut, 3 merges | sitemap = 20 URLs; cut URLs `noindex` N/N; merges one `301` 3/3; `scan-links` exit 0 |
 | 5 — links to the cluster | header, footer, home and related links lead to TubeTrace and the guides | `/apps/tubetrace/` inbound from 19/19 other indexable pages; every YouTube guide ≥ 10; 0 broken |
 | 6 — re-earn the dropped guides | export how-to and `watch-history.json` reference checked against the live Takeout | done 2026-11-17: owner's .zip read as it came (both formats accepted); field table 8/8 against the real export; indexing requested |

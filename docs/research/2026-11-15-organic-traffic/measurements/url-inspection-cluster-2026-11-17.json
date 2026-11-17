@@ -1,0 +1,98 @@
+[
+ {
+  "url": "https://smallwebapps.com/apps/tubetrace/",
+  "verdict": "PASS",
+  "coverageState": "Submitted and indexed",
+  "indexingState": "INDEXING_ALLOWED",
+  "robotsTxtState": "ALLOWED",
+  "pageFetchState": "SUCCESSFUL",
+  "lastCrawlTime": "2026-10-30T16:28:11Z",
+  "googleCanonical": "https://smallwebapps.com/apps/tubetrace/",
+  "userCanonical": "https://smallwebapps.com/apps/tubetrace/",
+  "crawledAs": "MOBILE"
+ },
+ {
+  "url": "https://smallwebapps.com/guides/youtube-recap-past-years/",
+  "verdict": "PASS",
+  "coverageState": "Submitted and indexed",
+  "indexingState": "INDEXING_ALLOWED",
+  "robotsTxtState": "ALLOWED",
+  "pageFetchState": "SUCCESSFUL",
+  "lastCrawlTime": "2026-11-16T15:37:10Z",
+  "googleCanonical": "https://smallwebapps.com/guides/youtube-recap-past-years/",
+  "userCanonical": "https://smallwebapps.com/guides/youtube-recap-past-years/",
+  "crawledAs": "MOBILE"
+ },
+ {
+  "url": "https://smallwebapps.com/guides/how-to-export-youtube-watch-history/",
+  "verdict": "NEUTRAL",
+  "coverageState": "Crawled - currently not indexed",
+  "indexingState": "INDEXING_ALLOWED",
+  "robotsTxtState": "ALLOWED",
+  "pageFetchState": "SUCCESSFUL",
+  "lastCrawlTime": "2026-10-19T20:14:51Z",
+  "googleCanonical": "https://smallwebapps.com/guides/how-to-export-youtube-watch-history/",
+  "userCanonical": "https://smallwebapps.com/guides/how-to-export-youtube-watch-history/",
+  "crawledAs": "MOBILE"
+ },
+ {
+  "url": "https://smallwebapps.com/guides/youtube-watch-history-json-format/",
+  "verdict": "NEUTRAL",
+  "coverageState": "Discovered - currently not indexed",
+  "indexingState": "INDEXING_STATE_UNSPECIFIED",
+  "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+  "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+  "lastCrawlTime": null,
+  "googleCanonical": null,
+  "userCanonical": null,
+  "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED"
+ },
+ {
+  "url": "https://smallwebapps.com/guides/youtube-takeout-json-vs-html/",
+  "verdict": "PASS",
+  "coverageState": "Submitted and indexed",
+  "indexingState": "INDEXING_ALLOWED",
+  "robotsTxtState": "ALLOWED",
+  "pageFetchState": "SUCCESSFUL",
+  "lastCrawlTime": "2026-10-20T11:35:38Z",
+  "googleCanonical": "https://smallwebapps.com/guides/youtube-takeout-json-vs-html/",
+  "userCanonical": "https://smallwebapps.com/guides/youtube-takeout-json-vs-html/",
+  "crawledAs": "MOBILE"
+ },
+ {
+  "url": "https://smallwebapps.com/guides/why-youtube-watch-counts-differ/",
+  "verdict": "NEUTRAL",
+  "coverageState": "Discovered - currently not indexed",
+  "indexingState": "INDEXING_STATE_UNSPECIFIED",
+  "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+  "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+  "lastCrawlTime": null,
+  "googleCanonical": null,
+  "userCanonical": null,
+  "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED"
+ },
+ {
+  "url": "https://smallwebapps.com/guides/what-your-youtube-history-reveals/",
+  "verdict": "PASS",
+  "coverageState": "Submitted and indexed",
+  "indexingState": "INDEXING_ALLOWED",
+  "robotsTxtState": "ALLOWED",
+  "pageFetchState": "SUCCESSFUL",
+  "lastCrawlTime": "2026-10-21T06:15:12Z",
+  "googleCanonical": "https://smallwebapps.com/guides/what-your-youtube-history-reveals/",
+  "userCanonical": "https://smallwebapps.com/guides/what-your-youtube-history-reveals/",
+  "crawledAs": "MOBILE"
+ },
+ {
+  "url": "https://smallwebapps.com/guides/pause-delete-youtube-history/",
+  "verdict": "PASS",
+  "coverageState": "Submitted and indexed",
+  "indexingState": "INDEXING_ALLOWED",
+  "robotsTxtState": "ALLOWED",
+  "pageFetchState": "SUCCESSFUL",
+  "lastCrawlTime": "2026-09-12T05:48:44Z",
+  "googleCanonical": "https://smallwebapps.com/guides/pause-delete-youtube-history/",
+  "userCanonical": "https://smallwebapps.com/guides/pause-delete-youtube-history/",
+  "crawledAs": "MOBILE"
+ }
+]
